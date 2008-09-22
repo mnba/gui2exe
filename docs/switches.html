@@ -1,0 +1,342 @@
+<!--
+ ____________________________________________________________
+|                                                            |
+|    DESIGN + Pat Heard { http://fullahead.org }             |
+|      DATE + 2006.03.19                                     |
+| COPYRIGHT + Free use if this notice is left in place       |
+|____________________________________________________________|
+
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-AU">
+
+<head>
+
+
+  <title>Compiler Switches in GUI2Exe</title>
+
+  <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+  <meta name="author" content="Andrea Gavana"/>
+  <meta name="keywords" content="GUI2Exe, py2exe, Python, compiler, exe"/>
+  <meta name="description" content="An help file that explains pyexe switches"/>
+  <meta name="robots" content="index, follow, noarchive"/>
+  <meta name="googlebot" content="noarchive"/>
+
+  <link rel="stylesheet" type="text/css" href="css/html.css" media="screen, projection, tv"/>
+  <link rel="stylesheet" type="text/css" href="css/layout.css" media="screen, projection, tv"/>
+  <link rel="stylesheet" type="text/css" href="css/print.css" media="print"/>
+
+</head>
+
+
+<body><!-- CONTENT: Holds all site content except for the footer.  This is what causes the footer to stick to the bottom -->
+<div id="content"><!-- HEADER: Holds title, subtitle and header images --><IMG style="Z-INDEX: 100; LEFT: 3px; POSITION: absolute; TOP: 33px" height=94 alt="" src="images/splash_small.png" width=150 border=0><IMG style="Z-INDEX: 100; LEFT: 173px; POSITION: absolute; TOP: 21px" height=120 alt="" src="images/switches.png" width=461 border=0><IMG style="Z-INDEX: 100; LEFT: 646px; POSITION: absolute; TOP: 37px" height=86 alt="" src="images/gui2exe_splash_small.png" width=151 border=0>
+  <div id="header"> 
+
+  </div><!-- MAIN MENU: Top horizontal menu of the site.  Use class="here" to turn the current page tab on -->
+  <div id="mainMenu">
+    <ul class="floatRight">
+      <li>
+      <li>
+      <li>
+      <li>
+      <li></li>
+    </ul>
+  </div><!-- PAGE CONTENT BEGINS: This is where you would define the columns (number, width and alignment) -->
+  <div id="page"><!-- 25 percent width column, aligned to the left -->
+    <div class="width25 floatLeft leftColumn">
+
+      <h1>Links</h1>
+
+      <ul class="sideMenu">
+        <li class="here"><font color="#80ffff"><A href="index3.html#py2exe">py2exe</A></font>
+           
+          <ul>
+            <li><A title="Jump to section" href="#exekind">Exe Kind</A>
+            <li><A title="Jump to section" href="#script">Python Main Script</A>
+			<li><A title="Jump to section" href="#optimize">Optimize</A>
+			<li><A title="Jump to section" href="#compressed">Compressed</A>
+			<li><A title="Jump to section" href="#bundle">Bundle Files</A>
+			<li><A title="Jump to section" href="#zipfile">Zipfile</A>
+			<li><A title="Jump to section" href="#dist">Dist Directory</A>
+			<li><A title="Jump to section" href="#includes">Includes And Friends</A>
+			<li><A title="Jump to section" href="#datafiles">Data Files</A>
+			<li><A title="Jump to section" href="#resources">Resources</A>
+			<li><A title="Jump to section" href="#xref">Cross Reference</A>
+			<li><A title="Jump to section" href="#ascii">Ascii</A>
+			<li><A title="Jump to section" href="#skiparchive">Skip Archive</A>
+			<li><A title="Jump to section" href="#customboot">Custom Boot Script</A>
+			</li>
+          </ul>
+           
+        <li><a href="" title="py2app">py2app</a>
+        <li><a href="" title="cx_Freeze">cx_Freeze</a>
+		<li><a href="" title="PyInstaller">PyInstaller</a>
+		</li>
+      </ul>
+
+      <p>
+        If you find any error or any stupid inconsistency in 
+this small manual about compiler switches, please let me know. A patch 
+would be extremely welcome, but in any case contact me at:<br><A href="mailto:andrea.gavana@gmail.com">andrea.gavana@gmail.com</A><br><A href="mailto:gavana@kpo.kz">gavana@kpo.kz</A><br>
+                           
+      </p>Enjoy 
+<strong>GUI2Exe</strong>, wxPython rules :-D<br>
+
+    </div><!-- 75 percent width column, aligned to the right -->
+    <div class="width75 floatRight"><!-- Gives the gradient block -->
+      <div class="gradient">
+
+        <a name="fluidity"></a>
+
+        <h1><a name="py2exe"><font color="#ffffff">py2exe</font></a> </h1>
+        <h2><font color="#80ffff">Last updated: 01 April 
+2007</font>           </h2>
+
+        <p align="justify">
+          This section provides information about 
+the compiler switches (aka options) available when compiling a Python script 
+using py2exe. Most of the options available with py2exe have been implemented in 
+<strong>GUI2Exe</strong>, and the exceptions are clearly marked in this 
+file. <br><br>
+        </p>
+        <h2><a name="exekind"><font color="#80ffff">Exe 
+Kind</font></a>           </h2>
+
+        <p align="justify">
+          This variable can assume two values (at 
+the moment). It can be either "windows" or "console", depending on the kind of 
+executable you wish to build:<br>
+        </p>
+<ul>
+  <li>
+  <div align="justify"><strong>windows</strong>: builds an executable for a 
+  GUI-based application;</div>
+  <li>
+  <div align="justify"><strong>console</strong>: creates an executable for a 
+  console program (i.e., no graphical interface stuff involved).</div></li></ul>
+
+        <blockquote class="exclamation">
+          <p>
+            The other options currently available in py2exe, 
+  namely <strong>service</strong>, <strong>com_server</strong> and 
+  <strong>ctypes_com_server</strong> are currently not implemented 
+  in <strong>GUI2Exe</strong>
+                                       .
+          </p>
+        </blockquote>
+
+        <p align="justify">
+          If you're interested in one of the missing 
+options, please let me know (I have never used them).<br><br>
+                                                
+        </p>
+        <h2><a name="script"><a name="exekind"><font color="#80ffff">Python</font></a><a name="exekind"><font color="#80ffff"> Main 
+Script</a></FONT></a>           </h2>
+
+        <p align="justify">
+          You should assign to this variable 
+the name of your main Python script for which you want to build the 
+executable. For example, if we want to build an executable for the wxPython 
+demo, the Python Main Script is: <br><br><strong>%YourPath%/wxPython2.X Docs and 
+Demos/demo/Main.py</strong><br><br>
+        </p>
+        <h2><a name="script"></a><font color="#80ffff"><a name="optimize"><a name="exekind"><font color="#80ffff">Optimize</font></a></font>           </h2>
+
+        <p align="justify">
+          This switch represents the optimization 
+level for the compiled bytecode. This variable can assume 3 values:<br>
+        </p>
+<ul>
+  <li><strong>0 (Python)</strong>: No 
+  optimization on the compiled bytecode (default); 
+  <li><strong>1 (Python -O)</strong>: 
+  Optimize the generated bytecode; 
+  <li><strong>2 (Python -OO)</strong>: remove doc-strings in addition to the -O 
+  optimizations.</li></ul>
+
+        <p align="justify">
+          I usually stick with the value of 2, 
+unless some package (i.e., <strong>matplotlib</strong> in the past), complains 
+about the missing __doc__. <br><br>
+        </p>
+<h2><a name="script"></a><font color="#80ffff"><a name="optimize"></a><font color="#80ffff"><a name="compressed"><font color="#80ffff"><a name="exekind"><font color="#80ffff">Compressed</font></a><a name="exekind"></font></a></font></A></font></h2>
+<p align="justify">This option, if activated, creates a compressed zip archive 
+(zipfile). It can be either 0 or a positive number, the meaning of 
+activating/deactivating the compression is as follows:<br></p>
+<ul>
+  <li>
+  <div align="justify">No Compression: the zipfile will be created using the 
+  zipfile.ZIP_STORED Python option;</div>
+  <li>
+  <div align="justify">With Compression: the zipfile will be created using the 
+  zipfile.ZIP_DEFLATED Python option.</div></li></ul>
+
+        <blockquote class="exclamation">
+          <p align="justify">
+            If you specify the <strong><A href="bubba2.html#skiparchive"><strong><font color="#80ffff">Skip Archive</font></strong></A> 
+  </strong> option, compression can not
+                                  be activated (no zipfile to compress).
+          </p>
+        </blockquote>
+
+        <p align="justify">
+          Compression activated will obviously 
+create a smaller zipfile.<br><br>
+                                                
+        </p>
+<h2><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"><a name="exekind"><font color="#80ffff">Bun</font></a><a name="exekind"><font color="#80ffff">dle Files</a></FONT></a></h2>
+<p>By default py2exe creates these files in the <strong>dist</strong><font face="Verdana"> directory which you must deploy:<br></p>
+<ul>
+  <li>
+  <div align="justify">One (or more) exe files;</div>
+  <li>
+  <div align="justify">The python#.#.dll;</div>
+  <li>
+  <div align="justify">A couple of .pyd files which are the compiled extensions 
+  that the exe files need, plus any other .dll files that the extensions 
+  need;</div>
+  <li>
+  <div align="justify">A library.zip file which contains the compiled pure python 
+  modules as .pyc or .pyo files (if you have specified 
+  '<strong>zipfile</strong>=None' in the setup script this file is appended to 
+  the .exe files and not present in the <strong>dist</strong> 
+  directory).</div></li></ul>
+<p align="justify">This command line switch will create less files because binary 
+extensions, runtime dlls, and even the Python-dll itself is bundled into the 
+executable itself, or inside the library-archive if you prefer that.<br>The 
+bundled pyds and dlls are <em>never</em> unpacked to the file system, instead 
+they are transparently loaded at runtime from the bundle. The resulting 
+executable <em>appears</em> to be statically linked.</p>
+<p align="justify">Specifying a level of <strong>2</strong> includes the .pyd 
+and .dll files into the zip-archive or the executable. Thus, the 
+<strong>dist</strong> directory will contain your exe file(s), the library.zip 
+file (if you haven't specified <strong>'zipfile</strong>=None'), and the python 
+dll. The advantage of this scheme is that the application can still load 
+extension modules from the file system if you extend <strong>sys.path</strong> 
+at runtime.</p>
+<p align="justify">Using a level of <strong>1</strong> includes the .pyd and 
+.dll files into the zip-archive or the executable itself, and does the same for 
+pythonXY.dll. The advantage is that you only need to distribute one file per 
+exe, which will however be quite large. The disadvantage of this scheme is that 
+it is impossible to load other extensions from the file system, the application 
+will crash with a fatal Python error if you try this.<br><br> </p>
+<blockquote class="exclamation">
+  <p align="justify">The <strong>Bundle Files</strong> option is currently 
+  not available on 64 bit machines (py2exe 0.6.6).</p></blockquote>
+<p align="justify"></p>
+<h2><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"></a><font color="#80ffff"><a name="zipfile"><a name="exekind"><font color="#80ffff">Zipfile</font></a><a name="exekind"></a></font></a></h2>
+<p align="justify">By activating this option in 
+<strong>GUI2Exe</strong>, you can specify a name for the compressed zip file 
+where py2exe will put all the bytecode-compiled Python modules. If you don't 
+activate this option, or the zipfile name is empty, the default in 
+<strong>GUI2Exe</strong>           
+            
+              
+    is to use <strong>zipfile</strong>=None. This means the 
+compiled bytecode will be attached to the executable itself and no zip file will 
+be created in your <strong>dist</strong> directory.<br></p>
+<blockquote class="exclamation">
+  <p align="justify">If you specify the <strong><A href="bubba2.html#skiparchive"><strong><font color="#80ffff">Skip 
+  Archive</font></strong></A> 
+  </strong> option, <strong>zipfile</strong> can not be
+  None.</p></blockquote>
+<p align="justify"></p>
+<h2><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"><a name="dist"><a name="exekind"><font color="#80ffff">Dist</font></a><a name="exekind"><font color="#80ffff"> Directory</a></FONT></a></h2>
+<p align="justify">If you activate this switch, you will be able to specify the 
+name of the directory to put final built distributions in (the default is 
+"dist").<br><br></p>
+<h2><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"><a name="dist"></a><font color="#80ffff"><a name="includes"><a name="exekind"><font color="#80ffff">Includes</font></a> And Friends</font></a></h2>
+<p align="justify">This section deals with the options py2exe 
+offers to forcibly include (or exclude, or ignore) Python modules, packages and 
+Windows dlls. Py2exe accepts this options as comma-separated lists of strings, 
+and in particular the options are:<br> </p>
+<ul>
+  <li><strong>Excludes</strong>: 
+  comma-separated list of Python modules to exclude; 
+  <li><strong>Dll-Excludes</strong>: 
+  comma-separated list of DLLs to exclude; 
+  <li><strong>Ignores</strong>: 
+  comma-separated list of Python modules to ignore if they are not found; 
+  <li><strong>Includes</strong>: 
+  comma-separated list of Python modules to include; 
+  <li><strong>Packages</strong>: comma-separated list of Python packages to 
+  include.</li></ul>
+<p align="justify">You can easily add this items in 
+<strong>GUI2Exe</strong>        by simply clicking 
+on the list control you wish to edit and hitting Ctrl+A to add items. To 
+remove them, you can select the items and either hit Del on the keyboard or 
+right-click and choose "Delete selected".<br></p>
+<blockquote class="go">
+  <p align="justify">The <strong>Includes</strong> option is stronger than the 
+  <strong>Excludes</strong> one. So, if a module is present in both 
+  <strong>Includes</strong> and <strong>Excludes</strong>, it will be included 
+  in your final distribution. </p></blockquote>
+<p></p>
+<h2><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"><a name="dist"></a><a name="includes"></a><a name="datafiles"><a name="exekind"><font color="#80ffff">Data</font></a><a name="exekind"><font color="#80ffff"> Files</a></FONT></a></h2>
+<p align="justify">Py2exe allows you to include one (or
+more) series of files that you are going to need to run your 
+executable. For example, to run my GUIs as executable, I ask py2exe to 
+create a folder called "images" where I put all my icons and another one called 
+"matplotlibdata" to include the <strong>matplotlib</strong> data files. <br>In <strong>GUI2Exe</strong>, you can just repeat the procedure described in section <A href="bubba2.html#includes"><strong><font color="#80ffff">Includes And 
+Friends</font></strong></A>, select all the files you need in one shot and 
+specify the name of the folder where py2exe will put the data files.<br><br> </p>
+<h2><a name="resources"><font color="#80ffff">Resources</font></a><a name="script"></a><a name="optimize"></a><a name="compressed"><a name="bundle"><a name="dist"></a><a name="includes"></a><a name="datafiles"></a><font color="#80ffff"></font></a></h2>
+<p align="justify">This section deals with the possible 
+resources you can include in your executable file. For example, speaking 
+about GUIs, if you want to assign an icon to your application, you need to 
+specify the "icon_resources" to py2exe. Moreover, when distributing your 
+application on other PCs, it is good practice to include also the "manifest 
+file", a file that instructs Windows on how to correctly render the widgets in 
+you user interface. This file lives under "other_resources" in py2exe.<br>In <strong>GUI2Exe</strong> 
+, you just need to click on <strong>XP Manifest File </strong>check box and it will be 
+automagically inserted in the appropriate list control (and obviously in the 
+final Setup.py file). The <strong>GUI2Exe</strong>  
+            
+        list controls for 
+icon_resources, bitmap_resources and other_resources work exactly as described 
+in section <A href="bubba2.html#includes"><strong><font color="#80ffff">Includes 
+And Friends</font></strong></A>. 
+<br> <br> </p></FONT>
+<h2><a name="xref"><a name="resources"><font color="#80ffff">Cross</font></a><a name="resources"><font color="#80ffff"> Reference</a></FONT></a></h2>
+<p align="justify">This command line switch instructs py2exe to create a Python 
+module cross reference and display it in the webbrowser. This allows to 
+answer question why a certain module has been included, or if you can exlude a 
+certain module and its dependencies. Also, the html page includes links 
+which will even allow to view the source code of a module in the browser, for 
+easy inspection.<br><br></p>
+<h2><a name="xref"></a><font color="#80ffff"><a name="ascii"><a name="resources"><font color="#80ffff">Ascii</font></a><a name="resources"></a></font></A></h2>
+<p align="justify">To prevent unicode encoding error, py2exe now by default 
+includes the <strong>codecs</strong> module and the 
+<strong>encodings</strong> package. If you are sure 
+your program never implicitely or explicitely has to convert between unicode and 
+ascii strings this can be prevented by switching on this option in its 
+associated check box in <STRONG>GUI2Exe</STRONG>         
+            
+            
+  .<br><br></p>
+<h2><a name="xref"></a><a name="ascii"><a name="skiparchive"><a name="resources"><font color="#80ffff">Skip</font></a><a name="resources"><font color="#80ffff"> 
+Archive</a></FONT></a></h2>
+<p align="justify">By choosing this option, py2exe will copy the Python bytecode 
+files directly into the dist directory and subdirectories (or in the excutable 
+itself). No zipfile archive is used.<br><strong><br></strong></p>
+<h2><a name="xref"></a><a name="ascii"><a name="skiparchive"><a name="customboot"><a name="resources"><font color="#80ffff">Custom</font></a><a name="resources"><font color="#80ffff"> Boot Script</a></FONT></a></h2>
+<p align="justify">By selecting a file for this option, your custom Python file 
+can do things like installing a customized stdout blackhole. The custom boot 
+script is executed during startup of the executable immediately after 
+boot_common.py is executed.</p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div><!-- FOOTER: Site footer for links, copyright, etc. -->
+
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+%% py2exe
+optimize: 0
+compressed: 0
+bundle_files: 3
+zipfile_choice: 0
+zipfile: None
+dist_dir_choice: 0
+dist_dir: dist
+skip_archive: 0
+manifest_file: 0
+xref: 0
+ascii: 0
+custom_boot_script:
+--
+multipleexe: [["windows", "", "", "0.1", "No Company", "No Copyrights", "Py2Exe Sample File"]]
+includes: []
+packages: []
+excludes: ["Tkconstants","Tkinter","tcl","_gtkagg","_tkagg","pywin.debugger","pywin.debugger.dbgcon","pywin.dialogs","bsddb","curses","email"]
+dll_excludes: ["libgdk-win32-2.0-0.dll","libgobject-2.0-0.dll","tcl84.dll","tk84.dll"]
+ignores: []
+data_files: []
+icon_resources: [] 
+bitmap_resources: []
+other_resources: []
+%% cx_Freeze
+version: 0.1
+description: No Description
+author: No Author
+name: cx_Freeze Sample File
+base: windows
+script:
+optimize: 0
+compress: 0
+target_name_choice: 0
+target_name: 
+dist_dir_choice: 0
+dist_dir: 
+copy_dependent_files: 0
+append_script_toexe: 0
+append_script_tolibrary: 0
+create_manifest_file: 0
+icon: 
+initScript:
+--
+includes: []
+packages: []
+excludes: ["Tkconstants","Tkinter","tcl","_gtkagg","_tkagg","pywin.debugger","pywin.debugger.dbgcon","pywin.dialogs","bsddb","curses","email"]
+path: []
+%% bbfreeze
+script:
+optimize: 0
+compress: 0
+dist_dir_choice: 0
+dist_dir: 
+gui_only: windows
+include_py: 1
+create_manifest_file: 0
+--
+includes: []
+excludes: ["Tkconstants","Tkinter","tcl","_gtkagg","_tkagg","pywin.debugger","pywin.debugger.dbgcon","pywin.dialogs","bsddb","curses","email"]
+%% PyInstaller
+debug: 0
+console: 0
+strip: 0
+upx: 0
+icon: 
+version: 
+onefile: 0
+onedir: 1
+exename: 
+ascii: 0
+dist_dir: 
+includetk: 0
+level: 9
+create_manifest_file: 0
+--
+scripts: []
+includes: []
+excludes: ["Tkconstants","Tkinter","tcl","_gtkagg","_tkagg","pywin.debugger","pywin.debugger.dbgcon","pywin.dialogs","bsddb","curses","email"]
+pathex: []
+hookspath: []
+dll_excludes: []
+dll_includes: []
+data_files: []
+options: [0, 0, 0, 0, 0, 0]
+packages: []
+%% py2app
+script: 
+dist_dir_choice: 0
+dist_dir: dist
+optimize: 0
+iconfile: 
+plist: 
+extension: .app
+graph: 0
+xref: 0
+no_strip: 0
+no_chdir: 0
+semi_standalone: 0
+argv_emulation: 1
+use_pythonpath: 0
+site_packages: 0
+prefer_ppc: 0
+debug_modulegraph: 0
+debug_skip_macholib: 0
+plistCode_choice: 0
+--
+includes: []
+packages: []
+excludes: ["Tkconstants","Tkinter","tcl","_gtkagg","_tkagg","pywin.debugger","pywin.debugger.dbgcon","pywin.dialogs","bsddb","curses","email"]
+dylib_excludes: []
+datamodels: []
+resources: []
+frameworks: []
+plist_code: {}
