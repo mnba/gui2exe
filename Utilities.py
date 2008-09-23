@@ -162,7 +162,7 @@ def unique(list):
     return res.items()
 
 
-def setupString(key, item, isPyInstaller=False, stripper=False):
+def setupString(key, item, isPyInstaller=False, splitter=False):
     """ Sets up the strings for py2exe. """
 
     # This is an incredible and horrible hack, and it may not always work     
@@ -184,7 +184,7 @@ def setupString(key, item, isPyInstaller=False, stripper=False):
 
         text = ""
         lentext = 0
-        maxLen = (stripper and [100] or [60])[0]
+        maxLen = (splitter and [100] or [60])[0]
         
         for chunk in item:
             text += chunk + ","
