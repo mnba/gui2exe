@@ -3,7 +3,6 @@
 import sys
 import os
 import wx
-import wx.lib.scrolledpanel as scrolled
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
@@ -163,10 +162,13 @@ class bbFreezePanel(BaseBuilderPanel):
         
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND, 0)
         mainSizer.Add(commonSizer, 0, wx.ALL|wx.EXPAND, 5)
-
+        
+        flag = wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         # Add the list controls
-        includesSizer.Add(self.includeList, 1, wx.ALL|wx.EXPAND, 5)
-        excludesSizer.Add(self.excludeList, 1, wx.ALL|wx.EXPAND, 5)
+        includesSizer.Add(self.includeList, 1, flag, 5)
+        includesSizer.Add(self.includeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        excludesSizer.Add(self.excludeList, 1, flag, 5)
+        excludesSizer.Add(self.excludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         
         plusSizer.Add(includesSizer, 1, wx.EXPAND)
         plusSizer.Add(excludesSizer, 1, wx.EXPAND|wx.LEFT, 5)

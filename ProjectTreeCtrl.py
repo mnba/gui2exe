@@ -4,7 +4,6 @@ import time
 import wx.lib.customtreectrl as CT
 
 from Widgets import PyBusyInfo
-from Utilities import opj
 from Constants import _treeIcons
 
 

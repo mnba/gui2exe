@@ -2,7 +2,8 @@
 
 import os
 import wx
-import wx.lib.scrolledpanel as scrolled
+import pprint
+
 import wx.lib.buttons as buttons
 
 from BaseBuilderPanel import BaseBuilderPanel
@@ -73,8 +74,11 @@ class Py2AppPanel(BaseBuilderPanel):
         # To add/edit PList code
         self.pListChoice = wx.CheckBox(self, -1, "PList Code", name="plistCode_choice")
         editBmp = self.MainFrame.CreateBitmap("edit_add")
-        self.pListButton = buttons.ThemedGenBitmapTextButton(self, -1, editBmp, " Add/Edit",
-                                                             size=(-1, 25), name="plistCode")
+        removeBmp = self.MainFrame.CreateBitmap("remove")
+        self.pListAddButton = buttons.ThemedGenBitmapTextButton(self, -1, editBmp, " Add/Edit",
+                                                                size=(-1, 25), name="plistCode")
+        self.pListRemoveButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, " Remove",
+                                                                   size=(-1, 25), name="plistRemove")
         
         # A list control for the "includes" option, a comma separated list of
         # modules to include
@@ -135,7 +139,8 @@ class Py2AppPanel(BaseBuilderPanel):
         self.SetProperties()
         self.BindEvents()
 
-        self.Bind(wx.EVT_BUTTON, self.OnPList, self.pListButton)        
+        self.Bind(wx.EVT_BUTTON, self.OnPListAdd, self.pListAddButton)
+        self.Bind(wx.EVT_BUTTON, self.OnPListRemove, self.pListRemoveButton)
 
     # ========================== #
     # Methods called in __init__ #
@@ -190,6 +195,7 @@ class Py2AppPanel(BaseBuilderPanel):
         commonSizer_3 = wx.BoxSizer(wx.VERTICAL)
         commonSizer_2 = wx.BoxSizer(wx.VERTICAL)
         commonSizer_1 = wx.BoxSizer(wx.VERTICAL)
+        hSizer = wx.BoxSizer(wx.HORIZONTAL)
                 
         # Add the VersionInfo text controls
         mainSizer.Add(self.label, 0, wx.ALL, 10)
@@ -221,7 +227,9 @@ class Py2AppPanel(BaseBuilderPanel):
         commonSizer_6.Add(self.pListPicker, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_6, (2, 3), (1, 2), flag|wx.TOP, 5)
         commonSizer_7.Add(self.pListChoice, 0, wx.RIGHT|wx.BOTTOM, 2)
-        commonSizer_7.Add(self.pListButton, 0, wx.EXPAND, 0)
+        hSizer.Add(self.pListAddButton, 0, wx.RIGHT, 5)
+        hSizer.Add(self.pListRemoveButton, 0)
+        commonSizer_7.Add(hSizer, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_7, (2, 5), (1, 1), flag|wx.TOP, 5)
         
         commonGridSizer.AddGrowableCol(2)
@@ -232,25 +240,33 @@ class Py2AppPanel(BaseBuilderPanel):
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND|wx.BOTTOM, 5)
         mainSizer.Add(commonSizer, 0, wx.ALL|wx.EXPAND, 5)
 
+        flag = wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         # Add the list controls
-        includesSizer.Add(self.includeList, 1, wx.ALL|wx.EXPAND, 5)
-        packagesSizer.Add(self.packagesList, 1, wx.ALL|wx.EXPAND, 5)
-        frameworksSizer.Add(self.frameworksList, 1, wx.ALL|wx.EXPAND, 5)
+        includesSizer.Add(self.includeList, 1, flag, 5)
+        includesSizer.Add(self.includeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        packagesSizer.Add(self.packagesList, 1, flag, 5)
+        packagesSizer.Add(self.packagesList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        frameworksSizer.Add(self.frameworksList, 1, flag, 5)
+        frameworksSizer.Add(self.frameworksList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         plusSizer.Add(includesSizer, 1, wx.EXPAND)
         plusSizer.Add(packagesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         plusSizer.Add(frameworksSizer, 1, wx.EXPAND|wx.LEFT, 5)
         mainSizer.Add(plusSizer, 1, wx.ALL|wx.EXPAND, 5)
         
-        excludesSizer.Add(self.excludeList, 1, wx.ALL|wx.EXPAND, 5)
-        dylibExcludesSizer.Add(self.dylibExcludeList, 1, wx.ALL|wx.EXPAND, 5)
-        datamodelsSizer.Add(self.datamodelsList, 1, wx.ALL|wx.EXPAND, 5)
+        excludesSizer.Add(self.excludeList, 1, flag, 5)
+        excludesSizer.Add(self.excludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        dylibExcludesSizer.Add(self.dylibExcludeList, 1, flag, 5)
+        dylibExcludesSizer.Add(self.dylibExcludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        datamodelsSizer.Add(self.datamodelsList, 1, flag, 5)
+        datamodelsSizer.Add(self.datamodelsList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
 
         minusSizer.Add(excludesSizer, 1, wx.EXPAND)
         minusSizer.Add(dylibExcludesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         minusSizer.Add(datamodelsSizer, 1, wx.EXPAND|wx.LEFT, 5)
         mainSizer.Add(minusSizer, 1, wx.ALL|wx.EXPAND, 5)
 
-        datafilesSizer.Add(self.datafileList, 1, wx.EXPAND|wx.ALL, 5)
+        datafilesSizer.Add(self.datafileList, 1, flag, 5)
+        datafilesSizer.Add(self.datafileList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         mainSizer.Add(datafilesSizer, 1, wx.ALL|wx.EXPAND, 5)
 
         # Add the other options at the bottom
@@ -340,7 +356,7 @@ class Py2AppPanel(BaseBuilderPanel):
         # A couple of dictionaries to populate the setup string        
         setupDict, importDict = {}, {}
         configuration = dict(configuration)
-        distDir = self.distChoice.GetValue()
+        distChoice = self.distChoice.GetValue()
 
         pListChoice = self.pListChoice.GetValue()
         usePListFile = True
@@ -352,7 +368,7 @@ class Py2AppPanel(BaseBuilderPanel):
                 pListCode = configuration["plist_code"]
                 if pListCode:
                     usePListFile = False
-                    plist_code = setupString("plist_code = ", pListCode, splitter=True)
+                    plist_code = "plist_code = " + pprint.pformat(pListCode, width=100)
 
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
@@ -410,7 +426,7 @@ class Py2AppPanel(BaseBuilderPanel):
         return setupScript, buildDir
 
 
-    def OnPList(self, event):
+    def OnPListAdd(self, event):
         """ Launches a custom PList editor. """
 
         if not self.ValidateOptions():
@@ -443,4 +459,13 @@ class Py2AppPanel(BaseBuilderPanel):
         self.MainFrame.UpdatePageBitmap(project.GetName() + "*", 1)
         
 
+    def OnPListRemove(self, event):
+        """ Deletes the PList code (if any) from the project. """
+
+        # Retrieve the project stored in the parent (LabelBook) properties
+        project = self.GetParent().GetProject()
+        if "plist_code" in project["py2app"]:
+            project["py2app"]["plist_code"] = {}
+            # Update the icon and the project name on the wx.aui.AuiNotebook tab
+            self.MainFrame.UpdatePageBitmap(project.GetName() + "*", 1)            
         

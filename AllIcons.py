@@ -4324,6 +4324,46 @@ getkillImage = kill.GetImage
 getkillBitmap = kill.GetBitmap
 
 #----------------------------------------------------------------------
+list_minus = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAlRJ"
+    "REFUKJFN0rtPU1EAx/HfOec+Km0vvfTSJ9eWUlAZeCwmwMBijIlBg0Z2FgcXNxMHJwfc/D/8"
+    "A5QwOKibD9RUSB14lJqW3Np3L/d1znUx0e/+2b4E/2IbGxtGmfNlfThcS/nOgg6iizA4pT5/"
+    "3T5vvUvW680tgJO/QN3a3Fxey+e3r9jDu+moPJlemqfa9GVwz4dVORw1Pn3fbVYOXoSV6j4D"
+    "wG6sri7eXlh4Mt+x7s2aaX1mfYVoU2koYyrUeBR6wVTiRrLMW13jYmB/YJqm6XdWVh4uDQcP"
+    "pqMRzbxaAg05EAQADwDfA2wbKiGM+rzYbTb2pevl8tyU49xMcS+RSutA8xx+RIZQFRBVAWQG"
+    "wkNQN4ARi0UjgtyXlCCYNexR/pLrQLEseD2Gk+4QfiYHKaKCqgpY4CPeayMpKRiTlZIU2HZM"
+    "7fcjcsuCaFsIIgp4aQ5zT59BisUQhiEGhwfo7TyHsCzAaoUSPK/vdLoeGY4gzpsQjELkiuCe"
+    "B9HrgbsunFoN4lsFggdwL9xjSXhetd7r1pcTWpLQEKTVBt3bw9HHdTACSCKE7PvQuQc7m/ad"
+    "371dBlkeJfqDZFFPLGWKuYiiSJhgFBO+B537SDACzdDASgVRp/S9ZfsvWcdx/CghnXHPmckX"
+    "zWKimGVUGwM1dNBsEszMQEybYYuyn2e/2zu1H9UvDEB4KkRn4sL9RRwnl8ikCtq1MpPMLMhU"
+    "DhfjcVGzOl9Pzho71aPGm0e27ZD/3pO3AXMxl9osGPqt2KSekoXo2AP7bRDi1fHnyvFjwAWA"
+    "PxoXENIXX62bAAAAAElFTkSuQmCC")
+index.append('list_minus')
+catalog['list_minus'] = list_minus
+getlist_minusData = list_minus.GetData
+getlist_minusImage = list_minus.GetImage
+getlist_minusBitmap = list_minus.GetBitmap
+
+#----------------------------------------------------------------------
+list_plus = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABHNCSVQICAgIfAhkiAAAAgRJ"
+    "REFUKJFdkT1rU2EAhc9773s/7S21qZpETak2fiCakqFBCtWh6OQfEBcRlILg5ODqXxBdhE5u"
+    "Hd2c7OgiBGpL29QEFHOxzb3JbXK/3i+XVkrO/DwcOIdgLNWFam352fLz7tluacDDPTOzN6NR"
+    "9KOtt1vBqyACADouKUvV9Tn9yY3p+cl66Tb62YD/DDv7u83d1wA+A4A2LhGDeExjtOBO4U65"
+    "ipXqXfpo/qEd5zE/YTQA1uzsrH3cqpuu6UkidUkYGGIM2CH8pJsKIYITidZWaquLLxefbg02"
+    "U8+YiJzMLXOaG4LkOOIhUpGgE3bshmjU3Lcu7830ftGIRMXQOrx5/1bdKHszSGQGoSTOeR4O"
+    "0j+QSsJyVGVh6eoHExZrdtNPVKOaRaCIJEPkRMI0KahOkakQeQwABBO2RurFizok1Vu9vSEF"
+    "hcnBSCQOkcUpdEJh6BaoZkAjBEopSCXBBYOmHBXmwT5lkvkJS2NdFkyDTyHjzOA60UD7SGUI"
+    "W/Pg90k8ytKjYeyHf4P+NnHuOZfkknzAXDaBA9DGXONF6Xrh2oVCDkVDTNPL2dq3r2/8L8F7"
+    "AALrEDTZSH5jA2vHa16pvKs8PuNSeO4I3MjgEE8eJIM21pH/n3zsW5ayNHGIjfOTRYAWEPQZ"
+    "F0r4p6Fxyd/5vvPRK9hOq4coS7NtAdVEgK3T0D/Wd/IorZV9BwAAAABJRU5ErkJggg==")
+index.append('list_plus')
+catalog['list_plus'] = list_plus
+getlist_plusData = list_plus.GetData
+getlist_plusImage = list_plus.GetImage
+getlist_plusBitmap = list_plus.GetBitmap
+
+#----------------------------------------------------------------------
 load_project = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAArBJ"
     "REFUOI1t01tIFFEcx/HvzM7s7O6Muq6VeUvI3DbtRkFQEhFZUC9SUVA99NAFCwSDTLrRjXwI"
@@ -5111,6 +5151,30 @@ getremovableImage = removable.GetImage
 getremovableBitmap = removable.GetBitmap
 
 #----------------------------------------------------------------------
+remove = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAvNJ"
+    "REFUOI1tkm9I4wUYxz9uy5OjaaeEf4KtEwIRhd8QAkEYjXwhKffKnS8CJ4mInMUNxgYKOxli"
+    "hUsGwXRKIocTJodGoiKLVIjYCF/sheBCGZju9tutKY501fX0wq30ri88PG+ePx+e71MCaNxu"
+    "N2NjY39zrRJAABobG0v39/cfA5/bbDbMZjPJZJLT09N/sxaQnZ0d4YbcbndpLpfT5HK5D7PZ"
+    "7Pzw8DBNTU2k02my2SyqqpJKpVBVlRJeV5HgY+Cpw+Hg8vKS+vp6RIRYLHaLQlPsMpvNupmZ"
+    "mbtFfOCp3W7/vbW19Y+Ojo4/j4+PyWQyt6KrqwvW1tbuzc3N6VtaWt54hUSsVutVTU1NpqKi"
+    "4qfV1dUXU1NT0t7eLkajUWw2mwDC0NDQmwChUOid2trauzcHDAwM/NXZ2fmyoaHhOfBVJBKJ"
+    "WywW6e3tlQKpU1NWVlYGYLVaTwC2t7c/A7Db7T2BQEBrNBrFZDLda2traz47O3urubmZhYUF"
+    "ABfwBQAOh+M9i8VS7XQ6TQCRSGTk/Px8dXp6+pfKykoZHR1NDQ4OvnC5XFuKogjgKxz7tgki"
+    "oqysrDwUEfXo6Oi7cDgcDgQCiQJuMVw3Gq+z3+9/JCKKiDwUkaCIOPf29p5tbm4+E5FIMBiM"
+    "Au//j+XXNup0On0ymewGHiwvL6eBhMlkyh8cHKjArxqNZh+Ijo+Pv/0Kdonu5OTk67q6updL"
+    "S0vK7u7uN36//wp4sLi4mDEYDHeAfD6fPwYYGRlJF5b+97mxWOznUCjkA5RwOLwpIj4RcQKK"
+    "iHhEJBgKhXwTExMDAN3d3fcB3G73teV9fX2fAgpAPB7/UUR8hdkmEfHE4/Hvo9Holtfr/aG4"
+    "dGNjox8gmUy+i1ar/WB2drb38PDw24uLi+lCjWIwGO6LiFNEgl6v98nk5OSuiFheO+L8/Hx1"
+    "f3//VXl5ealerx8ElK2trS89Hs8TVVWfp1KpaqPR2JdIJELAb+vr659UVVXpe3p6PgL4B/3l"
+    "eHQ0snj0AAAAAElFTkSuQmCC")
+index.append('remove')
+catalog['remove'] = remove
+getremoveData = remove.GetData
+getremoveImage = remove.GetImage
+getremoveBitmap = remove.GetBitmap
+
+#----------------------------------------------------------------------
 resource = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAqJJ"
     "REFUOI19kk1IVGEUhp+5d/R6JxUzSxGMsZGKNMuFmAQGGU0QQmJQ24p2s4hwa1pBm6BFCC1c"
@@ -5276,6 +5340,29 @@ catalog['sort_up'] = sort_up
 getsort_upData = sort_up.GetData
 getsort_upImage = sort_up.GetImage
 getsort_upBitmap = sort_up.GetBitmap
+
+#----------------------------------------------------------------------
+spellcheck = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAshJ"
+    "REFUOI2NkktoVGcYhp//nH/OmclccqMxSk1iLkpidRpGxY1YaYyiEuJiFqEWb7hw1VXtRWgN"
+    "2BbcuhDUtptuDCitYL1hyxBjNN5KURdDik3QJJOJZ6aTmcycyZz/dKMyJhb67r6P7334brBA"
+    "XV1d7T09PcGF+f+SVh5Eo1Fd07R9hUKh+f8CRHd393Kg13Vdp1gsDpim2Q9kXddNK6XOAy90"
+    "Xe8DvLZt/xSLxabKAdK27XlgVkq5W0r5QimlA5amaRlN0w4rpSzXdSVwzXEce2EHcnBw8MPa"
+    "2to1pmmm8/l8DVBwXfd3x3GmPR7PRqDWcZxTqVRqGODq2iV+U3M2Z62Z4V3jpKRSqimZTGpA"
+    "CXABHegFBBAHLOBjYEXYRyzk0Q/o9Y2fa7r548Ds86M6MPrS+BC4t8zD4631VU3TheJoXrnn"
+    "gLtAMajhP9XZGF36fuSTpdG9FUZVTSfZWSXK5xkAPbwzfNhsaP2ilJg40XJh+KQA9agDI9Aa"
+    "OaK3dRz1b9rm1fwh1NwcE0M3H8hyQGRHuM9oD3/rb1sdLCUnj415DCt+LjYQimw5Ils6vjRW"
+    "R7zggpUk/deodef+3Z/fAATebdpi+ANBpp/hq3mnyly/8Tu1pG6bbGju1euWeVUugyiVSI/9"
+    "bV2/8dvxQ7eenNbLAfsrWREq5j4w3JIU+RxGIBQyGlrWSoEhUkn0xHMyjx5aV27d7j94J34a"
+    "mHtjB7ug4pvOys9WVQc+laEqnzB9CH8Q8jlELkM6kbAuTf7Tv2dcnQHyvDzZa8Vh/tmUPbK+"
+    "RhPVXnODLBY8Yi6LUCUy+cLM5cn0sY+ezp99ZV4EeAUZwx5Z19YuKptbN+j1yz0ZX+XMr1Oz"
+    "X/Xdn/geKJTXLwIAxLPMj3lLI+tWvieormu8Oj59vO/i0A/AolcWb/G/1tfbt4dUhVjzy9CD"
+    "P/5MJHJvq/kX3gYYV92yZ68AAAAASUVORK5CYII=")
+index.append('spellcheck')
+catalog['spellcheck'] = spellcheck
+getspellcheckData = spellcheck.GetData
+getspellcheckImage = spellcheck.GetImage
+getspellcheckBitmap = spellcheck.GetBitmap
 
 #----------------------------------------------------------------------
 switch_db = PyEmbeddedImage(

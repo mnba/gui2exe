@@ -1,10 +1,8 @@
 # Start the imports
 
-import os
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _toolTips
 
 if wx.Platform != "__WXMAC__":
@@ -301,5 +299,9 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         if possibleTextCtrl:
             # Found it: enable or disable it accordingly
             possibleTextCtrl.Enable(int(value))
+            if possibleTextName == "plistCode":
+                sibling = self.FindWindowByName("plistRemove")
+                sibling.Enable(int(value))
+
 
 

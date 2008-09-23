@@ -2,7 +2,7 @@
 
 import sys
 import os
-from Utilities import odict, opj, now
+from Utilities import odict, now
 
 
 class Project(odict):

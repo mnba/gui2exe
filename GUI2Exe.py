@@ -119,6 +119,7 @@ class GUI2Exe(wx.Frame):
         self.pyInstallerPath = None          # Where PyInstaller lives
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
         self.showTips = False                # Show tooltips for various compiler options
+        self.openingPages = {}               # Used to remember the last used compiler for every project
         
         self.perspectives = []
 
@@ -224,7 +225,7 @@ class GUI2Exe(wx.Frame):
                     ('Clea&n "dist" directory', "Clean the distribution folder at every compilation", "", self.OnCleanDist, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
                     ("&Recurse sub-dirs for data_files option", "Recurse sub-directories for data_files option if checked", "", self.OnRecurseSubDir, wx.ITEM_CHECK),
-                    ('Show t&ooltips', "show tooltips for the various compiler options", "", self.OnShowTip, wx.ITEM_CHECK),
+                    ("Show t&ooltips", "show tooltips for the various compiler options", "", self.OnShowTip, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
                     ("Change &Python version...\tCtrl+H", "Temporarily changes the Python version", "python_version", self.OnChangePython, ""),
                     ("Set P&yInstaller path...\tCtrl+Y", "Sets the PyInstaller installation path", "PyInstaller_small", self.OnSetPyInstaller, ""),
@@ -235,6 +236,8 @@ class GUI2Exe(wx.Frame):
                     ("&Test executable\tCtrl+R", "Test the compiled file (if it exists)", "runexe", self.OnTestExecutable, ""),
                     ("", "", "", "", ""),
                     ("View &setup script\tCtrl+P", "View the auto-generated setup script", "view_setup", self.OnViewSetup, ""),
+                    ("&Check setup script syntax\tCtrl+X", "Check the syntax of the auto-generated setup script", "spellcheck", self.OnCheckSyntax, ""),
+                    ("", "", "", "", ""),
                     ("Show &full build output\tCtrl+F", "View the full build output for the current compiler", "full_build", self.OnViewFullBuild, ""),
                     ("", "", "", "", ""),                 
                     ("&Missing modules\tCtrl+M", "What the compiler thinks are the missing modules (py2exe only)", "missingmodules", self.OnViewMissing, ""),
@@ -288,6 +291,11 @@ class GUI2Exe(wx.Frame):
                 # By default the "remove build directory" is on
                 menuItem.Check(True)
 
+            if eachLabel.find("tooltips") >= 0:
+                # By default we activate the tooltips, unless in the wx.Config
+                # it's set to False
+                menuItem.Check(True)
+                
             # Bind the event
             self.Bind(wx.EVT_MENU, eachHandler, menuItem)
 
@@ -472,6 +480,10 @@ class GUI2Exe(wx.Frame):
             item = menuBar.FindMenuItem("Options", 'Clean "dist" directory')
             menuBar.Check(item, self.cleanDist)
 
+        val = options.Read('Opened_Pages')
+        if val:
+            self.openingPages = eval(val)
+
 
     def GetDefaultConfiguration(self, compiler):
         """ Returns the default configuration for a given compiler. """
@@ -619,6 +631,7 @@ class GUI2Exe(wx.Frame):
         config.Write('Show_Tooltips', str(self.showTips))
         config.Write('Delete_Build', str(self.deleteBuild))
         config.Write('Clean_Dist', str(self.cleanDist))
+        config.Write('Opened_Pages', str(self.openingPages))
         config.Flush()
 
         # Close down the database...
@@ -816,6 +829,37 @@ class GUI2Exe(wx.Frame):
         self.RunCompile(view=True, run=False)
         wx.EndBusyCursor()
 
+
+    def OnCheckSyntax(self, event):
+        """
+        Checks the Python syntax (for SyntaxError) of the automatically
+        generated Setup.py file.
+        """
+
+        page = self.GetCurrentPage()
+        if not page:
+            # No page opened, you can't fool me
+            return
+
+        outputs = page.PrepareForCompile()
+        if not outputs:
+            # Setup.py file creation went wrong.
+            # Have you set all the required variables?
+            return
+
+        setupScript, buildDir = outputs
+        
+        # Try to compile the code
+        try:
+            compile(setupScript, 'test', 'exec')
+            self.RunError("Message", "No SyntaxError detected in the automatically generated Setup.py file. ")
+        except:
+            # What can be wrong?
+            exception_instance = sys.exc_info()[1]
+            msg = "SyntaxError at line %d, column %d"%(exception_instance.lineno,
+                                                       exception_instance.offset)
+            self.RunError("Error", msg)
+            
 
     def OnViewFullBuild(self, event):
         """
@@ -1098,6 +1142,7 @@ class GUI2Exe(wx.Frame):
         # Retrieve all the information we need before closing
         page = self.mainPanel.GetPage(selection)
         project = page.GetProject()
+        projectName = project.GetName()
         treeItem = page.GetTreeItem()
         # Check if it is a close event or a wx.aui.AuiNotebookEvent
         isCloseEvent = isinstance(event, wx.CloseEvent)
@@ -1105,6 +1150,7 @@ class GUI2Exe(wx.Frame):
         if not unSaved:
             # Mark the item as non-edited anymore (if it exists)
             self.projectTree.SetItemEditing(treeItem, False)
+            self.openingPages[projectName] = page.GetSelection()
             if not isCloseEvent:
                 event.Skip()
                 if not isAUI:
@@ -1124,6 +1170,7 @@ class GUI2Exe(wx.Frame):
         elif answer == wx.ID_YES:
             # Save the project, defer to the database
             self.dataBase.SaveProject(project)
+            self.openingPages[projectName] = page.GetSelection()
             if not isCloseEvent:
                 # We are handling wx.aui.AuiNotebook close event
                 event.Skip()
@@ -1133,6 +1180,8 @@ class GUI2Exe(wx.Frame):
         else:
             # Check if the project exists
             projectExists = self.dataBase.IsProjectExisting(project)
+            if projectExists:
+                self.openingPages[projectName] = page.GetSelection()
             if not isCloseEvent:
                 event.Skip()
                 if not isAUI:
@@ -1219,7 +1268,7 @@ class GUI2Exe(wx.Frame):
         # The Project method adds a page to the center pane
         # I need it in another method as I use it also elsewhere below
         self.Project(project, treeItem, True)
-
+        self.openingPages[projectName] = 0
         # Send a message to the log window at the bottom    
         self.SendMessage("Message", 'New project "%s" added'%projectName)
 
@@ -1244,7 +1293,13 @@ class GUI2Exe(wx.Frame):
         project = self.dataBase.LoadProject(projectName)
         # The Project method adds a page to the center pane
         self.Project(project, treeItem, False)
-        # Send a message to the log window at the bottom    
+        projectName = project.GetName()
+        if projectName in self.openingPages:
+            # Get the current LabelBook
+            book = self.GetCurrentBook()
+            book.SetSelection(self.openingPages[projectName])
+            
+        # Send a message to the log window at the bottom
         self.SendMessage("Message", 'Project "%s" successfully loaded'%projectName)
 
         wx.EndBusyCursor()

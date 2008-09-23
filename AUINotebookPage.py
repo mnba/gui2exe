@@ -10,7 +10,6 @@ from Py2AppPanel import Py2AppPanel
 
 from NotImplementedOrMissingPanel import NotImplementedOrMissingPanel
 
-from Utilities import opj
 from Constants import _lbStyle, _bookIcons, _defaultCompilers
 
 

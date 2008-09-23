@@ -2,11 +2,10 @@
 
 import os
 import wx
-import wx.lib.scrolledpanel as scrolled
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
-from Constants import _py2exe_target, _py2exe_imports, _manifest_template, _pywild, ListType
+from Constants import _py2exe_target, _py2exe_imports, _manifest_template, ListType
 from Constants import _py2exe_class
 from Utilities import setupString
 
@@ -251,29 +250,39 @@ class Py2ExePanel(BaseBuilderPanel):
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND|wx.BOTTOM, 5)
         mainSizer.Add(commonSizer, 0, wx.ALL|wx.EXPAND, 5)
 
+        flag = wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         # Add the list controls
-        includesSizer.Add(self.includeList, 1, wx.ALL|wx.EXPAND, 5)
-        packagesSizer.Add(self.packagesList, 1, wx.ALL|wx.EXPAND, 5)
+        includesSizer.Add(self.includeList, 1, flag, 5)
+        includesSizer.Add(self.includeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        packagesSizer.Add(self.packagesList, 1, flag, 5)
+        packagesSizer.Add(self.packagesList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         
         plusSizer.Add(includesSizer, 1, wx.EXPAND)
         plusSizer.Add(packagesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         mainSizer.Add(plusSizer, 1, wx.ALL|wx.EXPAND, 5)
         
-        excludesSizer.Add(self.excludeList, 1, wx.ALL|wx.EXPAND, 5)
-        dllExcludesSizer.Add(self.dllExcludeList, 1, wx.ALL|wx.EXPAND, 5)
-        ignoreSizer.Add(self.ignoreList, 1, wx.ALL|wx.EXPAND, 5)
+        excludesSizer.Add(self.excludeList, 1, flag, 5)
+        excludesSizer.Add(self.excludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        dllExcludesSizer.Add(self.dllExcludeList, 1, flag, 5)
+        dllExcludesSizer.Add(self.dllExcludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        ignoreSizer.Add(self.ignoreList, 1, flag, 5)
+        ignoreSizer.Add(self.ignoreList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
 
         minusSizer.Add(excludesSizer, 1, wx.EXPAND)
         minusSizer.Add(dllExcludesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         minusSizer.Add(ignoreSizer, 1, wx.EXPAND|wx.LEFT, 5)
         mainSizer.Add(minusSizer, 1, wx.ALL|wx.EXPAND, 5)
 
-        datafilesSizer.Add(self.datafileList, 1, wx.EXPAND|wx.ALL, 5)
-        mainSizer.Add(datafilesSizer, 1, wx.ALL|wx.EXPAND, 5)
+        datafilesSizer.Add(self.datafileList, 1, flag, 5)
+        datafilesSizer.Add(self.datafileList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        mainSizer.Add(datafilesSizer, 1, flag, 5)
 
-        iconSizer.Add(self.iconResourceList, 1, wx.EXPAND|wx.ALL, 5)
-        bitmapSizer.Add(self.bitmapResourceList, 1, wx.EXPAND|wx.ALL, 5)
-        otherResSizer.Add(self.otherResourceList, 1, wx.EXPAND|wx.ALL, 5)
+        iconSizer.Add(self.iconResourceList, 1, flag, 5)
+        iconSizer.Add(self.iconResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        bitmapSizer.Add(self.bitmapResourceList, 1, flag, 5)
+        bitmapSizer.Add(self.bitmapResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        otherResSizer.Add(self.otherResourceList, 1, flag, 5)
+        otherSizer.Add(self.otherResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         resourceSizer.Add(iconSizer, 1, wx.EXPAND)
         resourceSizer.Add(bitmapSizer, 1, wx.EXPAND|wx.LEFT, 5)
         resourceSizer.Add(otherResSizer, 1, wx.EXPAND|wx.LEFT, 5)

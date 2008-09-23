@@ -3,7 +3,6 @@
 import sys
 import os
 import wx
-import wx.lib.scrolledpanel as scrolled
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
@@ -228,17 +227,23 @@ class cx_FreezePanel(BaseBuilderPanel):
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND, 0)
         mainSizer.Add(commonSizer, 0, wx.ALL|wx.EXPAND, 5)
 
+        flag = wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
         # Add the list controls
-        pathSizer.Add(self.pathList, 1, wx.ALL|wx.EXPAND, 5)
-        includesSizer.Add(self.includeList, 1, wx.ALL|wx.EXPAND, 5)
-        packagesSizer.Add(self.packagesList, 1, wx.ALL|wx.EXPAND, 5)
-
+        pathSizer.Add(self.pathList, 1, flag, 5)
+        pathSizer.Add(self.pathList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        includesSizer.Add(self.includeList, 1, flag, 5)
+        includesSizer.Add(self.includeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        packagesSizer.Add(self.packagesList, 1, flag, 5)
+        packagesSizer.Add(self.packagesList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        
         plusSizer.Add(pathSizer, 1, wx.EXPAND)        
         plusSizer.Add(includesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         plusSizer.Add(packagesSizer, 1, wx.EXPAND|wx.LEFT, 5)
         mainSizer.Add(plusSizer, 1, wx.ALL|wx.EXPAND, 5)
         
-        excludesSizer.Add(self.excludeList, 1, wx.ALL|wx.EXPAND, 5)
+        excludesSizer.Add(self.excludeList, 1, flag, 5)
+        excludesSizer.Add(self.excludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        
         minusSizer.Add(excludesSizer, 1, wx.EXPAND)
 
         otherOptionsSizer.Add(self.copyDepFiles, 0, wx.LEFT|wx.TOP|wx.EXPAND, 5)

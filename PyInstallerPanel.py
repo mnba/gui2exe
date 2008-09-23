@@ -2,11 +2,10 @@
 
 import os
 import wx
-import wx.lib.scrolledpanel as scrolled
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
-from Constants import _pyInstaller_imports, _pyInstaller_target, _pywild, ListType
+from Constants import _pyInstaller_imports, ListType
 from Constants import _pyInstaller_target_onefile, _pyInstaller_target_onedir
 from Constants import _pyInstallerTOC, _pyInstallerOptions
 from Utilities import setupString
@@ -156,12 +155,17 @@ class PyInstallerPanel(BaseBuilderPanel):
         pathSizer = wx.StaticBoxSizer(self.pathSizer_staticbox, wx.HORIZONTAL)
         scriptSizer = wx.StaticBoxSizer(self.scriptSizer_staticbox, wx.HORIZONTAL)
         mainSizer.Add(self.label, 0, wx.ALL, 10)
-        scriptSizer.Add(self.scriptsList, 1, wx.ALL|wx.EXPAND, 5)
+        
+        flag = wx.LEFT|wx.TOP|wx.BOTTOM|wx.EXPAND
+        scriptSizer.Add(self.scriptsList, 1, flag, 5)
+        scriptSizer.Add(self.scriptsList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         topSizer.Add(scriptSizer, 2, wx.ALL|wx.EXPAND, 5)
-        pathSizer.Add(self.pathexList, 1, wx.ALL|wx.EXPAND, 5)
-        topSizer.Add(pathSizer, 1, wx.ALL|wx.EXPAND, 5)
-        hookSizer.Add(self.hookList, 1, wx.ALL|wx.EXPAND, 5)
-        topSizer.Add(hookSizer, 1, wx.ALL|wx.EXPAND, 5)
+        pathSizer.Add(self.pathexList, 1, flag, 5)
+        pathSizer.Add(self.pathexList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        topSizer.Add(pathSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
+        hookSizer.Add(self.hookList, 1, flag, 5)
+        hookSizer.Add(self.hookList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        topSizer.Add(hookSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
         mainSizer.Add(topSizer, 0, wx.EXPAND, 0)
         exename = wx.StaticText(self, -1, "Executable Name")
         commonGridSizer.Add(exename, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
@@ -198,20 +202,34 @@ class PyInstallerPanel(BaseBuilderPanel):
         commonGridSizer.AddGrowableCol(4)
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND|wx.TOP|wx.BOTTOM, 5)
         mainSizer.Add(commonSizer, 0, wx.ALL|wx.EXPAND, 5)
-        includesSizer.Add(self.includeList, 1, wx.ALL|wx.EXPAND, 5)
+        
+        # Add the list controls
+        includesSizer.Add(self.includeList, 1, flag, 5)
+        includesSizer.Add(self.includeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         centerSizer1.Add(includesSizer, 1, wx.ALL|wx.EXPAND, 5)
-        excludesSizer.Add(self.excludeList, 1, wx.ALL|wx.EXPAND, 5)
-        centerSizer1.Add(excludesSizer, 1, wx.ALL|wx.EXPAND, 5)
+        
+        excludesSizer.Add(self.excludeList, 1, flag, 5)
+        excludesSizer.Add(self.excludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        centerSizer1.Add(excludesSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
         mainSizer.Add(centerSizer1, 0, wx.EXPAND, 0)
-        packagesSizer.Add(self.packagesList, 1, wx.ALL|wx.EXPAND, 5)
+        
+        packagesSizer.Add(self.packagesList, 1, flag, 5)
+        packagesSizer.Add(self.packagesList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         centerSizer2.Add(packagesSizer, 1, wx.ALL|wx.EXPAND, 5)
-        dllExcludesSizer.Add(self.dllExcludeList, 1, wx.ALL|wx.EXPAND, 5)
-        centerSizer2.Add(dllExcludesSizer, 1, wx.ALL|wx.EXPAND, 5)
-        dllIncludesSizer.Add(self.dllIncludeList, 1, wx.ALL|wx.EXPAND, 5)
-        centerSizer2.Add(dllIncludesSizer, 1, wx.ALL|wx.EXPAND, 5)
+        
+        dllExcludesSizer.Add(self.dllExcludeList, 1, flag, 5)
+        dllExcludesSizer.Add(self.dllExcludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        centerSizer2.Add(dllExcludesSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
+        
+        dllIncludesSizer.Add(self.dllIncludeList, 1, flag, 5)
+        dllIncludesSizer.Add(self.dllIncludeList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        centerSizer2.Add(dllIncludesSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
         mainSizer.Add(centerSizer2, 0, wx.EXPAND, 0)
-        dataFileSizer.Add(self.datafileList, 1, wx.EXPAND|wx.ALL, 5)
+        
+        dataFileSizer.Add(self.datafileList, 1, flag, 5)
+        dataFileSizer.Add(self.datafileList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         mainSizer.Add(dataFileSizer, 0, wx.ALL|wx.EXPAND, 5)
+        
         otherGridSizer.Add(self.verboseCheck, 0, wx.LEFT|wx.TOP|wx.ALIGN_CENTER_VERTICAL, 5)
         otherGridSizer.Add(self.warningCheck, 0, wx.TOP|wx.ALIGN_CENTER_VERTICAL, 5)
         otherGridSizer.Add(self.forceexecCheck, 0, wx.TOP|wx.ALIGN_CENTER_VERTICAL, 5)

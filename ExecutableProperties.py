@@ -59,7 +59,7 @@ class ExecutableProperties(wx.Panel):
     def InsertColumns(self):
         """ Inserts the columns in the list control. """
 
-        columnNames = ["Builder", "Size (MB) ", "Files   "]
+        columnNames = ["Builder", "Size (MB)   ", "Files     "]
         # Loop over all the column names        
         for indx, column in enumerate(columnNames):
             self.listCtrl.InsertColumn(indx, column)

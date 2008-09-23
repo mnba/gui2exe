@@ -19,8 +19,8 @@ from bisect import bisect
 # This is needed by the StyledTextCtrl
 import keyword
 
-from Utilities import opj, flatten, unique, RecurseSubDirs
-from Constants import ListType, _iconFromName, _unWantedLists, _faces
+from Utilities import flatten, unique, RecurseSubDirs
+from Constants import _iconFromName, _unWantedLists, _faces
 from Constants import _stcKeywords, _pywild, _pypackages, _dllbinaries
 from Constants import _xcdatawild, _dylibwild, _comboImages
 
@@ -33,7 +33,6 @@ if wx.Platform == "__WXMSW__":
         try:
             import win32api
             import win32con
-            import winxpgui
             import win32gui
             _libimported = "MH"
         except ImportError:
@@ -336,8 +335,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         self.Thaw()
         wx.EndBusyCursor()
 
-        # Update the project, something changed
-        wx.CallAfter(self.UpdateProject)
+        if indices:
+            # Update the project, something changed
+            wx.CallAfter(self.UpdateProject)
 
 
     def OnClearAll(self, event):
@@ -817,7 +817,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         paths = dlg.GetPaths()
         for path in paths:
             indx = self.InsertImageStringItem(sys.maxint, "", 0)
-            self.SetStringItem(indx, i, path)
+            self.SetStringItem(indx, 1, path)
 
 
     def AddFilesWithPath(self, name):
@@ -991,6 +991,32 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             return unique(values)
         
         return values
+
+
+    def MakeButtons(self):
+        """ Creates the +/- buttons for the list controls. """
+        
+        # Call our parent
+        parent = self.GetParent()
+        # Create the bitmaps for the button
+        plusBmp = self.MainFrame.CreateBitmap("list_plus")
+        minusBmp = self.MainFrame.CreateBitmap("list_minus")
+        # Create a couple of themed buttons for the +/- actions
+        plusButton = wx.BitmapButton(parent, -1, plusBmp, size=(13, 13), style=wx.NO_BORDER)
+        minusButton = wx.BitmapButton(parent, -1, minusBmp, size=(13, 13), style=wx.NO_BORDER)
+        # Add some explanation...
+        plusButton.SetToolTipString("Add items to the list")
+        minusButton.SetToolTipString("Remove items from the list")
+        # Put everything in a sizer
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add((0, 0), 1, wx.EXPAND)
+        sizer.Add(plusButton, 0, wx.BOTTOM, 3)
+        sizer.Add(minusButton, 0, wx.BOTTOM, 5)
+        # Bind the events
+        plusButton.Bind(wx.EVT_BUTTON, self.OnAdd)
+        minusButton.Bind(wx.EVT_BUTTON, self.OnDeleteSelected)
+        
+        return sizer
 
 
     def UpdateProject(self, changeIcon=True):
@@ -1559,6 +1585,7 @@ class Py2ExeMissing(wx.Frame):
 
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.cancelButton)
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
         
 
     # ============== #
@@ -1572,6 +1599,14 @@ class Py2ExeMissing(wx.Frame):
         self.Destroy()
         event.Skip()
 
+
+    def OnKeyUp(self, event):
+
+        if event.GetKeyCode() in [wx.WXK_ESCAPE, wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            self.OnOk(event)
+
+        event.Skip()
+        
 
 class GUI2ExeDirSelector(wx.Dialog):
 
@@ -1592,7 +1627,8 @@ class GUI2ExeDirSelector(wx.Dialog):
         
         self.SetupDirCtrl()
         self.LayoutItems()
-        
+        self.BindEvents()
+    
 
     def SetupDirCtrl(self):
 
@@ -1680,6 +1716,43 @@ class GUI2ExeDirSelector(wx.Dialog):
 
         return itemText
 
+
+    def BindEvents(self):
+        """ Binds the events to specific methods. """
+
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
+        
+
+    def OnOk(self, event):
+        """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
+
+        self.EndModal(wx.ID_OK)
+
+
+    def OnCancel(self, event):
+        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
+
+        self.OnClose(event)
+
+
+    def OnClose(self, event):
+        """ User canceled the dialog. """
+
+        self.EndModal(wx.ID_CANCEL)
+
+
+    def OnKeyUp(self, event):
+
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.OnClose(event)
+        elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            self.OnOk(event)
+
+        event.Skip()
+        
 
 class PyInfoFrame(wx.Frame):
     """ Base class for PyBusyInfo. """
@@ -1966,8 +2039,7 @@ class BuildDialog(wx.Dialog):
         self.SetProperties()
         self.DoLayout(header, projectName, compiler)
 
-        self.Bind(wx.EVT_BUTTON, self.OnSave, self.exportButton)
-        self.Bind(wx.EVT_BUTTON, self.OnClipboard, self.clipboardButton)
+        self.BindEvents()
         self.CenterOnParent()
 
 
@@ -1997,6 +2069,16 @@ class BuildDialog(wx.Dialog):
         mainSizer.Add(bottomSizer, 0, wx.EXPAND, 0)
         self.SetSizer(mainSizer)
         self.Layout()
+
+
+    def BindEvents(self):
+        """ Binds the events to specific methods. """
+
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
+        self.Bind(wx.EVT_BUTTON, self.OnSave, self.exportButton)
+        self.Bind(wx.EVT_BUTTON, self.OnClipboard, self.clipboardButton)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
 
 
     def OnSave(self, event):
@@ -2033,7 +2115,27 @@ class BuildDialog(wx.Dialog):
             self.MainFrame.SendMessage("Message", "Build output text successfully copied to the clipboard")
         else:
             self.MainFrame.RunError("Error", "Unable to open the clipboard.")
+        
 
+    def OnCancel(self, event):
+        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
+
+        self.OnClose(event)
+
+
+    def OnClose(self, event):
+        """ User canceled the dialog. """
+
+        self.EndModal(wx.ID_CANCEL)
+
+
+    def OnKeyUp(self, event):
+
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.OnClose(event)
+
+        event.Skip()
+        
 
 class TransientPopup(wx.PopupWindow):
     """
@@ -2242,11 +2344,14 @@ class PListEditor(wx.Dialog):
         if pListFile:
             # We got a file from the user
             PFile = plistlib.readPlist(pListFile)
-            
-        PTemplate = plist_template.infoPlistDict(CFBundleExecutable, pListCode)
-        for key in PFile.keys():
-            if key not in PTemplate:
-                PTemplate[key] = PFile[key]
+
+        if not pListCode:
+            PTemplate = plist_template.infoPlistDict(CFBundleExecutable, pListCode)
+            for key in PFile.keys():
+                if key not in PTemplate:
+                    PTemplate[key] = PFile[key]
+        else:
+            PTemplate = pListCode
 
         self.treeList = gizmos.TreeListCtrl(self, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
                                             wx.TR_COLUMN_LINES | wx.TR_FULL_ROW_HIGHLIGHT)
@@ -2262,7 +2367,8 @@ class PListEditor(wx.Dialog):
         self.LayoutItems()
         self.BuildImageList()
         self.PopulateTree(PTemplate)
-
+        self.BindEvents()
+        
         size = self.MainFrame.GetSize()
         self.SetSize((size.x/2, size.y/2))
 
@@ -2306,6 +2412,16 @@ class PListEditor(wx.Dialog):
         mainSizer.Layout()
 
 
+    def BindEvents(self):
+        """ Binds the events to specific methods. """
+
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
+        self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
+
+
     def BuildImageList(self):
         """ Builds the image list for the tree list control. """
         
@@ -2344,8 +2460,6 @@ class PListEditor(wx.Dialog):
         colWidth, dummy = self.CalculateColumnWidth(self.root, 0)
         self.treeList.SetColumnWidth(0, colWidth)
         self.treeList.SetColumnWidth(2, 300)
-        
-        self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
         
         del self.itemCounter
 
@@ -2419,7 +2533,35 @@ class PListEditor(wx.Dialog):
 
         event.Skip()
 
-    
+
+    def OnOk(self, event):
+        """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
+
+        self.EndModal(wx.ID_OK)
+
+
+    def OnCancel(self, event):
+        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
+
+        self.OnClose(event)
+
+
+    def OnClose(self, event):
+        """ User canceled the dialog. """
+
+        self.EndModal(wx.ID_CANCEL)
+
+
+    def OnKeyUp(self, event):
+
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.OnClose(event)
+        elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            self.OnOk(event)
+
+        event.Skip()
+
+
     def GetPList(self, item=None, PList={}):
         """ Returns the newly edited PList as a dictionary. """
 
@@ -2445,7 +2587,7 @@ class PListEditor(wx.Dialog):
             child, cookie = treeList.GetNextChild(item, cookie)        
 
         return PList
-
-    
+        
+        
             
                 

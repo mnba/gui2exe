@@ -7,10 +7,6 @@
 # Let's start with some default (for me) imports...
 
 from distutils.core import setup
-import py2exe
-import glob
-import os
-import zlib
 import shutil
 
 shutil.rmtree("build", ignore_errors=True)

@@ -202,7 +202,7 @@ _toolTips = {"py2exe": {"optimize": "Optimization level for the compiled bytecod
                         "Hit Ctrl+A to add a new item in the list and edit it.",
                         "data_files": "Py2exe allows you to include one (or more) series of files\n" \
                         "that you are going to need to run your executable\n\n" \
-                        "Depending on the choice ine the menu 'Options' ==>\n" \
+                        "Depending on the choice in the menu 'Options' ==>\n" \
                         "'Recurse sub-dirs for DATA files option' there are\n" \
                         "2 possibilities:\n\n" \
                         "- Choose multiple files at once;\n" \
@@ -330,7 +330,7 @@ _toolTips = {"py2exe": {"optimize": "Optimization level for the compiled bytecod
                              "dll_includes": "an optional list of binary files to include.\n\n" \
                              "Hit Ctrl+A to select one or more binary files.",
                              "data_files": "Arbitrary files to include in your distribution.\n\n" \
-                             "Depending on the choice ine the menu 'Options' ==>\n" \
+                             "Depending on the choice in the menu 'Options' ==>\n" \
                              "'Recurse sub-dirs for DATA files option' there are\n" \
                              "2 possibilities:\n\n" \
                              "- Choose multiple files at once;\n" \
@@ -381,7 +381,7 @@ _toolTips = {"py2exe": {"optimize": "Optimization level for the compiled bytecod
                         "debug_skip_macholib": "skip macholib phase.<note>Your App will not be standalone.",
                         "resources": "Py2app allows you to include one (or more) series of files\n" \
                         "that you are going to need to run your executable\n\n" \
-                        "Depending on the choice ine the menu 'Options' ==>\n" \
+                        "Depending on the choice in the menu 'Options' ==>\n" \
                         "'Recurse sub-dirs for DATA files option' there are\n" \
                         "2 possibilities:\n\n" \
                         "- Choose multiple files at once;\n" \
