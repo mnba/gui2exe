@@ -1002,8 +1002,20 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         plusBmp = self.MainFrame.CreateBitmap("list_plus")
         minusBmp = self.MainFrame.CreateBitmap("list_minus")
         # Create a couple of themed buttons for the +/- actions
-        plusButton = wx.BitmapButton(parent, -1, plusBmp, size=(13, 13), style=wx.NO_BORDER)
-        minusButton = wx.BitmapButton(parent, -1, minusBmp, size=(13, 13), style=wx.NO_BORDER)
+
+        # NOTE: the borderless bitmap button control on OSX requires the bitmaps
+        #       to be native size else they loose their transparency. These
+        #       should probably be changed to 16x16 so they can work properly
+        #       on all platforms.
+        if wx.Platform == '__WXMAC__':
+            flags = wx.BU_AUTODRAW
+            bsize = (16, 16)
+        else:
+            flags = wx.NO_BORDER
+            bsize = (13, 13)
+
+        plusButton = wx.BitmapButton(parent, bitmap=plusBmp, size=bsize, style=flags)
+        minusButton = wx.BitmapButton(parent, bitmap=minusBmp, size=bsize, style=flags)
         # Add some explanation...
         plusButton.SetToolTipString("Add items to the list")
         minusButton.SetToolTipString("Remove items from the list")
