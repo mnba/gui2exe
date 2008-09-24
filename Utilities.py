@@ -5,8 +5,11 @@ import time
 import wx
 
 # For the version checking
-import urllib
+import urllib2
 from threading import Thread
+
+# Used to recurse subdirectories
+import fnmatch
 
 from UserDict import UserDict
 from Constants import ListType
@@ -14,8 +17,13 @@ from Constants import ListType
 # This class keeps an ordered dictionary
 class odict(UserDict):
     """ An ordered dictionary implementation. """    
+
     def __init__(self, dict=None):
-        """ Default class constructor. """
+        """
+        Default class constructor.
+
+        @param dict: a dictionary from where to get the new dict keys (optional).
+        """
 
         self._keys = []
         UserDict.__init__(self, dict)
@@ -87,9 +95,16 @@ class odict(UserDict):
 
 
 class ConnectionThread(Thread):
-    """Worker Thread Class."""
+    """ Worker thread class to attempt cnnection to the internet."""
+    
     def __init__(self, notifyWindow):
-        """ Init Worker Thread Class. """
+        """
+        Initialize the worker thread.
+
+        @param notifyWindow: the window which will receive the notification when
+                             this thread finishes the work.
+        """
+        
         Thread.__init__(self)
 
         self._notifyWindow = notifyWindow
@@ -100,22 +115,23 @@ class ConnectionThread(Thread):
         
 
     def run(self):
-        """Run Worker Thread."""
+        """ Run worker thread. """
+        
         # This is the code executing in the new thread. Simulation of
-        # a long process (well, 10s here) as a simple loop - you will
-        # need to structure your processing so that you periodically
-        # peek at the abort variable
+        # a long process as a simple urllib2 call
 
         try:
             # Try to read my web page
             url = "http://xoomer.alice.it/infinity77/main/GUI2Exe.html"
-            infinityPage = urllib.urlopen(url)
+            infinityPage = urllib2.urlopen(url)
             text = infinityPage.read()
             infinityPage.close()
             wx.CallAfter(self._notifyWindow.CheckVersion, text)
         except IOError:
+            # Unable to get to the internet
             wx.CallAfter(self._notifyWindow.CheckVersion, None)
         except:
+            # Some other strange error...
             wx.CallAfter(self._notifyWindow.CheckVersion, None)
 
         return
@@ -123,7 +139,11 @@ class ConnectionThread(Thread):
 
 # Path and file filling (os indipendent)
 def opj(path):
-    """Convert paths to the platform-specific separator"""
+    """
+    Converts paths to the platform-specific separator.
+
+    @param path: the path to be normalized.
+    """
 
     str = apply(os.path.join, tuple(path.split('/')))
     # HACK: on Linux, a leading / gets lost...
@@ -133,7 +153,11 @@ def opj(path):
 
 
 def flatten(list):
-    """ Internal function that flattens a ND list. """
+    """
+    Internal function that flattens a N-D list.
+
+    @param list: the N-D list that needs to be flattened.
+    """
 
     res = []
     for item in list:
@@ -145,7 +169,11 @@ def flatten(list):
 
 
 def unique(list):
-    """ Internal function, returning the unique elements in a list."""
+    """
+    Internal function, returning the unique elements in a list.
+
+    @param list: the list for which we want the unique elements.
+    """
 
     # Create a fake dictionary
     res = {}
@@ -163,11 +191,19 @@ def unique(list):
 
 
 def setupString(key, item, isPyInstaller=False, splitter=False):
-    """ Sets up the strings for py2exe. """
+    """
+    Sets up the strings for py2exe and other compilers.
+
+    @param key: the option name (data_files, includes, etc...);
+    @param item: the option value (usually a list);
+    @param isPyInstaller: whether we are compiling with PyInstaller or not
+                          (PyInstaller requires a different syntax);
+    @param splitter: currently unused.
+    """
 
     # This is an incredible and horrible hack, and it may not always work     
     if key == "data_files" and not isPyInstaller:
-
+        # Set up the data_files option
         text = "["
         for i in xrange(len(item)):
             indent = len(key) + 9 + len(item[i][0])
@@ -177,7 +213,7 @@ def setupString(key, item, isPyInstaller=False, splitter=False):
         item = text + "]"
 
     else:
-        
+        # Split the string item and try to text-wrap it
         indent = len(key)+3
         spacer = "\n" + " "*indent
         item = ("%s"%item).split(",")
@@ -217,7 +253,11 @@ def shortNow():
 
 
 def FractSec(s):
-    """ Formats time as hh:mm:ss. """
+    """
+    Formats time as hh:mm:ss.
+
+    @param s: the number of seconds.
+    """
     
     min, s = divmod(s, 60)
     h, min = divmod(min, 60)
@@ -225,51 +265,45 @@ def FractSec(s):
 
 
 def GetExecutableData(project, compiler):
-    """ Returns information about the executable file. """
+    """
+    Returns information about the executable file.
 
-    config = project[compiler]
-    dist_dir = config["dist_dir"]
+    @param project: the project being compiled;
+    @param compiler: the compiler used to build the project.
+    """
 
-    if compiler == "py2exe":
-        try:
-            script = config["multipleexe"][0][1]
-        except IndexError:
-            return "", ""
-        dist_dir_choice = config["dist_dir_choice"]
-        if not dist_dir_choice or not dist_dir.strip():
-            dist_dir = "dist"
-            
-    elif compiler == "PyInstaller":
-        try:
-            script = config["scripts"][-1]
-            if config["onefile"]:
-                dist_dir = ""
-                script = os.path.normpath(os.path.split(script)[0] + "/" + config["exename"])
-        except IndexError:
-            return "", ""
-    else:
-        script = config["script"]
-
-    if not script:
+    if not project.GetBuildOutput(compiler):
+        # Project hasn't been compiled yet
         return "", ""
     
-    path = os.path.split(script)[0]
-    exePath = os.path.normpath(path + "/" + dist_dir)
-
+    try:
+        exePath = project.GetDistDir(compiler)
+    except:
+        # Project hasn't been compiled
+        return "", ""
+    
     return GetFolderSize(exePath)
 
 
 def GetFolderSize(exePath):
+    """
+    Returns the size of the executable distribution folder.
+
+    @param exePath: the path of the distribution folder.
+    """
     
     folderSize = numFiles = 0
-    
+    join, getsize = os.path.join, os.path.getsize
+    # Recurse over all the folders and sub-folders    
     for path, dirs, files in os.walk(exePath):
         for file in files:
-            filename = os.path.join(path, file)
-            folderSize += os.path.getsize(filename)
+            # Get the file size
+            filename = join(path, file)
+            folderSize += getsize(filename)
             numFiles += 1
 
     if numFiles == 0:
+        # No files found, has the executable ever been built?
         return "", ""
     
     folderSize = "%0.2f"%(folderSize/(1024*1024.0))
@@ -278,25 +312,49 @@ def GetFolderSize(exePath):
     return numFiles, folderSize
     
 
-def RecurseSubDirs(directory, userDir):
+def RecurseSubDirs(directory, userDir, extensions):
+    """
+    Recurse one directory to include all the files and sub-folders in it.
+
+    @param directory: the folder on which to recurse;
+    @param userDir: the directory chosen by the user;
+    @param extensions: the file extensions to be filtered.
+    """
 
     config = []
     baseStart = os.path.basename(directory)
+
+    normpath, join = os.path.normpath, os.path.join
+    splitext, match = os.path.splitext, fnmatch.fnmatch
     
+    # Loop over all the sub-folders in the top folder 
     for root, dirs, files in os.walk(directory):
         start = root.find(baseStart) + len(baseStart)
         dirName = userDir + root[start:]
         dirName = dirName.replace("\\", "/")
         paths = []
+        # Loop over all the files
         for name in files:
-            paths.append(os.path.normpath(os.path.join(root, name)))
+            # Loop over all extensions
+            for ext in extensions:
+                if match(name, ext):
+                    paths.append(normpath(join(root, name)))
+                    break
 
-        config.append((dirName, paths))
+        if paths:
+            config.append((dirName, paths))
 
     return config
 
 
 def PrintTree(strs, tree, depth=0, written=False):
+    """
+    Prints a tree-dict structure into a string.
+
+    @param strs: the string to which to print the tree,
+    @param depth: the nesting level we reached in the dictionary;
+    @param written: whether the dict key has been written or not.
+    """
     
     if type(tree) == ListType:
         strs += setupString(" "*32, tree) + ",\n"
@@ -326,3 +384,4 @@ def PrintTree(strs, tree, depth=0, written=False):
             strs += "\t\t\t\t},\n\n"
 
     return strs
+

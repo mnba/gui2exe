@@ -2,13 +2,13 @@
 import wx
 
 import LabelBook as LB
+
+# Import all our executable-builders panels
 from Py2ExePanel import Py2ExePanel
 from cx_FreezePanel import cx_FreezePanel
 from bbFreezePanel import bbFreezePanel
 from PyInstallerPanel import PyInstallerPanel
 from Py2AppPanel import Py2AppPanel
-
-from NotImplementedOrMissingPanel import NotImplementedOrMissingPanel
 
 from Constants import _lbStyle, _bookIcons, _defaultCompilers
 
@@ -19,10 +19,9 @@ class AUINotebookPage(LB.FlatImageBook):
         """
         Default class constructor.
 
-        @param parent: the parent widget
-        @param project: the project associated to this book
-        @param compilers: the available compilers on this machine
-
+        @param parent: the parent widget;
+        @param project: the project associated to this book;
+        @param compilers: the available compilers on this machine.
         """        
 
         # Initialize the custom FlatImageBook
@@ -49,7 +48,12 @@ class AUINotebookPage(LB.FlatImageBook):
 
 
     def CreateBookPages(self, project, compilers):
-        """ Creates the FlatImageBook pages. """
+        """
+        Creates the FlatImageBook pages.
+
+        @param project: the project associated with this L{LabelBook};
+        @param compilers: the available compilers in GUI2Exe.
+        """
 
         # Loop over all the icons we have (4 at the moment)
         for ii, png in enumerate(_bookIcons):
@@ -80,7 +84,11 @@ class AUINotebookPage(LB.FlatImageBook):
 
         
     def SetTreeItem(self, treeItem):
-        """ Stores the tree item associated with us. """
+        """
+        Stores the tree item associated with us.
+
+        @param treeItem: a tree control item.
+        """
 
         self.treeItem = treeItem
 
@@ -92,7 +100,11 @@ class AUINotebookPage(LB.FlatImageBook):
 
 
     def SetProject(self, project):
-        """ Stores the project associated with us. """
+        """
+        Stores the project associated with us.
+
+        @param project: the project to be stored.
+        """
 
         self.project = project
 
@@ -101,7 +113,7 @@ class AUINotebookPage(LB.FlatImageBook):
             page = self.GetPage(indx)
             if compiler in project:
                 page.SetConfiguration(project[compiler])
-            elif not isinstance(page, NotImplementedOrMissingPanel):
+            else:
                 defaultConfig = self.MainFrame.GetDefaultConfiguration(compiler)
                 page.SetConfiguration(defaultConfig)
                 project.SetConfiguration(compiler, defaultConfig)
@@ -114,7 +126,7 @@ class AUINotebookPage(LB.FlatImageBook):
 
 
     def OnPageChanged(self, event):
-        """ Handles the wx.EVT_NOTEBOOK_PAGE_CHANGED for Labelbook. """
+        """ Handles the wx.EVT_NOTEBOOK_PAGE_CHANGED for L{Labelbook}. """
 
         if not self.MainFrame.process:
             # Disable the dry-run button if not using py2exe

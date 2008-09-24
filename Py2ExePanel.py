@@ -205,20 +205,21 @@ class Py2ExePanel(BaseBuilderPanel):
         commonSizer_2 = wx.BoxSizer(wx.VERTICAL)
         commonSizer_1 = wx.BoxSizer(wx.VERTICAL)
         
-        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.VERTICAL)
+        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.HORIZONTAL)
         topGridSizer = wx.FlexGridSizer(1, 4, 5, 5)
         topSizer_4 = wx.BoxSizer(wx.VERTICAL)
         topSizer_3 = wx.BoxSizer(wx.VERTICAL)
         topSizer_2 = wx.BoxSizer(wx.VERTICAL)
         topSizer_1 = wx.BoxSizer(wx.VERTICAL)
         
-        # Add the VersionInfo text controls
+        flag = wx.LEFT|wx.RIGHT|wx.EXPAND
+        flag2 = wx.LEFT|wx.BOTTOM|wx.TOP|wx.EXPAND
+        
         mainSizer.Add(self.label, 0, wx.ALL, 10)
-        targetSizer.Add(self.multipleExe, 1, wx.ALL|wx.EXPAND, 5)
+        targetSizer.Add(self.multipleExe, 1, flag2, 5)
+        targetSizer.Add(self.multipleExe.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         mainSizer.Add(targetSizer, 0, wx.ALL|wx.EXPAND, 5)
 
-        flag = wx.LEFT|wx.RIGHT|wx.EXPAND
-        
         optimize = wx.StaticText(self, -1, "Optimize")
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
@@ -282,7 +283,7 @@ class Py2ExePanel(BaseBuilderPanel):
         bitmapSizer.Add(self.bitmapResourceList, 1, flag, 5)
         bitmapSizer.Add(self.bitmapResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         otherResSizer.Add(self.otherResourceList, 1, flag, 5)
-        otherSizer.Add(self.otherResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        otherResSizer.Add(self.otherResourceList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         resourceSizer.Add(iconSizer, 1, wx.EXPAND)
         resourceSizer.Add(bitmapSizer, 1, wx.EXPAND|wx.LEFT, 5)
         resourceSizer.Add(otherResSizer, 1, wx.EXPAND|wx.LEFT, 5)

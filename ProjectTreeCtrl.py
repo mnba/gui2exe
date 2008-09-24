@@ -3,21 +3,30 @@ import wx
 import time
 import wx.lib.customtreectrl as CT
 
+# Import our fancy PyBusyInfo (Windows & GTK only)
 from Widgets import PyBusyInfo
 from Constants import _treeIcons
 
 
 class ProjectTreeCtrl(CT.CustomTreeCtrl):
+    """
+    A custom tree control which displays all the GUI2Exe projects in a hierarchical
+    way, ordered by creation time.
+    """
 
     def __init__(self, parent):
-        """ Default class constructor. """
+        """
+        Default class constructor.
+
+        @param parent: the tree control parent widget.
+        """
 
         CT.CustomTreeCtrl.__init__(self, parent, style=wx.TR_FULL_ROW_HIGHLIGHT|wx.TR_EDIT_LABELS
                                    |wx.TR_MULTIPLE|wx.TR_HAS_VARIABLE_ROW_HEIGHT)
 
         # Remember our main frame (GUI2Exe application window)
         self.MainFrame = wx.GetTopLevelParent(self)
-        self.popupIds = [wx.NewId() for i in xrange(6)]
+        self.popupIds = [wx.NewId() for i in xrange(7)]
         # A flag to monitor if we are in dragging mode or not
         self.isDragging = False
 
@@ -26,7 +35,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         self.SetProperties()
         self.BindEvents()
 
-        # Add a root: if someone has a fancier name for the roor item, let me know :-D
+        # Add a root: if someone has a fancier name for the root item, let me know :-D
         self.rootItem = self.AddRoot("My Projects", image=0)
         # Make it bigger, so it is clear that it is a root item
         self.SetItemFont(self.rootItem, wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
@@ -44,9 +53,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """ Builds the image list for the tree control. """
 
         imgList = wx.ImageList(16, 16)
+        # Loop over all the images
         for png in _treeIcons:
             imgList.Add(self.MainFrame.CreateBitmap(png))
 
+        # Assign the image list to the tree, so that we don't have to keep
+        # a reference to it.
         self.AssignImageList(imgList)
         
 
@@ -224,6 +236,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             bmp = self.MainFrame.CreateBitmap("project_edit")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
+            item.Enable(len(selections) == 1)
             menu.AppendSeparator()
             item = wx.MenuItem(menu, self.popupIds[4], "Delete project(s)")
             bmp = self.MainFrame.CreateBitmap("delete_project")
@@ -232,6 +245,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             menu.AppendSeparator()
             item = wx.MenuItem(menu, self.popupIds[5], "Import from file...")
             bmp = self.MainFrame.CreateBitmap("importproject")
+            item.SetBitmap(bmp)
+            menu.AppendItem(item)
+            item.Enable(len(selections) == 1)
+            item = wx.MenuItem(menu, self.popupIds[6], "Copy to new project...")
+            bmp = self.MainFrame.CreateBitmap("copyproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
@@ -295,9 +313,13 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
                 return
             # Delete the selected items
             self.DeleteProject(selections)
-        else:
+        elif event.GetId() == self.popupIds[5]:
             # The user wants to import a project from file
             self.LoadFromFile()
+        else:
+            # The user wants to copy the selected project to
+            # a new location
+            self.CopyProject()
             
             
     # ================= #
@@ -305,7 +327,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
     # ================= #
     
     def LoadProject(self, treeItems):
-        """ Actually loads the project, calling the main frame method. """
+        """
+        Actually loads the projects, calling the main frame method.
+
+        treeItems: the selected tree items, which will be loaded.
+        """
 
         busy = PyBusyInfo("Loading project(s) from database...")
         wx.SafeYield()
@@ -353,7 +379,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def DeleteProject(self, treeItems):
-        """ Auxiliary called by external modules. """
+        """
+        Auxiliary called by external modules.
+
+        @param treeItems: the selected tree items to be deleted.
+        """
 
         # Freeze the main frame... it helps with flicker
         self.MainFrame.Freeze()
@@ -380,7 +410,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def CheckProjectName(self, projectName, usePyData=False):
-        """ Checks if a project is valid and it doesn't already exists in the tree control. """
+        """
+        Checks if a project is valid and it doesn't already exists in the tree control.
+
+        @param projectName: the project name;
+        @param usePyData: whether to use the data store in the tree item.
+        """
 
         if not projectName.strip():
             # Project name is empty?
@@ -413,7 +448,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def IsProjectExisting(self, projectName, usePyData=False):
-        """ Checks if a project with the given name already exists. """
+        """
+        Checks if a project with the given name already exists.
+
+        @param projectName: the project name;
+        @param usePyData: whether to use the data store in the tree item.
+        """
         
         child, cookie = self.GetFirstChild(self.rootItem)
         while child:
@@ -437,9 +477,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """ Re-implemented from CT.CustomTreeCtrl. """
 
         database = self.MainFrame.dataBase
+        # Get the item data
         key1, key2 = item1.GetData(), item2.GetData()
+        # Load the two projects
         node1, node2 = database.LoadProject(key1), database.LoadProject(key2)
 
+        # Compare their creation date
         creationDate1 = time.strptime(node1.creationDate, "%d %B %Y @ %H:%M:%S")
         creationDate2 = time.strptime(node2.creationDate, "%d %B %Y @ %H:%M:%S")
         
@@ -452,7 +495,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
     
     def PopulateTree(self, dbKeys):
-        """ Populates the tree with the keys coming from the database. """
+        """
+        Populates the tree with the keys coming from the database.
+
+        @param dbKeys: the database project names which will be used to name the
+                       items in the tree.
+        """
 
         # Freeze all... it helps with flicker
         self.Freeze()
@@ -469,7 +517,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def SetItemEditing(self, treeItem, editState):
-        """ Sets the state of a particular item as "in editing" or not. """
+        """
+        Sets the state of a particular item as "in editing" or not.
+
+        @param treeItem: the tree item;
+        @param editState: whether the item is being edited or not.
+        """
 
         # Change item image depending on the state
         itemImage = (editState and [2] or [1])[0]
@@ -480,6 +533,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def HighlightItem(self, treeItem, highlight):
+        """
+        Highlight/Un-highlight a tree item.
+
+        @param treeItem: the tree item to highlight/un-highlight;
+        @param highlight: whether the tree item will be highlighted or not.
+        """
 
         # Change item font depending on the highlight
         font = (highlight and [self.boldFont] or [self.GetFont()])[0]
@@ -488,7 +547,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
 
     def RepositionItems(self, appendToRoot, droppedItem):
-        """ Repositions the items after a drag and drop operation. """
+        """
+        Repositions the items after a drag and drop operation.
+
+        @param appendToRoot: whether to append the dropped item to the root item or not;
+        @param droppedItem: the item subjected to the drag and drop operation.
+        """
 
         # I need this flag to avoid the call to OnDeleteItem
         self.isDragging = True
@@ -516,6 +580,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
         fileName = self.GetItemText(self.selectedItem)
 
+        # Launch the file dialog
         dlg = wx.FileDialog(self, message="Please select a GUI2Exe project file...",
                             defaultFile=fileName, wildcard="All files (*.*)|*.*",
                             style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
@@ -530,25 +595,32 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             dlg.Destroy()
             return
 
+        # Open and read the file the user has selected
         fid = open(path, "r")
         strs = fid.read()
         fid.close()
 
         try:
+            # Load the project (stil shaky)
             project = self.MainFrame.dataBase.LoadProject(fileName)
         except:
+            # Something went wrong, the file content hasn't been recognized
             self.MainFrame.RunError("Error", "This project has not been saved yet. Please save it and retry.")
             return
 
         try:
+            # Try to compile the content of the file
             code = compile(strs, "__dummy__.txt", 'single')
             glbs, lcls = {}, {}
             exec code in glbs, lcls
+            # Retrieve the project dictionary
             projectDict = lcls["projectDict"]
         except:
+            # Corrupted file content
             self.MainFrame.RunError("Error", "Invalid or corrupted project file.")
             return
 
+        # Update the project with the information contained in the file
         busy = PyBusyInfo("Updating project from file...")
         wx.SafeYield()
 
@@ -556,10 +628,60 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         for keys, values in projectDict.items():
             project.SetConfiguration(keys, values)
 
+        # Save the updated project and reset the configuration in the GUI
         self.MainFrame.dataBase.SaveProject(project)
         self.MainFrame.ResetConfigurations(self.selectedItem, project)
             
         del busy
         wx.SafeYield()
+
+
+    def CopyProject(self):
+        """
+        Copies an existing project to a new one, basically transferring the project
+        settings into a new project.
+        """
+
+        # Get the selected item text
+        itemText = self.GetItemText(self.selectedItem)
+
+        try:
+            # Load the project
+            project = self.MainFrame.dataBase.LoadProject(itemText)
+        except:
+            # Something went wrong, the file content hasn't been recognized
+            self.MainFrame.RunError("Error", "This project has not been saved yet. Please save it and retry.")
+            return
+
+        # Generate a unique project name, not conflicting with the existing ones
+        uniqueName = self.GetUniqueProjectName()
+        # Ask the user to enter a project name
+        dlg = wx.TextEntryDialog(self.MainFrame, "Enter a name for the new project:", "New project")
+        dlg.SetValue(uniqueName)
+        
+        if dlg.ShowModal() != wx.ID_OK:
+            # Do you want to think about it, eh?
+            return
+
+        projectName = dlg.GetValue()
+        dlg.Destroy()
+
+        if not self.CheckProjectName(projectName):
+            # The selected project name already exists!
+            return
+
+        busy = PyBusyInfo("Copying existing project configuration...")
+        wx.SafeYield(self)
+        
+        # Go with the new project
+        treeItem = self.AppendItem(self.rootItem, projectName.encode(), image=1)
+        self.SetPyData(treeItem, projectName)
+
+        # Copy the existing project to the new one
+        self.MainFrame.dataBase.CopyProject(project, projectName)
+        del busy
+        wx.SafeYield(self)
+
+        self.MainFrame.RunError("Message", "Project %s succesfully copied to %s"%(project.GetName(), projectName))
 
         

@@ -11,21 +11,24 @@ from Utilities import opj, FractSec
 
 
 class Process(object):
+    """
+    A class which starts an external process to compile a Python source file
+    into an executable.
+    """
     
     def __init__(self, parent, buildDir, setupScript, run, compiler,
                  project, pageNumber, pythonVersion):
         """
         Default class constructor.
 
-        @param: parent: the parent widget (GUI2Exe)
-        @param buildDir: the directory in which we build the executable
-        @param setupScript: the setup file passed as a string
-        @param run: if False, only a "dry-run" is performed
-        @param compiler: the compiler used (at the moment only py2exe)
-        @param project: the project we are compiling
-        @param pageNumber: the main wx.aui.AuiNotebook page number we belong to
-        @param pythonVersion: the Python executable used to call the exe builder
-
+        @param: parent: the parent widget (GUI2Exe);
+        @param buildDir: the directory in which we build the executable;
+        @param setupScript: the setup file passed as a string;
+        @param run: if False, only a "dry-run" is performed (py2exe only);
+        @param compiler: the compiler used;
+        @param project: the project we are compiling;
+        @param pageNumber: the main wx.aui.AuiNotebook page number we belong to;
+        @param pythonVersion: the Python executable used to call the exe builder.
         """        
 
         # Store the input data passed in __init__
@@ -130,7 +133,7 @@ class Process(object):
 
         # Ok, this line is commented because if I leave it as it is Python
         # bombs with the classical Windows error dialog
-##        self.process.Destroy()
+        self.process.Destroy()
         
         self.MainFrame.process = None
         # Close the temporary file
@@ -148,7 +151,11 @@ class Process(object):
 
         
     def HandleProcessMessages(self, processEnded=False):
-        """ Handles all the messages that come from input and error streams. """
+        """
+        Handles all the messages that come from input and error streams.
+
+        @param processEnded: whether the process has just ended.
+        """
 
         # Get the input stream
         istream = self.process.GetInputStream()
@@ -179,7 +186,13 @@ class Process(object):
 
 
     def ReadStream(self, stream, isError, processEnded):
-        """ Reads the input/error streams (if any). """
+        """
+        Reads the input/error streams (if any).
+
+        @param stream: the stdout/stderr stream;
+        @param isError: whether the building process generated an error or not;
+        @param processEnded: whether the process has just ended.
+        """
 
         written, copy = False, True
         
@@ -214,6 +227,8 @@ class Process(object):
                 
         if not isError:
             if self.compiler in ["bbfreeze", "PyInstaller"]:
+                # bbFreeze and PyInstaller do not give intelligent
+                # messages in the stdout
                 self.MainFrame.SendMessage("Compile", "Running compilation steps...")
             elif not written:
                 if copy:
@@ -248,7 +263,7 @@ class Process(object):
         indx = text.find("*** binary dependencies ***")
         text = text[indx:].split("\n")
         text = text[7:]
-        # Here it's bit tricky, but t works
+        # Here it's bit tricky, but it works
         for line in text:
             line = line.strip().split("-")
             dll, path = line[0], "".join(line[1:])

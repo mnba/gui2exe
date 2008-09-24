@@ -25,9 +25,17 @@ def deserialize(s):
 
 
 class DataBase(object):
+    """
+    A simple class which holds all the operations related to our bsddb database,
+    """
 
     def __init__(self, mainFrame, dbName="GUI2Exe_Database.db"):
-        """ Default class constructor. """
+        """
+        Default class constructor.
+
+        @param mainFrame: the GUI2Exe main frame;
+        @param dbName: the database file name.
+        """
 
         # Create a fresh database, or open an  existing one
         self.db = bsddb.btopen(dbName, "c")
@@ -48,10 +56,12 @@ class DataBase(object):
             self.db.close()
             self.MainFrame.SendMessage("Warning", "Database file is corrupted: using backup file.")
             if self.CheckBackup():
+                # Ok, the backup database works...
                 self.CreateProjectTree()
                 self.RemoveBackup()
                 self.CreateBackup()
             else:
+                # Ahi, this shouldn't happen
                 self.hasError = True
         
 
@@ -100,6 +110,7 @@ class DataBase(object):
             self.db = bsddb.btopen(self.dbName, "c")
             return True
         except:
+            # The backup database is corrupted... bad news
             return False
         
         
@@ -108,7 +119,11 @@ class DataBase(object):
     # ================= #
     
     def SaveProject(self, project):
-        """ Saves the data into the database. """
+        """
+        Saves the data into the database.
+
+        @param project: the project to be saved.
+        """
 
         # Get the project name
         key = project.GetName().encode()
@@ -117,13 +132,21 @@ class DataBase(object):
 
 
     def LoadProject(self, projectName):
-        """ Loads the project from the database. """
+        """
+        Loads the project from the database.
+
+        @param projectName: the project name
+        """
 
         return deserialize(self.db[projectName.encode()])
 
 
     def DeleteProject(self, project):
-        """ Deletes the project from the database. """
+        """
+        Deletes the project from the database.
+
+        @param project: the project to be deleted.
+        """
 
         if not isinstance(project, basestring):
             projectKey = project.GetName().encode()
@@ -136,7 +159,12 @@ class DataBase(object):
 
 
     def RenameProject(self, oldName, newName):
-        """ Renames the project after a user has edited the project tree control. """
+        """
+        Renames the project after a user has edited the project tree control.
+
+        @param oldName: the old project name;
+        @param newName: the new project name.
+        """
 
         if not self.db.has_key(oldName.encode()):
             # This project has never been saved in the database
@@ -155,8 +183,26 @@ class DataBase(object):
         return tempProject        
 
 
+    def CopyProject(self, existingProject, newName):
+        """
+        Copies an existing project configuration into a new project.
+
+        @param existingProject: the existing project to be copied;
+        @param newName: the new project name.
+        """
+
+        # Store the existing project configuration into the new project
+        newProject = copy.deepcopy(existingProject)
+        newProject.SetName(newName.encode())
+        self.db[newName.encode()] = serialize(newProject)
+            
+
     def IsProjectExisting(self, project):
-        """ Checks if a project exists in the database. """
+        """
+        Checks if a project exists in the database.
+
+        @param project: the project to be checked for existance.
+        """
 
         return self.db.has_key(project.GetName().encode())
 
@@ -171,5 +217,3 @@ class DataBase(object):
         # Remove the backup file
         self.RemoveBackup()
 
-
-        

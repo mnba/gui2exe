@@ -5,19 +5,24 @@ import wx.lib.scrolledpanel as scrolled
 
 from Constants import _toolTips
 
+# Ijmport our fancy tooltips
 if wx.Platform != "__WXMAC__":
     from Widgets import TransientPopup
 else:
     from Widgets import MacTransientPopup as TransientPopup
 
+
 class BaseBuilderPanel(scrolled.ScrolledPanel):
+    """ Base ScrolledPanel class for all the compilers. """
 
     def __init__(self, parent, projectName, creationDate, name):
         """
         Default class constructor.
-
-        @param projectName: the name of the project we are working on
-        @param creationDate: the date and time the project was created
+        
+        @param parent: the widget parent;
+        @param projectName: the name of the project we are working on;
+        @param creationDate: the date and time the project was created;
+        @param name: the widget (compiler) name.
 
         """
         
@@ -58,10 +63,15 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
                 self.Bind(wx.EVT_RADIOBUTTON, self.OnUserChange, child)
                 
             if isMac:
+                # On the Mac we use smaller widgets
                 child.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
         
 
     def BindToolTips(self):
+        """
+        Binds the wx.EVT_ENTER_WINDOW and wx.EVT_LEAVE_WINDOW events for all
+        the widgets in our panel.
+        """
 
         for child in self.GetChildren():
             if isinstance(child, wx.TextCtrl) or isinstance(child, wx.combo.OwnerDrawnComboBox) \
@@ -82,40 +92,53 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
 
 
     def OnEnterWindow(self, event):
+        """ Handles the wx.EVT_ENTER_WINDOW event for BaseBuilderPanel. """
 
         if not self.MainFrame.showTips:
+            # User doesn't want tolltips...
             return
         
         if self.tipWindow:
+            # A tooltip window already exists
             return
 
+        # Get the hovered widget
         obj = event.GetEventObject()
+        # Retrieve the main panel name and compiler name
         compiler = self.GetName()
         option = obj.GetName()
 
         if compiler not in _toolTips:
+            # This should not happen, but you never know...
             return
 
         if option not in _toolTips[compiler]:
+            # Missing tooltip?
             return     
 
+        # Retrieve the tooltip associated with the widget
         options = _toolTips[compiler]
         tip = options[option]
 
         tip = tip.split("<note>")
         if len(tip) > 1:
+            # There is a note at the bottom of the tooltip
             tip, note = tip
         else:
             tip, note = tip[0], None
 
+        # Launch the fancy tooltip viewer
         self.tipWindow = TransientPopup(self, compiler, option, tip, note)
         
 
     def OnLeaveWindow(self, event):
+        """ Handles the wx.EVT_LEAVE_WINDOW event for BaseBuilderPanel. """
 
         if not self.tipWindow:
+            # No tooltip window exists
             return
 
+        # Destroy the existing tooltip window
         self.tipWindow.Destroy()
         self.tipWindow = None
         
@@ -158,7 +181,12 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
     # ================= #
     
     def GetWindowValues(self, windowName, window=None):
-        """ Retrieve the current value(s) displayed in a widget. """
+        """
+        Retrieve the current value(s) displayed in a widget.
+
+        @param windowName: the widget name;
+        @param window: the widget itsefl (if any).
+        """
 
         if window is None:
             # No window, find it by name
@@ -180,7 +208,13 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
 
     
     def GiveScreenFeedback(self, windowName, value, changeIcon=True):
-        """ Gives visual feedback to the user that the model has changed. """
+        """
+        Gives visual feedback to the user that the model has changed.
+
+        @param windowName: the widget name;
+        @param value: the new widget value;
+        @param changeIcon: whether to change the tab icon in the AuiNotebook.
+        """
 
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
@@ -196,6 +230,9 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Updates the "other_resources" list when the user checks/unchecks the
         xp manifest checkbox.
+
+        @param windowName: the widget name;
+        @param value: the new widget value;
         """
 
         if windowName != "manifest_file":
@@ -220,14 +257,24 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
 
 
     def UpdateLabel(self, projectName, creationDate):
-        """ Updates the project name and creation date when the user rename a project. """
+        """
+        Updates the project name and creation date when the user rename a project.
+
+        @param projectName: the name of the current project;
+        @param creationDate: the creation data of the project (as it is in the database).
+        """
                 
         self.label.SetLabel("%s options for: %s (Created: %s)"%(self.GetName(), projectName, creationDate))
         self.label.Refresh()
 
 
     def SetConfiguration(self, configuration, delete=False):
-        """ Populates all the widgets with the values coming from the project. """
+        """
+        Populates all the widgets with the values coming from the project.
+
+        @param configuration: the project configuration coming from the database;
+        @param delete: whether to delete the current configuration or not.
+        """
 
         onedir = ("onedir" in configuration and [configuration["onedir"]] or [None])[0]
         onefile = ("onefile" in configuration and [configuration["onefile"]] or [None])[0]
@@ -263,7 +310,12 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         
 
     def SetProjectOptions(self, key, value):
-        """ Populates all the widgets (except list controls). """
+        """
+        Populates all the widgets (except list controls).
+
+        @param key: the configuration option name (which is also a window name);
+        @param value: the configuration option value.
+        """
 
         # Find the window given its name (that is a key in the project dictionary)        
         window = self.FindWindowByName(key)
@@ -288,6 +340,9 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Enables/disables the text controls associated with the zipfile checkbox
         or the dist checkbox.
+        
+        @param windowName: the widget name;
+        @param value: the new widget value.
         """
 
         if windowName.find("_choice") < 0:
@@ -301,8 +356,7 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
             # Found it: enable or disable it accordingly
             possibleTextCtrl.Enable(int(value))
             if possibleTextName == "plistCode":
+                # It may be the PList buttons
                 sibling = self.FindWindowByName("plistRemove")
                 sibling.Enable(int(value))
-
-
 

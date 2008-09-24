@@ -9,8 +9,14 @@ from Constants import _sizeIcons, _bookIcons, _defaultCompilers
 
 
 class ExecutableListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
+    """ Simple base class which holds a list control and a mixin. """
 
     def __init__(self, parent):
+        """
+        Default class constructor.
+
+        @param parent: the list control parent widget.
+        """
 
         wx.ListCtrl.__init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.SUNKEN_BORDER)
         # Initialize the auto width mixin. We always need it        
@@ -18,12 +24,17 @@ class ExecutableListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         
         
 class ExecutableProperties(wx.Panel):
+    """
+    A small panel in the lower left corner of the main GUI, which holds information
+    about the executable size/executable folder size and number of files generated
+    in the building process.
+    """
 
     def __init__(self, parent):
         """
         Default class constructor.
 
-        @param parent: the parent widget
+        @param parent: the parent widget.
 
         """
         
@@ -50,6 +61,7 @@ class ExecutableProperties(wx.Panel):
     def DoLayout(self):
         """ Layouts the widgets in the panel. """
 
+        # That's an easy layout...
         sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_1.Add(self.listCtrl, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
@@ -74,11 +86,18 @@ class ExecutableProperties(wx.Panel):
         for png in _sizeIcons:
             imgList.Add(self.MainFrame.CreateBitmap(png))
 
+        # Assign the imagelist to the list control, so we don't keep
+        # a reference of it around
         self.listCtrl.AssignImageList(imgList, wx.IMAGE_LIST_SMALL)
 
 
     def PopulateList(self, blank=False, project=None):
-        """ Adds executable information to the listCtrl. """
+        """
+        Adds executable information to the listCtrl.
+
+        @param blank: whether to clear the list control or not;
+        @param project: the project from where to get all the data.
+        """
 
         numFiles, fileSizes = [""]*5, [""]*5
 
@@ -87,13 +106,13 @@ class ExecutableProperties(wx.Panel):
             for indx, compiler in enumerate(_defaultCompilers):
                 if compiler in project:
                     numFiles[indx], fileSizes[indx]= GetExecutableData(project, compiler)
-                
+
+        # Clear all the items in the list control                
         self.listCtrl.DeleteAllItems()
+        # Add all the executable information we have
         for indx, names in enumerate(_bookIcons):
             idx = self.listCtrl.InsertImageStringItem(sys.maxint, names, indx)
             self.listCtrl.SetStringItem(idx, 1, fileSizes[indx], 5)
             self.listCtrl.SetStringItem(idx, 2, numFiles[indx], 6)
                     
             
-            
-        

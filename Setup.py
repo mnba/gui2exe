@@ -9,9 +9,10 @@
 from distutils.core import setup
 import shutil
 
+# Remove the build directory
 shutil.rmtree("build", ignore_errors=True)
 
-
+# define the manifest template
 manifest_template = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
@@ -36,6 +37,10 @@ manifest_template = """
 </dependency>
 </assembly>
 """
+
+# ------------------- #
+# py2exe target class #
+# ------------------- #
 
 class Target(object):
     """ A simple class that holds information on our executable file. """

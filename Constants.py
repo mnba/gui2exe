@@ -408,12 +408,18 @@ _toolTips = {"py2exe": {"optimize": "Optimization level for the compiled bytecod
                         "Hit Ctrl+A to select one or more xcdatamodels.",
                         "frameworks": "comma-separated list of frameworks or dylibs to\n" \
                         "include in your distribution.\n\n" \
-                        "Hit Ctrl+A to select one or more dylibs or frameworks."
+                        "Hit Ctrl+A to select one or more dylibs or frameworks.",
+                        "plistCode_choice": "if activated, it allows you to add/edit PList\n" \
+                        "dictionary key/value pairs, or to remove it altogether.",
+                        "plistCode": "Add Plist dictionary key/value pairs or edit\n" \
+                        "an existing PList configuration.",
+                        "plistRemove": "Remove existing PList code."
                         }
              }
 
 _toolTips["py2exe"]["zipfile"] = _toolTips["py2exe"]["zipfile_choice"]
 _toolTips["py2exe"]["dist_dir"] = _toolTips["py2exe"]["dist_dir_choice"]
+_toolTips["py2app"]["dist_dir_choice"] = _toolTips["py2app"]["dist_dir"]
 
 _toolTips["cx_Freeze"]["target_name"] = _toolTips["cx_Freeze"]["target_name_choice"]
 _toolTips["cx_Freeze"]["dist_dir"] = _toolTips["cx_Freeze"]["dist_dir_choice"]

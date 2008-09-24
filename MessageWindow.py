@@ -14,9 +14,17 @@ from Constants import _iconMapper
 
 
 class MessageWindow(wx.Panel):
+    """
+    A class which will show a list control at the bottom of our application.
+    It is used to log messages coming from GUI2Exe.
+    """
 
     def __init__(self, parent):
-        """ Default class constructor. """
+        """
+        Default class constructor.
+
+        @param parent: the widget parent.
+        """
 
         wx.Panel.__init__(self, parent)
         self.MainFrame = wx.GetTopLevelParent(self)        
@@ -166,11 +174,16 @@ class MessageWindow(wx.Panel):
 
 
     def ShowThrobber(self, show):
-        """ Shows/hides the throbber. """
+        """
+        Shows/hides the throbber.
+
+        @param show: whether to show or hide the throbber.
+        """
         
-        # Show the throb
+        # Show/hide the throb
         self.buttonSizer.Show(self.throb, show)
         self.buttonSizer.Layout()
+        # Refresh ourselves
         self.Refresh()
         if show:
             self.throb.Play()
@@ -184,6 +197,8 @@ class MessageWindow(wx.Panel):
         column.
         """
 
+        # Use a wx.ClientDC to measure the maximum number of
+        # characters we can fill for every list control row
         width = self.list.GetColumnWidth(2)
         font = self.list.GetFont()
         dc = wx.ClientDC(self.list)
@@ -194,7 +209,11 @@ class MessageWindow(wx.Panel):
 
 
     def InsertError(self, currentTime):
-        """ Insert some fancy line when an error happens. """
+        """
+        Insert some fancy line when an error happens.
+
+        @param currentTime: the actual formatted time.
+        """
 
         indx = self.list.InsertImageStringItem(sys.maxint, "", _iconMapper["Error"])
         self.list.SetStringItem(indx, 1, currentTime)
@@ -208,7 +227,13 @@ class MessageWindow(wx.Panel):
     
     
     def SendMessage(self, kind, message, copy=False):
-        """ Prints an user-friendly message on the list control. """
+        """
+        Prints an user-friendly message on the list control.
+
+        @param kind: the message kind (error, warning, message);
+        @param message: the actual message to display in the list control;
+        @param copy: whether to save a reference to this message or not.
+        """
 
         # Get the current time slightly dirrently formatted
         currentTime = shortNow()
@@ -238,6 +263,7 @@ class MessageWindow(wx.Panel):
         if wx.Platform == "__WXGTK__":
             self.list.Refresh()
         if copy:
+            # Save the last message
             self.list.lastMessage = [kind, msg]
 
 
@@ -266,8 +292,10 @@ class MessageWindow(wx.Panel):
 
     def EnableButtons(self, enable):
         """
-        Enables/Disables the run buttons depending on the external
+        Enables/disables the run buttons depending on the external
         process status.
+
+        @param enable: whether to enable or disable the buttons.
         """
 
         # dry run and compile buttons are enabled when the kill button is
@@ -281,9 +309,12 @@ class MessageWindow(wx.Panel):
         """
         Enables/Disables the dry-run button depending on the selected compiler
         (dry-run is available only for py2exe).
+
+        @param book: the L[LabelBook] associated to our project.        
         """
 
+        # We enable the dry run option only if the selected compiler
+        # is py2exe
         pageNum = book.GetSelection()
         self.dryrun.Enable(pageNum == 0)
 
-        

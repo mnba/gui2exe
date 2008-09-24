@@ -3,15 +3,17 @@ import os
 import sys
 import wx
 import glob
+
 import wx.lib.mixins.listctrl as listmix
 import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 
-if wx.Platform == "__WXMAC__":
+##if wx.Platform == "__WXMAC__":
+if 1:
     # For the PList editor
     from py2app.apptemplate import plist_template
-    import plistlib
+##    import plistlib
     import wx.gizmos as gizmos
     
 # This is needed by BaseListCtrl
@@ -24,6 +26,7 @@ from Constants import _iconFromName, _unWantedLists, _faces
 from Constants import _stcKeywords, _pywild, _pypackages, _dllbinaries
 from Constants import _xcdatawild, _dylibwild, _comboImages
 
+# Let's see if we can add few nice shadows to our tooltips (Windows only)
 _libimported = None
 
 if wx.Platform == "__WXMSW__":
@@ -31,6 +34,7 @@ if wx.Platform == "__WXMSW__":
     # Shadows behind menus are supported only in XP
     if osVersion[1] == 5 and osVersion[2] == 1:
         try:
+            # Try Mark Hammond's win32all extensions
             import win32api
             import win32con
             import win32gui
@@ -43,6 +47,7 @@ if wx.Platform == "__WXMSW__":
                  
 class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin,
                    listmix.ColumnSorterMixin):
+    """ Base class for all the list controls in our application. """
 
     def __init__(self, parent, columnNames, name="", mainFrame=None):
         """
@@ -52,7 +57,6 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         @param columnNames: the list control column names
         @param name: the list control name
         @param mainFrame: the application main frame (GUI2Exe)
-
         """
 
         wx.ListCtrl.__init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.SUNKEN_BORDER,
@@ -106,7 +110,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     # ========================== #
     
     def InsertColumns(self, columnNames):
-        """ Inserts the columns in the list control. """
+        """
+        Inserts the columns in the list control.
+
+        @param columnNames: the list control column names.        
+        """
 
         # The first column is always empty text, as I use it to display
         # an informative/fancy icon
@@ -323,11 +331,14 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Reverse them, to delete them safely
         indices.reverse()
 
+        # Multiple exe list does not use ColumnSorterMixin
+        isMultipleExe = self.GetName() == "multipleexe"
         # Loop over all the indices        
         for ind in indices:
             # Pop the data from the column sorter mixin dictionary
             indx = self.GetItemData(ind)
-            self.itemDataMap.pop(indx)
+            if not isMultipleExe:
+                self.itemDataMap.pop(indx)
             # Delete the item from the list
             self.DeleteItem(ind)
 
@@ -358,10 +369,13 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
 
     def OnAdd(self, event):
+        """ Handles the wx.EVT_MENU event when adding items to the list. """
 
+        # Get our name and the compiler name
         name = self.GetName()
         compiler = self.GetParent().GetName()
-        
+
+        # This is a bit of a mess, but it works :-D        
         if compiler == "PyInstaller":
             self.HandleOtherInputs()
         elif compiler == "cx_Freeze" and name == "path":
@@ -388,24 +402,30 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         
     def OnItemActivated(self, event):
+        """ Handles the wx.EVT_LEFT_DOWN event for the list control. """
 
         if self.GetName() != "multipleexe":
+            # Wrong list control
             event.Skip()
             return
 
+        # Where did the user click?
         x, y = event.GetPosition()
         row, flags = self.HitTest((x, y))
 
         if row < 0:
+            # It seems that the click was not on an item
             event.Skip()
             return
-            
+
+        # Calculate the columns location (in pixels)            
         col_locs = [0]
         loc = 0
         for n in range(self.GetColumnCount()):
             loc = loc + self.GetColumnWidth(n)
             col_locs.append(loc)
 
+        # Get the selected column and row for this item
         column = bisect(col_locs, x+self.GetScrollPos(wx.HORIZONTAL)) - 1
         self.selectedItem = row
         rect = self.GetItemRect(self.selectedItem)
@@ -418,23 +438,33 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 # simplified scrollbar compensate
                 rect.SetWidth(max(self.GetColumnWidth(1), self.dummyCombo.GetBestSize().x))
 
+            # Show the combobox
             wx.CallAfter(self.ShowDummyControl, self.dummyCombo, rect)
             
         elif column == 2:
+            # Choosing the Python script
             for indx in xrange(3):
                 rect.x += self.GetColumnWidth(indx)
             rect.x -= 26
 
             if not self.GetRect().ContainsRect(rect):
                 rect.SetWidth(25)
-            
+
+            # Show the import button            
             wx.CallAfter(self.ShowDummyControl, self.dummyButton, rect)
             
         else:
+            # Some other column, we are not interested
             event.Skip()
 
             
     def ShowDummyControl(self, control, rect):
+        """
+        Shows a hidden widgets in the list control (py2exe only, top list control).
+
+        @param control: which control to show (a button or a combobox);
+        @param rect: the wx.Rect rectangle where to place the widget to be shown.
+        """
         
         control.SetRect(rect)
         control.SetFocus()
@@ -443,21 +473,28 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
 
     def OnKillFocus(self, event):
+        """ Handles the wx.EVT_KILL_FOCUS event for the list control. """
 
         obj = event.GetEventObject()
         if obj == self.dummyButton:
+            # Hide the py2exe import button in the top list control
             self.dummyButton.Hide()
             return
         
         shown = self.dummyCombo.IsShown()
         self.dummyCombo.Hide()
         if shown:
+            # Hide the py2exe combobox in the top list control
             value = self.dummyCombo.GetValue()
             self.SetStringItem(self.selectedItem, 1, value)
             self.UpdateProject()
 
 
     def OnChooseScript(self, event):
+        """
+        Handles the wx.EVT_BUTTON for the hidden button in the top list control
+        (py2exe only.
+        """
 
         # Launch the file dialog        
         dlg = wx.FileDialog(self.MainFrame, message="Add Python Script ...",
@@ -486,7 +523,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     # ================= #
     
     def PopulateList(self, configuration):
-        """ Populates the list control based on the input configuration. """
+        """
+        Populates the list control based on the input configuration.
+
+        @param configuration: the project configuration.
+        """
 
         if not configuration or not configuration[0]:
             # Nothing in here, go back
@@ -626,7 +667,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
 
     def HandleNewResource(self, name):
-        """ Handles the user request to add new resources. """
+        """
+        Handles the user request to add new resources.
+
+        @param name: the resource name (bitmap, icon).
+        """
 
         if name.find("bitmap") >= 0:   # bitmap resources
             wildcard = "Bitmap files (*.bmp)|*.bmp"
@@ -701,14 +746,27 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
             # Here we recurse and add all the files in a particular folder
             # and its subfolder
-            dlg = wx.DirDialog(self, "Choose a data files directory:",
-                               style=wx.DD_DEFAULT_STYLE)
+
+            # Use our fancy directory selector (which allows multiple
+            # folder selection at the same time
+            dlg = GUI2ExeDirSelector(self.MainFrame, title="Please select one or more directories...",
+                                     showExtensions=True)
+
             if dlg.ShowModal() != wx.ID_OK:
                 dlg.Destroy()
                 return
+        
+            folder, extensions = dlg.GetSelectedFolders()
+            if not folder:
+                # No folders selected
+                return
 
-            path = dlg.GetPath()
-            defaultDir = os.path.basename(path)
+            if not extensions or (len(extensions) == 1 and extensions[0].strip() == ""):
+                # Empty extensions, use default one (all files)
+                extensions = ["*.*"]
+
+            extensions = [ext.strip() for ext in extensions]                
+            defaultDir = os.path.basename(folder)
             
         else:            
             # Run a file dialog with multiple selection        
@@ -750,11 +808,16 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         wx.BeginBusyCursor()
         if self.MainFrame.recurseSubDirs:
+            # We are to include all the files in the selected folder
             if compiler == "py2exe":
-                config = RecurseSubDirs(path, defaultDir)
+                config = RecurseSubDirs(folder, defaultDir, extensions)
             else:
-                config = glob.glob(path + "/*")
+                config = []
+                # Loop over all the selected extensions
+                for ext in extensions:
+                    config += glob.glob(folder + "/" + ext)
         else:
+            # The user selected a bunch of files all together
             if compiler == "py2exe":
                 config = [(defaultDir, paths)]
             else:
@@ -796,7 +859,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
 
     def HandleMacImports(self, name):
-        """ Handles the Dylib/Frameworks/XCDataModels options for Mac. """
+        """
+        Handles the Dylib/Frameworks/XCDataModels options for Mac.
+
+        @param name: the option name (dylib, frameworks, xcdatamodels).
+        """
 
         if name.find("dylib") >= 0 or name.find("frameworks") >= 0:
             message = "Add Dylib/Frameworks"
@@ -824,6 +891,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Processes all the list controls option for PyInstaller except the Path
         and Hooks extensions.
+
+        @param name: the list control name.        
         """
 
         # A bunch of if switches to handle all the possibility offered
@@ -869,7 +938,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
 
     def AddFiles(self, paths, columns):
-        """ Utility function to handle properly the PyInstaller options. """
+        """
+        Utility function to handle properly the PyInstaller options.
+
+        @param paths: the file name paths;
+        @param columns: the number of items in every path (2 or 3).
+        """
 
         for path in paths:
             directory, filename = os.path.split(path)
@@ -902,8 +976,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             dlg.Destroy()
             return
 
+        # Retrieve the selected directory
         path = dlg.GetPath()
         fileNames = []
+        # Loop ove all the files in that directory
         for root, dirs, files in os.walk(path):
             for name in files:
                 fileNames.append(os.path.normpath(os.path.join(root, name)))
@@ -914,7 +990,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     def AddDirectories(self):
         """ Handles the Path and Hooks extensions for PyInstaller. """
 
-        dlg = GUI2ExeDirSelector(self.MainFrame, title="Browse For Folders...")
+        # Use our fancy directory selector (which allows multiple
+        # folder selection at the same time
+        dlg = GUI2ExeDirSelector(self.MainFrame, title="Browse For Folders...",
+                                 showExtensions=False)
 
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
@@ -935,7 +1014,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
 
     def GetSelectedIndices(self, state=wx.LIST_STATE_SELECTED):
-        """ Returns the indices of the selected items in the list control. """
+        """
+        Returns the indices of the selected items in the list control.
+
+        @param state: the list control item state.
+        """
 
         indices = []
         lastFound = -1
@@ -998,22 +1081,28 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
         # Call our parent
         parent = self.GetParent()
-        # Create the bitmaps for the button
-        plusBmp = self.MainFrame.CreateBitmap("list_plus")
-        minusBmp = self.MainFrame.CreateBitmap("list_minus")
-        # Create a couple of themed buttons for the +/- actions
 
         # NOTE: the borderless bitmap button control on OSX requires the bitmaps
         #       to be native size else they loose their transparency. These
         #       should probably be changed to 16x16 so they can work properly
         #       on all platforms.
+        
         if wx.Platform == '__WXMAC__':
             flags = wx.BU_AUTODRAW
             bsize = (16, 16)
+            plusBmp = "list_plus_mac"
+            minusBmp = "list_minus_mac"
         else:
             flags = wx.NO_BORDER
             bsize = (13, 13)
+            plusBmp = "list_plus"
+            minusBmp = "list_minus"
 
+        # Create the bitmaps for the button
+        plusBmp = self.MainFrame.CreateBitmap(plusBmp)
+        minusBmp = self.MainFrame.CreateBitmap(minusBmp)
+        
+        # Create a couple of themed buttons for the +/- actions
         plusButton = wx.BitmapButton(parent, bitmap=plusBmp, size=bsize, style=flags)
         minusButton = wx.BitmapButton(parent, bitmap=minusBmp, size=bsize, style=flags)
         # Add some explanation...
@@ -1032,7 +1121,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
 
     def UpdateProject(self, changeIcon=True):
-        """ Updates the project in the database, as something changed. """
+        """
+        Updates the project in the database, as something changed.
+
+        @param changeIcon: whether to change the icon in the AuiNotebook tab.
+        """
 
         # Translate the list control values to something understandable
         # by the model stored in the database
@@ -1042,6 +1135,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
 
 class CustomCodeViewer(wx.Frame):
+    """ A custom frame class to view the Setup.py code or to add code. """
 
     def __init__(self, parent, readOnly=False, text="", project=None, page=None,
                  compiler=None, postBuild=False):
@@ -1100,7 +1194,12 @@ class CustomCodeViewer(wx.Frame):
     # ========================== #
     
     def SetProperties(self, readOnly, text):
-        """ Sets few properties for the frame and the StyledTextCtrl. """
+        """
+        Sets few properties for the frame and the StyledTextCtrl.
+
+        @param readOnly: whether the StyledTextCtrl will be read-only or not
+        @param text: the text displayed in the StyledTextCtrl
+        """
 
         self.SetIcon(self.MainFrame.GetIcon())
         # Set the input text for the StyledTextCtrl
@@ -1119,7 +1218,11 @@ class CustomCodeViewer(wx.Frame):
             
 
     def LayoutItems(self, readOnly):
-        """ Layout the widgets with sizers. """
+        """
+        Layout the widgets with sizers.
+
+        @param readOnly: whether the StyledTextCtrl will be read-only or not
+        """
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         panelSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1159,7 +1262,11 @@ class CustomCodeViewer(wx.Frame):
 
 
     def BindEvents(self, readOnly):
-        """ Binds the events for our CustomCodeViewer. """
+        """
+        Binds the events for our CustomCodeViewer.
+
+        @param readOnly: whether the StyledTextCtrl will be read-only or not
+        """
 
         if not readOnly:
             self.Bind(wx.EVT_BUTTON, self.OnSave, self.saveButton)
@@ -1238,12 +1345,14 @@ class CustomCodeViewer(wx.Frame):
 
 
 class PythonSTC(stc.StyledTextCtrl):
-
+    """ A simple Python editor based on StyledTextCtrl. """
+    
     def __init__(self, parent, readOnly):
         """
         Default class constructor.
 
-        @param readOnly: indicates if the StyledTextCtrl should be in read-only mode
+        @param parent: the StyledTextCtrl parent;
+        @param readOnly: indicates if the StyledTextCtrl should be in read-only mode.
 
         """        
 
@@ -1346,7 +1455,7 @@ class PythonSTC(stc.StyledTextCtrl):
     # Event handlers #
     # ============== #
     
-    def OnUpdateUI(self, evt):
+    def OnUpdateUI(self, event):
         """ Handles the stc.EVT_STC_UPDATEUI event for PythonSTC. """
         
         # check for matching braces
@@ -1380,21 +1489,21 @@ class PythonSTC(stc.StyledTextCtrl):
             self.BraceHighlight(braceAtCaret, braceOpposite)
 
 
-    def OnMarginClick(self, evt):
+    def OnMarginClick(self, event):
         """ Handles the stc.EVT_STC_MARGINCLICK event for PythonSTC. """
         
         # fold and unfold as needed
-        if evt.GetMargin() == 2:
-            if evt.GetShift() and evt.GetControl():
+        if event.GetMargin() == 2:
+            if event.GetShift() and event.GetControl():
                 self.FoldAll()
             else:
-                lineClicked = self.LineFromPosition(evt.GetPosition())
+                lineClicked = self.LineFromPosition(event.GetPosition())
 
                 if self.GetFoldLevel(lineClicked) & stc.STC_FOLDLEVELHEADERFLAG:
-                    if evt.GetShift():
+                    if event.GetShift():
                         self.SetFoldExpanded(lineClicked, True)
                         self.Expand(lineClicked, True, True, 1)
-                    elif evt.GetControl():
+                    elif event.GetControl():
                         if self.GetFoldExpanded(lineClicked):
                             self.SetFoldExpanded(lineClicked, False)
                             self.Expand(lineClicked, False, True, 0)
@@ -1483,15 +1592,19 @@ class PythonSTC(stc.StyledTextCtrl):
 
         
 class Py2ExeMissing(wx.Frame):
+    """
+    A handy frame which can show the modules py2exe thinks are missing
+    or the dlls your executable relies on.
+    """
 
     def __init__(self, parent, project, dll=False):
         """
         Default class constructor.
 
-        @param parent: the parent widget
-        @param project: the project as stored in the database
+        @param parent: the parent widget;
+        @param project: the project as stored in the database;
         @param dll: indicates whether we are going to show the missing binary
-                    dependencies (dll) or the missing modules (py)
+                    dependencies (dll) or the missing modules (py).
 
         """
         
@@ -1538,7 +1651,11 @@ class Py2ExeMissing(wx.Frame):
     # ========================== #
     
     def SetProperties(self, dll):
-        """ Sets few properties for the Py2ExeMissing frame. """        
+        """
+        Sets few properties for the Py2ExeMissing frame.
+
+        @param dll: whether this frame is showing dlls or missing modules.
+        """
 
         if dll:
             # We are showing binary dependencies
@@ -1556,7 +1673,11 @@ class Py2ExeMissing(wx.Frame):
 
 
     def LayoutItems(self, dll):
-        """ Layouts the widgets with sizers. """        
+        """
+        Layouts the widgets with sizers.
+
+        @param dll: whether this frame is showing dlls or missing modules.
+        """
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         panelSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1613,21 +1734,35 @@ class Py2ExeMissing(wx.Frame):
 
 
     def OnKeyUp(self, event):
+        """ Handles the wx.EVT_CHAR_HOOK event for Py2ExeMissing. """
 
         if event.GetKeyCode() in [wx.WXK_ESCAPE, wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            # Close this window
             self.OnOk(event)
 
         event.Skip()
         
 
 class GUI2ExeDirSelector(wx.Dialog):
+    """
+    A different implementation of wx.DirDialog which allows multiple
+    folders to be selected at once.
+    """
 
     def __init__(self, parent, id=wx.ID_ANY, title="", pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER):
-    
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
-        self.MainFrame = parent
+                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER, showExtensions=False):
+        """
+        Default wx.Frame class constructor.
 
+        @param showExtensions: whether to show a text control to filter extensions.
+        """
+        
+        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
+
+        # Store a reference to our main GUI        
+        self.MainFrame = parent
+        self.showExtensions = showExtensions
+        
         self.dirCtrl = wx.GenericDirCtrl(self, size=(300, 200), style=wx.DIRCTRL_3D_INTERNAL|wx.DIRCTRL_DIR_ONLY)
         
         # Build a couple of fancy buttons
@@ -1636,13 +1771,19 @@ class GUI2ExeDirSelector(wx.Dialog):
         self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, " Ok ")
         self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
         self.okButton.SetDefault()
-        
+
+        if showExtensions:
+            # Create a text control to filter extensions
+            self.extensionText = wx.TextCtrl(self, -1, "*.*")
+            
+        # Setup the layout and frame properties        
         self.SetupDirCtrl()
         self.LayoutItems()
         self.BindEvents()
     
 
     def SetupDirCtrl(self):
+        """ Setup the wx.GenericDirCtrl (icons, labels, etc...). """
 
         il = wx.ImageList(16, 16)
 
@@ -1673,30 +1814,46 @@ class GUI2ExeDirSelector(wx.Dialog):
         # assign image list:
         treeCtrl = self.dirCtrl.GetTreeCtrl()
         treeCtrl.AssignImageList(il)
-        treeCtrl.SetWindowStyle(treeCtrl.GetWindowStyle() | wx.TR_MULTIPLE)
 
-        executable = os.path.split(sys.executable)[0]            
+        if not self.showExtensions:
+            treeCtrl.SetWindowStyle(treeCtrl.GetWindowStyle() | wx.TR_MULTIPLE)
+
+        # Set the wx.GenericDirCtrl defult path
+        executable = os.path.split(sys.executable)[0]
         self.dirCtrl.ExpandPath(executable)
         self.dirCtrl.SetDefaultPath(executable)
         self.dirCtrl.SetPath(executable)
         
 
     def LayoutItems(self):
+        """ Layout the widgets using sizers. """
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
         
         staticText = wx.StaticText(self, -1, "Choose one or more folders:")
         staticText.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
-        
+
+        # Add the main wx.GenericDirCtrl        
         mainSizer.Add(staticText, 0, wx.EXPAND|wx.ALL, 10)
         mainSizer.Add(self.dirCtrl, 1, wx.EXPAND|wx.ALL, 10)
 
+        if self.showExtensions:
+            # Show the extension filter
+            label = wx.StaticText(self, -1, "Filter file extensions using wildcard separated by a comma:")
+            label.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
+            # Add the extension text control
+            mainSizer.Add(label, 0, wx.TOP|wx.LEFT|wx.RIGHT|wx.EXPAND, 10)
+            mainSizer.Add((0, 2))
+            mainSizer.Add(self.extensionText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 10)
+            
+        # Add the fancy buttons
         bottomSizer.Add(self.okButton, 0, wx.ALL, 10)
         bottomSizer.Add((0, 0), 1, wx.EXPAND)
         bottomSizer.Add(self.cancelButton, 0, wx.ALL, 10)
         mainSizer.Add(bottomSizer, 0, wx.EXPAND)
 
+        # Layout the dialog
         self.SetSizer(mainSizer)
         mainSizer.Layout()
         mainSizer.Fit(self)
@@ -1704,27 +1861,44 @@ class GUI2ExeDirSelector(wx.Dialog):
 
 
     def GetSelectedFolders(self):
+        """ Returns the folders selected by the user. """
 
+        # Retrieve the tree control and the selections the
+        # user has made
         treeCtrl = self.dirCtrl.GetTreeCtrl()
         selections = treeCtrl.GetSelections()
 
         folders = []
 
+        # Loop recursively over the selected folder and its sub-direcories
         for select in selections:
             itemText = treeCtrl.GetItemText(select)
-            folder = self.RecurseTopDir(select, itemText)
+            # Recurse on it.
+            folder = self.RecurseTopDir(treeCtrl, select, itemText)
             folders.append(os.path.normpath(folder))
 
-        return folders
+        if not self.showExtensions:
+            return folders
+
+        extensions = self.extensionText.GetValue().strip()
+        return folders[0], extensions.split(",")
     
 
-    def RecurseTopDir(self, item, itemText):
+    def RecurseTopDir(self, treeCtrl, item, itemText):
+        """
+        Recurse a directory tree to include all the sub-folders.
 
-        treeCtrl = self.dirCtrl.GetTreeCtrl()
+        @param treeCtrl: the tree control associated with wx.GenericDirCtrl;
+        @param item: the selected tree control item;
+        @param itemText: the selected tree control item text.
+        """
+
+        # Get the item parent        
         parent = treeCtrl.GetItemParent(item)
-        if parent != treeCtrl.GetRootItem():            
+        if parent != treeCtrl.GetRootItem():
+            # Not the root item, recurse again on it
             itemText = treeCtrl.GetItemText(parent) + "/" + itemText
-            itemText = self.RecurseTopDir(parent, itemText)
+            itemText = self.RecurseTopDir(treeCtrl, parent, itemText)
 
         return itemText
 
@@ -1757,10 +1931,13 @@ class GUI2ExeDirSelector(wx.Dialog):
 
 
     def OnKeyUp(self, event):
+        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
 
         if event.GetKeyCode() == wx.WXK_ESCAPE:
+            # Close the dialog, no actions
             self.OnClose(event)
         elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            # Close the dialog, the user wants to continue
             self.OnOk(event)
 
         event.Skip()
@@ -1770,6 +1947,12 @@ class PyInfoFrame(wx.Frame):
     """ Base class for PyBusyInfo. """
 
     def __init__(self, parent, message, useCustom):
+        """ Defaults class constructor.
+
+        @param parent: the frame parent;
+        @param message: the message to display in the PyBusyInfo;
+        @param useCustom: if True, it will custom-draw the content in an OnPaint handler.
+        """
         
         wx.Frame.__init__(self, parent, wx.ID_ANY, "Busy", wx.DefaultPosition,
                           wx.DefaultSize, wx.NO_BORDER | wx.FRAME_TOOL_WINDOW | wx.FRAME_SHAPED | wx.STAY_ON_TOP)
@@ -1799,6 +1982,7 @@ class PyInfoFrame(wx.Frame):
         panel.SetSize(self.GetClientSize())
 
         if useCustom:
+            # Bind the events to draw ourselves
             panel.Bind(wx.EVT_PAINT, self.OnPaint)
             panel.Bind(wx.EVT_ERASE_BACKGROUND, self.OnErase)
             
@@ -1807,6 +1991,7 @@ class PyInfoFrame(wx.Frame):
             
         self.Centre(wx.BOTH)
 
+        # Create a non-rectangular region to set the frame shape
         size = self.GetSize()
         bmp = wx.EmptyBitmap(size.x, size.y)
         dc = wx.BufferedDC(None, bmp)
@@ -1815,21 +2000,25 @@ class PyInfoFrame(wx.Frame):
         dc.SetPen(wx.Pen(wx.Color(0, 0, 0), 1))
         dc.DrawRoundedRectangle(0, 0, size.x, size.y, 12)                
         r = wx.RegionFromBitmapColour(bmp, wx.Color(0, 0, 0))
+        # Store the non-rectangular region
         self.reg = r
 
         if wx.Platform == "__WXGTK__":
             self.Bind(wx.EVT_WINDOW_CREATE, self.SetBusyShape)
         else:
             self.SetBusyShape()
-                    
+
+        # Add a custom bitmap at the top                    
         gui2exe = wx.GetApp().GetTopWindow()
         self._icon = gui2exe.CreateBitmap("GUI2Exe_small")
 
 
     def SetBusyShape(self, event=None):
+        """ Sets the PyBusyInfo shape. """
 
         self.SetShape(self.reg)
         if event:
+            # GTK only
             event.Skip()
             
 
@@ -1852,10 +2041,12 @@ class PyInfoFrame(wx.Frame):
         font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         dc.SetFont(font)
 
+        # Draw the message
         rect2 = wx.Rect(*rect)
         rect2.height += 20
         dc.DrawLabel(self._message, rect2, alignment=wx.ALIGN_CENTER|wx.ALIGN_CENTER)
 
+        # Draw the top title
         font.SetWeight(wx.BOLD)
         dc.SetFont(font)
         dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_CAPTIONTEXT)))
@@ -1876,6 +2067,7 @@ class PyInfoFrame(wx.Frame):
         custom drawing.
         """
 
+        # This is empty on purpose, to avoid flickering
         pass
 
                 
@@ -1884,10 +2076,19 @@ class PyInfoFrame(wx.Frame):
 # -------------------------------------------------------------------- #
 
 if wx.Platform == "__WXMAC__":
+    
+    # wxMac doesn't like the custom PyBusyInfo
 
     class PyBusyInfo(wx.BusyInfo):
+        """ Standard wx.BusyInfo class in wxWidgets. """
 
         def __init__(self, message, parent=None):
+            """
+            Default class constructor.
+
+            @param message: the message to display in wx.BusyInfo;
+            @param parent: the wx.BusyInfo parent (if any).
+            """
 
             wx.BusyInfo.__init__(self, message, parent)
 
@@ -1930,7 +2131,15 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     """ A multi-purpose combobox. """
 
     def __init__(self, parent, choices, style, compiler, name):
-        """ Default class constructor. """
+        """
+        Default class constructor.
+
+        @param parent: the combobox parent;
+        @param choices: a list of strings which represents the combobox choices;
+        @param style: the combobox style;
+        @param compiler: the compiler to which the combobox's parent belongs;
+        @param name: the option name associated to this combobox.
+        """
 
         wx.combo.OwnerDrawnComboBox.__init__(self, parent, choices=choices,
                                              style=style, name=name)
@@ -1944,25 +2153,39 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         index = lengths.index(max(lengths))
         longestChoice = choices[index]
 
+        # This seems to do nothing on Mac, while it works
+        # pretty well on Windows and GTK
         choiceWidth, dummy = self.GetTextExtent(longestChoice)
         nameWidth, dummy = self.GetTextExtent(name)
         width = max(choiceWidth, nameWidth) + self.GetButtonSize().x + 35
         self.SetMinSize((width, 22))
 
+        # Create the image list for our choices
         self.BuildImageList()
 
 
     def BuildImageList(self):
+        """ Builds an image list for our list of choices. """
 
+        # Retrieve the images from Constants
         images = _comboImages[self.compiler][self.option]
         self.imageList = []
-        
+        # Build the image list
         for png in images:
             self.imageList.append(self.MainFrame.CreateBitmap(png))
         
-    # Overridden from OwnerDrawnComboBox, called to draw each
-    # item in the list
     def OnDrawItem(self, dc, rect, item, flags):
+        """
+        Overridden from OwnerDrawnComboBox, called to draw each item in the list.
+
+        @param dc: the device context used to draw text, icons etc... ;
+        @param rect: the bounding rectangle for the item being drawn
+                     (DC clipping region is set to this rectangle before
+                     calling this function);
+        @param item: the index of the item to be drawn;
+        @param flags: flags to draw the item.
+        """
+        
         if item == wx.NOT_FOUND:
             # painting the control, but there is no valid item selected yet
             return
@@ -1973,18 +2196,29 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         pen = wx.Pen(dc.GetTextForeground(), 1)
         dc.SetPen(pen)
 
+        # Get the item string and bitmap
         string = self.GetString(item)
         indx = self.GetItems().index(string)
         bmp = self.imageList[indx]
         y = (r.y+r.height/2-8)
+        # Draw the bitmap and the text
         dc.DrawBitmap(bmp, r.x+3, y, True)
         dc.DrawText(string, r.x + 25, r.y + (r.height/2 - dc.GetCharHeight()/2)-1)
             
 
-    # Overridden from OwnerDrawnComboBox, called for drawing the
-    # background area of each item.
     def OnDrawBackground(self, dc, rect, item, flags):
-        # If the item is selected, or its item # iseven, or we are painting the
+        """
+        Overridden from OwnerDrawnComboBox, called for drawing the background area of each item.
+
+        @param dc: the device context used to draw text, icons etc... ;
+        @param rect: the bounding rectangle for the item being drawn
+                     (DC clipping region is set to this rectangle before
+                     calling this function);
+        @param item: the index of the item to be drawn;
+        @param flags: flags to draw the item.
+        """
+        
+        # If the item is selected, or we are painting the
         # combo control itself, then use the default rendering.
 
         if flags & (wx.combo.ODCB_PAINTING_CONTROL | wx.combo.ODCB_PAINTING_SELECTED):
@@ -1992,27 +2226,37 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
             return
         
         string = self.GetString(item)
-        # Otherwise, draw every other background with different colour.
+        # Otherwise, draw every item background
         bgCol = wx.WHITE
         dc.SetBrush(wx.Brush(bgCol))
         dc.SetPen(wx.Pen(bgCol))
         dc.DrawRectangleRect(rect)
 
         
-    # Overridden from OwnerDrawnComboBox, should return the height
-    # needed to display an item in the popup, or -1 for default
     def OnMeasureItem(self, item):
-        # Simply demonstrate the ability to have variable-height items
+        """
+        Overridden from OwnerDrawnComboBox, should return the height needed to display
+        an item in the popup, or -1 for default.
+
+        @param item: the index of the item to be drawn.
+        """
+
+        # Return a sensible value for item height on all platforms
         return 19
 
 
-    # Overridden from OwnerDrawnComboBox.  Callback for item width, or
-    # -1 for default/undetermined
     def OnMeasureItemWidth(self, item):
+        """
+        Overridden from OwnerDrawnComboBox.  Callback for item width, or -1
+        for default/undetermined.
+
+        @param item: the index of the item to be drawn.
+        """
 
         dc = wx.ClientDC(self)
         string = self.GetString(item)
 
+        # Return the text width + the bitmap width + some white space
         return dc.GetTextExtent(string)[0] + 25
 
 
@@ -2037,17 +2281,22 @@ class BuildDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
         self.MainFrame = parent
 
+        # Split the text to look for compiler info/build text
         header, text = outputText.split("/-/-/")
         self.outputTextCtrl = wx.TextCtrl(self, -1, text.strip(), style=wx.TE_MULTILINE|wx.TE_READONLY)
 
+        # Create few bitmaps for the fancy buttons
         saveBmp = self.MainFrame.CreateBitmap("save_to_file")
         clipboardBmp = self.MainFrame.CreateBitmap("copy_to_clipboard")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-            
+
+        # Create the fancy buttons to export to a file, copy to the clipboard
+        # or close the dialog
         self.exportButton = buttons.ThemedGenBitmapTextButton(self, -1, saveBmp, " Save to file... ")
         self.clipboardButton = buttons.ThemedGenBitmapTextButton(self, -1, clipboardBmp, " Export to clipboard ")
         self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
 
+        # Do the hard work, layout items and set dialog properties
         self.SetProperties()
         self.DoLayout(header, projectName, compiler)
 
@@ -2056,6 +2305,7 @@ class BuildDialog(wx.Dialog):
 
 
     def SetProperties(self):
+        """ Sets few properties for the dialog. """
 
         self.SetTitle("Full Build Ouput Dialog")
         self.SetIcon(self.GetParent().GetIcon())
@@ -2065,20 +2315,34 @@ class BuildDialog(wx.Dialog):
 
 
     def DoLayout(self, header, projectName, compiler):
+        """
+        Layouts the widgets with sizers.
 
+        @param header: the header text (containing compiler information;
+        @param projectName: the name of the project the build output refers to;
+        @param compiler: the compiler used to build the project.
+        """
+
+        # Create the sizer structure        
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
         label = wx.StaticText(self, -1, "Build output text for %s (%s):\nBuilt on %s"% \
                               (projectName, compiler, header))
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         mainSizer.Add(label, 0, wx.ALL, 10)
+        
+        # Add the main text control
         mainSizer.Add(self.outputTextCtrl, 1, wx.ALL|wx.EXPAND, 10)
+
+        # Add the fancy buttons        
         bottomSizer.Add(self.exportButton, 0, wx.LEFT|wx.TOP|wx.BOTTOM, 10)
         bottomSizer.Add((5, 0), 0, 0, 0)
         bottomSizer.Add(self.clipboardButton, 0, wx.TOP|wx.BOTTOM, 10)
         bottomSizer.Add((0, 0), 1, 0, 0)
         bottomSizer.Add(self.cancelButton, 0, wx.ALL, 10)
         mainSizer.Add(bottomSizer, 0, wx.EXPAND, 0)
+
+        # Layout the sizers
         self.SetSizer(mainSizer)
         self.Layout()
 
@@ -2094,6 +2358,7 @@ class BuildDialog(wx.Dialog):
 
 
     def OnSave(self, event):
+        """ Handles the wx.EVT_BUTTON event for the 'Save' action. """
 
         # Launch the save dialog        
         dlg = wx.FileDialog(self, message="Save file as ...",
@@ -2117,15 +2382,20 @@ class BuildDialog(wx.Dialog):
         
 
     def OnClipboard(self, event):
+        """ Handles the wx.EVT_BUTTON event for the 'Copy' action. """
 
+        # Create a text objct in memory
         self.do = wx.TextDataObject()
         self.do.SetText(self.outputTextCtrl.GetValue())
-        
+
+        # Open the clipboard        
         if wx.TheClipboard.Open():
+            # Copy the data to the clipboard
             wx.TheClipboard.SetData(self.do)
             wx.TheClipboard.Close()
             self.MainFrame.SendMessage("Message", "Build output text successfully copied to the clipboard")
         else:
+            # Some problem with the clipboard...
             self.MainFrame.RunError("Error", "Unable to open the clipboard.")
         
 
@@ -2142,15 +2412,22 @@ class BuildDialog(wx.Dialog):
 
 
     def OnKeyUp(self, event):
+        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
 
         if event.GetKeyCode() == wx.WXK_ESCAPE:
+            # Close the dialog
             self.OnClose(event)
 
         event.Skip()
         
 #-----------------------------------------------------------------------------#       
 
-class TransientBase:
+class TransientBase(object):
+    """
+    Base class for the TransientPopup class defined later.
+    Allows our custom tooltip to work on all platforms.
+    """
+    
     def __init__(self, parent, compiler, option, tip, note=None):
         """
         Default class constructor.
@@ -2160,21 +2437,25 @@ class TransientBase:
         @param option: the option currently hovered by the mouse;
         @param tip: the help tip;
         @param note: a note on the current option.
-
         """
+        
         self.panel = wx.Panel(self, -1)
 
         self.MainFrame = parent.MainFrame
         self.bmp = self.MainFrame.CreateBitmap("GUI2Exe_small")
+
+        # Store the input data        
         self.option = option
         self.tip = tip.capitalize()
         self.note = note
         self.compiler = compiler
 
         if note:
+            # A bottom note is present
             self.warnbmp = self.MainFrame.CreateBitmap("note")
             self.note.capitalize()
-        
+
+        # Measure the correct width and height for ourselves        
         dc = wx.ClientDC(self)
         self.bigfont = wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD, False)
         self.boldfont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, True)
@@ -2198,22 +2479,25 @@ class TransientBase:
         fullheight = height1 + height2 + height3 + height4 + 40
         fullwidth = max(max(max(width1, width2), width3), width4) + 20
 
+        # Set size and position
         size = wx.Size(fullwidth, fullheight)
         self.panel.SetSize(size)
         self.SetSize(size)
+        # Bind the events to the panel
         self.panel.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.panel.Bind(wx.EVT_PAINT, self.OnPaint)
         self.panel.Bind(wx.EVT_LEFT_DOWN, self.OnMouseLeftDown)
+        # Drop a shadow underneath (Windows XP only)
         self.DropShadow()
 
-        self.AdjustPosition(size)        
-        self.Show()        
+        self.AdjustPosition(size)
+        self.Show()
         
 
     def OnPaint(self, event):
         """ Draw the full TransientPopup. """
 
-        dc = wx.PaintDC(self.panel)
+        dc = wx.BufferedPaintDC(self.panel)
         rect = self.panel.GetClientRect()
 
         # Fill the background with a gradient shading
@@ -2221,22 +2505,25 @@ class TransientBase:
         endColour = wx.WHITE
 
         dc.GradientFillLinear(rect, startColour, endColour, wx.SOUTH)
-        
-        dc.DrawBitmap(self.bmp, 5, 5)
+
+        # Draw the bitmap in the title
         dc.SetFont(self.bigfont)
         dc.SetTextForeground(wx.SystemSettings_GetColour(wx.SYS_COLOUR_CAPTIONTEXT))
 
         width, height = dc.GetTextExtent("GUI2Exe Help Tip")
         ypos = 13 - height/2
         dc.DrawBitmap(self.bmp, 5, ypos)
+        # Draw the title text
         dc.DrawText("GUI2Exe Help Tip (%s)"%self.compiler, 26, ypos)
 
+        # Draw a line separator between the title and the message
         newYpos = ypos + height + 6
         dc.SetPen(wx.GREY_PEN)
         dc.DrawLine(rect.x+5, newYpos, rect.width-5, newYpos)
 
         newYpos += 5        
 
+        # Draw the option name, in bold font
         dc.SetFont(self.boldfont)
         dc.SetTextForeground(wx.BLACK)
         
@@ -2245,7 +2532,8 @@ class TransientBase:
         dc.DrawLabel(self.option, textRect)
 
         newYpos += height2 + 6
-        
+
+        # Draw the option tooltip        
         dc.SetFont(self.normalfont)
         width3, height3, dummy = dc.GetMultiLineTextExtent(self.tip)
         textRect = wx.Rect(10, newYpos, width3, height3)
@@ -2253,15 +2541,18 @@ class TransientBase:
 
         newYpos += height3 + 6
         if not self.note:
+            # Draw a separator line
             dc.DrawLine(rect.x+10, newYpos, rect.width-10, newYpos)
             return
 
+        # Draw the note below, with a warning sign
         dc.SetFont(self.slantfont)        
         width4, height4, dummy = dc.GetMultiLineTextExtent(self.note)
         textRect = wx.Rect(26, newYpos, width4, height4)
         dc.DrawBitmap(self.warnbmp, 5, newYpos+height4/2-8)
         dc.DrawLabel(self.note, textRect)
         newYpos += height4 + 6
+        # Draw a separator line
         dc.DrawLine(rect.x+5, newYpos, rect.width-5, newYpos)
         
 
@@ -2269,31 +2560,45 @@ class TransientBase:
         """
         Adjust the position of TransientPopup accordingly to the TransientPopup
         size, mouse position and screen geometry.
+
+        @param size: our size.        
         """
 
+        # Retrieve mouse position and screen geometry
         XMousePos, YMousePos = wx.GetMousePosition()
         XScreen, YScreen = wx.GetDisplaySize()
 
+        # Position the tooltip window in order not to crash against
+        # the screen borders
         if XMousePos + size.x > XScreen:
             if YMousePos + size.y > YScreen:
+                # This is bottom right corner
                 xPos, yPos = XMousePos - size.x, YMousePos - size.y
             else:
+                # This is top right corner
                 xPos, yPos = XMousePos - size.x, YMousePos
         else:
             if YMousePos + size.y > YScreen:
+                # This is bottom left corner
                 xPos, yPos = XMousePos, YMousePos - size.y
             else:
+                # This is top left corner
                 xPos, yPos = XMousePos, YMousePos
             
         self.SetPosition((xPos, yPos))
 
 
     def OnEraseBackground(self, event):
+        """ Handles the wx.EVT_ERASE_BACKGROUND event for TransientPopup class. """
+
+        # Empty handler on purpose, it avoids flickering        
         pass
     
 
     def OnMouseLeftDown(self, event):
+        """ Handles the wx.EVT_LEFT_DOWN event for TransientPopup. """        
 
+        # We destroy ourselves when the user click on us
         self.Show(False)
         self.Destroy()
 
@@ -2302,19 +2607,22 @@ class TransientBase:
         """ Adds a shadow under the window (Windows Only). """
 
         if not _libimported:
+            # No Mark Hammond's win32all extension
             return
         
         if wx.Platform != "__WXMSW__":
+            # This works only on Windows XP
             return
 
         hwnd = self.GetHandle()
 
+        # Create a rounded rectangle region
         size = self.GetSize()
         rgn = win32gui.CreateRoundRectRgn(0, 0, size.x, size.y, 9, 9)
         win32gui.SetWindowRgn(hwnd, rgn, True)
         
         CS_DROPSHADOW = 0x00020000
-                
+        # Load the user32 library
         if not hasattr(self, "_winlib"):
             self._winlib = win32api.LoadLibrary("user32")
         
@@ -2323,24 +2631,17 @@ class TransientBase:
             return
         else:
             csstyle |= CS_DROPSHADOW     #Nothing to be done
-                
+
+        # Drop the shadow underneath the window                
         GCL_STYLE= -26
         cstyle= win32gui.GetClassLong(hwnd, GCL_STYLE)
         if cstyle & CS_DROPSHADOW == 0:
             win32api.SetClassLong(hwnd, GCL_STYLE, cstyle | CS_DROPSHADOW)
 
+
 class MacTransientPopup(wx.Frame, TransientBase):
-    """Popup window that works on wxMac"""
-    def __init__(self, parent, compiler, option, tip, note=None):
-        wx.Frame.__init__(self, parent, style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT|wx.FRAME_NO_TASKBAR|wx.POPUP_WINDOW)
-        TransientBase.__init__(self, parent, compiler, option, tip, note)
+    """ Popup window that works on wxMac """
 
-class TransientPopup(wx.PopupWindow, TransientBase):
-    """
-    A simple wx.PopupWindow that holds fancy tooltips.
-    Not available on Mac as wx.PopupWindow is not implemented.
-
-    """
     def __init__(self, parent, compiler, option, tip, note=None):
         """
         Default class constructor.
@@ -2350,12 +2651,34 @@ class TransientPopup(wx.PopupWindow, TransientBase):
         @param option: the option currently hovered by the mouse;
         @param tip: the help tip;
         @param note: a note on the current option.
-
         """
-        wx.PopupWindow.__init__(self, parent)
+        
+        wx.Frame.__init__(self, parent, style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT|wx.FRAME_NO_TASKBAR|wx.POPUP_WINDOW)
+        # Call the base class
         TransientBase.__init__(self, parent, compiler, option, tip, note)
 
-#-----------------------------------------------------------------------------#       
+
+class TransientPopup(TransientBase, wx.PopupWindow):
+    """
+    A simple wx.PopupWindow that holds fancy tooltips.
+    Not available on Mac as wx.PopupWindow is not implemented.
+    """
+    
+    def __init__(self, parent, compiler, option, tip, note=None):
+        """
+        Default class constructor.
+
+        @param parent: the TransientPopup parent;
+        @param compiler: the compiler currently selected;
+        @param option: the option currently hovered by the mouse;
+        @param tip: the help tip;
+        @param note: a note on the current option.
+        """
+
+        wx.PopupWindow.__init__(self, parent)
+        # Call the base class
+        TransientBase.__init__(self, parent, compiler, option, tip, note)
+
 
 class PListEditor(wx.Dialog):
     """ A simple PList editor for GUI2Exe (py2app only). """
@@ -2379,13 +2702,33 @@ class PListEditor(wx.Dialog):
             PFile = plistlib.readPlist(pListFile)
 
         if not pListCode:
+            # No existing PList code
             PTemplate = plist_template.infoPlistDict(CFBundleExecutable, pListCode)
             for key in PFile.keys():
                 if key not in PTemplate:
                     PTemplate[key] = PFile[key]
         else:
+            # If the user already has some PList code in the project,
+            # we do no update it reading the plist_template from py2app
             PTemplate = pListCode
 
+        boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
+        self.codeCheck = wx.CheckBox(self, -1, "Add by Python code")
+        self.codeCheck.SetFont(boldFont)
+        self.staticText_1 = wx.StaticText(self, -1, "Select one item in the tree control below")
+        self.staticText_1.SetFont(boldFont)
+        self.itemParentText = wx.TextCtrl(self, -1, "")
+        self.staticText_2 = wx.StaticText(self, -1, "Add your key/value dictionary in Python code:")
+        self.staticText_2.SetFont(boldFont)
+        self.pythonStc = PythonSTC(self, readOnly=True)
+
+        addBmp = self.MainFrame.CreateBitmap("add")
+        self.addButton = buttons.ThemedGenBitmapTextButton(self, -1, addBmp, " Append", size=(-1, 22))
+
+        self.enablingItems = [self.staticText_1, self.staticText_2, self.itemParentText,
+                              self.pythonStc, self.addButton]
+
+        # Create a tree list control to handle the Plist dictionary
         self.treeList = gizmos.TreeListCtrl(self, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
                                             wx.TR_COLUMN_LINES | wx.TR_FULL_ROW_HIGHLIGHT)
 
@@ -2395,7 +2738,7 @@ class PListEditor(wx.Dialog):
         self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, " Ok ")
         self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
 
-        # Do the hard work        
+        # Do the hard work
         self.SetProperties()
         self.LayoutItems()
         self.BuildImageList()
@@ -2403,7 +2746,7 @@ class PListEditor(wx.Dialog):
         self.BindEvents()
         
         size = self.MainFrame.GetSize()
-        self.SetSize((size.x/2, size.y/2))
+        self.SetSize((size.x/2, 4*size.y/5))
 
         self.CenterOnParent()
         self.Show()
@@ -2417,7 +2760,9 @@ class PListEditor(wx.Dialog):
 
         self.SetTitle("Simple PList editor for py2app")
         self.SetIcon(self.MainFrame.GetIcon())
-        self.okButton.SetDefault()
+        self.okButton.SetDefault()        
+
+        self.EnableCode(False)
 
 
     def LayoutItems(self):
@@ -2426,13 +2771,23 @@ class PListEditor(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        label = "You can edit the properties below or add new ones:"
+        mainSizer.Add(self.codeCheck, 0, wx.ALL, 5)
+        mainSizer.Add(self.staticText_1, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.itemParentText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 5)
+        mainSizer.Add(self.staticText_2, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.pythonStc, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.addButton, 0, wx.RIGHT|wx.BOTTOM|wx.ALIGN_RIGHT, 5)
+        
+        label = "Or you can edit the properties below or add new ones:"
 
         label = wx.StaticText(self, -1, label)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
 
-        mainSizer.Add(label, 0, wx.ALL, 10)
-        mainSizer.Add(self.treeList, 1, wx.EXPAND|wx.ALL, 5)
+        mainSizer.Add(label, 0, wx.ALL, 5)
+        mainSizer.Add(self.treeList, 3, wx.EXPAND|wx.ALL, 5)
 
         # Add the fancy and useless buttons
         bottomSizer.Add(self.okButton, 0, wx.ALL, 15)
@@ -2453,6 +2808,8 @@ class PListEditor(wx.Dialog):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
         self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
+        self.treeList.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
+        self.codeCheck.Bind(wx.EVT_CHECKBOX, self.OnEnableCode)
 
 
     def BuildImageList(self):
@@ -2467,9 +2824,28 @@ class PListEditor(wx.Dialog):
         self.treeList.AssignImageList(imgList)            
 
 
-    def PopulateTree(self, PTemplate):
-        """ Populates the tree list control using the PList dictionary. """
+    def EnableCode(self, enable):
+        """
+        Enables/disables the top portion of the dialog, the one which contains
+        the Python code editor.
 
+        @param enable: whether to enable or disable the top portion of the dialog.
+        """
+
+        for item in self.enablingItems:
+            item.Enable(enable)
+
+        self.enableCode = enable
+        
+
+    def PopulateTree(self, PTemplate):
+        """
+        Populates the tree list control using the PList dictionary.
+
+        @param PTemplate: a PList dictionary.
+        """
+
+        # Add three columns for property name, class and value
         self.treeList.AddColumn("Property List ")
         self.treeList.AddColumn("Class          ", flag=wx.ALIGN_CENTER)
         self.treeList.AddColumn("Value", edit=True)
@@ -2478,17 +2854,21 @@ class PListEditor(wx.Dialog):
         self.root = self.treeList.AddRoot("Root", 0)
 
         self.itemCounter = 1
+        # Recursively add children
         self.AutoAddChildren(self.root, PTemplate, 0)
+        # Sort the root's children
         self.treeList.SortChildren(self.root)
         self.treeList.SetItemText(self.root, "Dictionary", 1)
         self.treeList.SetItemText(self.root, "%d key/value pairs"%len(PTemplate.keys()), 2)
 
+        # Make the root item more visible
         boldFont = self.GetFont()
         pointSize = boldFont.GetPointSize()
         boldFont.SetWeight(wx.BOLD)
         boldFont.SetPointSize(pointSize+2)
         self.treeList.SetItemFont(self.root, boldFont)
-        
+
+        # Expand all items below the root, recursively        
         self.treeList.ExpandAll(self.root)
         colWidth, dummy = self.CalculateColumnWidth(self.root, 0)
         self.treeList.SetColumnWidth(0, colWidth)
@@ -2498,13 +2878,22 @@ class PListEditor(wx.Dialog):
 
 
     def AutoAddChildren(self, itemParent, PTemplate, level):
-        """ Recursively adds children to the tree item. """
+        """
+        Recursively adds children to a tree item.
 
+        @param itemParent: the item to which we will add children (if any);
+        @param PTemplate: a PList dictionary or a list/string;
+        @param level: the hierarchy level (root=0)
+        """
+
+        # Define the colours for alternate row colouring
         white, blue = wx.WHITE, wx.Colour(234, 242, 255)
+        # Define some bold font for items with children
         boldFont = self.GetFont()
         boldFont.SetWeight(wx.BOLD)
         treeList = self.treeList
 
+        # Loop around the key/value pairs
         keys = PTemplate.keys()
         keys.sort()
         for item in keys:
@@ -2513,11 +2902,16 @@ class PListEditor(wx.Dialog):
             treeList.SetItemBackgroundColour(child, colour)
             self.itemCounter += 1
             if isinstance(PTemplate[item], dict):
+                # Is a dictionary, recurse on it
                 treeList.SetItemText(child, "Dictionary", 1)
                 treeList.SetItemText(child, "%d key/value pairs"%len(PTemplate[item].keys()), 2)
                 treeList.SetItemFont(child, boldFont)
                 level = self.AutoAddChildren(child, PTemplate[item], level+1)
             else:
+                # It is either a list, or a string
+                # NOTE: array should be treated differently, as
+                # they may be array of dictionaries, for which we
+                # need to recurse on them
                 treeList.SetItemImage(child, level+1)
                 value = PTemplate[item]
                 if isinstance(value, list):
@@ -2528,23 +2922,39 @@ class PListEditor(wx.Dialog):
                 treeList.SetItemText(child, kind, 1)                    
                 treeList.SetItemText(child, str(value), 2)
                 treeList.SetItemImage(child, 6, 2)
+                # Store the item kind in the item PyData
                 treeList.SetPyData(child, kind)
+                if kind == "Array":
+                    # Arrays can contain dictionaries...
+                    for val in value:
+                        if isinstance(val, dict):
+                            level = self.AutoAddChildren(child, val, level+1)
                 
         return level
     
 
     def CalculateColumnWidth(self, item, colWidth, level=1):
-        """ Calculates the correct column widths for the tree list control columns. """
+        """
+        Calculates the correct column widths for the tree list control columns.
+
+        @param item: the item to be measured;
+        @param colWidth: the maximum column width up to now;
+        @param level: the hierarchy level (root=0).
+        """
 
         treeList = self.treeList
         child, cookie = treeList.GetFirstChild(self.root)
-        
+        # Loop over all the item's children
         while child.IsOk():
             if treeList.HasChildren(child):
+                # Recurse on this item, it has children
                 colWidths, level = self.CalculateColumnWidth(child, colWidth, level+1)
 
+            # Get the bounding rectangle of the item
             rect = treeList.GetBoundingRect(child)
+            # Calculate the column width based on the bounding rectangle
             colWidth = max(colWidth, rect.width + 40*level+16)
+            # Get the next item
             child, cookie = treeList.GetNextChild(item, cookie)
             
         return colWidth, level
@@ -2567,6 +2977,24 @@ class PListEditor(wx.Dialog):
         event.Skip()
 
 
+    def OnItemActivated(self, event):
+        """ Handles the wx.EVT_TREE_ITEM_ACTIVATED event for the tree list control. """
+
+        if not self.enableCode:
+            # We are not adding PList dicts by code
+            return
+
+        itemText = self.treeList.GetItemText(event.GetItem())
+        self.itemParentText.SetValue(itemText)
+        self.itemParentText.Refresh()
+        
+
+    def OnEnableCode(self, event):
+        """ Handles the wx.EVT_CHECKBOX event for the dialog. """
+
+        self.EnableCode(event.IsChecked())
+        
+
     def OnOk(self, event):
         """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
 
@@ -2586,10 +3014,13 @@ class PListEditor(wx.Dialog):
 
 
     def OnKeyUp(self, event):
+        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
 
         if event.GetKeyCode() == wx.WXK_ESCAPE:
+            # Close the dialog, no action
             self.OnClose(event)
         elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            # Close the dialog, the user wants to continue
             self.OnOk(event)
 
         event.Skip()
@@ -2599,28 +3030,33 @@ class PListEditor(wx.Dialog):
         """ Returns the newly edited PList as a dictionary. """
 
         if item is None:
+            # We have just started...
             item = self.root
             PList = dict()
 
         treeList = self.treeList        
         child, cookie = treeList.GetFirstChild(item)
+        # Loop over all the item's children
         while child.IsOk():
             key = treeList.GetItemText(child)
             value = treeList.GetItemText(child, 2)
             kind = treeList.GetPyData(child)
+            
             if treeList.HasChildren(child):
+                # Recurse on the child, it has children
                 PList[key] = {}
                 PList[key] = self.GetPList(child, PList[key])
             else:
                 if kind == "String":
                     PList[key] = value
                 else:
+                    # NOTE: array should be treated differently, as
+                    # they may be array of dictionaries, for which we
+                    # need to recurse on them
                     PList[key] = eval(value)
 
+            # Get the next child
             child, cookie = treeList.GetNextChild(item, cookie)        
 
         return PList
         
-        
-            
-                
