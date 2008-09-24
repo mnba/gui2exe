@@ -2148,13 +2148,9 @@ class BuildDialog(wx.Dialog):
 
         event.Skip()
         
+#-----------------------------------------------------------------------------#       
 
-class TransientPopup(wx.PopupWindow):
-    """
-    A simple wx.PopupWindow that holds fancy tooltips.
-    Not available on Mac as wx.PopupWindow is not implemented.
-    """
-    
+class TransientBase:
     def __init__(self, parent, compiler, option, tip, note=None):
         """
         Default class constructor.
@@ -2164,9 +2160,8 @@ class TransientPopup(wx.PopupWindow):
         @param option: the option currently hovered by the mouse;
         @param tip: the help tip;
         @param note: a note on the current option.
-        """
 
-        wx.PopupWindow.__init__(self, parent)
+        """
         self.panel = wx.Panel(self, -1)
 
         self.MainFrame = parent.MainFrame
@@ -2334,7 +2329,33 @@ class TransientPopup(wx.PopupWindow):
         if cstyle & CS_DROPSHADOW == 0:
             win32api.SetClassLong(hwnd, GCL_STYLE, cstyle | CS_DROPSHADOW)
 
-        
+class MacTransientPopup(wx.Frame, TransientBase):
+    """Popup window that works on wxMac"""
+    def __init__(self, parent, compiler, option, tip, note=None):
+        wx.Frame.__init__(self, parent, style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT|wx.FRAME_NO_TASKBAR|wx.POPUP_WINDOW)
+        TransientBase.__init__(self, parent, compiler, option, tip, note)
+
+class TransientPopup(wx.PopupWindow, TransientBase):
+    """
+    A simple wx.PopupWindow that holds fancy tooltips.
+    Not available on Mac as wx.PopupWindow is not implemented.
+
+    """
+    def __init__(self, parent, compiler, option, tip, note=None):
+        """
+        Default class constructor.
+
+        @param parent: the TransientPopup parent;
+        @param compiler: the compiler currently selected;
+        @param option: the option currently hovered by the mouse;
+        @param tip: the help tip;
+        @param note: a note on the current option.
+
+        """
+        wx.PopupWindow.__init__(self, parent)
+        TransientBase.__init__(self, parent, compiler, option, tip, note)
+
+#-----------------------------------------------------------------------------#       
 
 class PListEditor(wx.Dialog):
     """ A simple PList editor for GUI2Exe (py2app only). """

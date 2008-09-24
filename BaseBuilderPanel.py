@@ -7,7 +7,8 @@ from Constants import _toolTips
 
 if wx.Platform != "__WXMAC__":
     from Widgets import TransientPopup
-
+else:
+    from Widgets import MacTransientPopup as TransientPopup
 
 class BaseBuilderPanel(scrolled.ScrolledPanel):
 
