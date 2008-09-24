@@ -636,10 +636,9 @@ class GUI2Exe(wx.Frame):
 
         # Close down the database...
         self.dataBase.CloseSession()
-        
-        # We're gone
-        wx.CallAfter(self.Destroy)
 
+        # Destoy it
+        wx.CallAfter(self.Destroy)
 
     def AccelClosing(self, event):
         """ Handles the Ctrl+W accelerator key (close a page in the central notebook. """
@@ -1145,7 +1144,7 @@ class GUI2Exe(wx.Frame):
         projectName = project.GetName()
         treeItem = page.GetTreeItem()
         # Check if it is a close event or a wx.aui.AuiNotebookEvent
-        isCloseEvent = isinstance(event, wx.CloseEvent)
+        isCloseEvent = (event.GetId() == wx.ID_EXIT)
             
         if not unSaved:
             # Mark the item as non-edited anymore (if it exists)
@@ -1176,12 +1175,13 @@ class GUI2Exe(wx.Frame):
                 event.Skip()
                 if not isAUI:
                     self.mainPanel.DeletePage(selection)
-            
         else:
+            # Don't save changes ID_NO
             # Check if the project exists
             projectExists = self.dataBase.IsProjectExisting(project)
             if projectExists:
                 self.openingPages[projectName] = page.GetSelection()
+
             if not isCloseEvent:
                 event.Skip()
                 if not isAUI:
