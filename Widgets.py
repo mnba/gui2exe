@@ -9,11 +9,10 @@ import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 
-##if wx.Platform == "__WXMAC__":
-if 1:
+if wx.Platform == "__WXMAC__":
     # For the PList editor
     from py2app.apptemplate import plist_template
-##    import plistlib
+    import plistlib
     import wx.gizmos as gizmos
     
 # This is needed by BaseListCtrl
@@ -28,6 +27,8 @@ from Constants import _xcdatawild, _dylibwild, _comboImages
 
 # Let's see if we can add few nice shadows to our tooltips (Windows only)
 _libimported = None
+
+_ = wx.GetTranslation
 
 if wx.Platform == "__WXMSW__":
     osVersion = wx.GetOsVersion()
@@ -285,18 +286,18 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.Select(item)
         
         menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, "Add Item(s)")
+        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         menu.AppendSeparator()        
         # Well, we can either delete the selected item(s)...
-        item = wx.MenuItem(menu, self.popupId1, "Delete selected")
+        item = wx.MenuItem(menu, self.popupId1, _("Delete selected"))
         bmp = self.MainFrame.CreateBitmap("delete_selected")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         # Or clear completely the list
-        item = wx.MenuItem(menu, self.popupId2, "Clear all")
+        item = wx.MenuItem(menu, self.popupId2, _("Clear all"))
         bmp = self.MainFrame.CreateBitmap("clear_all")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
@@ -310,7 +311,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """ Handles the wx.EVT_RIGHT_UP event for the list control. """
 
         menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, "Add Item(s)")
+        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
@@ -497,7 +498,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
 
         # Launch the file dialog        
-        dlg = wx.FileDialog(self.MainFrame, message="Add Python Script ...",
+        dlg = wx.FileDialog(self.MainFrame, message=_("Add Python Script..."),
                             wildcard=_pywild,
                             style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
 
@@ -681,7 +682,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             wildcard = "All files (*.*)|*.*"
 
         # Run a file dialog with multiple selection            
-        dlg = wx.FileDialog(self.MainFrame, message="New resources", wildcard=wildcard,
+        dlg = wx.FileDialog(self.MainFrame, message=_("New resources"),
+                            wildcard=wildcard,
                             style=wx.FD_OPEN|wx.FD_MULTIPLE)
 
         # Show the dialog and retrieve the user response. If it is the OK response, 
@@ -749,7 +751,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
             # Use our fancy directory selector (which allows multiple
             # folder selection at the same time
-            dlg = GUI2ExeDirSelector(self.MainFrame, title="Please select one or more directories...",
+            dlg = GUI2ExeDirSelector(self.MainFrame,
+                                     title=_("Please select one or more directories..."),
                                      showExtensions=True)
 
             if dlg.ShowModal() != wx.ID_OK:
@@ -771,7 +774,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         else:            
             # Run a file dialog with multiple selection        
             wildcard = "All files (*.*)|*.*"
-            dlg = wx.FileDialog(self.MainFrame, message="New data files", wildcard=wildcard,
+            dlg = wx.FileDialog(self.MainFrame, message=_("New data files"), wildcard=wildcard,
                                 style=wx.FD_OPEN|wx.FD_MULTIPLE)
 
             # Show the dialog and retrieve the user response. If it is the OK response, 
@@ -789,8 +792,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if compiler == "py2exe":
             # Ask the user which name the directory in the py2exe distribution
             # should have, suggesting the above defaultDir
-            dlg = wx.TextEntryDialog(self.MainFrame, "Please enter the name of the folder for py2exe:",
-                                     "Directory Name")
+            dlg = wx.TextEntryDialog(self.MainFrame,
+                                     _("Please enter the name of the folder for py2exe:"),
+                                     _("Directory Name"))
             dlg.SetValue(defaultDir)
             
             if dlg.ShowModal() != wx.ID_OK:
@@ -803,7 +807,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
             if not defaultDir.strip():
                 # Empty folder name?
-                self.MainFrame.RunError("Error", "Invalid folder name.")
+                self.MainFrame.RunError(_("Error"), _("Invalid folder name."))
                 return
 
         wx.BeginBusyCursor()
@@ -836,8 +840,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # The first item is always empty text with an informative icon
         indx = self.InsertImageStringItem(sys.maxint, "", 0)
         # Insert the "Windows" option, which is the default...
-        multipleOptions = ["windows", "", "", "0.1", "No Company", "No Copyrights",
-                           "Py2Exe Sample File"]
+        multipleOptions = ["windows", "", "", "0.1", _("No Company"),
+                           _("No Copyrights"),
+                           _("Py2Exe Sample File")]
         for i in xrange(1, self.GetColumnCount()):            
             self.SetStringItem(indx, i, multipleOptions[i-1])
 
@@ -866,10 +871,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
 
         if name.find("dylib") >= 0 or name.find("frameworks") >= 0:
-            message = "Add Dylib/Frameworks"
+            message = _("Add Dylib/Frameworks")
             wildcard = _dylibwild
         else:
-            message = "Add XC Data Models"
+            message = _("Add XC Data Models")
             wildcard = _xcdatawild
             
         dlg = wx.FileDialog(self.MainFrame, message=message, wildcard=wildcard,
@@ -898,22 +903,22 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # A bunch of if switches to handle all the possibility offered
         # by PyInstaller
         if name == "scripts":
-            message = "Add Python Scripts"
+            message = _("Add Python Scripts")
             wildcard = _pywild
         elif name == "includes":
-            message = "Add Python Modules"
+            message = _("Add Python Modules")
             wildcard = _pywild
         elif name == "packages":
-            message = "Add Python Packages"
+            message = _("Add Python Packages")
             wildcard = _pypackages
         elif name[0:3] == "dll":
-            message = "Add Dll/Binary Files"
+            message = _("Add Dll/Binary Files")
             wildcard = _dllbinaries
         else:
             if self.MainFrame.recurseSubDirs:
                 self.AddDataFiles()
                 return                
-            message = "Add Data Files"
+            message = _("Add Data Files")
             wildcard = "All files (*.*)|*.*"
         
         columns = self.GetColumnCount()
@@ -970,7 +975,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
         # Here we recurse and add all the files in a particular folder
         # and its subfolder
-        dlg = wx.DirDialog(self, "Choose a data files directory:",
+        dlg = wx.DirDialog(self, _("Choose a data files directory:"),
                            style=wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
@@ -992,7 +997,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         # Use our fancy directory selector (which allows multiple
         # folder selection at the same time
-        dlg = GUI2ExeDirSelector(self.MainFrame, title="Browse For Folders...",
+        dlg = GUI2ExeDirSelector(self.MainFrame,
+                                 title=_("Browse For Folders..."),
                                  showExtensions=False)
 
         if dlg.ShowModal() != wx.ID_OK:
@@ -1104,8 +1110,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         plusButton = wx.BitmapButton(parent, bitmap=plusBmp, size=bsize, style=wx.NO_BORDER)
         minusButton = wx.BitmapButton(parent, bitmap=minusBmp, size=bsize, style=wx.NO_BORDER)
         # Add some explanation...
-        plusButton.SetToolTipString("Add items to the list")
-        minusButton.SetToolTipString("Remove items from the list")
+        plusButton.SetToolTipString(_("Add items to the list"))
+        minusButton.SetToolTipString(_("Remove items from the list"))
         # Put everything in a sizer
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add((0, 0), 1, wx.EXPAND)
@@ -1151,7 +1157,7 @@ class CustomCodeViewer(wx.Frame):
 
         """        
 
-        wx.Frame.__init__(self, parent, title="GUI2Exe Code Viewer", size=(700, 550))
+        wx.Frame.__init__(self, parent, title=_("GUI2Exe Code Viewer"), size=(700, 550))
 
         # Store few objects, we are going to need them later        
         self.MainFrame = parent
@@ -1171,8 +1177,8 @@ class CustomCodeViewer(wx.Frame):
             saveBmp = self.MainFrame.CreateBitmap("code_save")
             discardBmp = self.MainFrame.CreateBitmap("code_discard")
             # Create a couple of themed buttons to save or discard changes
-            self.saveButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, saveBmp, " Save ")
-            self.discardButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, discardBmp, " Discard ")
+            self.saveButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, saveBmp, _(" Save "))
+            self.discardButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, discardBmp, _(" Discard "))
             self.saveButton.SetDefault()
             # If it is custom code, add the compiler name to the frame title
             self.SetTitle("%s - %s"%(self.GetTitle(), compiler))
@@ -1228,12 +1234,12 @@ class CustomCodeViewer(wx.Frame):
         rightSizer = wx.BoxSizer(wx.VERTICAL)
 
         if readOnly:
-            topLabel = "This is the Setup file as it comes out after the pre-processing\n" \
-                       "work done by GUI2Exe."
+            topLabel = _("This is the Setup file as it comes out after the pre-processing\n" \
+                       "work done by GUI2Exe.")
         else:
-            topLabel = "Enter your custom code below and it will be inserted inside the\n" \
+            topLabel = _("Enter your custom code below and it will be inserted inside the\n" \
                        "Setup script. Note that you can use as 'keywords' also the compiler\n" \
-                       "options like data_files, ignores and icon_resources."
+                       "options like data_files, ignores and icon_resources.")
 
         # The top label text is different depending on the choice of the user
         # If he/she chose to view the Setup.py file, it is read only
@@ -1614,10 +1620,11 @@ class Py2ExeMissing(wx.Frame):
         # Build column names dinamically depending on the dll value
         name = (dll and ["binarydependencies"] or ["missingmodules"])[0]
         if dll:
-            columnNames = ["DLL Name", "DLL Path"]
+            columnNames = [_("DLL Name"), _("DLL Path")]
         else:
             # There might be some strange sub-sub-sub module imported...
-            columnNames = ["Main Module", "Sub-Module 1", "Sub-Module 2", "Sub-Module 3"]
+            columnNames = [_("Main Module"), _("Sub-Module 1"),
+                           _("Sub-Module 2"), _("Sub-Module 3")]
 
         # Build the base list control            
         self.list = BaseListCtrl(self.mainPanel, columnNames, name, self.MainFrame)
@@ -1625,8 +1632,8 @@ class Py2ExeMissing(wx.Frame):
         # Build a couple of fancy and useless buttons        
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_OK, okBmp, " Ok ")
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_CANCEL, cancelBmp, " Cancel ")
+        self.okButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_OK, okBmp, _(" Ok "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
 
         # Do the hard work        
         self.SetProperties(dll)
@@ -1657,10 +1664,10 @@ class Py2ExeMissing(wx.Frame):
 
         if dll:
             # We are showing binary dependencies
-            title = "Py2Exe Binary Dependencies"
+            title = _("Py2Exe Binary Dependencies")
         else:
             # These are what py2exe thinks are the missing modules
-            title = "Py2Exe Missing Modules"
+            title = _("Py2Exe Missing Modules")
             
         self.SetTitle(title)
         self.SetIcon(self.MainFrame.GetIcon())
@@ -1683,12 +1690,12 @@ class Py2ExeMissing(wx.Frame):
 
         if dll:
             # We are showing binary dependencies
-            label = "Make sure you have the license if you distribute any of them, and\n"  \
-                    "make sure you don't distribute files belonging to the operating system."
+            label = _("Make sure you have the license if you distribute any of them, and\n"  \
+                    "make sure you don't distribute files belonging to the operating system.")
         else:
             # These are what py2exe thinks are the missing modules
-            label = "Py2Exe thinks that these modules (and sub-modules) are missing.\n" \
-                    "Inclusion of one or more of them may allow your compiled application to run."
+            label = _("Py2Exe thinks that these modules (and sub-modules) are missing.\n" \
+                    "Inclusion of one or more of them may allow your compiled application to run.")
 
         label = wx.StaticText(self.mainPanel, -1, label)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
@@ -1766,8 +1773,8 @@ class GUI2ExeDirSelector(wx.Dialog):
         # Build a couple of fancy buttons
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, " Ok ")
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
+        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
         self.okButton.SetDefault()
 
         if showExtensions:
@@ -1829,7 +1836,7 @@ class GUI2ExeDirSelector(wx.Dialog):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
         
-        staticText = wx.StaticText(self, -1, "Choose one or more folders:")
+        staticText = wx.StaticText(self, -1, _("Choose one or more folders:"))
         staticText.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
         # Add the main wx.GenericDirCtrl        
@@ -1838,7 +1845,7 @@ class GUI2ExeDirSelector(wx.Dialog):
 
         if self.showExtensions:
             # Show the extension filter
-            label = wx.StaticText(self, -1, "Filter file extensions using wildcard separated by a comma:")
+            label = wx.StaticText(self, -1, _("Filter file extensions using wildcard separated by a comma:"))
             label.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
             # Add the extension text control
             mainSizer.Add(label, 0, wx.TOP|wx.LEFT|wx.RIGHT|wx.EXPAND, 10)
@@ -1952,7 +1959,7 @@ class PyInfoFrame(wx.Frame):
         @param useCustom: if True, it will custom-draw the content in an OnPaint handler.
         """
         
-        wx.Frame.__init__(self, parent, wx.ID_ANY, "Busy", wx.DefaultPosition,
+        wx.Frame.__init__(self, parent, wx.ID_ANY, _("Busy"), wx.DefaultPosition,
                           wx.DefaultSize, wx.NO_BORDER | wx.FRAME_TOOL_WINDOW | wx.FRAME_SHAPED | wx.STAY_ON_TOP)
 
         panel = wx.Panel(self)
@@ -2050,7 +2057,7 @@ class PyInfoFrame(wx.Frame):
         dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_CAPTIONTEXT)))
         dc.SetTextForeground(wx.SystemSettings_GetColour(wx.SYS_COLOUR_CAPTIONTEXT))
         dc.DrawBitmap(self._icon, 5, 5)
-        dc.DrawText("GUI2Exe Busy Message", 26, 5)
+        dc.DrawText(_("GUI2Exe Busy Message"), 26, 5)
         dc.DrawLine(5, 25, rect.width-5, 25)
 
         size = self.GetSize()
@@ -2290,9 +2297,9 @@ class BuildDialog(wx.Dialog):
 
         # Create the fancy buttons to export to a file, copy to the clipboard
         # or close the dialog
-        self.exportButton = buttons.ThemedGenBitmapTextButton(self, -1, saveBmp, " Save to file... ")
-        self.clipboardButton = buttons.ThemedGenBitmapTextButton(self, -1, clipboardBmp, " Export to clipboard ")
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
+        self.exportButton = buttons.ThemedGenBitmapTextButton(self, -1, saveBmp, _(" Save to file... "))
+        self.clipboardButton = buttons.ThemedGenBitmapTextButton(self, -1, clipboardBmp, _(" Export to clipboard "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
 
         # Do the hard work, layout items and set dialog properties
         self.SetProperties()
@@ -2305,7 +2312,7 @@ class BuildDialog(wx.Dialog):
     def SetProperties(self):
         """ Sets few properties for the dialog. """
 
-        self.SetTitle("Full Build Ouput Dialog")
+        self.SetTitle(_("Full Build Ouput Dialog"))
         self.SetIcon(self.GetParent().GetIcon())
 
         size = self.MainFrame.GetSize()
@@ -2324,8 +2331,10 @@ class BuildDialog(wx.Dialog):
         # Create the sizer structure        
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(self, -1, "Build output text for %s (%s):\nBuilt on %s"% \
-                              (projectName, compiler, header))
+        transdict = dict(projectName=projectName, compiler=compiler, header=header)
+        label = wx.StaticText(self, -1,
+                              _("Build output text for %(projectName)s (%(compiler)s):\nBuilt on %(header)s") % \
+                              transdict)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         mainSizer.Add(label, 0, wx.ALL, 10)
         
@@ -2359,7 +2368,7 @@ class BuildDialog(wx.Dialog):
         """ Handles the wx.EVT_BUTTON event for the 'Save' action. """
 
         # Launch the save dialog        
-        dlg = wx.FileDialog(self, message="Save file as ...",
+        dlg = wx.FileDialog(self, message=_("Save file as..."),
                             defaultFile="BuildOutput.txt", wildcard="All files (*.*)|*.*",
                             style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
 
@@ -2372,7 +2381,7 @@ class BuildDialog(wx.Dialog):
             fp = file(path, 'w') # Create file anew
             fp.write(self.outputTextCtrl.GetValue())
             fp.close()
-            self.MainFrame.SendMessage("Message", "Build output file %s successfully saved"%path)
+            self.MainFrame.SendMessage("Message", _("Build output file %s successfully saved") % path)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -2391,10 +2400,10 @@ class BuildDialog(wx.Dialog):
             # Copy the data to the clipboard
             wx.TheClipboard.SetData(self.do)
             wx.TheClipboard.Close()
-            self.MainFrame.SendMessage("Message", "Build output text successfully copied to the clipboard")
+            self.MainFrame.SendMessage("Message", _("Build output text successfully copied to the clipboard"))
         else:
             # Some problem with the clipboard...
-            self.MainFrame.RunError("Error", "Unable to open the clipboard.")
+            self.MainFrame.RunError("Error", _("Unable to open the clipboard."))
         
 
     def OnCancel(self, event):
@@ -2460,7 +2469,7 @@ class TransientBase(object):
         self.normalfont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
         self.slantfont = wx.Font(8, wx.SWISS, wx.FONTSTYLE_ITALIC, wx.NORMAL, False)
         dc.SetFont(self.bigfont)
-        width1, height1 = dc.GetTextExtent("GUI2Exe Help Tip (%s)"%compiler)
+        width1, height1 = dc.GetTextExtent(_("GUI2Exe Help Tip (%s)") % compiler)
         width1 += 25 
         height1 = max(height1, 16)
         dc.SetFont(self.boldfont)
@@ -2508,11 +2517,11 @@ class TransientBase(object):
         dc.SetFont(self.bigfont)
         dc.SetTextForeground(wx.SystemSettings_GetColour(wx.SYS_COLOUR_CAPTIONTEXT))
 
-        width, height = dc.GetTextExtent("GUI2Exe Help Tip")
+        width, height = dc.GetTextExtent(_("GUI2Exe Help Tip"))
         ypos = 13 - height/2
         dc.DrawBitmap(self.bmp, 5, ypos)
         # Draw the title text
-        dc.DrawText("GUI2Exe Help Tip (%s)"%self.compiler, 26, ypos)
+        dc.DrawText(_("GUI2Exe Help Tip (%s)") % self.compiler, 26, ypos)
 
         # Draw a line separator between the title and the message
         newYpos = ypos + height + 6
@@ -2711,17 +2720,17 @@ class PListEditor(wx.Dialog):
             PTemplate = pListCode
 
         boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
-        self.codeCheck = wx.CheckBox(self, -1, "Add by Python code")
+        self.codeCheck = wx.CheckBox(self, -1, _("Add by Python code"))
         self.codeCheck.SetFont(boldFont)
-        self.staticText_1 = wx.StaticText(self, -1, "Select one item in the tree control below")
+        self.staticText_1 = wx.StaticText(self, -1, _("Select one item in the tree control below"))
         self.staticText_1.SetFont(boldFont)
         self.itemParentText = wx.TextCtrl(self, -1, "")
-        self.staticText_2 = wx.StaticText(self, -1, "Add your key/value dictionary in Python code:")
+        self.staticText_2 = wx.StaticText(self, -1, _("Add your key/value dictionary in Python code:"))
         self.staticText_2.SetFont(boldFont)
         self.pythonStc = PythonSTC(self, readOnly=True)
 
         addBmp = self.MainFrame.CreateBitmap("add")
-        self.addButton = buttons.ThemedGenBitmapTextButton(self, -1, addBmp, " Append", size=(-1, 22))
+        self.addButton = buttons.ThemedGenBitmapTextButton(self, -1, addBmp, _(" Append "), size=(-1, 22))
 
         self.enablingItems = [self.staticText_1, self.staticText_2, self.itemParentText,
                               self.pythonStc, self.addButton]
@@ -2733,8 +2742,8 @@ class PListEditor(wx.Dialog):
         # Build a couple of fancy and useless buttons        
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, " Ok ")
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, " Cancel ")
+        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
 
         # Do the hard work
         self.SetProperties()
@@ -2756,7 +2765,7 @@ class PListEditor(wx.Dialog):
     def SetProperties(self):
         """ Sets few properties for the dialog. """        
 
-        self.SetTitle("Simple PList editor for py2app")
+        self.SetTitle(_("Simple PList editor for py2app"))
         self.SetIcon(self.MainFrame.GetIcon())
         self.okButton.SetDefault()        
 
@@ -2844,9 +2853,9 @@ class PListEditor(wx.Dialog):
         """
 
         # Add three columns for property name, class and value
-        self.treeList.AddColumn("Property List ")
-        self.treeList.AddColumn("Class          ", flag=wx.ALIGN_CENTER)
-        self.treeList.AddColumn("Value", edit=True)
+        self.treeList.AddColumn(_("Property List "))
+        self.treeList.AddColumn(_("Class          "), flag=wx.ALIGN_CENTER)
+        self.treeList.AddColumn(_("Value"), edit=True)
         
         self.treeList.SetMainColumn(0) # the one with the tree in it...
         self.root = self.treeList.AddRoot("Root", 0)
@@ -2857,7 +2866,7 @@ class PListEditor(wx.Dialog):
         # Sort the root's children
         self.treeList.SortChildren(self.root)
         self.treeList.SetItemText(self.root, "Dictionary", 1)
-        self.treeList.SetItemText(self.root, "%d key/value pairs"%len(PTemplate.keys()), 2)
+        self.treeList.SetItemText(self.root, _("%d key/value pairs") % len(PTemplate.keys()), 2)
 
         # Make the root item more visible
         boldFont = self.GetFont()
@@ -2902,7 +2911,7 @@ class PListEditor(wx.Dialog):
             if isinstance(PTemplate[item], dict):
                 # Is a dictionary, recurse on it
                 treeList.SetItemText(child, "Dictionary", 1)
-                treeList.SetItemText(child, "%d key/value pairs"%len(PTemplate[item].keys()), 2)
+                treeList.SetItemText(child, _("%d key/value pairs") % len(PTemplate[item].keys()), 2)
                 treeList.SetItemFont(child, boldFont)
                 level = self.AutoAddChildren(child, PTemplate[item], level+1)
             else:

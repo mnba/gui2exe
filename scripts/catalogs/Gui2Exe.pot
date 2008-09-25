@@ -1,0 +1,283 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-09-24 20:28-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../Widgets.py:2733
+msgid " Append "
+msgstr ""
+
+#: ../Widgets.py:1636 ../Widgets.py:1777 ../Widgets.py:2302 ../Widgets.py:2746
+msgid " Cancel "
+msgstr ""
+
+#: ../Widgets.py:1181
+msgid " Discard "
+msgstr ""
+
+#: ../Widgets.py:2301
+msgid " Export to clipboard "
+msgstr ""
+
+#: ../Widgets.py:1635 ../Widgets.py:1776 ../Widgets.py:2745
+msgid " Ok "
+msgstr ""
+
+#: ../Widgets.py:1180
+msgid " Save "
+msgstr ""
+
+#: ../Widgets.py:2300
+msgid " Save to file... "
+msgstr ""
+
+#: ../Widgets.py:2869 ../Widgets.py:2914
+#, python-format
+msgid "%d key/value pairs"
+msgstr ""
+
+#: ../Widgets.py:921
+msgid "Add Data Files"
+msgstr ""
+
+#: ../Widgets.py:915
+msgid "Add Dll/Binary Files"
+msgstr ""
+
+#: ../Widgets.py:874
+msgid "Add Dylib/Frameworks"
+msgstr ""
+
+#: ../Widgets.py:289 ../Widgets.py:314
+msgid "Add Item(s)"
+msgstr ""
+
+#: ../Widgets.py:909
+msgid "Add Python Modules"
+msgstr ""
+
+#: ../Widgets.py:912
+msgid "Add Python Packages"
+msgstr ""
+
+#: ../Widgets.py:501
+msgid "Add Python Script..."
+msgstr ""
+
+#: ../Widgets.py:906
+msgid "Add Python Scripts"
+msgstr ""
+
+#: ../Widgets.py:877
+msgid "Add XC Data Models"
+msgstr ""
+
+#: ../Widgets.py:2723
+msgid "Add by Python code"
+msgstr ""
+
+#: ../Widgets.py:1113
+msgid "Add items to the list"
+msgstr ""
+
+#: ../Widgets.py:2728
+msgid "Add your key/value dictionary in Python code:"
+msgstr ""
+
+#: ../Widgets.py:1001
+msgid "Browse For Folders..."
+msgstr ""
+
+#: ../Widgets.py:2384
+#, python-format
+msgid "Build output file %s successfully saved"
+msgstr ""
+
+#: ../Widgets.py:2336
+#, python-format
+msgid ""
+"Build output text for %(projectName)s (%(compiler)s):\n"
+"Built on %(header)s"
+msgstr ""
+
+#: ../Widgets.py:2403
+msgid "Build output text successfully copied to the clipboard"
+msgstr ""
+
+#: ../Widgets.py:1962
+msgid "Busy"
+msgstr ""
+
+#: ../Widgets.py:978
+msgid "Choose a data files directory:"
+msgstr ""
+
+#: ../Widgets.py:1839
+msgid "Choose one or more folders:"
+msgstr ""
+
+#: ../Widgets.py:2857
+msgid "Class          "
+msgstr ""
+
+#: ../Widgets.py:300
+msgid "Clear all"
+msgstr ""
+
+#: ../Widgets.py:1623
+msgid "DLL Name"
+msgstr ""
+
+#: ../Widgets.py:1623
+msgid "DLL Path"
+msgstr ""
+
+#: ../Widgets.py:295
+msgid "Delete selected"
+msgstr ""
+
+#: ../Widgets.py:797
+msgid "Directory Name"
+msgstr ""
+
+#: ../Widgets.py:1240
+msgid "Enter your custom code below and it will be inserted inside the\n"
+msgstr ""
+
+#: ../Widgets.py:810
+msgid "Error"
+msgstr ""
+
+#: ../Widgets.py:1848
+msgid "Filter file extensions using wildcard separated by a comma:"
+msgstr ""
+
+#: ../Widgets.py:2315
+msgid "Full Build Ouput Dialog"
+msgstr ""
+
+#: ../Widgets.py:2060
+msgid "GUI2Exe Busy Message"
+msgstr ""
+
+#: ../Widgets.py:1160
+msgid "GUI2Exe Code Viewer"
+msgstr ""
+
+#: ../Widgets.py:2520
+msgid "GUI2Exe Help Tip"
+msgstr ""
+
+#: ../Widgets.py:2472 ../Widgets.py:2524
+#, python-format
+msgid "GUI2Exe Help Tip (%s)"
+msgstr ""
+
+#: ../Widgets.py:810
+msgid "Invalid folder name."
+msgstr ""
+
+#: ../Widgets.py:1626
+msgid "Main Module"
+msgstr ""
+
+#: ../Widgets.py:1693
+msgid "Make sure you have the license if you distribute any of them, and\n"
+msgstr ""
+
+#: ../Widgets.py:777
+msgid "New data files"
+msgstr ""
+
+#: ../Widgets.py:685
+msgid "New resources"
+msgstr ""
+
+#: ../Widgets.py:843
+msgid "No Company"
+msgstr ""
+
+#: ../Widgets.py:844
+msgid "No Copyrights"
+msgstr ""
+
+#: ../Widgets.py:796
+msgid "Please enter the name of the folder for py2exe:"
+msgstr ""
+
+#: ../Widgets.py:755
+msgid "Please select one or more directories..."
+msgstr ""
+
+#: ../Widgets.py:2856
+msgid "Property List "
+msgstr ""
+
+#: ../Widgets.py:1667
+msgid "Py2Exe Binary Dependencies"
+msgstr ""
+
+#: ../Widgets.py:1670
+msgid "Py2Exe Missing Modules"
+msgstr ""
+
+#: ../Widgets.py:845
+msgid "Py2Exe Sample File"
+msgstr ""
+
+#: ../Widgets.py:1697
+msgid "Py2Exe thinks that these modules (and sub-modules) are missing.\n"
+msgstr ""
+
+#: ../Widgets.py:1114
+msgid "Remove items from the list"
+msgstr ""
+
+#: ../Widgets.py:2371
+msgid "Save file as..."
+msgstr ""
+
+#: ../Widgets.py:2725
+msgid "Select one item in the tree control below"
+msgstr ""
+
+#: ../Widgets.py:2768
+msgid "Simple PList editor for py2app"
+msgstr ""
+
+#: ../Widgets.py:1626
+msgid "Sub-Module 1"
+msgstr ""
+
+#: ../Widgets.py:1627
+msgid "Sub-Module 2"
+msgstr ""
+
+#: ../Widgets.py:1627
+msgid "Sub-Module 3"
+msgstr ""
+
+#: ../Widgets.py:1237
+msgid "This is the Setup file as it comes out after the pre-processing\n"
+msgstr ""
+
+#: ../Widgets.py:2406
+msgid "Unable to open the clipboard."
+msgstr ""
+
+#: ../Widgets.py:2858
+msgid "Value"
+msgstr ""
