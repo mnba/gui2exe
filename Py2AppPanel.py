@@ -2,6 +2,7 @@
 
 import os
 import wx
+# To print out the PList dictionary
 import pprint
 
 import wx.lib.buttons as buttons
@@ -10,6 +11,9 @@ from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox, PListEditor
 from Constants import _py2app_target, _py2app_imports, _pywild, _iconwild, _plistwild, ListType
 from Utilities import setupString
+
+# Get the I18N things
+_ = wx.GetTranslation
 
 
 class Py2AppPanel(BaseBuilderPanel):
@@ -31,19 +35,19 @@ class Py2AppPanel(BaseBuilderPanel):
         self.created = False
 
         # A whole bunch of static box sizers
-        self.commonSizer_staticbox = wx.StaticBox(self, -1, "Common Options")
-        self.includesSizer_staticbox = wx.StaticBox(self, -1, "Includes")
-        self.packagesSizer_staticbox = wx.StaticBox(self, -1, "Packages")
-        self.excludesSizer_staticbox = wx.StaticBox(self, -1, "Excludes")
-        self.dylibExcludesSizer_staticbox = wx.StaticBox(self, -1, "Dylib/Frameworks Excludes")
-        self.datamodelsSizer_staticbox = wx.StaticBox(self, -1, "XC Data Models")
-        self.frameworksSizer_staticbox = wx.StaticBox(self, -1, "Dylib/Frameworks Includes")
-        self.datafile_staticbox = wx.StaticBox(self, -1, "Resources")
+        self.commonSizer_staticbox = wx.StaticBox(self, -1, _("Common Options"))
+        self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
+        self.packagesSizer_staticbox = wx.StaticBox(self, -1, _("Packages"))
+        self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
+        self.dylibExcludesSizer_staticbox = wx.StaticBox(self, -1, _("Dylib/Frameworks Excludes"))
+        self.datamodelsSizer_staticbox = wx.StaticBox(self, -1, _("XC Data Models"))
+        self.frameworksSizer_staticbox = wx.StaticBox(self, -1, _("Dylib/Frameworks Includes"))
+        self.datafile_staticbox = wx.StaticBox(self, -1, _("Resources"))
 
-        self.otherSizer_staticbox = wx.StaticBox(self, -1, "Other Options")
+        self.otherSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, "Py2app options for: %s (Created: %s)"%(projectName, creationDate))
+        self.label = wx.StaticText(self, -1, _("Py2app options for: %s (Created: %s)")%(projectName, creationDate))
 
         # A combobox to choose the application extension
         self.extensionCombo = MultiComboBox(self, [".app", ".plugin"], wx.CB_DROPDOWN|wx.CB_READONLY,
@@ -54,7 +58,7 @@ class Py2AppPanel(BaseBuilderPanel):
 
         # A checkbox that enables the user to choose a different name for the
         # distribution directory. Default is unchecked, that means dist_dir="dist"
-        self.distChoice = wx.CheckBox(self, -1, "Dist Directory", name="dist_dir_choice")
+        self.distChoice = wx.CheckBox(self, -1, _("Dist Directory"), name="dist_dir_choice")
         # The name of the distribution directory (if enabled)
         self.distTextCtrl = wx.TextCtrl(self, -1, "dist", name="dist_dir")
         
@@ -72,36 +76,36 @@ class Py2AppPanel(BaseBuilderPanel):
                                              wildcard=_plistwild, name="plist")
 
         # To add/edit PList code
-        self.pListChoice = wx.CheckBox(self, -1, "PList Code", name="plistCode_choice")
+        self.pListChoice = wx.CheckBox(self, -1, _("PList Code"), name="plistCode_choice")
         editBmp = self.MainFrame.CreateBitmap("edit_add")
         removeBmp = self.MainFrame.CreateBitmap("remove")
-        self.pListAddButton = buttons.ThemedGenBitmapTextButton(self, -1, editBmp, " Add/Edit",
+        self.pListAddButton = buttons.ThemedGenBitmapTextButton(self, -1, editBmp, _(" Add/Edit"),
                                                                 size=(-1, 25), name="plistCode")
-        self.pListRemoveButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, " Remove",
+        self.pListRemoveButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, _(" Remove"),
                                                                    size=(-1, 25), name="plistRemove")
         
         # A list control for the "includes" option, a comma separated list of
         # modules to include
-        self.includeList = BaseListCtrl(self, columnNames=["Python Modules"], name="includes")
+        self.includeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="includes")
         # A list control for the "packages" option, a comma separated list of
         # packages to include
-        self.packagesList = BaseListCtrl(self, columnNames=["Python Packages"], name="packages")
+        self.packagesList = BaseListCtrl(self, columnNames=[_("Python Packages")], name="packages")
         # A list control for the "frameworks" option, a comma separated list of
         # frameworks/dylibs to include
-        self.frameworksList = BaseListCtrl(self, columnNames=["Dylib/Frameworks Names"], name="frameworks")
+        self.frameworksList = BaseListCtrl(self, columnNames=[_("Dylib/Frameworks Names")], name="frameworks")
         # A list control for the "excludes" option, a comma separated list of
         # modules to exclude   
-        self.excludeList = BaseListCtrl(self, columnNames=["Python Modules"], name="excludes")
+        self.excludeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="excludes")
         # A list control for the "dylib_excludes" option, a comma separated list of
         # dylibs/frameworks to exclude
-        self.dylibExcludeList = BaseListCtrl(self, columnNames=["Dylib/Frameworks Names"], name="dylib_excludes")
+        self.dylibExcludeList = BaseListCtrl(self, columnNames=[_("Dylib/Frameworks Names")], name="dylib_excludes")
         # A list control for the "xcdatamodels" option, a comma separated list of
         # xcdatamodels to compile and include
-        self.datamodelsList = BaseListCtrl(self, columnNames=["XC Data Models Names"], name="datamodels")
+        self.datamodelsList = BaseListCtrl(self, columnNames=[_("XC Data Models Names")], name="datamodels")
         # A list control for the "resources" option. "resources" should contain
         # a sequence of (target-dir, files) tuples, where files is a sequence of
         # files to be copied
-        self.datafileList = BaseListCtrl(self, columnNames=["Files Path"], name="resources")
+        self.datafileList = BaseListCtrl(self, columnNames=[_("Files Path")], name="resources")
 
         # output module dependency graph
         self.graphCheck = wx.CheckBox(self, -1, "Graph", name="graph")
@@ -202,11 +206,11 @@ class Py2AppPanel(BaseBuilderPanel):
 
         flag = wx.LEFT|wx.RIGHT|wx.EXPAND
 
-        extension = wx.StaticText(self, -1, "Extension")
+        extension = wx.StaticText(self, -1, _("Extension"))
         commonSizer_1.Add(extension, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.extensionCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_1, (1, 0), (1, 1), flag, 5)
-        script = wx.StaticText(self, -1, "Python Main Script")
+        script = wx.StaticText(self, -1, _("Python Main Script"))
         commonSizer_2.Add(script, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_2.Add(self.scriptPicker, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_2, (1, 1), (1, 4), flag, 5)
@@ -214,15 +218,15 @@ class Py2AppPanel(BaseBuilderPanel):
         commonSizer_3.Add(self.distTextCtrl, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_3, (1, 5), (1, 1), flag, 5)
 
-        optimize = wx.StaticText(self, -1, "Optimize")
+        optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_4.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_4.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_4, (2, 0), (1, 1), flag|wx.TOP, 5)
-        icon = wx.StaticText(self, -1, "Icon File")
+        icon = wx.StaticText(self, -1, _("Icon File"))
         commonSizer_5.Add(icon, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_5.Add(self.iconPicker, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_5, (2, 1), (1, 2), flag|wx.TOP, 5)
-        plist = wx.StaticText(self, -1, "PList File")
+        plist = wx.StaticText(self, -1, _("PList File"))
         commonSizer_6.Add(plist, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_6.Add(self.pListPicker, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_6, (2, 3), (1, 2), flag|wx.TOP, 5)
@@ -301,22 +305,22 @@ class Py2AppPanel(BaseBuilderPanel):
 
         # check if the script file exists
         if not os.path.isfile(self.scriptPicker.GetPath()):
-            msg = "Python main script is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Python main script is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # check if the PList file is not empty and if it exists
         pListScript = self.pListPicker.GetPath()
         if pListScript and not os.path.isfile(pListScript):
-            msg = "PList file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("PList file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # check if the icon file is not empty and if it exists
         icon = self.iconPicker.GetPath()
         if icon and not os.path.isfile(icon):
-            msg = "Icon file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Icon file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # Everything is ok, let's go compiling...
@@ -333,7 +337,7 @@ class Py2AppPanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Generating "%s" setup script...' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')%project.GetName())
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -381,7 +385,7 @@ class Py2AppPanel(BaseBuilderPanel):
                 if not item.strip() or not distChoice:
                     item = "dist"
                     if distChoice:
-                        self.MainFrame.SendMessage("Warning", 'Empty dist_dir option. Using default value "dist" ')
+                        self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
             elif key in ["iconfile", "plist"]:
                 if key == "plist" and not usePListFile:
                     item = "plist_code"
@@ -422,7 +426,7 @@ class Py2AppPanel(BaseBuilderPanel):
         setupScript += _py2app_target % setupDict
         
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Setup script for "%s" succesfully created' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')%project.GetName())
         return setupScript, buildDir
 
 

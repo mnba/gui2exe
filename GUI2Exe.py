@@ -35,6 +35,10 @@ import webbrowser
 # Used to clean up the distribution folder
 import shutil
 
+# Get the translation module
+import gettext
+import locale
+
 # Let's import few modules I have written for GUI2Exe
 from ProjectTreeCtrl import ProjectTreeCtrl
 from MessageWindow import MessageWindow
@@ -53,6 +57,9 @@ import AdvancedSplash as AS
 
 # I need that to have restorable perspectives
 ID_FirstPerspective = wx.ID_HIGHEST + 10001
+
+# Define a translation string
+_ = wx.GetTranslation
 
 # It looks like that, while py2exe and py2app are installed on site-packages
 # (or at least you can actually __import__ them), for the other 2 beasts
@@ -151,30 +158,30 @@ class GUI2Exe(wx.Frame):
 
         # Check if we had a very hard crash (irreversible)
         if self.dataBase.hasError:
-            strs = "The database file and its backup seem to be broken.\n\n" \
-                   "Please go to the /USER/Application Data/.GUI2Exe/ folder\n" \
-                   "and delete the GUI2Exe database file."
-            self.RunError("Error", strs)
+            strs = _("The database file and its backup seem to be broken.\n\n" \
+                     "Please go to the /USER/Application Data/.GUI2Exe/ folder\n" \
+                     "and delete the GUI2Exe database file.")
+            self.RunError(2, strs)
             self.Destroy()
             return
 
         # Add the panes to the wxAUI manager
         # Very nice the bug introduced in wxPython 2.8.3 about wxAUI Maximize buttons...
         self._mgr.AddPane(self.projectTree, wx.aui.AuiPaneInfo().Left().
-                          Caption("GUI2Exe Projects").MinSize(wx.Size(250, -1)).
+                          Caption(_("GUI2Exe Projects")).MinSize(wx.Size(250, -1)).
                           FloatingSize(wx.Size(200, 300)).Layer(1).MaximizeButton())
         self._mgr.AddPane(self.executablePanel, wx.aui.AuiPaneInfo().Left().
-                          Caption("Executable Properties").MinSize(wx.Size(200, 100)).
+                          Caption(_("Executable Properties")).MinSize(wx.Size(200, 100)).
                           BestSize(wx.Size(200, size[1]/6)).MaxSize(wx.Size(200, 100)).
                           FloatingSize(wx.Size(200, 200)).Layer(1).Position(1).MaximizeButton())
         self._mgr.GetPane(self.executablePanel).dock_proportion = 100000/4
         self._mgr.AddPane(self.mainPanel, wx.aui.AuiPaneInfo().CenterPane())
         self._mgr.AddPane(self.messageWindow, wx.aui.AuiPaneInfo().Bottom().
-                          Caption("Messages And Actions").MinSize(wx.Size(200, 100)).
+                          Caption(_("Messages And Actions")).MinSize(wx.Size(200, 100)).
                           FloatingSize(wx.Size(500, 300)).BestSize(wx.Size(200, size[1]/6)).
                           MaximizeButton())
         
-        # Set all the flags for wxAUI         
+        # Set all the flags for wxAUI
         self.SetAllFlags()
         # Bind the main frame events
         self.BindEvents()
@@ -209,54 +216,54 @@ class GUI2Exe(wx.Frame):
 
         # That's really a bunch of data...
         
-        return (("&File",
-                    ("&New project...\tCtrl+N", "Add a new project to the project tree", "project", self.OnNewProject, ""),
-                    ("Switch project &database...\tCtrl+D", "Load another GUI2Exe database file", "switch_db", self.OnSwitchDB, ""),
+        return ((_("&File"),
+                    (_("&New project...\tCtrl+N"), _("Add a new project to the project tree"), "project", self.OnNewProject, ""),
+                    (_("Switch project &database...\tCtrl+D"), _("Load another GUI2Exe database file"), "switch_db", self.OnSwitchDB, ""),
                     ("", "", "", "", ""),
-                    ("&Save project\tCtrl+S", "Save the current project to database", "save_project", self.OnSaveProject, ""),
-                    ("&Save project as...\tCtrl+Shift+S", "Save the current project to a file", "save_to_file", self.OnExportProject, ""),
+                    (_("&Save project\tCtrl+S"), _("Save the current project to database"), "save_project", self.OnSaveProject, ""),
+                    (_("&Save project as...\tCtrl+Shift+S"), _("Save the current project to a file"), "save_to_file", self.OnExportProject, ""),
                     ("", "", "", "", ""),
-                    ("&Export setup file...\tCtrl+E", "Export the Setup.py file", "export_setup", self.OnExportSetup, ""),
+                    (_("&Export setup file...\tCtrl+E"), _("Export the Setup.py file"), "export_setup", self.OnExportSetup, ""),
                     ("", "", "", "", ""),
-                    ("&Quit\tCtrl+Q", "Exit GUI2Exe", "exit", self.OnClose, "")),
-                ("&Options",
-                    ("Use &AutoSave", "AutoSaves your work every minute", "", self.OnAutoSave, wx.ITEM_CHECK),
+                    (_("&Quit\tCtrl+Q"), _("Exit GUI2Exe"), "exit", self.OnClose, "")),
+                (_("&Options"),
+                    (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", self.OnAutoSave, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
-                    ('De&lete "build" directory', "Delete the build folder at every compilation", "", self.OnDeleteBuild, wx.ITEM_CHECK),
-                    ('Clea&n "dist" directory', "Clean the distribution folder at every compilation", "", self.OnCleanDist, wx.ITEM_CHECK),
+                    (_('De&lete "build" directory'), _("Delete the build folder at every compilation"), "", self.OnDeleteBuild, wx.ITEM_CHECK),
+                    (_('Clea&n "dist" directory'), _("Clean the distribution folder at every compilation"), "", self.OnCleanDist, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
-                    ("&Recurse sub-dirs for data_files option", "Recurse sub-directories for data_files option if checked", "", self.OnRecurseSubDir, wx.ITEM_CHECK),
-                    ("Show t&ooltips", "show tooltips for the various compiler options", "", self.OnShowTip, wx.ITEM_CHECK),
+                    (_("&Recurse sub-dirs for data_files option"), _("Recurse sub-directories for data_files option if checked"), "", self.OnRecurseSubDir, wx.ITEM_CHECK),
+                    (_("Show t&ooltips"), _("show tooltips for the various compiler options"), "", self.OnShowTip, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
-                    ("Change &Python version...\tCtrl+H", "Temporarily changes the Python version", "python_version", self.OnChangePython, ""),
-                    ("Set P&yInstaller path...\tCtrl+Y", "Sets the PyInstaller installation path", "PyInstaller_small", self.OnSetPyInstaller, ""),
+                    (_("Change &Python version...\tCtrl+H"), _("Temporarily changes the Python version"), "python_version", self.OnChangePython, ""),
+                    (_("Set P&yInstaller path...\tCtrl+Y"), _("Sets the PyInstaller installation path"), "PyInstaller_small", self.OnSetPyInstaller, ""),
                     ("", "", "", "", ""),
-                    ("Add &custom code...\tCtrl+U", "Add custom code to the setup script", "custom_code", self.OnCustomCode, ""),
-                    ("&Insert post compilation code...\tCtrl+I", "Add custom code to be executed after the building process", "post_compile", self.OnPostCompilationCode, "")),                    
-                ("&Builds",
-                    ("&Test executable\tCtrl+R", "Test the compiled file (if it exists)", "runexe", self.OnTestExecutable, ""),
+                    (_("Add &custom code...\tCtrl+U"), _("Add custom code to the setup script"), "custom_code", self.OnCustomCode, ""),
+                    (_("&Insert post compilation code...\tCtrl+I"), _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, "")),                    
+                (_("&Builds"),
+                    (_("&Test executable\tCtrl+R"), _("Test the compiled file (if it exists)"), "runexe", self.OnTestExecutable, ""),
                     ("", "", "", "", ""),
-                    ("View &setup script\tCtrl+P", "View the auto-generated setup script", "view_setup", self.OnViewSetup, ""),
-                    ("&Check setup script syntax\tCtrl+X", "Check the syntax of the auto-generated setup script", "spellcheck", self.OnCheckSyntax, ""),
+                    (_("View &setup script\tCtrl+P"), _("View the auto-generated setup script"), "view_setup", self.OnViewSetup, ""),
+                    (_("&Check setup script syntax\tCtrl+X"), _("Check the syntax of the auto-generated setup script"), "spellcheck", self.OnCheckSyntax, ""),
                     ("", "", "", "", ""),
-                    ("Show &full build output\tCtrl+F", "View the full build output for the current compiler", "full_build", self.OnViewFullBuild, ""),
+                    (_("Show &full build output\tCtrl+F"), _("View the full build output for the current compiler"), "full_build", self.OnViewFullBuild, ""),
                     ("", "", "", "", ""),                 
-                    ("&Missing modules\tCtrl+M", "What the compiler thinks are the missing modules (py2exe only)", "missingmodules", self.OnViewMissing, ""),
-                    ("&Binary dependencies\tCtrl+B", "What the compiler says are the binary dependencies (py2exe only)", "binarydependencies", self.OnViewMissing, "")),
-                ("&View",
-                    ("Save &panes configuration...", "Save the current GUI panes configuration", "save_aui_config", self.OnSaveConfig, ""),
-                    ("Restore original &GUI\tCtrl+G", "Restore the original GUI appearance", "restore_aui", self.OnRestorePerspective, "")),
-                ("&Help",
-                    ("GUI2Exe &help\tF1", "Opens the GUI2Exe help", "help", self.OnHelp, ""),
-                    ("GUI2Exe &API\tF2", "Opens the GUI2Exe API reference", "api_reference", self.OnAPI, ""),
+                    (_("&Missing modules\tCtrl+M"), _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", self.OnViewMissing, ""),
+                    (_("&Binary dependencies\tCtrl+B"), _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", self.OnViewMissing, "")),
+                (_("&View"),
+                    (_("Save &panes configuration..."), _("Save the current GUI panes configuration"), "save_aui_config", self.OnSaveConfig, ""),
+                    (_("Restore original &GUI\tCtrl+G"), _("Restore the original GUI appearance"), "restore_aui", self.OnRestorePerspective, "")),
+                (_("&Help"),
+                    (_("GUI2Exe &help\tF1"), _("Opens the GUI2Exe help"), "help", self.OnHelp, ""),
+                    (_("GUI2Exe &API\tF2"), _("Opens the GUI2Exe API reference"), "api_reference", self.OnAPI, ""),
                     ("", "", "", "", ""),
-                    ("Compiler s&witches\tF3", "Show compilers switches and common options", "compiler_switches", self.OnCompilerSwitches, ""),
-                    ("&Tips and tricks\tF4", "Show compilation tips and tricks", "tips_and_tricks", self.OnTipsAndTricks, ""),
+                    (_("Compiler s&witches\tF3"), _("Show compilers switches and common options"), "compiler_switches", self.OnCompilerSwitches, ""),
+                    (_("&Tips and tricks\tF4"), _("Show compilation tips and tricks"), "tips_and_tricks", self.OnTipsAndTricks, ""),
                     ("", "", "", "", ""),
-                    ("Check for &upgrade\tF9", "Check for a GUI2Exe upgrade", "upgrade", self.OnCheckUpgrade, ""),
+                    (_("Check for &upgrade\tF9"), _("Check for a GUI2Exe upgrade"), "upgrade", self.OnCheckUpgrade, ""),
                     ("", "", "", "", ""),
-                    ("&Contact the Author...", "Contact Andrea Gavana by e-mail", "contact", self.OnContact, ""),
-                    ("&About GUI2Exe...", "About GUI2Exe and the Creator...", "about", self.OnAbout, "")))
+                    (_("&Contact the Author..."), _("Contact Andrea Gavana by e-mail"), "contact", self.OnContact, ""),
+                    (_("&About GUI2Exe..."), _("About GUI2Exe and the Creator..."), "about", self.OnAbout, "")))
                     
                     
     def CreateMenu(self, menuData):
@@ -278,11 +285,11 @@ class GUI2Exe(wx.Frame):
 
             # I need to find which menu holds the wxAUI-based "restore perspective"
             # as I have to bind on wx.EVT_MENU_RANGE with a specific start id 
-            id = (eachLabel.find("Restore") >= 0 and [ID_FirstPerspective] or [-1])[0]
+            id = (eachLabel.find(_("Restore")) >= 0 and [ID_FirstPerspective] or [-1])[0]
             # The about menu on Mac should go on the application menu
-            id = (eachLabel.find("About") >= 0 and [wx.ID_ABOUT] or [-1])[0]
+            id = (eachLabel.find(_("About")) >= 0 and [wx.ID_ABOUT] or [-1])[0]
             # The exit menu is more special
-            id = (eachLabel.find("Quit") >= 0 and [wx.ID_EXIT] or [-1])[0]
+            id = (eachLabel.find(_("Quit")) >= 0 and [wx.ID_EXIT] or [-1])[0]
             # There are also few check menu items around...
             kind = (eachKind and [eachKind] or [wx.ITEM_NORMAL])[0]
 
@@ -296,7 +303,7 @@ class GUI2Exe(wx.Frame):
                 # By default the "remove build directory" is on
                 menuItem.Check(True)
 
-            if eachLabel.find("tooltips") >= 0:
+            if eachLabel.find(_("tooltips")) >= 0:
                 # By default we activate the tooltips, unless in the wx.Config
                 # it's set to False
                 menuItem.Check(True)
@@ -323,7 +330,7 @@ class GUI2Exe(wx.Frame):
                   id2=ID_FirstPerspective+1000)
 
         # I need to keep track of this menu
-        id = menuBar.FindMenu("View")
+        id = menuBar.FindMenu(_("View"))
         self.configMenu = menuBar.GetMenu(id)
 
         # We're done with the menubar
@@ -466,25 +473,25 @@ class GUI2Exe(wx.Frame):
         val = options.Read('Recurse_Subdirs')
         if val:
             self.recurseSubDirs = eval(val)
-            item = menuBar.FindMenuItem("Options", "Recurse sub-dirs for data_files option")
+            item = menuBar.FindMenuItem(_("Options"), _("Recurse sub-dirs for data_files option"))
             menuBar.Check(item, self.recurseSubDirs)
 
         val = options.Read('Show_Tooltips')
         if val:
             self.showTips = eval(val)
-            item = menuBar.FindMenuItem("Options", "Show tooltips")
+            item = menuBar.FindMenuItem(_("Options"), _("Show tooltips"))
             menuBar.Check(item, self.showTips)
 
         val = options.Read('Delete_Build')
         if val:
             self.deleteBuild = eval(val)
-            item = menuBar.FindMenuItem("Options", 'Delete "build" directory')
+            item = menuBar.FindMenuItem(_("Options"), _('Delete "build" directory'))
             menuBar.Check(item, self.deleteBuild)
             
         val = options.Read('Clean_Dist')
         if val:
             self.cleanDist = eval(val)
-            item = menuBar.FindMenuItem("Options", 'Clean "dist" directory')
+            item = menuBar.FindMenuItem(_("Options"), _('Clean "dist" directory'))
             menuBar.Check(item, self.cleanDist)
 
         val = options.Read('Opened_Pages')
@@ -519,7 +526,7 @@ class GUI2Exe(wx.Frame):
         """ Switch to another project database. """
 
         # Not implemented yet...
-        self.RunError("Message", "This option has not been implemented yet.")
+        self.RunError(0, _("This option has not been implemented yet."))
         event.Skip()
 
 
@@ -555,7 +562,7 @@ class GUI2Exe(wx.Frame):
         setupScript, buildDir = outputs
 
         # Launch the save dialog        
-        dlg = wx.FileDialog(self, message="Save file as ...", defaultDir=buildDir,
+        dlg = wx.FileDialog(self, message=_("Save file as ..."), defaultDir=buildDir,
                             defaultFile="Setup.py", wildcard=_pywildspec,
                             style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
 
@@ -568,7 +575,7 @@ class GUI2Exe(wx.Frame):
             fp = file(path, 'w') # Create file anew
             fp.write(setupScript)
             fp.close()
-            self.SendMessage("Message", "File %s successfully saved"%path)
+            self.SendMessage(0, _("File %s successfully saved")%path)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -593,7 +600,7 @@ class GUI2Exe(wx.Frame):
         strs += "\n}"
 
         # Launch the save dialog        
-        dlg = wx.FileDialog(self, message="Save file as ...", 
+        dlg = wx.FileDialog(self, message=_("Save file as ..."), 
                             defaultFile="%s.g2e"%project.GetName(),
                             wildcard="All files (*.*)|*.*",
                             style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
@@ -607,7 +614,7 @@ class GUI2Exe(wx.Frame):
             fp = file(path, 'w') # Create file anew
             fp.write(strs)
             fp.close()
-            self.SendMessage("Message", "Project %s successfully exported to file %s"% \
+            self.SendMessage(0, _("Project %s successfully exported to file %s")% \
                              (project.GetName(), path))
 
         # Destroy the dialog. Don't do this until you are done with it!
@@ -746,7 +753,7 @@ class GUI2Exe(wx.Frame):
             wildcard = "All files (*.*)|*.*"
             fileName = "python"
             
-        dlg = wx.FileDialog(self, message="Please select the new Python executable ...", defaultDir=default,
+        dlg = wx.FileDialog(self, message=_("Please select the new Python executable ..."), defaultDir=default,
                             defaultFile=fileName, wildcard=wildcard,
                             style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
         dlg.CenterOnParent()
@@ -758,10 +765,10 @@ class GUI2Exe(wx.Frame):
             directory, fileName = os.path.split(path)
             if wx.Platform == "__WXMSW__":
                 if fileName.lower() != "python.exe":
-                    self.RunError("Error", "The selected file is not a Python executable.")
+                    self.RunError(2, _("The selected file is not a Python executable."))
                     return
             
-            self.SendMessage("Message", "Python executable changed from %s to %s"%(self.pythonVersion, path))
+            self.SendMessage(0, _("Python executable changed from %s to %s")%(self.pythonVersion, path))
             self.pythonVersion = path
             
         else:
@@ -782,7 +789,7 @@ class GUI2Exe(wx.Frame):
     def OnSetPyInstaller(self, event):
         """ Sets the PyInstaller installation path. """
 
-        dlg = wx.DirDialog(self, "Choose the PyInstaller location:",
+        dlg = wx.DirDialog(self, _("Choose the PyInstaller location:"),
                           style=wx.DD_DEFAULT_STYLE|wx.DD_DIR_MUST_EXIST)
 
         # If the user selects OK, then we process the dialog's data.
@@ -794,7 +801,7 @@ class GUI2Exe(wx.Frame):
                 self.pyInstallerPath = path
             else:
                 dlg.Destroy()
-                self.RunError("Error", "Invalid PyInstaller path: no file named 'Build.py' has been found.")
+                self.RunError(2, _("Invalid PyInstaller path: no file named 'Build.py' has been found."))
                 return
                 
         # Only destroy a dialog after you're done with it.
@@ -811,8 +818,8 @@ class GUI2Exe(wx.Frame):
 
         if not project.HasBeenCompiled():
             # The project hasn't been compiled yet
-            msg = "This project has not been compiled yet."
-            self.RunError("Error", msg)
+            msg = _("This project has not been compiled yet.")
+            self.RunError(2, msg)
             return
 
         page = self.GetCurrentPage()
@@ -863,13 +870,13 @@ class GUI2Exe(wx.Frame):
         # Try to compile the code
         try:
             compile(setupScript, 'test', 'exec')
-            self.RunError("Message", "No SyntaxError detected in the automatically generated Setup.py file. ")
+            self.RunError(0, _("No SyntaxError detected in the automatically generated Setup.py file."))
         except:
             # What can be wrong?
             exception_instance = sys.exc_info()[1]
-            msg = "SyntaxError at line %d, column %d"%(exception_instance.lineno,
-                                                       exception_instance.offset)
-            self.RunError("Error", msg)
+            msg = _("SyntaxError at line %d, column %d")%(exception_instance.lineno,
+                                                          exception_instance.offset)
+            self.RunError(2, msg)
             
 
     def OnViewFullBuild(self, event):
@@ -892,8 +899,8 @@ class GUI2Exe(wx.Frame):
         outputText = project.GetBuildOutput(compiler)
         if not outputText:
             # No compilatin has been done
-            msg = "This project has not been compiled with %s yet."%compiler
-            self.RunError("Error", msg)
+            msg = _("This project has not been compiled with %s yet.")%compiler
+            self.RunError(2, msg)
             return
 
         # Show the result in a nice dialog
@@ -917,21 +924,21 @@ class GUI2Exe(wx.Frame):
         book = self.GetCurrentBook()
         page = book.GetPage(book.GetSelection()).GetName()
         if page != "py2exe":
-            msg = "This option is available only for Py2Exe."
-            self.RunError("Error", msg)
+            msg = _("This option is available only for Py2Exe.")
+            self.RunError(2, msg)
             return
 
         if not project.HasBeenCompiled():
             # The project hasn't been compiled yet
-            msg = "This project has not been compiled yet."
-            self.RunError("Error", msg)
+            msg = _("This project has not been compiled yet.")
+            self.RunError(2, msg)
             return
 
         wx.BeginBusyCursor()
 
         # Switch between the "show missing modules" and "show binary dependencies"        
         label = self.GetMenuBar().GetLabel(event.GetId())
-        dll = (label.find("Binary") >= 0 and [True] or [False])[0]
+        dll = (label.find(_("Binary")) >= 0 and [True] or [False])[0]
         # Run the appropriate frame
         frame = Py2ExeMissing(self, project, dll)
         
@@ -954,9 +961,9 @@ class GUI2Exe(wx.Frame):
         """ Saves the current GUI configuration, in terms of panes positions. """
 
         # Ask the user to enter a configuration name
-        dlg = wx.TextEntryDialog(self, "Enter A Name For The New Configuration:",
-                                 "Saving Panels Configuration")
-        dlg.SetValue(("Perspective %d")%(len(self.perspectives)))
+        dlg = wx.TextEntryDialog(self, _("Enter a name for the new configuration:"),
+                                 _("Saving panels configuration"))
+        dlg.SetValue((_("Perspective %d"))%len(self.perspectives))
         
         if dlg.ShowModal() != wx.ID_OK:
             # No choice made, go back
@@ -967,7 +974,7 @@ class GUI2Exe(wx.Frame):
 
         if not value.strip():
             # Empty configuration name?
-            self.RunError("Error", "Invalid perspective name!")
+            self.RunError(2, _("Invalid perspective name!"))
             return
         
         if len(self.perspectives) == 1:
@@ -976,7 +983,7 @@ class GUI2Exe(wx.Frame):
 
         # Append a new item in the Configuration menu
         item = wx.MenuItem(self.configMenu, ID_FirstPerspective + len(self.perspectives), value,
-                           "Restore GUI configuration: %s"%value)
+                           _("Restore GUI configuration: %s")%value)
         item.SetBitmap(self.CreateBitmap("aui_config"))
         self.configMenu.AppendItem(item)
 
@@ -995,7 +1002,7 @@ class GUI2Exe(wx.Frame):
         """ Shows the GUI2Exe help file. """
 
         # Not implemented yet...
-        self.RunError("Message", "This option has not been implemented yet.")
+        self.RunError(0, _("This option has not been implemented yet."))
 
 
     def OnAPI(self, event):
@@ -1007,8 +1014,8 @@ class GUI2Exe(wx.Frame):
     def OnCheckUpgrade(self, event):
         """ Checks for a possible upgrade of GUI2Exe. """
 
-        dlg = wx.ProgressDialog("GUI2Exe: Check for upgrade",
-                                "Attempting to connect to the internet...", parent=self,
+        dlg = wx.ProgressDialog(_("GUI2Exe: Check for upgrade"),
+                                _("Attempting to connect to the internet..."), parent=self,
                                 style=wx.PD_APP_MODAL | wx.PD_ELAPSED_TIME)
         dlg.Pulse()
         # Run in a separate thread
@@ -1030,7 +1037,7 @@ class GUI2Exe(wx.Frame):
         
         if text is None:
             # We can't get to the internet?
-            self.RunError("Error", "Unable to connect to the internet.")
+            self.RunError(2, _("Unable to connect to the internet."))
             return
 
         # A bit shaky, but it seems to work...
@@ -1039,13 +1046,13 @@ class GUI2Exe(wx.Frame):
         version = version[0:version.find("<")]
         if version > __version__:
             # Time to upgrade maybe? :-D
-            strs = "A new version of GUI2Exe is available!\n\nPlease go to " \
-                   "http://xoomer.alice.it/infinity77/main/GUI2Exe.html\nif you wish to upgrade."
-            self.RunError("Message", strs)
+            strs = _("A new version of GUI2Exe is available!\n\nPlease go to " \
+                   "http://xoomer.alice.it/infinity77/main/GUI2Exe.html\nif you wish to upgrade.")
+            self.RunError(0, strs)
             return
 
         # No upgrade required
-        self.RunError("Message", "At present you have the latest version of GUI2Exe.")        
+        self.RunError(0, _("At present you have the latest version of GUI2Exe."))        
 
 
     def OnContact(self, event):
@@ -1059,16 +1066,16 @@ class GUI2Exe(wx.Frame):
     def OnAbout(self, event):
         """ Shows the about dialog for GUI2Exe. """
 
-        msg = "This is the about dialog of GUI2Exe.\n\n" + \
-              "Version %s"%__version__ + "\n"+ \
+        msg = _("This is the about dialog of GUI2Exe.\n\n" + \
+              "Version %s \n" + \
               "Author: Andrea Gavana @ 01 Apr 2007\n\n" + \
               "Please report any bug/request of improvements\n" + \
               "to me at the following addresses:\n\n" + \
               "andrea.gavana@gmail.com\ngavana@kpo.kz\n\n" + \
               "Thanks to Robin Dunn and the wxPython mailing list\n" + \
-              "for the ideas and useful suggestions."
+              "for the ideas and useful suggestions.")%__version__
               
-        self.RunError("Message", msg)
+        self.RunError(0, msg)
 
 
     def OnProcessTimer(self, event):
@@ -1190,8 +1197,8 @@ class GUI2Exe(wx.Frame):
 
         # Not saved. If it wasn't ever saved before, not saving will delete
         # the item from the project tree
-        msg = "Warning: the selected page contains unsaved data.\n\nDo you wish to save this project?"
-        answer = self.RunError("Question", msg)
+        msg = _("Warning: the selected page contains unsaved data.\n\nDo you wish to save this project?")
+        answer = self.RunError(3, msg)
 
         if answer == wx.ID_CANCEL:
             # You want to think about it, eh?
@@ -1278,12 +1285,15 @@ class GUI2Exe(wx.Frame):
         if sendMessage:
             # Send a message also to the log window at the bottom
             self.SendMessage(kind, msg.strip("."))
-            
-        if kind == "Message":    # is a simple message
+
+        kindDict = {0: _("Message"), 1: _("Warning"), 2: _("Error"), 3: _("Question")}
+        kind = kindDict[kind]
+        
+        if kind == _("Message"):    # is a simple message
             style = wx.OK | wx.ICON_INFORMATION
-        elif kind == "Warning":  # is a warning
+        elif kind == _("Warning"):  # is a warning
             style = wx.OK | wx.ICON_EXCLAMATION
-        elif kind == "Question": # is a question
+        elif kind == _("Question"): # is a question
             style = wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION
         else:                    # is an error
             style = wx.OK | wx.ICON_ERROR
@@ -1293,7 +1303,7 @@ class GUI2Exe(wx.Frame):
         answer = dlg.ShowModal()
         dlg.Destroy()
 
-        if kind == "Question":
+        if kind == _("Question"):
             # return the answer, it was a question
             return answer
 
@@ -1307,7 +1317,7 @@ class GUI2Exe(wx.Frame):
         """
 
         # Freeze all. It speeds up a bit the drawing
-        busy = PyBusyInfo("Creating new project...")
+        busy = PyBusyInfo(_("Creating new project..."))
         wx.SafeYield()
         
         self.Freeze()
@@ -1319,7 +1329,7 @@ class GUI2Exe(wx.Frame):
         self.Project(project, treeItem, True)
         self.openingPages[projectName] = 0
         # Send a message to the log window at the bottom    
-        self.SendMessage("Message", 'New project "%s" added'%projectName)
+        self.SendMessage(0, _('New project "%s" added')%projectName)
 
         # Time to warm up...        
         self.Thaw()
@@ -1354,7 +1364,7 @@ class GUI2Exe(wx.Frame):
             book.SetSelection(self.openingPages[projectName])
             
         # Send a message to the log window at the bottom
-        self.SendMessage("Message", 'Project "%s" successfully loaded'%projectName)
+        self.SendMessage(0, _('Project "%s" successfully loaded')%projectName)
 
         wx.EndBusyCursor()
         
@@ -1484,7 +1494,7 @@ class GUI2Exe(wx.Frame):
 
         # Ah, by the way, thank you menu bar for deleting my status bar messages...            
         self.statusBar.SetStatusText(statusText, 1)
-        self.statusBar.SetStatusText("Welcome to GUI2Exe", 0)
+        self.statusBar.SetStatusText(_("Welcome to GUI2Exe"), 0)
 
 
     def CreateBitmap(self, bmpName):
@@ -1513,8 +1523,8 @@ class GUI2Exe(wx.Frame):
 
         if self.mainPanel.GetPageCount() == 0:
             # No page opened, fire an error
-            msg = "No project has been loaded"
-            self.RunError("Error", msg +".", True)
+            msg = "No project has been loaded."
+            self.RunError(2, msg, True)
             return None
 
         # Return the current page (is a LabelBook)
@@ -1536,7 +1546,7 @@ class GUI2Exe(wx.Frame):
     def CleanDistDir(self):
         """ Cleans up the distribution folder. """
 
-        self.SendMessage("Message", "Cleaning the distribution folder...")
+        self.SendMessage(0, _("Cleaning the distribution folder..."))
         
         page = self.GetCurrentPage()
         # Get all the information we need about this project        
@@ -1554,7 +1564,7 @@ class GUI2Exe(wx.Frame):
 
         if self.process:
             # Compilation already running
-            self.RunError("Error", "One instance of the building process is already running.")
+            self.RunError(2, _("One instance of the building process is already running."))
             return
 
         # Run the compilation process        
@@ -1580,8 +1590,8 @@ class GUI2Exe(wx.Frame):
             return
 
         if not view and not run and page.GetName() != "py2exe":
-            msg = "The Dry-Run option is available only for Py2Exe."
-            self.RunError("Error", msg)
+            msg = _("The Dry-Run option is available only for Py2Exe.")
+            self.RunError(2, msg)
             return
         
         outputs = page.PrepareForCompile()
@@ -1611,8 +1621,8 @@ class GUI2Exe(wx.Frame):
         project = self.GetCurrentProject()
         currentPage = self.mainPanel.GetSelection()
 
-        self.SendMessage("Message", "Starting compilation with Python executable: %s"%self.pythonVersion)
-        self.SendMessage("Message", "The compiler selected is ==> %s <=="%compiler.upper())
+        self.SendMessage(0, _("Starting compilation with Python executable: %s")%self.pythonVersion)
+        self.SendMessage(0, _("The compiler selected is ==> %s <==")%compiler.upper())
         
         # Start the external process, which is actually subclassed in
         # The Process class
@@ -1638,7 +1648,7 @@ class GUI2Exe(wx.Frame):
         # The process is still there and there is no os.kill on Windows
         self.process.Kill()
         # Send a failure message to the log window at the bottom
-        self.SendMessage("Warning", "Compilation killed by user")
+        self.SendMessage(1, _("Compilation killed by user"))
         # Re-enable the run buttons
         self.messageWindow.EnableButtons(True)
 
@@ -1659,25 +1669,30 @@ class GUI2Exe(wx.Frame):
 
         if ask:
             # We came from an wx.EVT_END_PROCESS event
-            msg = "The compiler has successfully built your executable.\n" \
-                  "Do you wish to test your application?"
-            answer = self.RunError("Question", msg)
+            msg = _("The compiler has successfully built your executable.\n" \
+                    "Do you wish to test your application?")
+            answer = self.RunError(3, msg)
             if answer != wx.ID_YES:
                 return
 
+        msg = _("This project has never been compiled or its executable has been deleted.")
         # Get the executable name from the Project class
-        exeName = project.GetExecutableName(compiler)
+        try:
+            exeName = project.GetExecutableName(compiler)
+        except:
+            self.RunError(2, msg)
+            return
+        
         if not os.path.isfile(exeName):
             # No such file, have you compiled it?
-            msg = "This project has never been compiled or its executable has been deleted."
-            self.RunError("Error", msg)
+            self.RunError(2, msg)
             return
 
         # Starts the compiled exe file
-        msg = "Starting compiled executable..."
+        msg = _("Starting compiled executable...")
         busy = PyBusyInfo(msg)
         wx.SafeYield()
-        self.SendMessage("Message", msg) 
+        self.SendMessage(0, msg) 
 
         logFile = exeName + ".log"
         # Remove the log file or it will fool us later
@@ -1698,6 +1713,8 @@ class GUI2Exe(wx.Frame):
 
         if wx.Platform == "__WXGTK__":
             exe = "./" + exe
+        elif wx.Platform == "__WXMAC__":
+            exe = "open %s"%exe
 
         if sys.version[0:3] > "(2,4)":
             # subprocess is new in 2.4
@@ -1726,12 +1743,11 @@ class GUI2Exe(wx.Frame):
         self.timerCount = 0
 
         # Send the error message to the log window at the bottom
-        self.SendMessage("Error", "Executable terminated with errors or warnings")
+        self.SendMessage(2, _("Executable terminated with errors or warnings"))
         
         # Ask the user if he/she wants to examine the tracebacks in the log file
-        msg = "It appears that the executable generated errors in file:\n\n%s" % logFile
-        msg += "\n\nDo you want to examine the tracebacks?"
-        answer = self.RunError("Question", msg)
+        msg = _("It appears that the executable generated errors in file:\n\n%s\n\nDo you want to examine the tracebacks?")%logFile
+        answer = self.RunError(3, msg)
         if answer != wx.ID_YES:
             return
 
@@ -1742,7 +1758,7 @@ class GUI2Exe(wx.Frame):
         msg = fid.read()
         fid.close()
         # And displays it in a scrolled message dialog
-        dlg = wx.lib.dialogs.ScrolledMessageDialog(self, msg, "Tracebacks in log file")
+        dlg = wx.lib.dialogs.ScrolledMessageDialog(self, msg, _("Tracebacks in log file"))
         wx.EndBusyCursor()
         dlg.ShowModal()
         dlg.Destroy()
@@ -1836,7 +1852,7 @@ class GUI2Exe(wx.Frame):
         # Update information on screen (if needed)
         page = self.WalkAUIPages(selectedItem)
         if page is None:
-            self.SendMessage("Message", "Project successfully updated from file.")
+            self.SendMessage(0, _("Project successfully updated from file."))
             # This page is not opened, go back
             return        
 
@@ -1850,7 +1866,7 @@ class GUI2Exe(wx.Frame):
             book.SetConfiguration(project[name], delete=True)
 
         self.mainPanel.Thaw()
-        self.SendMessage("Message", "Project successfully updated from file.")
+        self.SendMessage(0, _("Project successfully updated from file."))
         
 
 class GUI2ExeSplashScreen(AS.AdvancedSplash):

@@ -10,6 +10,9 @@ from Constants import _pyInstaller_target_onefile, _pyInstaller_target_onedir
 from Constants import _pyInstallerTOC, _pyInstallerOptions
 from Utilities import setupString
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class PyInstallerPanel(BaseBuilderPanel):
 
@@ -31,41 +34,41 @@ class PyInstallerPanel(BaseBuilderPanel):
 
         # A whole bunch of static box sizers
 
-        self.pathSizer_staticbox = wx.StaticBox(self, -1, "Path Extensions")
-        self.hookSizer_staticbox = wx.StaticBox(self, -1, "Hooks Extensions")
-        self.commonSizer_staticbox = wx.StaticBox(self, -1, "Common Options")
-        self.includesSizer_staticbox = wx.StaticBox(self, -1, "Includes")
-        self.excludesSizer_staticbox = wx.StaticBox(self, -1, "Excludes")
-        self.packagesSizer_staticbox = wx.StaticBox(self, -1, "Packages (PKG)")
-        self.dllExcludesSizer_staticbox = wx.StaticBox(self, -1, "DLL/Binary Excludes")
-        self.dllIncludesSizer_staticbox = wx.StaticBox(self, -1, "DLL/Binary Includes")
-        self.datafileSizer_staticBox = wx.StaticBox(self, -1, "Data Files")
-        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, "Other Options")
-        self.scriptSizer_staticbox = wx.StaticBox(self, -1, "Scripts")
+        self.pathSizer_staticbox = wx.StaticBox(self, -1, _("Path Extensions"))
+        self.hookSizer_staticbox = wx.StaticBox(self, -1, _("Hooks Extensions"))
+        self.commonSizer_staticbox = wx.StaticBox(self, -1, _("Common Options"))
+        self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
+        self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
+        self.packagesSizer_staticbox = wx.StaticBox(self, -1, _("Packages (PKG)"))
+        self.dllExcludesSizer_staticbox = wx.StaticBox(self, -1, _("DLL/Binary Excludes"))
+        self.dllIncludesSizer_staticbox = wx.StaticBox(self, -1, _("DLL/Binary Includes"))
+        self.datafileSizer_staticBox = wx.StaticBox(self, -1, _("Data Files"))
+        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
+        self.scriptSizer_staticbox = wx.StaticBox(self, -1, _("Scripts"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, "PyInstaller options for: %s (Created: %s)"%(projectName, creationDate))
+        self.label = wx.StaticText(self, -1, _("PyInstaller options for: %s (Created: %s)")%(projectName, creationDate))
 
         # This list holds all the script files added by the user
-        self.scriptsList = BaseListCtrl(self, columnNames=["Python Scripts"], name="scripts")
+        self.scriptsList = BaseListCtrl(self, columnNames=[_("Python Scripts")], name="scripts")
         # A list for the extension of the search path
-        self.pathexList = BaseListCtrl(self, columnNames=["Paths"], name="pathex")
+        self.pathexList = BaseListCtrl(self, columnNames=[_("Paths")], name="pathex")
         # A list for the extension of the hooks package
-        self.hookList = BaseListCtrl(self, columnNames=["Paths"], name="hookspath")
+        self.hookList = BaseListCtrl(self, columnNames=[_("Paths")], name="hookspath")
         # Do we want a debug build?
-        self.debugCheck = wx.CheckBox(self, -1, "Debug", name="debug")
+        self.debugCheck = wx.CheckBox(self, -1, _("Debug"), name="debug")
         # Radiobutton for the one-file build
-        self.oneFileRadio = wx.RadioButton(self, -1, "One File", style=wx.RB_GROUP, name="onefile")
+        self.oneFileRadio = wx.RadioButton(self, -1, _("One File"), style=wx.RB_GROUP, name="onefile")
         # Name of the executable
         self.exeTextCtrl = wx.TextCtrl(self, -1, "", name="exename")
         # Whether it is a console or a windowed application
-        self.consoleCheck = wx.CheckBox(self, -1, "Console Application", name="console")
+        self.consoleCheck = wx.CheckBox(self, -1, _("Console Application"), name="console")
         # Radiobutton for the one-dir build
-        self.oneDirRadio = wx.RadioButton(self, -1, "One Directory", name="onedir")
+        self.oneDirRadio = wx.RadioButton(self, -1, _("One Directory"), name="onedir")
         # A file picker for the executable icon
         self.iconPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, name="icon")
         # Strip or no strip?
-        self.stripCheck = wx.CheckBox(self, -1, "Strip Executable", name="strip")
+        self.stripCheck = wx.CheckBox(self, -1, _("Strip Executable"), name="strip")
         # Do we want to include encodings or not?
         self.asciiCheck = wx.CheckBox(self, -1, "Ascii", name="ascii")
         # Name of the distribution directory
@@ -74,35 +77,35 @@ class PyInstallerPanel(BaseBuilderPanel):
         self.compressCombo = MultiComboBox(self, [str(i) for i in xrange(10)],
                                            wx.CB_DROPDOWN|wx.CB_READONLY, self.GetName(), "level")
         # Use UPX compression? 
-        self.upxCheck = wx.CheckBox(self, -1, "UPX Compression", name="upx")
+        self.upxCheck = wx.CheckBox(self, -1, _("UPX Compression"), name="upx")
         # Include Tk in the distribution?
-        self.includeTkCheck = wx.CheckBox(self, -1, "Include Tk", name="includetk")
+        self.includeTkCheck = wx.CheckBox(self, -1, _("Include Tk"), name="includetk")
         # A file picker for the version file
         self.versionPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, name="version")
         # A list control for the "includes" option, a comma separated list of
         # modules to include
-        self.includeList = BaseListCtrl(self, columnNames=["Python Modules", "Path"], name="includes")
+        self.includeList = BaseListCtrl(self, columnNames=[_("Python Modules"), _("Path")], name="includes")
         # A list control for the "excludes" option, a comma separated list of
         # modules to exclude
-        self.excludeList = BaseListCtrl(self, columnNames=["Python Modules"], name="excludes")
+        self.excludeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="excludes")
         # A list control for the "packages" option, a comma separated list of
         # packages to include
-        self.packagesList = BaseListCtrl(self, columnNames=["Python Packages", "Path"], name="packages")
+        self.packagesList = BaseListCtrl(self, columnNames=[_("Python Packages"), _("Path")], name="packages")
         # A couple of listctrls to hold DLL/binary includes and excludes
-        self.dllExcludeList = BaseListCtrl(self, columnNames=["File Name", "Path"], name="dll_excludes")
-        self.dllIncludeList = BaseListCtrl(self, columnNames=["File Name", "Path"], name="dll_includes")
+        self.dllExcludeList = BaseListCtrl(self, columnNames=[_("File Name"), _("Path")], name="dll_excludes")
+        self.dllIncludeList = BaseListCtrl(self, columnNames=[_("File Name"), _("Path")], name="dll_includes")
         # A list control for the "data_files" option. "data_files" should contain
         # a sequence of (target-dir, files) tuples, where files is a sequence of
         # files to be copied
-        self.datafileList = BaseListCtrl(self, columnNames=["File Name", "Path"], name="data_files")
+        self.datafileList = BaseListCtrl(self, columnNames=[_("File Name"), _("Path")], name="data_files")
         # Less used options
-        self.verboseCheck = wx.CheckBox(self, -1, "Verbose Import", name="option1")
-        self.warningCheck = wx.CheckBox(self, -1, "Warning Option", name="option2")
-        self.forceexecCheck = wx.CheckBox(self, -1, "Force Execpv", name="option3")
-        self.unbufferedCheck = wx.CheckBox(self, -1, "Unbuffered STDIO", name="option4")
-        self.useSiteCheck = wx.CheckBox(self, -1, "Use Site.py", name="option5")
-        self.optimizeCheck = wx.CheckBox(self, -1, "Build Optimized", name="option6")
-        self.addManifest = wx.CheckBox(self, -1, "Create Manifest File (MSW)", name="create_manifest_file")
+        self.verboseCheck = wx.CheckBox(self, -1, _("Verbose Import"), name="option1")
+        self.warningCheck = wx.CheckBox(self, -1, _("Warning Option"), name="option2")
+        self.forceexecCheck = wx.CheckBox(self, -1, _("Force Execpv"), name="option3")
+        self.unbufferedCheck = wx.CheckBox(self, -1, _("Unbuffered STDIO"), name="option4")
+        self.useSiteCheck = wx.CheckBox(self, -1, _("Use Site.py"), name="option5")
+        self.optimizeCheck = wx.CheckBox(self, -1, _("Build Optimized"), name="option6")
+        self.addManifest = wx.CheckBox(self, -1, _("Create Manifest File (MSW)"), name="create_manifest_file")
 
         # Hold a reference to all the list controls, to speed up things later
         self.listCtrls = [self.includeList, self.packagesList, self.excludeList, self.dllExcludeList,
@@ -167,13 +170,13 @@ class PyInstallerPanel(BaseBuilderPanel):
         hookSizer.Add(self.hookList.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         topSizer.Add(hookSizer, 1, wx.RIGHT|wx.TOP|wx.BOTTOM|wx.EXPAND, 5)
         mainSizer.Add(topSizer, 0, wx.EXPAND, 0)
-        exename = wx.StaticText(self, -1, "Executable Name")
+        exename = wx.StaticText(self, -1, _("Executable Name"))
         commonGridSizer.Add(exename, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
-        compress = wx.StaticText(self, -1, "Compression Level")
+        compress = wx.StaticText(self, -1, _("Compression Level"))
         commonGridSizer.Add(compress, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 10)
         commonGridSizer.Add(self.debugCheck, 0, wx.LEFT|wx.ALIGN_BOTTOM, 10)
         commonGridSizer.Add(self.oneFileRadio, 0, wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM, 10)
-        icon = wx.StaticText(self, -1, "Icon File")
+        icon = wx.StaticText(self, -1, _("Icon File"))
         commonGridSizer.Add(icon, 0, wx.ALIGN_CENTER_VERTICAL, 0)
         commonGridSizer.Add(self.exeTextCtrl, 0, wx.LEFT|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
         commonGridSizer.Add(self.compressCombo, 1, wx.EXPAND|wx.LEFT|wx.ALIGN_BOTTOM, 10)
@@ -186,12 +189,12 @@ class PyInstallerPanel(BaseBuilderPanel):
         commonGridSizer.Add((0, 15), 0, 0, 0)
         commonGridSizer.Add((0, 15), 0, 0, 0)
         
-        distname = wx.StaticText(self, -1, "Dist Directory Name")
+        distname = wx.StaticText(self, -1, _("Dist Directory Name"))
         commonGridSizer.Add(distname, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
         commonGridSizer.Add((0, 5), 1, 0, 0)
         commonGridSizer.Add(self.stripCheck, 0, wx.LEFT|wx.ALIGN_BOTTOM, 10)
         commonGridSizer.Add(self.asciiCheck, 0, wx.LEFT|wx.RIGHT|wx.ALIGN_BOTTOM, 10)
-        version = wx.StaticText(self, -1, "Version File")
+        version = wx.StaticText(self, -1, _("Version File"))
         commonGridSizer.Add(version, 0, wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, 5)
         commonGridSizer.Add(self.distTextCtrl, 0, wx.LEFT|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
         commonGridSizer.Add((0, 5), 1, 0, 0)
@@ -258,28 +261,28 @@ class PyInstallerPanel(BaseBuilderPanel):
 
         # check if the script files exist
         if self.scriptsList.GetItemCount() == 0:
-            msg = "No Python scripts have been added."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("No Python scripts have been added.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         for indx in xrange(self.scriptsList.GetItemCount()):
             script = self.scriptsList.GetItem(indx, 1)
             if not os.path.isfile(script.GetText()):
-                msg = "Python script:\n\n%s\n\nIs not a valid file."%script.GetText()
-                self.MainFrame.RunError("Error", msg, True)
+                msg = _("Python script:\n\n%s\n\nIs not a valid file.")%script.GetText()
+                self.MainFrame.RunError(2, msg, True)
                 return False
 
         # check if the icon/version files are not empty and if they exist
         iconFile = self.iconPicker.GetPath()
         if iconFile and not os.path.isfile(iconFile):
-            msg = "Icon file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Icon file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         versionFile = self.versionPicker.GetPath()
         if versionFile and not os.path.isfile(versionFile):
-            msg = "Version file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Version file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # Everything is ok, let's go compiling...
@@ -296,7 +299,7 @@ class PyInstallerPanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Generating "%s" setup script...' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')%project.GetName())
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -381,9 +384,9 @@ class PyInstallerPanel(BaseBuilderPanel):
 
         pyInstallerPath = self.MainFrame.GetPyInstallerPath()
         if not pyInstallerPath or pyInstallerPath == "None":
-            msg = "PyInstaller path has not been set.\n\nPlease set the PyInstaller" \
-                  "path using the menu Options ==> Set PyInstaller path."
-            self.MainFrame.RunError("Error", msg)
+            msg = _("PyInstaller path has not been set.\n\nPlease set the PyInstaller" \
+                    "path using the menu Options ==> Set PyInstaller path.")
+            self.MainFrame.RunError(2, msg)
             return
 
         items = configuration["scripts"][:]
@@ -440,6 +443,6 @@ class PyInstallerPanel(BaseBuilderPanel):
         setupScript += target % setupDict
 
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Setup script for "%s" succesfully created' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')%project.GetName())
         return setupScript, buildDir
 

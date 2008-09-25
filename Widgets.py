@@ -9,10 +9,12 @@ import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 
-if wx.Platform == "__WXMAC__":
+##if wx.Platform == "__WXMAC__":
+if 1:
     # For the PList editor
     from py2app.apptemplate import plist_template
-    import plistlib
+    import traceback
+##    import plistlib
     import wx.gizmos as gizmos
     
 # This is needed by BaseListCtrl
@@ -170,6 +172,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp)
             # for wxGTK
             self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+            self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, lambda event: None)
             self.popupId1, self.popupId2, self.popupId3 = wx.NewId(), wx.NewId(), wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnDeleteSelected, id=self.popupId1)
             self.Bind(wx.EVT_MENU, self.OnClearAll, id=self.popupId2)
@@ -494,7 +497,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     def OnChooseScript(self, event):
         """
         Handles the wx.EVT_BUTTON for the hidden button in the top list control
-        (py2exe only.
+        (py2exe only).
         """
 
         # Launch the file dialog        
@@ -807,7 +810,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
             if not defaultDir.strip():
                 # Empty folder name?
-                self.MainFrame.RunError(_("Error"), _("Invalid folder name."))
+                self.MainFrame.RunError(2, _("Invalid folder name."))
                 return
 
         wx.BeginBusyCursor()
@@ -1235,11 +1238,11 @@ class CustomCodeViewer(wx.Frame):
 
         if readOnly:
             topLabel = _("This is the Setup file as it comes out after the pre-processing\n" \
-                       "work done by GUI2Exe.")
+                         "work done by GUI2Exe.")
         else:
             topLabel = _("Enter your custom code below and it will be inserted inside the\n" \
-                       "Setup script. Note that you can use as 'keywords' also the compiler\n" \
-                       "options like data_files, ignores and icon_resources.")
+                         "Setup script. Note that you can use as 'keywords' also the compiler\n" \
+                         "options like data_files, ignores and icon_resources.")
 
         # The top label text is different depending on the choice of the user
         # If he/she chose to view the Setup.py file, it is read only
@@ -1327,8 +1330,8 @@ class CustomCodeViewer(wx.Frame):
             return
 
         # Something changed. Ask for saving
-        question = "The current code has changed.\nDo you want to save changes?"
-        answer = self.MainFrame.RunError("Question", question)
+        question = _("The current code has changed.\nDo you want to save changes?")
+        answer = self.MainFrame.RunError(3, question)
         
         if answer == wx.ID_CANCEL:
             # Do you want to think about it, eh?
@@ -1691,11 +1694,11 @@ class Py2ExeMissing(wx.Frame):
         if dll:
             # We are showing binary dependencies
             label = _("Make sure you have the license if you distribute any of them, and\n"  \
-                    "make sure you don't distribute files belonging to the operating system.")
+                      "make sure you don't distribute files belonging to the operating system.")
         else:
             # These are what py2exe thinks are the missing modules
             label = _("Py2Exe thinks that these modules (and sub-modules) are missing.\n" \
-                    "Inclusion of one or more of them may allow your compiled application to run.")
+                      "Inclusion of one or more of them may allow your compiled application to run.")
 
         label = wx.StaticText(self.mainPanel, -1, label)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
@@ -2312,7 +2315,7 @@ class BuildDialog(wx.Dialog):
     def SetProperties(self):
         """ Sets few properties for the dialog. """
 
-        self.SetTitle(_("Full Build Ouput Dialog"))
+        self.SetTitle(_("Full Build Output Dialog"))
         self.SetIcon(self.GetParent().GetIcon())
 
         size = self.MainFrame.GetSize()
@@ -2381,7 +2384,7 @@ class BuildDialog(wx.Dialog):
             fp = file(path, 'w') # Create file anew
             fp.write(self.outputTextCtrl.GetValue())
             fp.close()
-            self.MainFrame.SendMessage("Message", _("Build output file %s successfully saved") % path)
+            self.MainFrame.SendMessage(0, _("Build output file %s successfully saved") % path)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -2400,10 +2403,10 @@ class BuildDialog(wx.Dialog):
             # Copy the data to the clipboard
             wx.TheClipboard.SetData(self.do)
             wx.TheClipboard.Close()
-            self.MainFrame.SendMessage("Message", _("Build output text successfully copied to the clipboard"))
+            self.MainFrame.SendMessage(0, _("Build output text successfully copied to the clipboard"))
         else:
             # Some problem with the clipboard...
-            self.MainFrame.RunError("Error", _("Unable to open the clipboard."))
+            self.MainFrame.RunError(2, _("Unable to open the clipboard."))
         
 
     def OnCancel(self, event):
@@ -2719,31 +2722,35 @@ class PListEditor(wx.Dialog):
             # we do no update it reading the plist_template from py2app
             PTemplate = pListCode
 
+        self.vSplitter = wx.SplitterWindow(self, style=wx.SP_3D|wx.SP_LIVE_UPDATE)
+        self.topPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        self.bottomPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        
         boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
-        self.codeCheck = wx.CheckBox(self, -1, _("Add by Python code"))
+        self.codeCheck = wx.CheckBox(self.topPanel, -1, _("Add by Python code"))
         self.codeCheck.SetFont(boldFont)
-        self.staticText_1 = wx.StaticText(self, -1, _("Select one item in the tree control below"))
+        self.staticText_1 = wx.StaticText(self.topPanel, -1, _("Select one item in the tree control below:"))
         self.staticText_1.SetFont(boldFont)
-        self.itemParentText = wx.TextCtrl(self, -1, "")
-        self.staticText_2 = wx.StaticText(self, -1, _("Add your key/value dictionary in Python code:"))
+        self.itemParentText = wx.TextCtrl(self.topPanel, -1, "")
+        self.staticText_2 = wx.StaticText(self.topPanel, -1, _("Add your key/value dictionary in Python code:"))
         self.staticText_2.SetFont(boldFont)
-        self.pythonStc = PythonSTC(self, readOnly=True)
+        self.pythonStc = PythonSTC(self.topPanel, readOnly=True)
 
         addBmp = self.MainFrame.CreateBitmap("add")
-        self.addButton = buttons.ThemedGenBitmapTextButton(self, -1, addBmp, _(" Append "), size=(-1, 22))
+        self.addButton = buttons.ThemedGenBitmapTextButton(self.topPanel, -1, addBmp, _(" Append "), size=(-1, 22))
 
         self.enablingItems = [self.staticText_1, self.staticText_2, self.itemParentText,
                               self.pythonStc, self.addButton]
 
         # Create a tree list control to handle the Plist dictionary
-        self.treeList = gizmos.TreeListCtrl(self, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
+        self.treeList = gizmos.TreeListCtrl(self.bottomPanel, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
                                             wx.TR_COLUMN_LINES | wx.TR_FULL_ROW_HIGHLIGHT)
 
         # Build a couple of fancy and useless buttons        
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
+        self.okButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, wx.ID_OK, okBmp, _(" Ok "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
 
         # Do the hard work
         self.SetProperties()
@@ -2775,36 +2782,39 @@ class PListEditor(wx.Dialog):
     def LayoutItems(self):
         """ Layouts the widgets with sizers. """        
 
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
+        topSizer = wx.BoxSizer(wx.VERTICAL)
+        bottomSizer = wx.BoxSizer(wx.VERTICAL)
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        mainSizer.Add(self.codeCheck, 0, wx.ALL, 5)
-        mainSizer.Add(self.staticText_1, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
-        mainSizer.Add((0, 2))
-        mainSizer.Add(self.itemParentText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 5)
-        mainSizer.Add(self.staticText_2, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
-        mainSizer.Add((0, 2))
-        mainSizer.Add(self.pythonStc, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
-        mainSizer.Add((0, 2))
-        mainSizer.Add(self.addButton, 0, wx.RIGHT|wx.BOTTOM|wx.ALIGN_RIGHT, 5)
+        topSizer.Add(self.codeCheck, 0, wx.ALL, 5)
+        topSizer.Add(self.staticText_1, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        topSizer.Add((0, 2))
+        topSizer.Add(self.itemParentText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 5)
+        topSizer.Add(self.staticText_2, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        topSizer.Add((0, 2))
+        topSizer.Add(self.pythonStc, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
+        topSizer.Add((0, 2))
+        topSizer.Add(self.addButton, 0, wx.RIGHT|wx.BOTTOM|wx.ALIGN_RIGHT, 5)
         
-        label = "Or you can edit the properties below or add new ones:"
+        label = _("Or you can edit the properties below or add new ones:")
 
-        label = wx.StaticText(self, -1, label)
+        label = wx.StaticText(self.bottomPanel, -1, label)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
 
-        mainSizer.Add(label, 0, wx.ALL, 5)
-        mainSizer.Add(self.treeList, 3, wx.EXPAND|wx.ALL, 5)
+        bottomSizer.Add(label, 0, wx.ALL, 5)
+        bottomSizer.Add(self.treeList, 1, wx.EXPAND|wx.ALL, 5)
 
         # Add the fancy and useless buttons
-        bottomSizer.Add(self.okButton, 0, wx.ALL, 15)
-        bottomSizer.Add((0, 0), 1, wx.EXPAND)
-        bottomSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
 
-        mainSizer.Add(bottomSizer, 0, wx.EXPAND)
-        # Add everything to the main sizer        
-        self.SetSizer(mainSizer)
-        mainSizer.Layout()
+        bottomSizer.Add(buttonSizer, 0, wx.EXPAND)
+
+        self.topPanel.SetSizer(topSizer)
+        self.bottomPanel.SetSizer(bottomSizer)
+
+        self.vSplitter.SplitHorizontally(self.topPanel, self.bottomPanel)
 
 
     def BindEvents(self):
@@ -2812,6 +2822,7 @@ class PListEditor(wx.Dialog):
 
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
+        self.Bind(wx.EVT_BUTTON, self.OnAddCode, self.addButton)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
         self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
         self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
@@ -2867,6 +2878,7 @@ class PListEditor(wx.Dialog):
         self.treeList.SortChildren(self.root)
         self.treeList.SetItemText(self.root, "Dictionary", 1)
         self.treeList.SetItemText(self.root, _("%d key/value pairs") % len(PTemplate.keys()), 2)
+        self.treeList.SetPyData(self.root, ["Dictionary", 0])
 
         # Make the root item more visible
         boldFont = self.GetFont()
@@ -2881,8 +2893,6 @@ class PListEditor(wx.Dialog):
         self.treeList.SetColumnWidth(0, colWidth)
         self.treeList.SetColumnWidth(2, 300)
         
-        del self.itemCounter
-
 
     def AutoAddChildren(self, itemParent, PTemplate, level):
         """
@@ -2913,6 +2923,7 @@ class PListEditor(wx.Dialog):
                 treeList.SetItemText(child, "Dictionary", 1)
                 treeList.SetItemText(child, _("%d key/value pairs") % len(PTemplate[item].keys()), 2)
                 treeList.SetItemFont(child, boldFont)
+                treeList.SetPyData(child, ["Dictionary", level])
                 level = self.AutoAddChildren(child, PTemplate[item], level+1)
             else:
                 # It is either a list, or a string
@@ -2926,17 +2937,33 @@ class PListEditor(wx.Dialog):
                 else:
                     kind = "String"
 
-                treeList.SetItemText(child, kind, 1)                    
+                treeList.SetItemText(child, kind, 1)
+                
                 treeList.SetItemText(child, str(value), 2)
                 treeList.SetItemImage(child, 6, 2)
                 # Store the item kind in the item PyData
-                treeList.SetPyData(child, kind)
+                treeList.SetPyData(child, [kind, level])
+                toSet = False
                 if kind == "Array":
                     # Arrays can contain dictionaries...
-                    for val in value:
+                    for indx, val in enumerate(value):
                         if isinstance(val, dict):
-                            level = self.AutoAddChildren(child, val, level+1)
-                
+                            toSet = True
+                            grandChild = treeList.AppendItem(child, "%d"%indx, level+2)
+                            self.itemCounter += 1
+                            treeList.SetItemText(grandChild, "Dictionary", 1)
+                            treeList.SetItemText(grandChild, _("%d key/value pairs") % len(val.keys()), 2)
+                            treeList.SetPyData(grandChild, ["Dictionary", level+2])
+                            colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
+                            treeList.SetItemBackgroundColour(child, colour)
+                            treeList.SetItemFont(grandChild, boldFont)
+                            level = self.AutoAddChildren(grandChild, val, level+2)
+
+                if toSet:
+                    treeList.SetItemFont(child, boldFont)
+                    treeList.SetItemText(child, _("%d ordered objects")%len(value), 2)
+                    treeList.SetItemImage(child, -1, 2)
+                    
         return level
     
 
@@ -2991,15 +3018,78 @@ class PListEditor(wx.Dialog):
             # We are not adding PList dicts by code
             return
 
+        # Store the item text in the upper text control
         itemText = self.treeList.GetItemText(event.GetItem())
         self.itemParentText.SetValue(itemText)
         self.itemParentText.Refresh()
+        # Store the tree item in the text control
+        self.itemParentText.treeItem = event.GetItem()
         
 
     def OnEnableCode(self, event):
         """ Handles the wx.EVT_CHECKBOX event for the dialog. """
 
         self.EnableCode(event.IsChecked())
+        
+
+    def OnAddCode(self, event):
+        """ Handles the wx.EVT_BUTTON event when adding Python code. """
+
+        if not hasattr(self.itemParentText, "treeItem"):
+            msg = _("Please double-click on one of the tree items, to which the\n" \
+                    "new property will be appended.")
+            self.MainFrame.RunError(2, msg)
+            return
+        
+        # Get the Python code the user entered
+        code = self.pythonStc.GetText()
+        if not code.strip():
+            # Code is empty?
+            self.MainFrame.RunError(2, _("No Python code has been entered."))
+            return
+
+        code2 = code.strip().split("=")
+        if len(code2) < 2:
+            # The code should be in the form property = value
+            msg = _("Invalid Python code entered.\n\n" \
+                    "You should enter code in the form 'property = value',\n" \
+                    "where 'value' can be any Python dictionary, string or list.")
+            self.MainFrame.RunError(2, msg)
+            return
+
+        dummy = code.split("\n")
+        dummy = dummy[-1].split("=")
+        
+        property, value = dummy[0].strip(), "=".join(dummy[1:])
+        exc = False
+        newCode = ";".join(self.pythonStc.GetText().split("\r"))
+        try:
+            # Try to eval it
+            newValue = {}
+            exec newCode in newValue
+            value = newValue[property]
+        except NameError:
+            exc = True
+            trb = sys.exc_info()[1]
+            error, line, msg = "NameError", 1, trb.message
+        except:
+            exc = True
+            trb = sys.exc_info()[1]
+            error, line, msg = trb.msg, trb.lineno, trb.text
+
+        if exc:
+            msg = _("Invalid Python code entered.\n\n" \
+                    "The error returned by 'eval' is:\n\n%s\nLine: %d, %s")%(error, line, msg)
+            self.MainFrame.RunError(2, msg)
+            return
+
+        treeItem = self.itemParentText.treeItem
+        level = self.treeList.GetPyData(treeItem)[1]
+
+        self.AutoAddChildren(treeItem, {property: value}, level)
+        self.treeList.ExpandAll(self.root)
+        self.codeCheck.SetValue(0)
+        self.EnableCode(False)
         
 
     def OnOk(self, event):
@@ -3022,11 +3112,15 @@ class PListEditor(wx.Dialog):
 
     def OnKeyUp(self, event):
         """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
-
+        
         if event.GetKeyCode() == wx.WXK_ESCAPE:
             # Close the dialog, no action
             self.OnClose(event)
         elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            if wx.Window.FindFocus() == self.pythonStc:
+                # Don't kill the dialog if the user presses enter
+                event.Skip()
+                return
             # Close the dialog, the user wants to continue
             self.OnOk(event)
 
@@ -3043,24 +3137,40 @@ class PListEditor(wx.Dialog):
 
         treeList = self.treeList        
         child, cookie = treeList.GetFirstChild(item)
+        itemKind = treeList.GetPyData(item)[0]
+        itemKey = treeList.GetItemText(item)
+        
         # Loop over all the item's children
         while child.IsOk():
+            
             key = treeList.GetItemText(child)
             value = treeList.GetItemText(child, 2)
-            kind = treeList.GetPyData(child)
-            
-            if treeList.HasChildren(child):
-                # Recurse on the child, it has children
-                PList[key] = {}
-                PList[key] = self.GetPList(child, PList[key])
-            else:
-                if kind == "String":
-                    PList[key] = value
+            kind = treeList.GetPyData(child)[0]
+
+            if kind == "Array":
+                if treeList.HasChildren(child):
+                    # Is an array of dictionaries, or something similar
+                    grandChild, cookie2 = treeList.GetFirstChild(child)
+                    counter = 0
+                    PList[key] = []
+                    while grandChild.IsOk():
+                        PList[key].append(self.GetPList(grandChild, {}))
+                        grandChild, cookie2 = treeList.GetNextChild(child, cookie2)
                 else:
-                    # NOTE: array should be treated differently, as
-                    # they may be array of dictionaries, for which we
-                    # need to recurse on them
+                    # A simple array of strings
                     PList[key] = eval(value)
+            else:
+                if treeList.HasChildren(child):
+                    # Recurse on the child, it has children
+                    PList[key] = self.GetPList(child, {})
+                else:
+                    if kind == "String":
+                        PList[key] = value
+                    else:
+                        # NOTE: array should be treated differently, as
+                        # they may be array of dictionaries, for which we
+                        # need to recurse on them
+                        PList[key] = eval(value)
 
             # Get the next child
             child, cookie = treeList.GetNextChild(item, cookie)        

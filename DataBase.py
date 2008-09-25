@@ -1,5 +1,6 @@
 # Start the imports
 
+import wx
 # We are going to use bsddb. Robin, do you recognize it? :-D
 import bsddb
 # We also use cPickle and zlib for maximum data compression
@@ -9,6 +10,9 @@ import copy
 # For the database backup
 import os
 import shutil
+
+# Get the I18N things
+_ = wx.GetTranslation
 
 # Pick the highst protocol for picking, as we are not storing megabites of data
 PICKLE_PROTOCOL = cPickle.HIGHEST_PROTOCOL
@@ -54,7 +58,7 @@ class DataBase(object):
         except:
             # Database error, maybe we had a hard crash before
             self.db.close()
-            self.MainFrame.SendMessage("Warning", "Database file is corrupted: using backup file.")
+            self.MainFrame.SendMessage(1, _("Database file is corrupted: using backup file"))
             if self.CheckBackup():
                 # Ok, the backup database works...
                 self.CreateProjectTree()

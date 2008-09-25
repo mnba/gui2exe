@@ -9,6 +9,9 @@ from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _bbFreeze_imports, _bbFreeze_target, _pywild, ListType
 from Utilities import setupString
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class bbFreezePanel(BaseBuilderPanel):
 
@@ -29,13 +32,13 @@ class bbFreezePanel(BaseBuilderPanel):
         self.created = False
 
         # A whole bunch of static box sizers
-        self.commonSizer_staticbox = wx.StaticBox(self, -1, "Common Options")
-        self.includesSizer_staticbox = wx.StaticBox(self, -1, "Includes")
-        self.excludesSizer_staticbox = wx.StaticBox(self, -1, "Excludes")
-        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, "Other Options")
+        self.commonSizer_staticbox = wx.StaticBox(self, -1, _("Common Options"))
+        self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
+        self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
+        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, "bbFreeze options for: %s (Created: %s)"%(projectName, creationDate))
+        self.label = wx.StaticText(self, -1, _("bbFreeze options for: %s (Created: %s)")%(projectName, creationDate))
 
         # Target combobox: can be either "windows" or "console"
         self.targetCombo = MultiComboBox(self, ["windows", "console"],
@@ -53,19 +56,19 @@ class bbFreezePanel(BaseBuilderPanel):
 
         # A checkbox that enables the user to choose a different name for the
         # distribution directory. Default is unchecked, that means dist_dir="dist"
-        self.distChoice = wx.CheckBox(self, -1, "Dist Directory", name="dist_dir_choice")
+        self.distChoice = wx.CheckBox(self, -1, _("Dist Directory"), name="dist_dir_choice")
         # The name of the distribution directory (if enabled)
         self.distTextCtrl = wx.TextCtrl(self, -1, "dist", name="dist_dir")
 
         # A list control for the "includes" option, a comma separated list of
         # modules to include
-        self.includeList = BaseListCtrl(self, columnNames=["Python Modules"], name="includes")
+        self.includeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="includes")
         # A list control for the "excludes" option, a comma separated list of
         # modules to exclude
-        self.excludeList = BaseListCtrl(self, columnNames=["Python Modules"], name="excludes")
+        self.excludeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="excludes")
 
-        self.includeInterpreter = wx.CheckBox(self, -1, "Include Python Interpreter", name="include_py")
-        self.addManifest = wx.CheckBox(self, -1, "Create Manifest File (MSW)", name="create_manifest_file")
+        self.includeInterpreter = wx.CheckBox(self, -1, _("Include Python Interpreter"), name="include_py")
+        self.addManifest = wx.CheckBox(self, -1, _("Create Manifest File (MSW)"), name="create_manifest_file")
 
         # Hold a reference to all the list controls, to speed up things later
         self.listCtrls = [self.includeList, self.excludeList]
@@ -129,21 +132,21 @@ class bbFreezePanel(BaseBuilderPanel):
         # Add the VersionInfo text controls
         mainSizer.Add(self.label, 0, wx.ALL, 10)
 
-        target = wx.StaticText(self, -1, "Exe Kind")
+        target = wx.StaticText(self, -1, _("Exe Kind"))
         commonSizer_6.Add(target, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_6.Add(self.targetCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_6, (0, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
             
-        script = wx.StaticText(self, -1, "Python Main Script")
+        script = wx.StaticText(self, -1, _("Python Main Script"))
         commonSizer_7.Add(script, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_7.Add(self.scriptPicker, 1, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_7, (0, 1), (1, 5), wx.ALL|wx.EXPAND, 5)
         
-        optimize = wx.StaticText(self, -1, "Optimize")
+        optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_1, (1, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
-        compress = wx.StaticText(self, -1, "Compressed")
+        compress = wx.StaticText(self, -1, _("Compressed"))
         commonSizer_2.Add(compress, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_2.Add(self.compressCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_2, (1, 1), (1, 1), wx.ALL|wx.EXPAND, 5)
@@ -192,7 +195,7 @@ class bbFreezePanel(BaseBuilderPanel):
         # check if the script file exists
         if not os.path.isfile(self.scriptPicker.GetPath()):
             msg = "Python main script is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # Everything is ok, let's go compiling...
@@ -209,7 +212,7 @@ class bbFreezePanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Generating "%s" setup script...' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')%project.GetName())
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -257,7 +260,7 @@ class bbFreezePanel(BaseBuilderPanel):
                 if key == "dist_dir" and (item == "" or not distChoice):
                     item = "'dist'"
                     if distChoice:
-                        self.MainFrame.SendMessage("Warning", 'Empty dist_dir option. Using default value "dist" ')
+                        self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
                 else:
                     item = "r'%s'"%item
 
@@ -284,6 +287,6 @@ class bbFreezePanel(BaseBuilderPanel):
         setupScript += _bbFreeze_target % setupDict
         
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Setup script for "%s" succesfully created' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')%project.GetName())
         return setupScript, buildDir
 

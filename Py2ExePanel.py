@@ -9,6 +9,9 @@ from Constants import _py2exe_target, _py2exe_imports, _manifest_template, ListT
 from Constants import _py2exe_class
 from Utilities import setupString
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class Py2ExePanel(BaseBuilderPanel):
 
@@ -29,29 +32,29 @@ class Py2ExePanel(BaseBuilderPanel):
         self.created = False
 
         # A whole bunch of static box sizers
-        self.commonSizer_staticbox = wx.StaticBox(self, -1, "Common Options")
-        self.includesSizer_staticbox = wx.StaticBox(self, -1, "Includes")
-        self.packagesSizer_staticbox = wx.StaticBox(self, -1, "Packages")
-        self.excludesSizer_staticbox = wx.StaticBox(self, -1, "Excludes")
-        self.dllExcludesSizer_staticbox = wx.StaticBox(self, -1, "DLL Excludes")
-        self.ignoreSizer_staticbox = wx.StaticBox(self, -1, "Ignores")
-        self.datafile_staticbox = wx.StaticBox(self, -1, "Data Files")
-        self.icon_staticbox = wx.StaticBox(self, -1, "Icon Resources")
-        self.bitmap_staticbox = wx.StaticBox(self, -1, "Bitmap Resources")
-        self.other_staticbox = wx.StaticBox(self, -1, "Other Resources")
-        self.otherSizer_staticbox = wx.StaticBox(self, -1, "Other Options")
-        self.targetSizer_staticbox = wx.StaticBox(self, -1, "Target Classes")
+        self.commonSizer_staticbox = wx.StaticBox(self, -1, _("Common Options"))
+        self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
+        self.packagesSizer_staticbox = wx.StaticBox(self, -1, _("Packages"))
+        self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
+        self.dllExcludesSizer_staticbox = wx.StaticBox(self, -1, _("DLL Excludes"))
+        self.ignoreSizer_staticbox = wx.StaticBox(self, -1, _("Ignores"))
+        self.datafile_staticbox = wx.StaticBox(self, -1, _("Data Files"))
+        self.icon_staticbox = wx.StaticBox(self, -1, _("Icon Resources"))
+        self.bitmap_staticbox = wx.StaticBox(self, -1, _("Bitmap Resources"))
+        self.other_staticbox = wx.StaticBox(self, -1, _("Other Resources"))
+        self.otherSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
+        self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Classes"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, "Py2exe options for: %s (Created: %s)"%(projectName, creationDate))
+        self.label = wx.StaticText(self, -1, _("Py2exe options for: %s (Created: %s)")%(projectName, creationDate))
 
         # These text controls hold data used by VersionInfo in py2exe
 
         # A list control for the target classes, scripts
-        self.multipleExe = BaseListCtrl(self, columnNames=["Exe Kind", "Python Main Script",
-                                                           "Executable Name", "Version",
-                                                           "Company Name", "Copyrights",
-                                                           "Program Name"], name="multipleexe")
+        self.multipleExe = BaseListCtrl(self, columnNames=[_("Exe Kind"), _("Python Main Script"),
+                                                           _("Executable Name"), _("Version"),
+                                                           _("Company Name"), _("Copyrights"),
+                                                           _("Program Name")], name="multipleexe")
         
         # Optimization level for py2exe  1 for "python -O", 2 for "python -OO",
         # 0 to disable
@@ -83,7 +86,7 @@ class Py2ExePanel(BaseBuilderPanel):
         self.zipfileTextCtrl = wx.TextCtrl(self, -1, "None", name="zipfile")
         # A checkbox that enables the user to choose a different name for the
         # distribution directory. Default is unchecked, that means dist_dir="dist"
-        self.distChoice = wx.CheckBox(self, -1, "Dist Directory", name="dist_dir_choice")
+        self.distChoice = wx.CheckBox(self, -1, _("Dist Directory"), name="dist_dir_choice")
         # The name of the distribution directory (if enabled)
         self.distTextCtrl = wx.TextCtrl(self, -1, "dist", name="dist_dir")
         # Allows to skip the archive. If checked, this copies the Python bytecode files
@@ -94,29 +97,29 @@ class Py2ExePanel(BaseBuilderPanel):
 
         # A list control for the "includes" option, a comma separated list of
         # modules to include
-        self.includeList = BaseListCtrl(self, columnNames=["Python Modules"], name="includes")
+        self.includeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="includes")
         # A list control for the "packages" option, a comma separated list of
         # packages to include
-        self.packagesList = BaseListCtrl(self, columnNames=["Python Packages"], name="packages")
+        self.packagesList = BaseListCtrl(self, columnNames=[_("Python Packages")], name="packages")
         # A list control for the "excludes" option, a comma separated list of
         # modules to exclude
-        self.excludeList = BaseListCtrl(self, columnNames=["Python Modules"], name="excludes")
+        self.excludeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="excludes")
         # A list control for the "dll_excludes" option, a comma separated list of
         # Windows dlls to include
-        self.dllExcludeList = BaseListCtrl(self, columnNames=["DLL Names"], name="dll_excludes")
+        self.dllExcludeList = BaseListCtrl(self, columnNames=[_("DLL Names")], name="dll_excludes")
         # A list control for the "ignores" option, a comma separated list of
         # modules to ignores
-        self.ignoreList = BaseListCtrl(self, columnNames=["Python Modules"], name="ignores")
+        self.ignoreList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="ignores")
         # A list control for the "data_files" option. "data_files" should contain
         # a sequence of (target-dir, files) tuples, where files is a sequence of
         # files to be copied
-        self.datafileList = BaseListCtrl(self, columnNames=["Directory"+" "*15, "Files Path"], name="data_files")
+        self.datafileList = BaseListCtrl(self, columnNames=[_("Directory"+" "*15), _("Files Path")], name="data_files")
         # A list control for the "icon_resources" option
-        self.iconResourceList = BaseListCtrl(self, columnNames=["Id  ", "Icon Path"], name="icon_resources")
+        self.iconResourceList = BaseListCtrl(self, columnNames=[_("Id  "), _("Icon Path")], name="icon_resources")
         # A list control for the "bitmap_resources" option
-        self.bitmapResourceList = BaseListCtrl(self, columnNames=["Id  ", "Bitmap Path"], name="bitmap_resources")
+        self.bitmapResourceList = BaseListCtrl(self, columnNames=[_("Id  "), _("Bitmap Path")], name="bitmap_resources")
         # A list control for the "other_resources" option
-        self.otherResourceList = BaseListCtrl(self, columnNames=["Type", "Id  ", "Icon Path"], name="other_resources")
+        self.otherResourceList = BaseListCtrl(self, columnNames=[_("Type"), _("Id  "), _("Icon Path")], name="other_resources")
 
         # This command line switch instructs py2exe to create a python module cross
         # reference and display it in the webbrowser.  This allows to answer question
@@ -220,15 +223,15 @@ class Py2ExePanel(BaseBuilderPanel):
         targetSizer.Add(self.multipleExe.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         mainSizer.Add(targetSizer, 0, wx.ALL|wx.EXPAND, 5)
 
-        optimize = wx.StaticText(self, -1, "Optimize")
+        optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_1, (1, 0), (1, 1), flag, 5)
-        compress = wx.StaticText(self, -1, "Compressed")
+        compress = wx.StaticText(self, -1, _("Compressed"))
         commonSizer_2.Add(compress, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_2.Add(self.compressCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_2, (1, 1), (1, 1), flag, 5)
-        bundle = wx.StaticText(self, -1, "Bundle Files")
+        bundle = wx.StaticText(self, -1, _("Bundle Files"))
         commonSizer_3.Add(bundle, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_3.Add(self.bundleCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_3, (1, 2), (1, 1), flag, 5)
@@ -297,7 +300,7 @@ class Py2ExePanel(BaseBuilderPanel):
         otherSizer_1.Add(self.asciiCheck, 0, wx.ALL, 5)
         otherSizer_1.Add((0, 0), 1)
         otherSizer_1.Add(self.skiparchiveChoice, 0, wx.ALL, 5)
-        customboot = wx.StaticText(self, -1, "Custom Boot Script")
+        customboot = wx.StaticText(self, -1, _("Custom Boot Script"))
         otherSizer_2.Add(customboot, 0, wx.BOTTOM, 2)
         otherSizer_2.Add(self.customBootPicker, 0, wx.EXPAND)
         otherSizer.Add(otherSizer_1, 0, wx.EXPAND)
@@ -316,22 +319,22 @@ class Py2ExePanel(BaseBuilderPanel):
 
         # check if the script files exist
         if self.multipleExe.GetItemCount() == 0:
-            msg = "No Python scripts have been added."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("No Python scripts have been added.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         for indx in xrange(self.multipleExe.GetItemCount()):
             script = self.multipleExe.GetItem(indx, 2)
             if not os.path.isfile(script.GetText()):
-                msg = "Python main script is not a valid file."
-                self.MainFrame.RunError("Error", msg, True)
+                msg = _("Python main script is not a valid file.")
+                self.MainFrame.RunError(2, msg, True)
                 return False
 
         # check if the custom boot file is not empty and if it exists
         customBoot = self.customBootPicker.GetPath()
         if customBoot and not os.path.isfile(customBoot):
-            msg = "Custom boot file is not a valid file"
-            self.MainFrame.RunError("Error", msg+".", True)
+            msg = _("Custom boot file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # Everything is ok, let's go compiling...
@@ -348,7 +351,7 @@ class Py2ExePanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Generating "%s" setup script...' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')%project.GetName())
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -393,7 +396,7 @@ class Py2ExePanel(BaseBuilderPanel):
             if key == "zipfile":
                 if item and item.strip() and zipChoice:
                     if (os.path.splitext(item)[1]).lower() != ".zip":
-                        self.MainFrame.SendMessage("Warning", 'zipfile does not have ".zip" extension')
+                        self.MainFrame.SendMessage(1, _('zipfile does not have ".zip" extension'))
                     item = "r'%s'"%item
                 else:
                     item = None
@@ -403,7 +406,7 @@ class Py2ExePanel(BaseBuilderPanel):
                 else:
                     item = "dist"
                     if distChoice:
-                        self.MainFrame.SendMessage("Warning", 'Empty dist_dir option. Using default value "dist" ')
+                        self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
                 
             setupDict[key] = item
 
@@ -470,5 +473,5 @@ class Py2ExePanel(BaseBuilderPanel):
             setupScript = setupScript.replace("'manifest_template'", "manifest_template")
 
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Setup script for "%s" succesfully created' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')% project.GetName())
         return setupScript, buildDir

@@ -9,6 +9,9 @@ from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _cx_Freeze_imports, _cx_Freeze_target, _pywild, ListType
 from Utilities import setupString
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class cx_FreezePanel(BaseBuilderPanel):
 
@@ -29,22 +32,22 @@ class cx_FreezePanel(BaseBuilderPanel):
         self.created = False
 
         # A whole bunch of static box sizers
-        self.commonSizer_staticbox = wx.StaticBox(self, -1, "Common Options")
-        self.pathSizer_staticbox = wx.StaticBox(self, -1, "Path")
-        self.includesSizer_staticbox = wx.StaticBox(self, -1, "Includes")
-        self.packagesSizer_staticbox = wx.StaticBox(self, -1, "Packages")
-        self.excludesSizer_staticbox = wx.StaticBox(self, -1, "Excludes")
-        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, "Other Options")
-        self.targetSizer_staticbox = wx.StaticBox(self, -1, "Target Class")
+        self.commonSizer_staticbox = wx.StaticBox(self, -1, _("Common Options"))
+        self.pathSizer_staticbox = wx.StaticBox(self, -1, _("Path"))
+        self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
+        self.packagesSizer_staticbox = wx.StaticBox(self, -1, _("Packages"))
+        self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
+        self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
+        self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Class"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, "cx_Freeze options for: %s (Created: %s)"%(projectName, creationDate))
+        self.label = wx.StaticText(self, -1, _("cx_Freeze options for: %s (Created: %s)")%(projectName, creationDate))
 
         # These text controls hold data used by VersionInfo in cx_Freeze
         self.versionTextCtrl = wx.TextCtrl(self, -1, "0.1", name="version")
-        self.descriptionTextCtrl = wx.TextCtrl(self, -1, "No Description", name="description")
-        self.authorTextCtrl = wx.TextCtrl(self, -1, "No Author", name="author")
-        self.nameTextCtrl = wx.TextCtrl(self, -1, "cx_Freeze Sample File", name="name")
+        self.descriptionTextCtrl = wx.TextCtrl(self, -1, _("No Description"), name="description")
+        self.authorTextCtrl = wx.TextCtrl(self, -1, _("No Author"), name="author")
+        self.nameTextCtrl = wx.TextCtrl(self, -1, _("cx_Freeze Sample File"), name="name")
 
         # Target combobox: can be either "windows" or "console"
         self.targetCombo = MultiComboBox(self, ["windows", "console"], wx.CB_DROPDOWN|wx.CB_READONLY,
@@ -62,33 +65,33 @@ class cx_FreezePanel(BaseBuilderPanel):
 
         # A checkbox that enables the user to choose a different name for the
         # executable file. Default is unchecked, that means target=python file + .exe
-        self.targetChoice = wx.CheckBox(self, -1, "Executable Name", name="target_name_choice")
+        self.targetChoice = wx.CheckBox(self, -1, _("Executable Name"), name="target_name_choice")
         # The name of the executable file (if enabled)
         self.targetTextCtrl = wx.TextCtrl(self, -1, "", name="target_name")
         
         # A checkbox that enables the user to choose a different name for the
         # distribution directory. Default is unchecked, that means dist_dir="dist"
-        self.distChoice = wx.CheckBox(self, -1, "Dist Directory", name="dist_dir_choice")
+        self.distChoice = wx.CheckBox(self, -1, _("Dist Directory"), name="dist_dir_choice")
         # The name of the distribution directory (if enabled)
         self.distTextCtrl = wx.TextCtrl(self, -1, "dist", name="dist_dir")
 
         # A list control for the "includes" option, a comma separated list of
         # modules to include
-        self.includeList = BaseListCtrl(self, columnNames=["Python Modules"], name="includes")
+        self.includeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="includes")
         # A list control for the "packages" option, a comma separated list of
         # packages to include
-        self.packagesList = BaseListCtrl(self, columnNames=["Python Packages"], name="packages")
+        self.packagesList = BaseListCtrl(self, columnNames=[_("Python Packages")], name="packages")
         # A list control for the "excludes" option, a comma separated list of
         # modules to exclude
-        self.excludeList = BaseListCtrl(self, columnNames=["Python Modules"], name="excludes")
+        self.excludeList = BaseListCtrl(self, columnNames=[_("Python Modules")], name="excludes")
         # A list control for the "path" option, a comma separated list of
         # paths to search for modules
-        self.pathList = BaseListCtrl(self, columnNames=["Paths"], name="path")
+        self.pathList = BaseListCtrl(self, columnNames=[_("Paths")], name="path")
 
-        self.copyDepFiles = wx.CheckBox(self, -1, "Copy Dependent Files", name="copy_dependent_files")
-        self.appendScriptToExe = wx.CheckBox(self, -1, "Append Script To Executable", name="append_script_toexe")
-        self.appendScriptToLibrary = wx.CheckBox(self, -1, "Append Script To Library", name="append_script_tolibrary")
-        self.addManifest = wx.CheckBox(self, -1, "Create Manifest File (MSW)", name="create_manifest_file")
+        self.copyDepFiles = wx.CheckBox(self, -1, _("Copy Dependent Files"), name="copy_dependent_files")
+        self.appendScriptToExe = wx.CheckBox(self, -1, _("Append Script To Executable"), name="append_script_toexe")
+        self.appendScriptToLibrary = wx.CheckBox(self, -1, _("Append Script To Library"), name="append_script_tolibrary")
+        self.addManifest = wx.CheckBox(self, -1, _("Create Manifest File (MSW)"), name="create_manifest_file")
 
         self.icon = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, name="icon")
         self.initScriptPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, name="initScript")
@@ -168,19 +171,19 @@ class cx_FreezePanel(BaseBuilderPanel):
         
         # Add the VersionInfo text controls
         mainSizer.Add(self.label, 0, wx.ALL, 10)
-        version = wx.StaticText(self, -1, "Version")
+        version = wx.StaticText(self, -1, _("Version"))
         topSizer_1.Add(version, 0, wx.RIGHT|wx.BOTTOM, 2)
         topSizer_1.Add(self.versionTextCtrl, 0, 0, 0)
         topGridSizer.Add(topSizer_1, 1, flag, 5)
-        companyName = wx.StaticText(self, -1, "Description")
+        companyName = wx.StaticText(self, -1, _("Description"))
         topSizer_2.Add(companyName, 0, wx.RIGHT|wx.BOTTOM, 2)
         topSizer_2.Add(self.descriptionTextCtrl, 1, wx.EXPAND, 0)
         topGridSizer.Add(topSizer_2, 1, flag, 5)
-        copyright = wx.StaticText(self, -1, "Author")
+        copyright = wx.StaticText(self, -1, _("Author"))
         topSizer_3.Add(copyright, 0, wx.RIGHT|wx.BOTTOM, 2)
         topSizer_3.Add(self.authorTextCtrl, 1, wx.EXPAND, 0)
         topGridSizer.Add(topSizer_3, 1, flag, 5)
-        name = wx.StaticText(self, -1, "Program Name")
+        name = wx.StaticText(self, -1, _("Program Name"))
         topSizer_4.Add(name, 0, wx.RIGHT|wx.BOTTOM, 2)
         topSizer_4.Add(self.nameTextCtrl, 0, wx.EXPAND, 1)
         topGridSizer.Add(topSizer_4, 1, flag, 5)
@@ -190,21 +193,21 @@ class cx_FreezePanel(BaseBuilderPanel):
         targetSizer.Add(topGridSizer, 0, wx.EXPAND, 0)
         mainSizer.Add(targetSizer, 0, wx.ALL|wx.EXPAND, 5)
 
-        target = wx.StaticText(self, -1, "Exe Kind")
+        target = wx.StaticText(self, -1, _("Exe Kind"))
         commonSizer_6.Add(target, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_6.Add(self.targetCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_6, (0, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
             
-        script = wx.StaticText(self, -1, "Python Main Script")
+        script = wx.StaticText(self, -1, _("Python Main Script"))
         commonSizer_7.Add(script, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_7.Add(self.scriptPicker, 1, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_7, (0, 1), (1, 5), wx.ALL|wx.EXPAND, 5)
         
-        optimize = wx.StaticText(self, -1, "Optimize")
+        optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_1, (1, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
-        compress = wx.StaticText(self, -1, "Compressed")
+        compress = wx.StaticText(self, -1, _("Compressed"))
         commonSizer_2.Add(compress, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_2.Add(self.compressCombo, 0, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_2, (1, 1), (1, 1), wx.ALL|wx.EXPAND, 5)
@@ -256,10 +259,10 @@ class cx_FreezePanel(BaseBuilderPanel):
 
         otherOptionsSizer.Add((0, 10))
         
-        icon = wx.StaticText(self, -1, "Icon File")
+        icon = wx.StaticText(self, -1, _("Icon File"))
         pickerSizer_1.Add(icon, 0, wx.BOTTOM, 2)
         pickerSizer_1.Add(self.icon, 0, wx.EXPAND)
-        initScript = wx.StaticText(self, -1, "Initialization Script")
+        initScript = wx.StaticText(self, -1, _("Initialization Script"))
         pickerSizer_2.Add(initScript, 0, wx.BOTTOM, 2)
         pickerSizer_2.Add(self.initScriptPicker, 0, wx.EXPAND)
     
@@ -290,22 +293,22 @@ class cx_FreezePanel(BaseBuilderPanel):
 
         # check if the script file exists
         if not os.path.isfile(self.scriptPicker.GetPath()):
-            msg = "Python main script is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Python main script is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # check if the initialization file is not empty and if it exists
         initScript = self.initScriptPicker.GetPath()
         if initScript and not os.path.isfile(initScript):
-            msg = "Initialization file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Initialization file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # check if the icon file is not empty and if it exists
         icon = self.icon.GetPath()
         if icon and not os.path.isfile(icon):
-            msg = "Icon file is not a valid file."
-            self.MainFrame.RunError("Error", msg, True)
+            msg = _("Icon file is not a valid file.")
+            self.MainFrame.RunError(2, msg, True)
             return False
 
         # Everything is ok, let's go compiling...
@@ -322,7 +325,7 @@ class cx_FreezePanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Generating "%s" setup script...' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')% project.GetName())
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -377,12 +380,12 @@ class cx_FreezePanel(BaseBuilderPanel):
                     if not item.strip() or not distChoice:
                         item = "dist"
                         if distChoice:
-                            self.MainFrame.SendMessage("Warning", 'Empty dist_dir option. Using default value "dist" ')
+                            self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
                 elif key == "target_name":
                     if not item.strip() or not targetChoice:
                         item = programName + extension
                         if targetChoice:
-                            self.MainFrame.SendMessage("Warning", 'Empty targetName option. Using Python script name')
+                            self.MainFrame.SendMessage(1, _('Empty targetName option. Using Python script name'))
                 if not item.strip():
                     item = None
                 else:
@@ -414,6 +417,6 @@ class cx_FreezePanel(BaseBuilderPanel):
         setupScript += _cx_Freeze_target % setupDict
         
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage("Message", 'Setup script for "%s" succesfully created' % project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')% project.GetName())
         return setupScript, buildDir
 

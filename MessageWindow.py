@@ -10,7 +10,9 @@ import wx.animate
 
 from Widgets import BaseListCtrl
 from Utilities import opj, shortNow
-from Constants import _iconMapper
+
+# Get the I18N things
+_ = wx.GetTranslation
 
 
 class MessageWindow(wx.Panel):
@@ -30,7 +32,7 @@ class MessageWindow(wx.Panel):
         self.MainFrame = wx.GetTopLevelParent(self)        
 
         # Add the fancy list at the bottom
-        self.list = BaseListCtrl(self, columnNames=["Time        ", "Compiler Messages"],
+        self.list = BaseListCtrl(self, columnNames=[_("Time        "), _("Compiler Messages")],
                                  name="messages")
 
         # Create 3 themed bitmap buttons
@@ -39,9 +41,9 @@ class MessageWindow(wx.Panel):
         killBmp = self.MainFrame.CreateBitmap("kill")
 
         # This is a bit tailored over py2exe, but it's the only one I know
-        self.dryrun = buttons.ThemedGenBitmapTextButton(self, -1, dryBmp, " Dry Run ", size=(-1, 25))
-        self.compile = buttons.ThemedGenBitmapTextButton(self, -1, compileBmp, " Compile ", size=(-1, 25))
-        self.kill = buttons.ThemedGenBitmapTextButton(self, -1, killBmp, " Kill ", size=(-1, 25))
+        self.dryrun = buttons.ThemedGenBitmapTextButton(self, -1, dryBmp, _(" Dry Run "), size=(-1, 25))
+        self.compile = buttons.ThemedGenBitmapTextButton(self, -1, compileBmp, _(" Compile "), size=(-1, 25))
+        self.kill = buttons.ThemedGenBitmapTextButton(self, -1, killBmp, _(" Kill "), size=(-1, 25))
         # The animation control
         ani = wx.animate.Animation(opj(self.MainFrame.installDir +"/images/throbber.gif"))
         self.throb = wx.animate.AnimationCtrl(self, -1, ani)
@@ -147,7 +149,7 @@ class MessageWindow(wx.Panel):
 
         menu = wx.Menu()
         # This pops up the "clear all" message
-        item = wx.MenuItem(menu, self.popupId, "Clear History")
+        item = wx.MenuItem(menu, self.popupId, _("Clear History"))
         bmp = self.MainFrame.CreateBitmap("history_clear")
         item.SetBitmap(bmp)
         menu.AppendItem(item)        
@@ -215,9 +217,9 @@ class MessageWindow(wx.Panel):
         @param currentTime: the actual formatted time.
         """
 
-        indx = self.list.InsertImageStringItem(sys.maxint, "", _iconMapper["Error"])
+        indx = self.list.InsertImageStringItem(sys.maxint, "", 2)
         self.list.SetStringItem(indx, 1, currentTime)
-        self.list.SetStringItem(indx, 2, "Error Message")
+        self.list.SetStringItem(indx, 2, _("Error Message"))
         self.list.SetItemBackgroundColour(indx, wx.NamedColor("yellow"))
         font = self.list.GetFont()
         font.SetWeight(wx.BOLD)
@@ -238,10 +240,15 @@ class MessageWindow(wx.Panel):
         # Get the current time slightly dirrently formatted
         currentTime = shortNow()
 
+        # Delete the "." at the end of the message (if any)
+        message = message.strip()
+        if message.endswith("."):
+            message = message[:-1]
+            
         # Wrap the message... error messages are often too long
         # to be seen in the list control
         width = self.GetMaxWidth()
-        if kind == "Error":
+        if kind == 2:  # is an error
             # Insert the correct icon (message, error, etc...) in the first column
             indx = self.InsertError(currentTime)
             messages = message.splitlines()
@@ -253,7 +260,7 @@ class MessageWindow(wx.Panel):
 
         for msg in message:
             # Insert the correct icon (message, error, etc...) in the first column
-            indx = self.list.InsertImageStringItem(sys.maxint, "", _iconMapper[kind])
+            indx = self.list.InsertImageStringItem(sys.maxint, "", kind)
             # Insert the current time and the message
             self.list.SetStringItem(indx, 1, currentTime)
             self.list.SetStringItem(indx, 2, msg)
@@ -278,7 +285,7 @@ class MessageWindow(wx.Panel):
         
         # Insert the correct icon (message, error, etc...) in the first column
         kind, msg = self.list.lastMessage
-        indx = self.list.InsertImageStringItem(sys.maxint, "", _iconMapper[kind])
+        indx = self.list.InsertImageStringItem(sys.maxint, "", kind)
         # Insert the current time and the message
         self.list.SetStringItem(indx, 1, currentTime)
         self.list.SetStringItem(indx, 2, msg)

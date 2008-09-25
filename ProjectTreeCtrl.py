@@ -7,6 +7,9 @@ import wx.lib.customtreectrl as CT
 from Widgets import PyBusyInfo
 from Constants import _treeIcons
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class ProjectTreeCtrl(CT.CustomTreeCtrl):
     """
@@ -36,7 +39,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         self.BindEvents()
 
         # Add a root: if someone has a fancier name for the root item, let me know :-D
-        self.rootItem = self.AddRoot("My Projects", image=0)
+        self.rootItem = self.AddRoot(_("My Projects"), image=0)
         # Make it bigger, so it is clear that it is a root item
         self.SetItemFont(self.rootItem, wx.Font(10, wx.SWISS, wx.NORMAL, wx.BOLD, False))
 
@@ -211,11 +214,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The user clicked on the root item
             # There are a couple of options here: either add a new project or
             # delete all the existing projects from the tree
-            item = wx.MenuItem(menu, self.popupIds[0], "New project...")
+            item = wx.MenuItem(menu, self.popupIds[0], _("New project..."))
             bmp = self.MainFrame.CreateBitmap("project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = wx.MenuItem(menu, self.popupIds[1], "Delete all projects")
+            item = wx.MenuItem(menu, self.popupIds[1], _("Delete all projects"))
             bmp = self.MainFrame.CreateBitmap("delete_all")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
@@ -228,27 +231,27 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The user clicked on one of children (the project)
             # There are a couple of options here: either load the selected projects or
             # delete them
-            item = wx.MenuItem(menu, self.popupIds[2], "Load project(s)")
+            item = wx.MenuItem(menu, self.popupIds[2], _("Load project(s)"))
             bmp = self.MainFrame.CreateBitmap("load_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = wx.MenuItem(menu, self.popupIds[3], "Edit project name")
+            item = wx.MenuItem(menu, self.popupIds[3], _("Edit project name"))
             bmp = self.MainFrame.CreateBitmap("project_edit")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
             menu.AppendSeparator()
-            item = wx.MenuItem(menu, self.popupIds[4], "Delete project(s)")
+            item = wx.MenuItem(menu, self.popupIds[4], _("Delete project(s)"))
             bmp = self.MainFrame.CreateBitmap("delete_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             menu.AppendSeparator()
-            item = wx.MenuItem(menu, self.popupIds[5], "Import from file...")
+            item = wx.MenuItem(menu, self.popupIds[5], _("Import from file..."))
             bmp = self.MainFrame.CreateBitmap("importproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
-            item = wx.MenuItem(menu, self.popupIds[6], "Copy to new project...")
+            item = wx.MenuItem(menu, self.popupIds[6], _("Copy to new project..."))
             bmp = self.MainFrame.CreateBitmap("copyproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
@@ -269,8 +272,8 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             selections = self.GetSelections()
             if not selections:
                 return
-            msg = "Are you sure you want to delete the selected projects from your database?"
-            answer = self.MainFrame.RunError("Question", msg)
+            msg = _("Are you sure you want to delete the selected project(s) from your database?")
+            answer = self.MainFrame.RunError(3, msg)
             if answer != wx.ID_YES:
                 # No, user doesn't want to do that
                 return
@@ -291,8 +294,8 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             self.NewProject()
         elif event.GetId() == self.popupIds[1]:
             # User wants to delete all the children projects
-            msg = "Are you sure you want to delete all the projects from your database?"
-            answer = self.MainFrame.RunError("Question", msg)
+            msg = _("Are you sure you want to delete all the projects from your database?")
+            answer = self.MainFrame.RunError(3, msg)
             if answer != wx.ID_YES:
                 # No, user doesn't want to do that
                 return
@@ -306,8 +309,8 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             self.EditLabel(selections[0])
         elif event.GetId() == self.popupIds[4]:
             # The user wants to delete all the selected project(s)
-            msg = "Are you sure you want to delete the selected projects from your database?"
-            answer = self.MainFrame.RunError("Question", msg)
+            msg = _("Are you sure you want to delete the selected project(s) from your database?")
+            answer = self.MainFrame.RunError(3, msg)
             if answer != wx.ID_YES:
                 # No, user doesn't want to do that
                 return
@@ -356,7 +359,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         # Generate a unique project name, not conflicting with the existing ones
         uniqueName = self.GetUniqueProjectName()
         # Ask the user to enter a project name
-        dlg = wx.TextEntryDialog(self.MainFrame, "Enter a name for the new project:", "New project")
+        dlg = wx.TextEntryDialog(self.MainFrame, _("Enter a name for the new project:"), _("New project"))
         dlg.SetValue(uniqueName)
         
         if dlg.ShowModal() != wx.ID_OK:
@@ -419,12 +422,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
         if not projectName.strip():
             # Project name is empty?
-            self.MainFrame.RunError("Error", "Invalid project name (empty string).")
+            self.MainFrame.RunError(2, _("Invalid project name (empty string)."))
             return False
 
         if self.IsProjectExisting(projectName, usePyData):
             # This project already exists
-            self.MainFrame.RunError("Error", "The project name you chose already exists.")
+            self.MainFrame.RunError(2, _("The project name you chose already exists."))
             return False
 
         # Project name valid!
@@ -581,7 +584,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         fileName = self.GetItemText(self.selectedItem)
 
         # Launch the file dialog
-        dlg = wx.FileDialog(self, message="Please select a GUI2Exe project file...",
+        dlg = wx.FileDialog(self.MainFrame, message=_("Please select a GUI2Exe project file..."),
                             defaultFile=fileName, wildcard="All files (*.*)|*.*",
                             style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
         dlg.CenterOnParent()
@@ -601,11 +604,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         fid.close()
 
         try:
-            # Load the project (stil shaky)
+            # Load the project
             project = self.MainFrame.dataBase.LoadProject(fileName)
         except:
-            # Something went wrong, the file content hasn't been recognized
-            self.MainFrame.RunError("Error", "This project has not been saved yet. Please save it and retry.")
+            # Something went wrong, the project hasn't been saved yet
+            self.MainFrame.RunError(2, _("This project has not been saved yet. Please save it and retry."))
             return
 
         try:
@@ -617,11 +620,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             projectDict = lcls["projectDict"]
         except:
             # Corrupted file content
-            self.MainFrame.RunError("Error", "Invalid or corrupted project file.")
+            self.MainFrame.RunError(2, _("Invalid or corrupted project file."))
             return
 
         # Update the project with the information contained in the file
-        busy = PyBusyInfo("Updating project from file...")
+        busy = PyBusyInfo(_("Updating project from file..."))
         wx.SafeYield()
 
         # Set the configurations for every compiler    
@@ -649,14 +652,14 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # Load the project
             project = self.MainFrame.dataBase.LoadProject(itemText)
         except:
-            # Something went wrong, the file content hasn't been recognized
-            self.MainFrame.RunError("Error", "This project has not been saved yet. Please save it and retry.")
+            # Something went wrong, the project hasn't been saved yet
+            self.MainFrame.RunError(2, _("This project has not been saved yet. Please save it and retry."))
             return
 
         # Generate a unique project name, not conflicting with the existing ones
         uniqueName = self.GetUniqueProjectName()
         # Ask the user to enter a project name
-        dlg = wx.TextEntryDialog(self.MainFrame, "Enter a name for the new project:", "New project")
+        dlg = wx.TextEntryDialog(self.MainFrame, _("Enter a name for the new project:"), _("New project"))
         dlg.SetValue(uniqueName)
         
         if dlg.ShowModal() != wx.ID_OK:
@@ -670,7 +673,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The selected project name already exists!
             return
 
-        busy = PyBusyInfo("Copying existing project configuration...")
+        busy = PyBusyInfo(_("Copying existing project configuration..."))
         wx.SafeYield(self)
         
         # Go with the new project
@@ -682,6 +685,6 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         del busy
         wx.SafeYield(self)
 
-        self.MainFrame.RunError("Message", "Project %s succesfully copied to %s"%(project.GetName(), projectName))
+        self.MainFrame.RunError(2, _("Project %s succesfully copied to %s")%(project.GetName(), projectName))
 
         

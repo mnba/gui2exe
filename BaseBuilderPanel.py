@@ -5,11 +5,14 @@ import wx.lib.scrolledpanel as scrolled
 
 from Constants import _toolTips
 
-# Ijmport our fancy tooltips
+# Import our fancy tooltips
 if wx.Platform != "__WXMAC__":
     from Widgets import TransientPopup
 else:
     from Widgets import MacTransientPopup as TransientPopup
+
+# Get the I18N things
+_ = wx.GetTranslation
 
 
 class BaseBuilderPanel(scrolled.ScrolledPanel):
@@ -74,9 +77,12 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
 
         for child in self.GetChildren():
+            # For the Mac PList buttons
+            childName = child.GetName()
             if isinstance(child, wx.TextCtrl) or isinstance(child, wx.combo.OwnerDrawnComboBox) \
                or isinstance(child, wx.CheckBox) or isinstance(child, wx.FilePickerCtrl) \
-               or isinstance(child, wx.RadioButton) or isinstance(child, wx.ListCtrl):
+               or isinstance(child, wx.RadioButton) or isinstance(child, wx.ListCtrl) \
+               or childName in ["plistCode", "plistRemove"]:
                 child.Bind(wx.EVT_ENTER_WINDOW, self.OnEnterWindow)
                 child.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeaveWindow)
                 
@@ -264,7 +270,7 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         @param creationDate: the creation data of the project (as it is in the database).
         """
                 
-        self.label.SetLabel("%s options for: %s (Created: %s)"%(self.GetName(), projectName, creationDate))
+        self.label.SetLabel(_("%s options for: %s (Created: %s)")%(self.GetName(), projectName, creationDate))
         self.label.Refresh()
 
 
@@ -298,7 +304,7 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
                 if key == "onedir":
                     if onefile:
                         continue
-                elif key in ["plistCode", "plist_code"]:
+                elif key in ["plistCode", "plist_code", "plistRemove"]:
                     # Mac py2app things, used later
                     continue
                 

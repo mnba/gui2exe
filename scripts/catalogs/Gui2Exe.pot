@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-24 20:28-0500\n"
+"POT-Creation-Date: 2008-09-25 12:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,268 +16,1465 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../Widgets.py:2733
+#: Py2ExePanel.py:116
+msgid " "
+msgstr ""
+
+#: Py2AppPanel.py:82
+msgid " Add/Edit"
+msgstr ""
+
+#: Widgets.py:2733
 msgid " Append "
 msgstr ""
 
-#: ../Widgets.py:1636 ../Widgets.py:1777 ../Widgets.py:2302 ../Widgets.py:2746
+#: Widgets.py:1636 Widgets.py:1777 Widgets.py:2302 Widgets.py:2746
 msgid " Cancel "
 msgstr ""
 
-#: ../Widgets.py:1181
+#: MessageWindow.py:45
+msgid " Compile "
+msgstr ""
+
+#: Widgets.py:1181
 msgid " Discard "
 msgstr ""
 
-#: ../Widgets.py:2301
+#: MessageWindow.py:44
+msgid " Dry Run "
+msgstr ""
+
+#: Widgets.py:2301
 msgid " Export to clipboard "
 msgstr ""
 
-#: ../Widgets.py:1635 ../Widgets.py:1776 ../Widgets.py:2745
+#: MessageWindow.py:46
+msgid " Kill "
+msgstr ""
+
+#: Widgets.py:1635 Widgets.py:1776 Widgets.py:2745
 msgid " Ok "
 msgstr ""
 
-#: ../Widgets.py:1180
+#: Py2AppPanel.py:84
+msgid " Remove"
+msgstr ""
+
+#: Widgets.py:1180
 msgid " Save "
 msgstr ""
 
-#: ../Widgets.py:2300
+#: Widgets.py:2300
 msgid " Save to file... "
 msgstr ""
 
-#: ../Widgets.py:2869 ../Widgets.py:2914
-#, python-format
+#: Widgets.py:2869 Widgets.py:2914
+#, possible-python-format
 msgid "%d key/value pairs"
 msgstr ""
 
-#: ../Widgets.py:921
+#: BaseBuilderPanel.py:273
+#, possible-python-format
+msgid "%s options for: %s (Created: %s)"
+msgstr ""
+
+#: GUI2Exe.py:265
+msgid "&About GUI2Exe..."
+msgstr ""
+
+#: GUI2Exe.py:251
+msgid "&Binary dependencies\tCtrl+B"
+msgstr ""
+
+#: GUI2Exe.py:242
+msgid "&Builds"
+msgstr ""
+
+#: GUI2Exe.py:246
+msgid "&Check setup script syntax\tCtrl+X"
+msgstr ""
+
+#: GUI2Exe.py:264
+msgid "&Contact the Author..."
+msgstr ""
+
+#: GUI2Exe.py:225
+msgid "&Export setup file...\tCtrl+E"
+msgstr ""
+
+#: GUI2Exe.py:218
+msgid "&File"
+msgstr ""
+
+#: GUI2Exe.py:255
+msgid "&Help"
+msgstr ""
+
+#: GUI2Exe.py:241
+msgid "&Insert post compilation code...\tCtrl+I"
+msgstr ""
+
+#: GUI2Exe.py:250
+msgid "&Missing modules\tCtrl+M"
+msgstr ""
+
+#: GUI2Exe.py:219
+msgid "&New project...\tCtrl+N"
+msgstr ""
+
+#: GUI2Exe.py:228
+msgid "&Options"
+msgstr ""
+
+#: GUI2Exe.py:227
+msgid "&Quit\tCtrl+Q"
+msgstr ""
+
+#: GUI2Exe.py:234
+msgid "&Recurse sub-dirs for data_files option"
+msgstr ""
+
+#: GUI2Exe.py:222
+msgid "&Save project\tCtrl+S"
+msgstr ""
+
+#: GUI2Exe.py:223
+msgid "&Save project as...\tCtrl+Shift+S"
+msgstr ""
+
+#: GUI2Exe.py:243
+msgid "&Test executable\tCtrl+R"
+msgstr ""
+
+#: GUI2Exe.py:260
+msgid "&Tips and tricks\tF4"
+msgstr ""
+
+#: GUI2Exe.py:252
+msgid "&View"
+msgstr ""
+
+#: GUI2Exe.py:1048
+msgid ""
+"A new version of GUI2Exe is available!\n"
+"\n"
+"Please go to http://xoomer.alice.it/infinity77/main/GUI2Exe.html\n"
+"if you wish to upgrade."
+msgstr ""
+
+#: GUI2Exe.py:289
+msgid "About"
+msgstr ""
+
+#: GUI2Exe.py:265
+msgid "About GUI2Exe and the Creator..."
+msgstr ""
+
+#: GUI2Exe.py:240
+msgid "Add &custom code...\tCtrl+U"
+msgstr ""
+
+#: Widgets.py:921
 msgid "Add Data Files"
 msgstr ""
 
-#: ../Widgets.py:915
+#: Widgets.py:915
 msgid "Add Dll/Binary Files"
 msgstr ""
 
-#: ../Widgets.py:874
+#: Widgets.py:874
 msgid "Add Dylib/Frameworks"
 msgstr ""
 
-#: ../Widgets.py:289 ../Widgets.py:314
+#: Widgets.py:289 Widgets.py:314
 msgid "Add Item(s)"
 msgstr ""
 
-#: ../Widgets.py:909
+#: Widgets.py:909
 msgid "Add Python Modules"
 msgstr ""
 
-#: ../Widgets.py:912
+#: Widgets.py:912
 msgid "Add Python Packages"
 msgstr ""
 
-#: ../Widgets.py:501
+#: Widgets.py:501
 msgid "Add Python Script..."
 msgstr ""
 
-#: ../Widgets.py:906
+#: Widgets.py:906
 msgid "Add Python Scripts"
 msgstr ""
 
-#: ../Widgets.py:877
+#: Widgets.py:877
 msgid "Add XC Data Models"
 msgstr ""
 
-#: ../Widgets.py:2723
+#: GUI2Exe.py:219
+msgid "Add a new project to the project tree"
+msgstr ""
+
+#: Widgets.py:2723
 msgid "Add by Python code"
 msgstr ""
 
-#: ../Widgets.py:1113
+#: GUI2Exe.py:241
+msgid "Add custom code to be executed after the building process"
+msgstr ""
+
+#: GUI2Exe.py:240
+msgid "Add custom code to the setup script"
+msgstr ""
+
+#: Widgets.py:1113
 msgid "Add items to the list"
 msgstr ""
 
-#: ../Widgets.py:2728
+#: Widgets.py:2728
 msgid "Add your key/value dictionary in Python code:"
 msgstr ""
 
-#: ../Widgets.py:1001
+#: cx_FreezePanel.py:92
+msgid "Append Script To Executable"
+msgstr ""
+
+#: cx_FreezePanel.py:93
+msgid "Append Script To Library"
+msgstr ""
+
+#: ProjectTreeCtrl.py:297
+msgid "Are you sure you want to delete all the projects from your database?"
+msgstr ""
+
+#: ProjectTreeCtrl.py:275 ProjectTreeCtrl.py:312
+msgid "Are you sure you want to delete the selected project(s) from your database?"
+msgstr ""
+
+#: GUI2Exe.py:1054
+msgid "At present you have the latest version of GUI2Exe."
+msgstr ""
+
+#: GUI2Exe.py:1017
+msgid "Attempting to connect to the internet..."
+msgstr ""
+
+#: cx_FreezePanel.py:182
+msgid "Author"
+msgstr ""
+
+#: GUI2Exe.py:1070
+msgid ""
+"Author: Andrea Gavana @ 01 Apr 2007\n"
+"\n"
+msgstr ""
+
+#: GUI2Exe.py:229
+msgid "AutoSaves your work every minute"
+msgstr ""
+
+#: GUI2Exe.py:940
+msgid "Binary"
+msgstr ""
+
+#: Py2ExePanel.py:120
+msgid "Bitmap Path"
+msgstr ""
+
+#: Py2ExePanel.py:43
+msgid "Bitmap Resources"
+msgstr ""
+
+#: Widgets.py:1001
 msgid "Browse For Folders..."
 msgstr ""
 
-#: ../Widgets.py:2384
-#, python-format
+#: PyInstallerPanel.py:107
+msgid "Build Optimized"
+msgstr ""
+
+#: Widgets.py:2384
+#, possible-python-format
 msgid "Build output file %s successfully saved"
 msgstr ""
 
-#: ../Widgets.py:2336
-#, python-format
+#: Widgets.py:2336
+#, possible-python-format
 msgid ""
 "Build output text for %(projectName)s (%(compiler)s):\n"
 "Built on %(header)s"
 msgstr ""
 
-#: ../Widgets.py:2403
+#: Widgets.py:2403
 msgid "Build output text successfully copied to the clipboard"
 msgstr ""
 
-#: ../Widgets.py:1962
+#: ExecutableProperties.py:77
+msgid "Builder"
+msgstr ""
+
+#: Py2ExePanel.py:234
+msgid "Bundle Files"
+msgstr ""
+
+#: Widgets.py:1962
 msgid "Busy"
 msgstr ""
 
-#: ../Widgets.py:978
+#: Process.py:214
+msgid "Byte-compiling Python files..."
+msgstr ""
+
+#: GUI2Exe.py:237
+msgid "Change &Python version...\tCtrl+H"
+msgstr ""
+
+#: GUI2Exe.py:262
+msgid "Check for &upgrade\tF9"
+msgstr ""
+
+#: GUI2Exe.py:262
+msgid "Check for a GUI2Exe upgrade"
+msgstr ""
+
+#: GUI2Exe.py:246
+msgid "Check the syntax of the auto-generated setup script"
+msgstr ""
+
+#: Widgets.py:978
 msgid "Choose a data files directory:"
 msgstr ""
 
-#: ../Widgets.py:1839
+#: Widgets.py:1839
 msgid "Choose one or more folders:"
 msgstr ""
 
-#: ../Widgets.py:2857
+#: GUI2Exe.py:791
+msgid "Choose the PyInstaller location:"
+msgstr ""
+
+#: Widgets.py:2857
 msgid "Class          "
 msgstr ""
 
-#: ../Widgets.py:300
+#: GUI2Exe.py:232
+msgid "Clea&n \"dist\" directory"
+msgstr ""
+
+#: GUI2Exe.py:493
+msgid "Clean \"dist\" directory"
+msgstr ""
+
+#: GUI2Exe.py:232
+msgid "Clean the distribution folder at every compilation"
+msgstr ""
+
+#: GUI2Exe.py:1548
+msgid "Cleaning the distribution folder..."
+msgstr ""
+
+#: MessageWindow.py:152
+msgid "Clear History"
+msgstr ""
+
+#: Widgets.py:300
 msgid "Clear all"
 msgstr ""
 
-#: ../Widgets.py:1623
+#: bbFreezePanel.py:35 cx_FreezePanel.py:35 Py2AppPanel.py:38
+#: Py2ExePanel.py:35 PyInstallerPanel.py:39
+msgid "Common Options"
+msgstr ""
+
+#: Py2ExePanel.py:56
+msgid "Company Name"
+msgstr ""
+
+#: GUI2Exe.py:1650
+msgid "Compilation killed by user"
+msgstr ""
+
+#: MessageWindow.py:35
+msgid "Compiler Messages"
+msgstr ""
+
+#: GUI2Exe.py:259
+msgid "Compiler s&witches\tF3"
+msgstr ""
+
+#: bbFreezePanel.py:149 cx_FreezePanel.py:210 Py2ExePanel.py:230
+msgid "Compressed"
+msgstr ""
+
+#: PyInstallerPanel.py:175
+msgid "Compression Level"
+msgstr ""
+
+#: PyInstallerPanel.py:65
+msgid "Console Application"
+msgstr ""
+
+#: GUI2Exe.py:264
+msgid "Contact Andrea Gavana by e-mail"
+msgstr ""
+
+#: cx_FreezePanel.py:91
+msgid "Copy Dependent Files"
+msgstr ""
+
+#: ProjectTreeCtrl.py:254
+msgid "Copy to new project..."
+msgstr ""
+
+#: ProjectTreeCtrl.py:676
+msgid "Copying existing project configuration..."
+msgstr ""
+
+#: Process.py:216
+msgid "Copying files..."
+msgstr ""
+
+#: Py2ExePanel.py:56
+msgid "Copyrights"
+msgstr ""
+
+#: bbFreezePanel.py:71 cx_FreezePanel.py:94 PyInstallerPanel.py:108
+msgid "Create Manifest File (MSW)"
+msgstr ""
+
+#: GUI2Exe.py:1319
+msgid "Creating new project..."
+msgstr ""
+
+#: Py2ExePanel.py:303
+msgid "Custom Boot Script"
+msgstr ""
+
+#: Py2ExePanel.py:336
+msgid "Custom boot file is not a valid file."
+msgstr ""
+
+#: Py2ExePanel.py:39
+msgid "DLL Excludes"
+msgstr ""
+
+#: Widgets.py:1623
 msgid "DLL Name"
 msgstr ""
 
-#: ../Widgets.py:1623
+#: Py2ExePanel.py:109
+msgid "DLL Names"
+msgstr ""
+
+#: Widgets.py:1623
 msgid "DLL Path"
 msgstr ""
 
-#: ../Widgets.py:295
+#: PyInstallerPanel.py:43
+msgid "DLL/Binary Excludes"
+msgstr ""
+
+#: PyInstallerPanel.py:44
+msgid "DLL/Binary Includes"
+msgstr ""
+
+#: Py2ExePanel.py:41 PyInstallerPanel.py:45
+msgid "Data Files"
+msgstr ""
+
+#: DataBase.py:61
+msgid "Database file is corrupted: using backup file"
+msgstr ""
+
+#: GUI2Exe.py:231
+msgid "De&lete \"build\" directory"
+msgstr ""
+
+#: PyInstallerPanel.py:59
+msgid "Debug"
+msgstr ""
+
+#: GUI2Exe.py:487
+msgid "Delete \"build\" directory"
+msgstr ""
+
+#: ProjectTreeCtrl.py:221
+msgid "Delete all projects"
+msgstr ""
+
+#: ProjectTreeCtrl.py:244
+msgid "Delete project(s)"
+msgstr ""
+
+#: Widgets.py:295
 msgid "Delete selected"
 msgstr ""
 
-#: ../Widgets.py:797
+#: GUI2Exe.py:231
+msgid "Delete the build folder at every compilation"
+msgstr ""
+
+#: cx_FreezePanel.py:178
+msgid "Description"
+msgstr ""
+
+#: Py2ExePanel.py:116
+msgid "Directory"
+msgstr ""
+
+#: Widgets.py:797
 msgid "Directory Name"
 msgstr ""
 
-#: ../Widgets.py:1240
-msgid "Enter your custom code below and it will be inserted inside the\n"
+#: bbFreezePanel.py:59 cx_FreezePanel.py:74 Py2AppPanel.py:61
+#: Py2ExePanel.py:89
+msgid "Dist Directory"
 msgstr ""
 
-#: ../Widgets.py:810
+#: PyInstallerPanel.py:192
+msgid "Dist Directory Name"
+msgstr ""
+
+#: Py2AppPanel.py:42
+msgid "Dylib/Frameworks Excludes"
+msgstr ""
+
+#: Py2AppPanel.py:44
+msgid "Dylib/Frameworks Includes"
+msgstr ""
+
+#: Py2AppPanel.py:95 Py2AppPanel.py:101
+msgid "Dylib/Frameworks Names"
+msgstr ""
+
+#: ProjectTreeCtrl.py:238
+msgid "Edit project name"
+msgstr ""
+
+#: Process.py:175
+#, possible-python-format
+msgid "Elapsed time for the process: %02d:%02d:%02d"
+msgstr ""
+
+#: bbFreezePanel.py:263 cx_FreezePanel.py:383 Py2AppPanel.py:388
+#: Py2ExePanel.py:409
+msgid "Empty dist_dir option. Using default value \"dist\""
+msgstr ""
+
+#: cx_FreezePanel.py:388
+msgid "Empty targetName option. Using Python script name"
+msgstr ""
+
+#: GUI2Exe.py:963
+msgid "Enter a name for the new configuration:"
+msgstr ""
+
+#: ProjectTreeCtrl.py:362 ProjectTreeCtrl.py:662
+msgid "Enter a name for the new project:"
+msgstr ""
+
+#: Widgets.py:1240
+msgid ""
+"Enter your custom code below and it will be inserted inside the\n"
+"Setup script. Note that you can use as 'keywords' also the compiler\n"
+"options like data_files, ignores and icon_resources."
+msgstr ""
+
+#: GUI2Exe.py:1288
 msgid "Error"
 msgstr ""
 
-#: ../Widgets.py:1848
+#: MessageWindow.py:222
+msgid "Error Message"
+msgstr ""
+
+#: bbFreezePanel.py:37 cx_FreezePanel.py:39 Py2AppPanel.py:41
+#: Py2ExePanel.py:38 PyInstallerPanel.py:41
+msgid "Excludes"
+msgstr ""
+
+#: bbFreezePanel.py:135 cx_FreezePanel.py:196 Py2ExePanel.py:54
+msgid "Exe Kind"
+msgstr ""
+
+#: cx_FreezePanel.py:68 Py2ExePanel.py:55 PyInstallerPanel.py:173
+msgid "Executable Name"
+msgstr ""
+
+#: GUI2Exe.py:173
+msgid "Executable Properties"
+msgstr ""
+
+#: GUI2Exe.py:1745
+msgid "Executable terminated with errors or warnings"
+msgstr ""
+
+#: GUI2Exe.py:227
+msgid "Exit GUI2Exe"
+msgstr ""
+
+#: GUI2Exe.py:225
+msgid "Export the Setup.py file"
+msgstr ""
+
+#: Py2AppPanel.py:209
+msgid "Extension"
+msgstr ""
+
+#: GUI2Exe.py:577
+#, possible-python-format
+msgid "File %s successfully saved"
+msgstr ""
+
+#: PyInstallerPanel.py:95 PyInstallerPanel.py:96 PyInstallerPanel.py:100
+msgid "File Name"
+msgstr ""
+
+#: ExecutableProperties.py:77
+msgid "Files     "
+msgstr ""
+
+#: Py2AppPanel.py:108 Py2ExePanel.py:116
+msgid "Files Path"
+msgstr ""
+
+#: Widgets.py:1848
 msgid "Filter file extensions using wildcard separated by a comma:"
 msgstr ""
 
-#: ../Widgets.py:2315
-msgid "Full Build Ouput Dialog"
+#: Process.py:222
+msgid "Filtering Dependencies..."
 msgstr ""
 
-#: ../Widgets.py:2060
+#: Process.py:218
+msgid "Finding required modules..."
+msgstr ""
+
+#: PyInstallerPanel.py:104
+msgid "Force Execpv"
+msgstr ""
+
+#: Widgets.py:2315
+msgid "Full Build Output Dialog"
+msgstr ""
+
+#: GUI2Exe.py:257
+msgid "GUI2Exe &API\tF2"
+msgstr ""
+
+#: GUI2Exe.py:256
+msgid "GUI2Exe &help\tF1"
+msgstr ""
+
+#: Widgets.py:2060
 msgid "GUI2Exe Busy Message"
 msgstr ""
 
-#: ../Widgets.py:1160
+#: Widgets.py:1160
 msgid "GUI2Exe Code Viewer"
 msgstr ""
 
-#: ../Widgets.py:2520
+#: Widgets.py:2520
 msgid "GUI2Exe Help Tip"
 msgstr ""
 
-#: ../Widgets.py:2472 ../Widgets.py:2524
-#, python-format
+#: Widgets.py:2472 Widgets.py:2524
+#, possible-python-format
 msgid "GUI2Exe Help Tip (%s)"
 msgstr ""
 
-#: ../Widgets.py:810
+#: GUI2Exe.py:170
+msgid "GUI2Exe Projects"
+msgstr ""
+
+#: GUI2Exe.py:1016
+msgid "GUI2Exe: Check for upgrade"
+msgstr ""
+
+#: bbFreezePanel.py:215 cx_FreezePanel.py:328 Py2AppPanel.py:340
+#: Py2ExePanel.py:354 PyInstallerPanel.py:302
+#, possible-python-format
+msgid "Generating \"%s\" setup script..."
+msgstr ""
+
+#: PyInstallerPanel.py:38
+msgid "Hooks Extensions"
+msgstr ""
+
+#: cx_FreezePanel.py:262 Py2AppPanel.py:225 PyInstallerPanel.py:179
+msgid "Icon File"
+msgstr ""
+
+#: Py2ExePanel.py:118 Py2ExePanel.py:122
+msgid "Icon Path"
+msgstr ""
+
+#: Py2ExePanel.py:42
+msgid "Icon Resources"
+msgstr ""
+
+#: cx_FreezePanel.py:310 Py2AppPanel.py:322 PyInstallerPanel.py:278
+msgid "Icon file is not a valid file."
+msgstr ""
+
+#: Py2ExePanel.py:118 Py2ExePanel.py:120 Py2ExePanel.py:122
+msgid "Id  "
+msgstr ""
+
+#: Py2ExePanel.py:40
+msgid "Ignores"
+msgstr ""
+
+#: ProjectTreeCtrl.py:249
+msgid "Import from file..."
+msgstr ""
+
+#: bbFreezePanel.py:70
+msgid "Include Python Interpreter"
+msgstr ""
+
+#: PyInstallerPanel.py:82
+msgid "Include Tk"
+msgstr ""
+
+#: bbFreezePanel.py:36 cx_FreezePanel.py:37 Py2AppPanel.py:39
+#: Py2ExePanel.py:36 PyInstallerPanel.py:40
+msgid "Includes"
+msgstr ""
+
+#: cx_FreezePanel.py:265
+msgid "Initialization Script"
+msgstr ""
+
+#: cx_FreezePanel.py:303
+msgid "Initialization file is not a valid file."
+msgstr ""
+
+#: GUI2Exe.py:803
+msgid "Invalid PyInstaller path: no file named 'Build.py' has been found."
+msgstr ""
+
+#: Widgets.py:810
 msgid "Invalid folder name."
 msgstr ""
 
-#: ../Widgets.py:1626
+#: ProjectTreeCtrl.py:623
+msgid "Invalid or corrupted project file."
+msgstr ""
+
+#: GUI2Exe.py:976
+msgid "Invalid perspective name!"
+msgstr ""
+
+#: ProjectTreeCtrl.py:425
+msgid "Invalid project name (empty string)."
+msgstr ""
+
+#: GUI2Exe.py:1748
+#, possible-python-format
+msgid ""
+"It appears that the executable generated errors in file:\n"
+"\n"
+"%s\n"
+"\n"
+"Do you want to examine the tracebacks?"
+msgstr ""
+
+#: GUI2Exe.py:220
+msgid "Load another GUI2Exe database file"
+msgstr ""
+
+#: ProjectTreeCtrl.py:234
+msgid "Load project(s)"
+msgstr ""
+
+#: Widgets.py:1626
 msgid "Main Module"
 msgstr ""
 
-#: ../Widgets.py:1693
-msgid "Make sure you have the license if you distribute any of them, and\n"
+#: Widgets.py:1693
+msgid ""
+"Make sure you have the license if you distribute any of them, and\n"
+"make sure you don't distribute files belonging to the operating system."
 msgstr ""
 
-#: ../Widgets.py:777
+#: GUI2Exe.py:1288 GUI2Exe.py:1291
+msgid "Message"
+msgstr ""
+
+#: GUI2Exe.py:179
+msgid "Messages And Actions"
+msgstr ""
+
+#: ProjectTreeCtrl.py:42
+msgid "My Projects"
+msgstr ""
+
+#: Widgets.py:777
 msgid "New data files"
 msgstr ""
 
-#: ../Widgets.py:685
+#: ProjectTreeCtrl.py:362 ProjectTreeCtrl.py:662
+msgid "New project"
+msgstr ""
+
+#: GUI2Exe.py:1331
+#, possible-python-format
+msgid "New project \"%s\" added"
+msgstr ""
+
+#: ProjectTreeCtrl.py:217
+msgid "New project..."
+msgstr ""
+
+#: Widgets.py:685
 msgid "New resources"
 msgstr ""
 
-#: ../Widgets.py:843
+#: cx_FreezePanel.py:49
+msgid "No Author"
+msgstr ""
+
+#: Widgets.py:843
 msgid "No Company"
 msgstr ""
 
-#: ../Widgets.py:844
+#: Widgets.py:844
 msgid "No Copyrights"
 msgstr ""
 
-#: ../Widgets.py:796
+#: cx_FreezePanel.py:48
+msgid "No Description"
+msgstr ""
+
+#: Py2ExePanel.py:322 PyInstallerPanel.py:264
+msgid "No Python scripts have been added."
+msgstr ""
+
+#: GUI2Exe.py:872
+msgid "No SyntaxError detected in the automatically generated Setup.py file."
+msgstr ""
+
+#: PyInstallerPanel.py:67
+msgid "One Directory"
+msgstr ""
+
+#: PyInstallerPanel.py:61
+msgid "One File"
+msgstr ""
+
+#: GUI2Exe.py:1566
+msgid "One instance of the building process is already running."
+msgstr ""
+
+#: GUI2Exe.py:257
+msgid "Opens the GUI2Exe API reference"
+msgstr ""
+
+#: GUI2Exe.py:256
+msgid "Opens the GUI2Exe help"
+msgstr ""
+
+#: bbFreezePanel.py:145 cx_FreezePanel.py:206 Py2AppPanel.py:221
+#: Py2ExePanel.py:226
+msgid "Optimize"
+msgstr ""
+
+#: GUI2Exe.py:475 GUI2Exe.py:481 GUI2Exe.py:487 GUI2Exe.py:493
+msgid "Options"
+msgstr ""
+
+#: Widgets.py:2791
+msgid "Or you can edit the properties below or add new ones:"
+msgstr ""
+
+#: bbFreezePanel.py:38 cx_FreezePanel.py:40 Py2AppPanel.py:47
+#: Py2ExePanel.py:45 PyInstallerPanel.py:46
+msgid "Other Options"
+msgstr ""
+
+#: Py2ExePanel.py:44
+msgid "Other Resources"
+msgstr ""
+
+#: Py2AppPanel.py:79
+msgid "PList Code"
+msgstr ""
+
+#: Py2AppPanel.py:229
+msgid "PList File"
+msgstr ""
+
+#: Py2AppPanel.py:315
+msgid "PList file is not a valid file."
+msgstr ""
+
+#: cx_FreezePanel.py:38 Py2AppPanel.py:40 Py2ExePanel.py:37
+msgid "Packages"
+msgstr ""
+
+#: PyInstallerPanel.py:42
+msgid "Packages (PKG)"
+msgstr ""
+
+#: cx_FreezePanel.py:36 PyInstallerPanel.py:87 PyInstallerPanel.py:93
+#: PyInstallerPanel.py:95 PyInstallerPanel.py:96 PyInstallerPanel.py:100
+msgid "Path"
+msgstr ""
+
+#: PyInstallerPanel.py:37
+msgid "Path Extensions"
+msgstr ""
+
+#: cx_FreezePanel.py:89 PyInstallerPanel.py:55 PyInstallerPanel.py:57
+msgid "Paths"
+msgstr ""
+
+#: GUI2Exe.py:965
+#, possible-python-format
+msgid "Perspective %d"
+msgstr ""
+
+#: Widgets.py:796
 msgid "Please enter the name of the folder for py2exe:"
 msgstr ""
 
-#: ../Widgets.py:755
+#: GUI2Exe.py:1071
+msgid "Please report any bug/request of improvements\n"
+msgstr ""
+
+#: ProjectTreeCtrl.py:587
+msgid "Please select a GUI2Exe project file..."
+msgstr ""
+
+#: Widgets.py:755
 msgid "Please select one or more directories..."
 msgstr ""
 
-#: ../Widgets.py:2856
+#: GUI2Exe.py:755
+msgid "Please select the new Python executable ..."
+msgstr ""
+
+#: cx_FreezePanel.py:186 Py2ExePanel.py:57
+msgid "Program Name"
+msgstr ""
+
+#: GUI2Exe.py:1366
+#, possible-python-format
+msgid "Project \"%s\" successfully loaded"
+msgstr ""
+
+#: ProjectTreeCtrl.py:688
+#, possible-python-format
+msgid "Project %s succesfully copied to %s"
+msgstr ""
+
+#: GUI2Exe.py:616
+#, possible-python-format
+msgid "Project %s successfully exported to file %s"
+msgstr ""
+
+#: GUI2Exe.py:1854 GUI2Exe.py:1868
+msgid "Project successfully updated from file."
+msgstr ""
+
+#: Widgets.py:2856
 msgid "Property List "
 msgstr ""
 
-#: ../Widgets.py:1667
+#: Widgets.py:1667
 msgid "Py2Exe Binary Dependencies"
 msgstr ""
 
-#: ../Widgets.py:1670
+#: Widgets.py:1670
 msgid "Py2Exe Missing Modules"
 msgstr ""
 
-#: ../Widgets.py:845
+#: Widgets.py:845
 msgid "Py2Exe Sample File"
 msgstr ""
 
-#: ../Widgets.py:1697
-msgid "Py2Exe thinks that these modules (and sub-modules) are missing.\n"
+#: Widgets.py:1697
+msgid ""
+"Py2Exe thinks that these modules (and sub-modules) are missing.\n"
+"Inclusion of one or more of them may allow your compiled application to run."
 msgstr ""
 
-#: ../Widgets.py:1114
+#: Py2AppPanel.py:50
+#, possible-python-format
+msgid "Py2app options for: %s (Created: %s)"
+msgstr ""
+
+#: Py2ExePanel.py:49
+#, possible-python-format
+msgid "Py2exe options for: %s (Created: %s)"
+msgstr ""
+
+#: PyInstallerPanel.py:50
+#, possible-python-format
+msgid "PyInstaller options for: %s (Created: %s)"
+msgstr ""
+
+#: PyInstallerPanel.py:387
+msgid ""
+"PyInstaller path has not been set.\n"
+"\n"
+"Please set the PyInstallerpath using the menu Options ==> Set PyInstaller path."
+msgstr ""
+
+#: bbFreezePanel.py:140 cx_FreezePanel.py:201 Py2AppPanel.py:213
+#: Py2ExePanel.py:54
+msgid "Python Main Script"
+msgstr ""
+
+#: bbFreezePanel.py:65 bbFreezePanel.py:68 cx_FreezePanel.py:80
+#: cx_FreezePanel.py:86 Py2AppPanel.py:89 Py2AppPanel.py:98 Py2ExePanel.py:100
+#: Py2ExePanel.py:106 Py2ExePanel.py:112 PyInstallerPanel.py:87
+#: PyInstallerPanel.py:90
+msgid "Python Modules"
+msgstr ""
+
+#: cx_FreezePanel.py:83 Py2AppPanel.py:92 Py2ExePanel.py:103
+#: PyInstallerPanel.py:93
+msgid "Python Packages"
+msgstr ""
+
+#: PyInstallerPanel.py:53
+msgid "Python Scripts"
+msgstr ""
+
+#: GUI2Exe.py:770
+#, possible-python-format
+msgid "Python executable changed from %s to %s"
+msgstr ""
+
+#: cx_FreezePanel.py:296 Py2AppPanel.py:308 Py2ExePanel.py:329
+msgid "Python main script is not a valid file."
+msgstr ""
+
+#: PyInstallerPanel.py:271
+#, possible-python-format
+msgid ""
+"Python script:\n"
+"\n"
+"%s\n"
+"\n"
+"Is not a valid file."
+msgstr ""
+
+#: GUI2Exe.py:1288 GUI2Exe.py:1295 GUI2Exe.py:1305
+msgid "Question"
+msgstr ""
+
+#: GUI2Exe.py:291
+msgid "Quit"
+msgstr ""
+
+#: GUI2Exe.py:234
+msgid "Recurse sub-directories for data_files option if checked"
+msgstr ""
+
+#: GUI2Exe.py:475
+msgid "Recurse sub-dirs for data_files option"
+msgstr ""
+
+#: Widgets.py:1114
 msgid "Remove items from the list"
 msgstr ""
 
-#: ../Widgets.py:2371
+#: Py2AppPanel.py:45
+msgid "Resources"
+msgstr ""
+
+#: GUI2Exe.py:287
+msgid "Restore"
+msgstr ""
+
+#: GUI2Exe.py:985
+#, possible-python-format
+msgid "Restore GUI configuration: %s"
+msgstr ""
+
+#: GUI2Exe.py:254
+msgid "Restore original &GUI\tCtrl+G"
+msgstr ""
+
+#: GUI2Exe.py:254
+msgid "Restore the original GUI appearance"
+msgstr ""
+
+#: Process.py:235 Process.py:240
+msgid "Running compilation steps..."
+msgstr ""
+
+#: GUI2Exe.py:253
+msgid "Save &panes configuration..."
+msgstr ""
+
+#: GUI2Exe.py:564 GUI2Exe.py:602
+msgid "Save file as ..."
+msgstr ""
+
+#: Widgets.py:2371
 msgid "Save file as..."
 msgstr ""
 
-#: ../Widgets.py:2725
-msgid "Select one item in the tree control below"
+#: GUI2Exe.py:253
+msgid "Save the current GUI panes configuration"
 msgstr ""
 
-#: ../Widgets.py:2768
+#: GUI2Exe.py:223
+msgid "Save the current project to a file"
+msgstr ""
+
+#: GUI2Exe.py:222
+msgid "Save the current project to database"
+msgstr ""
+
+#: GUI2Exe.py:964
+msgid "Saving panels configuration"
+msgstr ""
+
+#: PyInstallerPanel.py:47
+msgid "Scripts"
+msgstr ""
+
+#: Widgets.py:2725
+msgid "Select one item in the tree control below:"
+msgstr ""
+
+#: GUI2Exe.py:238
+msgid "Set P&yInstaller path...\tCtrl+Y"
+msgstr ""
+
+#: GUI2Exe.py:238
+msgid "Sets the PyInstaller installation path"
+msgstr ""
+
+#: Process.py:172
+msgid "Setup file succesfully compiled"
+msgstr ""
+
+#: bbFreezePanel.py:290 cx_FreezePanel.py:420 Py2AppPanel.py:429
+#: Py2ExePanel.py:476 PyInstallerPanel.py:446
+#, possible-python-format
+msgid "Setup script for \"%s\" succesfully created"
+msgstr ""
+
+#: GUI2Exe.py:248
+msgid "Show &full build output\tCtrl+F"
+msgstr ""
+
+#: GUI2Exe.py:260
+msgid "Show compilation tips and tricks"
+msgstr ""
+
+#: GUI2Exe.py:259
+msgid "Show compilers switches and common options"
+msgstr ""
+
+#: GUI2Exe.py:235
+msgid "Show t&ooltips"
+msgstr ""
+
+#: GUI2Exe.py:481
+msgid "Show tooltips"
+msgstr ""
+
+#: Widgets.py:2768
 msgid "Simple PList editor for py2app"
 msgstr ""
 
-#: ../Widgets.py:1626
+#: ExecutableProperties.py:77
+msgid "Size (MB)   "
+msgstr ""
+
+#: Process.py:220
+msgid "Skipping Python loaders/byte-compilation..."
+msgstr ""
+
+#: GUI2Exe.py:1623
+#, possible-python-format
+msgid "Starting compilation with Python executable: %s)"
+msgstr ""
+
+#: GUI2Exe.py:1691
+msgid "Starting compiled executable..."
+msgstr ""
+
+#: PyInstallerPanel.py:71
+msgid "Strip Executable"
+msgstr ""
+
+#: Widgets.py:1626
 msgid "Sub-Module 1"
 msgstr ""
 
-#: ../Widgets.py:1627
+#: Widgets.py:1627
 msgid "Sub-Module 2"
 msgstr ""
 
-#: ../Widgets.py:1627
+#: Widgets.py:1627
 msgid "Sub-Module 3"
 msgstr ""
 
-#: ../Widgets.py:1237
-msgid "This is the Setup file as it comes out after the pre-processing\n"
+#: GUI2Exe.py:220
+msgid "Switch project &database...\tCtrl+D"
 msgstr ""
 
-#: ../Widgets.py:2406
+#: GUI2Exe.py:876
+#, possible-python-format
+msgid "SyntaxError at line %d, column %d"
+msgstr ""
+
+#: cx_FreezePanel.py:41
+msgid "Target Class"
+msgstr ""
+
+#: Py2ExePanel.py:46
+msgid "Target Classes"
+msgstr ""
+
+#: GUI2Exe.py:237
+msgid "Temporarily changes the Python version"
+msgstr ""
+
+#: GUI2Exe.py:243
+msgid "Test the compiled file (if it exists)"
+msgstr ""
+
+#: GUI2Exe.py:1074
+msgid "Thanks to Robin Dunn and the wxPython mailing list\n"
+msgstr ""
+
+#: GUI2Exe.py:1592
+msgid "The Dry-Run option is available only for Py2Exe."
+msgstr ""
+
+#: GUI2Exe.py:1671
+msgid ""
+"The compiler has successfully built your executable.\n"
+"Do you wish to test your application?"
+msgstr ""
+
+#: GUI2Exe.py:1624
+#, possible-python-format
+msgid "The compiler selected is ==> %s <=="
+msgstr ""
+
+#: Widgets.py:1330
+msgid ""
+"The current code has changed.\n"
+"Do you want to save changes?"
+msgstr ""
+
+#: GUI2Exe.py:160
+msgid ""
+"The database file and its backup seem to be broken.\n"
+"\n"
+"Please go to the /USER/Application Data/.GUI2Exe/ folder\n"
+"and delete the GUI2Exe database file."
+msgstr ""
+
+#: ProjectTreeCtrl.py:430
+msgid "The project name you chose already exists."
+msgstr ""
+
+#: GUI2Exe.py:767
+msgid "The selected file is not a Python executable."
+msgstr ""
+
+#: Widgets.py:1237
+msgid ""
+"This is the Setup file as it comes out after the pre-processing\n"
+"work done by GUI2Exe."
+msgstr ""
+
+#: GUI2Exe.py:1068
+msgid ""
+"This is the about dialog of GUI2Exe.\n"
+"\n"
+msgstr ""
+
+#: GUI2Exe.py:528 GUI2Exe.py:1004
+msgid "This option has not been implemented yet."
+msgstr ""
+
+#: GUI2Exe.py:926
+msgid "This option is available only for Py2Exe."
+msgstr ""
+
+#: GUI2Exe.py:1677
+msgid "This project has never been compiled or its executable has been deleted."
+msgstr ""
+
+#: GUI2Exe.py:901
+#, possible-python-format
+msgid "This project has not been compiled with %s yet."
+msgstr ""
+
+#: GUI2Exe.py:820 GUI2Exe.py:932
+msgid "This project has not been compiled yet."
+msgstr ""
+
+#: ProjectTreeCtrl.py:611 ProjectTreeCtrl.py:656
+msgid "This project has not been saved yet. Please save it and retry."
+msgstr ""
+
+#: MessageWindow.py:35
+msgid "Time        "
+msgstr ""
+
+#: GUI2Exe.py:1760
+msgid "Tracebacks in log file"
+msgstr ""
+
+#: Py2ExePanel.py:122
+msgid "Type"
+msgstr ""
+
+#: PyInstallerPanel.py:80
+msgid "UPX Compression"
+msgstr ""
+
+#: GUI2Exe.py:1039
+msgid "Unable to connect to the internet."
+msgstr ""
+
+#: Widgets.py:2406
 msgid "Unable to open the clipboard."
 msgstr ""
 
-#: ../Widgets.py:2858
+#: PyInstallerPanel.py:105
+msgid "Unbuffered STDIO"
+msgstr ""
+
+#: ProjectTreeCtrl.py:627
+msgid "Updating project from file..."
+msgstr ""
+
+#: GUI2Exe.py:229
+msgid "Use &AutoSave"
+msgstr ""
+
+#: PyInstallerPanel.py:106
+msgid "Use Site.py"
+msgstr ""
+
+#: Widgets.py:2858
 msgid "Value"
+msgstr ""
+
+#: PyInstallerPanel.py:102
+msgid "Verbose Import"
+msgstr ""
+
+#: cx_FreezePanel.py:174 Py2ExePanel.py:55
+msgid "Version"
+msgstr ""
+
+#: GUI2Exe.py:1069
+#, possible-python-format
+msgid "Version %s \n"
+msgstr ""
+
+#: PyInstallerPanel.py:197
+msgid "Version File"
+msgstr ""
+
+#: PyInstallerPanel.py:284
+msgid "Version file is not a valid file."
+msgstr ""
+
+#: GUI2Exe.py:332
+msgid "View"
+msgstr ""
+
+#: GUI2Exe.py:245
+msgid "View &setup script\tCtrl+P"
+msgstr ""
+
+#: GUI2Exe.py:245
+msgid "View the auto-generated setup script"
+msgstr ""
+
+#: GUI2Exe.py:248
+msgid "View the full build output for the current compiler"
+msgstr ""
+
+#: GUI2Exe.py:1288 GUI2Exe.py:1293
+msgid "Warning"
+msgstr ""
+
+#: PyInstallerPanel.py:103
+msgid "Warning Option"
+msgstr ""
+
+#: GUI2Exe.py:1199
+msgid ""
+"Warning: the selected page contains unsaved data.\n"
+"\n"
+"Do you wish to save this project?"
+msgstr ""
+
+#: GUI2Exe.py:1496
+msgid "Welcome to GUI2Exe"
+msgstr ""
+
+#: GUI2Exe.py:251
+msgid "What the compiler says are the binary dependencies (py2exe only)"
+msgstr ""
+
+#: GUI2Exe.py:250
+msgid "What the compiler thinks are the missing modules (py2exe only)"
+msgstr ""
+
+#: Py2AppPanel.py:43
+msgid "XC Data Models"
+msgstr ""
+
+#: Py2AppPanel.py:104
+msgid "XC Data Models Names"
+msgstr ""
+
+#: GUI2Exe.py:1073
+msgid ""
+"andrea.gavana@gmail.com\n"
+"gavana@kpo.kz\n"
+"\n"
+msgstr ""
+
+#: bbFreezePanel.py:41
+#, possible-python-format
+msgid "bbFreeze options for: %s (Created: %s)"
+msgstr ""
+
+#: cx_FreezePanel.py:50
+msgid "cx_Freeze Sample File"
+msgstr ""
+
+#: cx_FreezePanel.py:44
+#, possible-python-format
+msgid "cx_Freeze options for: %s (Created: %s)"
+msgstr ""
+
+#: GUI2Exe.py:1075
+msgid "for the ideas and useful suggestions."
+msgstr ""
+
+#: GUI2Exe.py:235
+msgid "show tooltips for the various compiler options"
+msgstr ""
+
+#: GUI2Exe.py:1072
+msgid ""
+"to me at the following addresses:\n"
+"\n"
+msgstr ""
+
+#: GUI2Exe.py:305
+msgid "tooltips"
+msgstr ""
+
+#: Py2ExePanel.py:399
+msgid "zipfile does not have \".zip\" extension"
 msgstr ""

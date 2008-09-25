@@ -9,6 +9,9 @@ import time
 
 from Utilities import opj, FractSec
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class Process(object):
     """
@@ -166,10 +169,10 @@ class Process(object):
 
         if processEnded and not self.failed:
             # Process finished without errors, send a congratulation message
-            self.MainFrame.SendMessage("Message", "Setup file succesfully compiled")
+            self.MainFrame.SendMessage(0, _("Setup file succesfully compiled"))
             # Show the elapsed time
             h, m, s = FractSec(int(time.time() - self.startTime))
-            self.MainFrame.SendMessage("Message", "Elapsed time for the process: %02d:%02d:%02d"%(h, m, s))
+            self.MainFrame.SendMessage(0, _("Elapsed time for the process: %02d:%02d:%02d")%(h, m, s))
             # Update visually the project page
             self.MainFrame.UpdatePageBitmap(self.project.GetName(), 1, self.pageNumber)
             # Process the output text from the compilation steps
@@ -201,22 +204,22 @@ class Process(object):
             text = stream.read()
             if isError and text.strip():
                 # Ah, is the error stream, something went wrong
-                self.MainFrame.SendMessage("Error", text)
+                self.MainFrame.SendMessage(2, text)
                 self.failed = True
                 self.fullText = ""
                 self.outputText += text
             else:
                 # That's the input stream
                 if text.find("byte-compiling") >= 0:    # py2exe/py2app is compiling
-                    self.MainFrame.SendMessage("Compile", "Byte-compiling Python files...", True)
+                    self.MainFrame.SendMessage(4, _("Byte-compiling Python files..."), True)
                 elif text.find("copying") >= 0:         # py2exe is copying files
-                    self.MainFrame.SendMessage("Copy", "Copying files...", True)
+                    self.MainFrame.SendMessage(5, _("Copying files..."), True)
                 elif text.find("searching") >= 0:       # py2exe is searching for modules
-                    self.MainFrame.SendMessage("Find", "Finding required modules...", True)
+                    self.MainFrame.SendMessage(3, _("Finding required modules..."), True)
                 elif text.find("skipping") >= 0:        # py2app skipping loaders
-                    self.MainFrame.SendMessage("Skip", "Skipping Python loaders/byte-compilation...", True)
+                    self.MainFrame.SendMessage(6, _("Skipping Python loaders/byte-compilation..."), True)
                 elif text.find("filtering") >= 0:       # py2app filtering dependencies
-                    self.MainFrame.SendMessage("Filter", "Filtering Dependencies...", True)
+                    self.MainFrame.SendMessage(7, _("Filtering Dependencies..."), True)
                 else:
                     copy = False
 
@@ -229,12 +232,12 @@ class Process(object):
             if self.compiler in ["bbfreeze", "PyInstaller"]:
                 # bbFreeze and PyInstaller do not give intelligent
                 # messages in the stdout
-                self.MainFrame.SendMessage("Compile", "Running compilation steps...")
+                self.MainFrame.SendMessage(4, _("Running compilation steps..."))
             elif not written:
                 if copy:
                     self.MainFrame.CopyLastMessage()
                 else:
-                    self.MainFrame.SendMessage("Compile", "Running compilation steps...", True)
+                    self.MainFrame.SendMessage(4, _("Running compilation steps..."), True)
         
 
     def ProcessOutputText(self):

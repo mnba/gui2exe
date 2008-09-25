@@ -36,7 +36,8 @@ _iconFromName = {"includes": ["modules"],
                  }
 _unWantedLists = ["messages", "missingmodules", "binarydependencies"]
 _bookIcons = ["py2exe", "py2app", "cx_Freeze", "PyInstaller", "bbFreeze"]
-_iconMapper = {"Message": 0, "Warning": 1, "Error": 2, "Find": 3, "Compile": 4, "Copy": 5}
+_iconMapper = {"Message": 0, "Warning": 1, "Error": 2, "Find": 3, "Compile": 4,
+               "Copy": 5, "Skip": 6, "Filter": 7}
 _sizeIcons = ["py2exe_small", "py2app_small", "cx_Freeze_small", "PyInstaller_small",
               "bbFreeze_small", "file_size", "numfiles"]
 

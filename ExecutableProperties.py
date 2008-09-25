@@ -7,6 +7,9 @@ import wx.lib.mixins.listctrl as listmix
 from Utilities import GetExecutableData
 from Constants import _sizeIcons, _bookIcons, _defaultCompilers
 
+# Get the I18N things
+_ = wx.GetTranslation
+
 
 class ExecutableListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """ Simple base class which holds a list control and a mixin. """
@@ -71,7 +74,7 @@ class ExecutableProperties(wx.Panel):
     def InsertColumns(self):
         """ Inserts the columns in the list control. """
 
-        columnNames = ["Builder", "Size (MB)   ", "Files     "]
+        columnNames = [_("Builder"), _("Size (MB)   "), _("Files     ")]
         # Loop over all the column names        
         for indx, column in enumerate(columnNames):
             self.listCtrl.InsertColumn(indx, column)
