@@ -273,6 +273,30 @@ getapi_referenceImage = api_reference.GetImage
 getapi_referenceBitmap = api_reference.GetBitmap
 
 #----------------------------------------------------------------------
+appearance = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAuZJ"
+    "REFUOI2lk11sUwUcxX/3tt3WbZ0TxmZxyBBxxBj5FqFMUGBZYkCNHxFNfEDiRxTCwxITv1DU"
+    "6CIaNRoh0QQkAcWIoPKgE5yGgE6WBSV1ReZKzUpLoWzt2t7b297jgyHBMJ88b/+cnN//5Rz4"
+    "nzIuPfatJmB6uHfC9NaOwsTZC5qamwLVNdWMJuPl0cG+yBc//P7tnl/dXUmboctI+1fR0fvS"
+    "/F+sMz06ckGyJfUXpZIkua5UtFXOpdWzeelwRzOP/Cv85d3mutjeJ1ypIEmiS6o6IPGq1Hvi"
+    "D6mrQ274a2nb81LJ0qldj7u3Btlw8XPo+FtLrYNv3pVeN43ftHuR3k5ltTAsBQ/Zkn1cehjp"
+    "Hb/yK1Ep1S/ZCf30csgKVhEyfn5m+jdTFy5pv+rOHQZAKzw7oI9fITcB8jEwJkEmTsHyo+wA"
+    "fv8CmPkAxD+h8/4HP/dOmjNvcUP7Q3y/9tOkslZk8oq2NkZKkDqGbAfKMfDV4S9lwaxFw4/C"
+    "Td0Y+X6WzKxb7DUzCY/pSbPsw/cbyaQacUvo1GGwbXAdcBxwHeSUIevDaM4CSag8ycRARa1H"
+    "yXjdDZ7YLVf4LdMIeFFkALLnwBqBsTTkzkH+PGRSGLkhGKwh31fAd7rAUDRvG4Ax90raQ9dX"
+    "rFl/T8uaGfeFKhRNQGYUHAejmIR4DLwGx9LCu/4Cwfp6mrYZfHaAuAfgjMVg73B533dHz5+4"
+    "MRdtb2m7xs/ZLIaVAnOMkZYXqDKjbCqkeWxlL1vM/STCEZxujlxWqNZ6Vp3cFCypZ670Lvrx"
+    "ucP6S1J0jxR+Ck3RDE3Tzdr9NJoVYOO4/d4w39hR3n61tNejrbcltXOz1LlM0lqk11Cxy6fO"
+    "WfQBU8YFNFXSsvUOT3jsjSqV3mtQ8ehXcrbMlj5A1ovo9UVEajzcDhjGuASgEq5dfR1PzpvM"
+    "8oZaGqt9GIkMhUN/0n3wNB8VoA8o/yfgEjUAtfyzXBc4CxQumn8Dj4F8CTVsHL0AAAAASUVO"
+    "RK5CYII=")
+index.append('appearance')
+catalog['appearance'] = appearance
+getappearanceData = appearance.GetData
+getappearanceImage = appearance.GetImage
+getappearanceBitmap = appearance.GetBitmap
+
+#----------------------------------------------------------------------
 aui_config = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAABHNCSVQICAgIfAhkiAAAAwdJ"
     "REFUOI2tkltIFGEYht9//pl2Zw+U28EytxA21K3oQHYgqy0zK8GCiKKLoO7EMjrcRAZ1J0hE"
@@ -4814,6 +4838,26 @@ getpost_compileImage = post_compile.GetImage
 getpost_compileBitmap = post_compile.GetBitmap
 
 #----------------------------------------------------------------------
+preferences = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAg5J"
+    "REFUOI2lkU9IVHEQxz/zXn9VcrdACMoi2UuHUm9G1sVFsN1rh6BDICGFiBG7aqK0qOwueA6i"
+    "TgkhRYfe2gYZnoLCdG31YCBJsW2mKUuwEdF706HestnTS3P6zXzn+52Z7w/+M6Q8SSRGQipq"
+    "iUo4Gu1LbcEJxZPDpR6jHFFRq/1SOypqJRIjoa3Il9s7bBW1POXjyWEtFDY0nhxWb6zgYiEA"
+    "I5EYCbnN7tSKiqp/hF3s9p1b9ERuhIEUgKGiVufVLn3wcFxV1OrqvMba5xUCdQHW19dubvYm"
+    "cr1XXDKAuOCVjk51HFts21bHscnMzsjsmwyiEt7OWCmfUA60tZ4jOz9PLv8B0FhPpH/QyzPx"
+    "KgI8TU/o3PwcDScayWRn+bPBE8DxFKhtHTpomGbezS82OdQfD3D4UC3FYpFXr1/idYZZTh7t"
+    "DtLaVEeNv4KxqTWOVX+JLb9fPttwshG/z0/uU+5CsKVlZnLy+RKgAMaRtqF6wzTzdwfCTGcX"
+    "mc4uUrO/EoCeSP+gqIRT6ccEAgHOnGpGRa14cqjkhyGYmdHuIM9ezPHTdjD2+FjdKJZWjEb7"
+    "UqISHrt/j33VPk43NQMyUBJwHzt3mOyqPMD3bz8YSy8gQnCzSCptsfRu6S+zDYCPq1/ZW+mn"
+    "arfJo6m3iBBcnuidLG/8bZ7GVlbyC6Cx0i8cbYufBx0vFTzI28UvvPj58+RojlkAAAAASUVO"
+    "RK5CYII=")
+index.append('preferences')
+catalog['preferences'] = preferences
+getpreferencesData = preferences.GetData
+getpreferencesImage = preferences.GetImage
+getpreferencesBitmap = preferences.GetBitmap
+
+#----------------------------------------------------------------------
 project = PyEmbeddedImage(
     "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAjxJ"
     "REFUOI11k71rFFEUxX9vZvYz2WiCYsSvQKKIBGIRLFQidiokVmIl9laCVjYW2in5CwTRxmih"
@@ -4924,6 +4968,29 @@ catalog['project_ok'] = project_ok
 getproject_okData = project_ok.GetData
 getproject_okImage = project_ok.GetImage
 getproject_okBitmap = project_ok.GetBitmap
+
+#----------------------------------------------------------------------
+project_tab = PyEmbeddedImage(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAr5J"
+    "REFUOI2NkFtIUwEcxr9z5k5znl11U6d0sXnZ0bQUxVsqeClLgwp76KlSH5JuCIFBdBF6qAch"
+    "CqGXegmxSCxvWSqp88LUxKVOp860pu6ibqGb13Z6kkSc9b384Q+/Hx8fB39DZmZmHpycnLRX"
+    "va2qGNWPGuVyuZOmaaHNZnPgX6FpWtbXp519XVnT296hdX1u6hjX6cZN2dk5xXtxHAAoKLia"
+    "X1hYdMuxTsVJpb4KitpHcCm+lOTwaKm3WJSUkBXZ3FzXDWBtp4AEAJ1OJwxWxZ/nciiAJTA2"
+    "ZvhtsSywJtMCQkLi4y1WaxKApd0akAC8U9JOxBmNJvC9RKj9UD2cfykn/Mnj0pcbmwSGhvQQ"
+    "SwJ8GSY6bVeBQCBQ0iK/3I1NFmCBA/sVKwD0qtCgGb4nD160J1iCE+h0OmPdDsEwMdeqa7Rs"
+    "yxcdqxuxshMTVqteb17XaAxsY7OOPZtX1O6OJQHAkxapPja8m+d4EBCL+PAgKR8+n+b6yLzR"
+    "0tJosy/O8wH4lJe/yADAYxiG2hIQW5fL5R69UVzWezhIQaiYMNJiMrtGxqbJ509Li09mJHml"
+    "pJ/KjDpyLGbqp6F/dHhg4v69u1d2thELBNLLACLiEnN7/ANDywCklZQ8bKqpb5+xLqyyDqeL"
+    "dThd7IDWsHT95p1nAChym8C+tLT4CsBQT1fthTmj/hGA1pWVdZsqLEqhVmtWzuVd7Kyta13j"
+    "cIW0ze7wA7Dh4WabKQCQyfyTmciE3OkfZgx+Gxz+VF+ZmpyYqnWxvHClMiJLKlekuxMAAKzW"
+    "ua6uLnWfUChPPqQMj656r/5ut68GLDtXoenp7F60zLZx9hIAIObnTb4CgUSpDFFJlpdXRRSP"
+    "Rwxqe82NDW8qnI5fPcQ/BAAAhSLotkgiCU46fvpM/9e2zrlZ4+DcjOHB/7A74hELgN7++QML"
+    "xRPotiKh8gAAAABJRU5ErkJggg==")
+index.append('project_tab')
+catalog['project_tab'] = project_tab
+getproject_tabData = project_tab.GetData
+getproject_tabImage = project_tab.GetImage
+getproject_tabBitmap = project_tab.GetBitmap
 
 #----------------------------------------------------------------------
 project_unsaved = PyEmbeddedImage(

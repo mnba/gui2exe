@@ -47,7 +47,7 @@ from AUINotebookPage import AUINotebookPage
 from DataBase import DataBase
 from Project import Project
 from Process import Process
-from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog
+from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog, PreferencesDialog
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
 from AllIcons import catalog
@@ -192,9 +192,10 @@ class GUI2Exe(wx.Frame):
         self._mgr.Update()
         # Sort the tree children
         self.projectTree.SortItems()
-        # Read the default configuration file. At the moment it contains data
-        # only for py2exe, and it might be moved to wx.Config
+        # Read the default configuration file.
         self.ReadConfigurationFile()
+        # Disable the Run and Dry-Run buttons
+        self.messageWindow.NoPagesLeft(False)
 
 
     # ================================== #
@@ -239,7 +240,9 @@ class GUI2Exe(wx.Frame):
                     (_("Set P&yInstaller path...\tCtrl+Y"), _("Sets the PyInstaller installation path"), "PyInstaller_small", self.OnSetPyInstaller, ""),
                     ("", "", "", "", ""),
                     (_("Add &custom code...\tCtrl+U"), _("Add custom code to the setup script"), "custom_code", self.OnCustomCode, ""),
-                    (_("&Insert post compilation code...\tCtrl+I"), _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, "")),                    
+                    (_("&Insert post compilation code...\tCtrl+I"), _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, ""),
+                    ("", "", "", "", ""),
+                    (_("Preferences..."), _("Edit preferences/settings"), "preferences", self.OnPreferences, "")),
                 (_("&Builds"),
                     (_("&Test executable\tCtrl+R"), _("Test the compiled file (if it exists)"), "runexe", self.OnTestExecutable, ""),
                     ("", "", "", "", ""),
@@ -684,6 +687,8 @@ class GUI2Exe(wx.Frame):
         if self.mainPanel.GetPageCount() == 0:
             # Clear the ExecutableProperties list at the bottom left
             self.executablePanel.PopulateList(True, None)
+            # Disable the Run and Dry-Run buttons
+            self.messageWindow.NoPagesLeft(False)
 
 
     def OnPageChanging(self, event):
@@ -838,6 +843,14 @@ class GUI2Exe(wx.Frame):
         
         self.HandleUserCode(post=True)        
 
+
+    def OnPreferences(self, event):
+        """ Edit/view pereferences and settings for GUI2Exe. """
+
+        dlg = PreferencesDialog(self, {})
+        dlg.ShowModal()
+        dlg.Destroy()
+        
         
     def OnViewSetup(self, event):
         """ Allows the user to see the Setup.py file. """
@@ -1317,7 +1330,7 @@ class GUI2Exe(wx.Frame):
         """
 
         # Freeze all. It speeds up a bit the drawing
-        busy = PyBusyInfo(_("Creating new project..."))
+        busy = PyBusyInfo(_("Creating new project..."), self)
         wx.SafeYield()
         
         self.Freeze()
@@ -1358,6 +1371,10 @@ class GUI2Exe(wx.Frame):
         # The Project method adds a page to the center pane
         self.Project(project, treeItem, False)
         projectName = project.GetName()
+        if self.mainPanel.GetPageCount() == 1:
+            # Disable the Run and Dry-Run buttons
+            self.messageWindow.NoPagesLeft(True)
+
         if projectName in self.openingPages:
             # Get the current LabelBook
             book = self.GetCurrentBook()
@@ -1696,7 +1713,7 @@ class GUI2Exe(wx.Frame):
 
         # Starts the compiled exe file
         msg = _("Starting compiled executable...")
-        busy = PyBusyInfo(msg)
+        busy = PyBusyInfo(msg, self)
         wx.SafeYield()
         self.SendMessage(0, msg) 
 

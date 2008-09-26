@@ -9,12 +9,11 @@ import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 
-##if wx.Platform == "__WXMAC__":
-if 1:
+if wx.Platform == "__WXMAC__":
     # For the PList editor
     from py2app.apptemplate import plist_template
     import traceback
-##    import plistlib
+    import plistlib
     import wx.gizmos as gizmos
     
 # This is needed by BaseListCtrl
@@ -96,6 +95,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # The column sorter mixin will be initialized later
         self.columnSorter = False
         self.itemDataMap = {}
+        self.isBeingEdited = False
 
         # Do the hard work        
         self.BuildImageList()
@@ -217,15 +217,18 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         elif self.GetName() == "multipleexe" and event.GetColumn() in [1, 2]:
             event.Veto()
             return
-        
+
+        self.Select(event.m_itemIndex)
+        self.isBeingEdited = True
         event.Skip()
 
 
     def OnEndEdit(self, event):
         """ Handles the wx.EVT_LIST_END_LABEL_EDIT event for the list control. """
-        
+
         if event.IsEditCancelled():
             # Nothing to do, the user cancelled the editing
+            self.isBeingEdited = False
             event.Skip()
             return
 
@@ -247,6 +250,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         # Update the project, as something changed
         wx.CallAfter(self.UpdateProject)
+        self.isBeingEdited = False
         
 
     def OnKeyDown(self, event):
@@ -330,6 +334,13 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Freeze everything... it helps with flicker
         self.Freeze()
         wx.BeginBusyCursor()
+        
+        if self.isBeingEdited:
+            # We may be in editing mode...
+            self.isBeingEdited = False
+            self.editor.Hide()
+            self.SetFocus()
+            
         # Get all the selected items
         indices = self.GetSelectedIndices()
         # Reverse them, to delete them safely
@@ -739,7 +750,6 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         self.itemDataMap[indx] = ("", "==> Edit Me! <==")
         # Start editing the new label
         self.EnsureVisible(indx)
-        wx.CallAfter(self.EditLabel, indx)
         
 
     def HandleDataFiles(self):
@@ -755,7 +765,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             # Use our fancy directory selector (which allows multiple
             # folder selection at the same time
             dlg = GUI2ExeDirSelector(self.MainFrame,
-                                     title=_("Please select one or more directories..."),
+                                     title=_("Please select one directory..."),
                                      showExtensions=True)
 
             if dlg.ShowModal() != wx.ID_OK:
@@ -1751,39 +1761,103 @@ class Py2ExeMissing(wx.Frame):
         event.Skip()
         
 
-class GUI2ExeDirSelector(wx.Dialog):
+class BaseDialog(wx.Dialog):
+    """ A wx.Dialog base class for all the other GUI2Exe dialogs. """
+
+    def __init__(self, parent):
+        """
+        Default class constructor.
+
+        @param parent: the dialog parent;
+        """
+            
+        wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
+        self.MainFrame = parent
+        
+
+    def CreateButtons(self):
+        """ Creates the Ok and cancel bitmap buttons. """
+        
+        # Build a couple of fancy and useless buttons        
+        okBmp = self.MainFrame.CreateBitmap("project_ok")
+        cancelBmp = self.MainFrame.CreateBitmap("exit")
+        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))        
+
+
+    def SetProperties(self, title):
+        """ Sets few properties for the dialog. """        
+
+        self.SetTitle(title)
+        self.SetIcon(self.MainFrame.GetIcon())
+        self.okButton.SetDefault()        
+
+
+    def BindEvents(self):
+        """ Binds the events to specific methods. """
+        
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
+
+
+    def OnOk(self, event):
+        """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
+
+        self.EndModal(wx.ID_OK)
+
+
+    def OnCancel(self, event):
+        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
+
+        self.OnClose(event)
+
+
+    def OnClose(self, event):
+        """ User canceled the dialog. """
+
+        self.EndModal(wx.ID_CANCEL)
+
+
+    def OnKeyUp(self, event):
+        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
+        
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            # Close the dialog, no action
+            self.OnClose(event)
+        elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
+            # Close the dialog, the user wants to continue
+            self.OnOk(event)
+
+        event.Skip()
+
+
+class GUI2ExeDirSelector(BaseDialog):
     """
     A different implementation of wx.DirDialog which allows multiple
     folders to be selected at once.
     """
 
-    def __init__(self, parent, id=wx.ID_ANY, title="", pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER, showExtensions=False):
+    def __init__(self, parent, title, showExtensions=False):
         """
-        Default wx.Frame class constructor.
+        Default BaseDialog class constructor.
 
+        @param parent: the dialog parent widget;
+        @param title: the dialog title;
         @param showExtensions: whether to show a text control to filter extensions.
         """
         
-        wx.Dialog.__init__(self, parent, id, title, pos, size, style)
+        BaseDialog.__init__(self, parent)
 
-        # Store a reference to our main GUI        
-        self.MainFrame = parent
         self.showExtensions = showExtensions
         
         self.dirCtrl = wx.GenericDirCtrl(self, size=(300, 200), style=wx.DIRCTRL_3D_INTERNAL|wx.DIRCTRL_DIR_ONLY)
+        self.CreateButtons()
         
-        # Build a couple of fancy buttons
-        okBmp = self.MainFrame.CreateBitmap("project_ok")
-        cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
-        self.okButton.SetDefault()
-
         if showExtensions:
             # Create a text control to filter extensions
             self.extensionText = wx.TextCtrl(self, -1, "*.*")
-            
+
+        self.SetProperties(title)           
         # Setup the layout and frame properties        
         self.SetupDirCtrl()
         self.LayoutItems()
@@ -1914,41 +1988,9 @@ class GUI2ExeDirSelector(wx.Dialog):
     def BindEvents(self):
         """ Binds the events to specific methods. """
 
+        BaseDialog.BindEvents(self)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
-        
-
-    def OnOk(self, event):
-        """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
-
-        self.EndModal(wx.ID_OK)
-
-
-    def OnCancel(self, event):
-        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
-
-        self.OnClose(event)
-
-
-    def OnClose(self, event):
-        """ User canceled the dialog. """
-
-        self.EndModal(wx.ID_CANCEL)
-
-
-    def OnKeyUp(self, event):
-        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
-
-        if event.GetKeyCode() == wx.WXK_ESCAPE:
-            # Close the dialog, no actions
-            self.OnClose(event)
-        elif event.GetKeyCode() in [wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER]:
-            # Close the dialog, the user wants to continue
-            self.OnOk(event)
-
-        event.Skip()
         
 
 class PyInfoFrame(wx.Frame):
@@ -2268,7 +2310,7 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         return dc.GetTextExtent(string)[0] + 25
 
 
-class BuildDialog(wx.Dialog):
+class BuildDialog(BaseDialog):
     """
     A dialog used to show the full build output for a specific compiler.
     It allows to save the build output text to a file or to export it to
@@ -2286,8 +2328,7 @@ class BuildDialog(wx.Dialog):
         @param outputText: the full build output text.
         """
 
-        wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
-        self.MainFrame = parent
+        BaseDialog.__init__(self, parent)
 
         # Split the text to look for compiler info/build text
         header, text = outputText.split("/-/-/")
@@ -2360,12 +2401,12 @@ class BuildDialog(wx.Dialog):
     def BindEvents(self):
         """ Binds the events to specific methods. """
 
+        BaseDialog.BindEvents(self)
+        
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
         self.Bind(wx.EVT_BUTTON, self.OnSave, self.exportButton)
         self.Bind(wx.EVT_BUTTON, self.OnClipboard, self.clipboardButton)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
-
+        
 
     def OnSave(self, event):
         """ Handles the wx.EVT_BUTTON event for the 'Save' action. """
@@ -2408,27 +2449,6 @@ class BuildDialog(wx.Dialog):
             # Some problem with the clipboard...
             self.MainFrame.RunError(2, _("Unable to open the clipboard."))
         
-
-    def OnCancel(self, event):
-        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
-
-        self.OnClose(event)
-
-
-    def OnClose(self, event):
-        """ User canceled the dialog. """
-
-        self.EndModal(wx.ID_CANCEL)
-
-
-    def OnKeyUp(self, event):
-        """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
-
-        if event.GetKeyCode() == wx.WXK_ESCAPE:
-            # Close the dialog
-            self.OnClose(event)
-
-        event.Skip()
         
 #-----------------------------------------------------------------------------#       
 
@@ -2690,7 +2710,7 @@ class TransientPopup(TransientBase, wx.PopupWindow):
         TransientBase.__init__(self, parent, compiler, option, tip, note)
 
 
-class PListEditor(wx.Dialog):
+class PListEditor(BaseDialog):
     """ A simple PList editor for GUI2Exe (py2app only). """
 
     def __init__(self, parent, CFBundleExecutable, pListFile=None, pListCode={}):
@@ -2703,8 +2723,7 @@ class PListEditor(wx.Dialog):
         @param pListCode: the existing PList code (if any).
         """
 
-        wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
-        self.MainFrame = parent
+        BaseDialog.__init__(self, parent)
         
         PFile = {}
         if pListFile:
@@ -2727,31 +2746,32 @@ class PListEditor(wx.Dialog):
         self.bottomPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         
         boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
-        self.codeCheck = wx.CheckBox(self.topPanel, -1, _("Add by Python code"))
+        self.codeCheck = wx.CheckBox(self.bottomPanel, -1, _("Add by Python code"))
         self.codeCheck.SetFont(boldFont)
-        self.staticText_1 = wx.StaticText(self.topPanel, -1, _("Select one item in the tree control below:"))
+        self.staticText_1 = wx.StaticText(self.bottomPanel, -1, _("Select one item in the tree control above:"))
         self.staticText_1.SetFont(boldFont)
-        self.itemParentText = wx.TextCtrl(self.topPanel, -1, "")
-        self.staticText_2 = wx.StaticText(self.topPanel, -1, _("Add your key/value dictionary in Python code:"))
+        self.itemParentText = wx.TextCtrl(self.bottomPanel, -1, "")
+        self.staticText_2 = wx.StaticText(self.bottomPanel, -1, _("Add your key/value dictionary in Python code:"))
         self.staticText_2.SetFont(boldFont)
-        self.pythonStc = PythonSTC(self.topPanel, readOnly=True)
+        self.pythonStc = PythonSTC(self.bottomPanel, readOnly=True)
 
         addBmp = self.MainFrame.CreateBitmap("add")
-        self.addButton = buttons.ThemedGenBitmapTextButton(self.topPanel, -1, addBmp, _(" Append "), size=(-1, 22))
+        self.addButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, -1, addBmp, _(" Append "), size=(-1, 22))
 
         self.enablingItems = [self.staticText_1, self.staticText_2, self.itemParentText,
                               self.pythonStc, self.addButton]
 
         # Create a tree list control to handle the Plist dictionary
-        self.treeList = gizmos.TreeListCtrl(self.bottomPanel, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
+        self.treeList = gizmos.TreeListCtrl(self.topPanel, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
                                             wx.TR_COLUMN_LINES | wx.TR_FULL_ROW_HIGHLIGHT)
 
-        # Build a couple of fancy and useless buttons        
-        okBmp = self.MainFrame.CreateBitmap("project_ok")
-        cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, wx.ID_OK, okBmp, _(" Ok "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
+        
+        # Build a couple of fancy and useless buttons
+        self.CreateButtons()
 
+        size = self.MainFrame.GetSize()
+        self.SetSize((size.x/2, 4*size.y/5))
+        
         # Do the hard work
         self.SetProperties()
         self.LayoutItems()
@@ -2759,9 +2779,6 @@ class PListEditor(wx.Dialog):
         self.PopulateTree(PTemplate)
         self.BindEvents()
         
-        size = self.MainFrame.GetSize()
-        self.SetSize((size.x/2, 4*size.y/5))
-
         self.CenterOnParent()
         self.Show()
 
@@ -2772,59 +2789,64 @@ class PListEditor(wx.Dialog):
     def SetProperties(self):
         """ Sets few properties for the dialog. """        
 
-        self.SetTitle(_("Simple PList editor for py2app"))
-        self.SetIcon(self.MainFrame.GetIcon())
-        self.okButton.SetDefault()        
-
+        BaseDialog.SetProperties(self, _("Simple PList editor for py2app"))
         self.EnableCode(False)
 
 
     def LayoutItems(self):
         """ Layouts the widgets with sizers. """        
 
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
         topSizer = wx.BoxSizer(wx.VERTICAL)
         bottomSizer = wx.BoxSizer(wx.VERTICAL)
         buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        topSizer.Add(self.codeCheck, 0, wx.ALL, 5)
-        topSizer.Add(self.staticText_1, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
-        topSizer.Add((0, 2))
-        topSizer.Add(self.itemParentText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 5)
-        topSizer.Add(self.staticText_2, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
-        topSizer.Add((0, 2))
-        topSizer.Add(self.pythonStc, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
-        topSizer.Add((0, 2))
-        topSizer.Add(self.addButton, 0, wx.RIGHT|wx.BOTTOM|wx.ALIGN_RIGHT, 5)
-        
-        label = _("Or you can edit the properties below or add new ones:")
+        label = _("You can edit the properties below or add new ones:")
 
-        label = wx.StaticText(self.bottomPanel, -1, label)
+        label = wx.StaticText(self.topPanel, -1, label)
         label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
 
-        bottomSizer.Add(label, 0, wx.ALL, 5)
-        bottomSizer.Add(self.treeList, 1, wx.EXPAND|wx.ALL, 5)
+        topSizer.Add((0, 5))
+        topSizer.Add(label, 0, wx.ALL, 5)
+        topSizer.Add(self.treeList, 2, wx.EXPAND|wx.ALL, 5)
 
+        bottomSizer.Add((0, 5))        
+        bottomSizer.Add(self.codeCheck, 0, wx.ALL, 5)
+        bottomSizer.Add(self.staticText_1, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        bottomSizer.Add((0, 2))
+        bottomSizer.Add(self.itemParentText, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM|wx.EXPAND, 5)
+        bottomSizer.Add(self.staticText_2, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        bottomSizer.Add((0, 2))
+        bottomSizer.Add(self.pythonStc, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
+        bottomSizer.Add((0, 2))
+        bottomSizer.Add(self.addButton, 0, wx.RIGHT|wx.BOTTOM|wx.ALIGN_RIGHT, 5)
+        
         # Add the fancy and useless buttons
         buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
         buttonSizer.Add((0, 0), 1, wx.EXPAND)
         buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
 
-        bottomSizer.Add(buttonSizer, 0, wx.EXPAND)
-
+        self.vSplitter.SplitHorizontally(self.topPanel, self.bottomPanel)
+        self.vSplitter.SetMinimumPaneSize(200)
+        
         self.topPanel.SetSizer(topSizer)
         self.bottomPanel.SetSizer(bottomSizer)
+        mainSizer.Add(self.vSplitter, 1, wx.EXPAND)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
 
-        self.vSplitter.SplitHorizontally(self.topPanel, self.bottomPanel)
+        self.SetSizer(mainSizer)
+        mainSizer.Layout()
 
+        wx.CallAfter(self.vSplitter.SetSashPosition, self.GetSize()[1]/2)
+        
 
     def BindEvents(self):
         """ Binds the events to specific methods. """
 
+        BaseDialog.BindEvents(self)
         self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
         self.Bind(wx.EVT_BUTTON, self.OnAddCode, self.addButton)
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-        self.Bind(wx.EVT_CHAR_HOOK, self.OnKeyUp)
         self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
         self.treeList.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
         self.codeCheck.Bind(wx.EVT_CHECKBOX, self.OnEnableCode)
@@ -3003,6 +3025,8 @@ class PListEditor(wx.Dialog):
         """ Handles the wx.EVT_TREE_BEGIN_LABEL_EDIT event for the tree list control. """
 
         item = event.GetItem()
+        self.treeList.Select(event.m_itemIndex)
+        
         if self.treeList.HasChildren(item):
             # No no, you can't edit items with children
             event.Veto()
@@ -3092,24 +3116,6 @@ class PListEditor(wx.Dialog):
         self.EnableCode(False)
         
 
-    def OnOk(self, event):
-        """ Handles the Ok wx.EVT_BUTTON event for the dialog. """
-
-        self.EndModal(wx.ID_OK)
-
-
-    def OnCancel(self, event):
-        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
-
-        self.OnClose(event)
-
-
-    def OnClose(self, event):
-        """ User canceled the dialog. """
-
-        self.EndModal(wx.ID_CANCEL)
-
-
     def OnKeyUp(self, event):
         """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
         
@@ -3177,3 +3183,114 @@ class PListEditor(wx.Dialog):
 
         return PList
         
+        
+class PreferencesDialog(BaseDialog):
+    """ A dialog to show/edit preferences for GUI2Exe. """
+
+    def __init__(self, parent, preferences):
+        """
+        Default class constructor.
+
+        @param parent: the dialog parent;
+        @param preferences: saved GUI2Exe preferences (if any).
+        """
+
+        BaseDialog.__init__(self, parent)
+        self.SetWindowStyleFlag(self.GetWindowStyleFlag() & ~wx.RESIZE_BORDER)
+
+        self.preferences = preferences
+
+        self.interfaceSizer_staticbox = wx.StaticBox(self, -1, _("User Interface"))
+        self.languagesSizer_staticbox = wx.StaticBox(self, -1, _("Locale Settings"))
+        self.projectSizer_staticbox = wx.StaticBox(self, -1, _("Projects"))
+        self.loadProjects = wx.CheckBox(self, -1, _("Reload opened projects at start-up"))
+        self.openedCompilers = wx.CheckBox(self, -1, _("Remember last used compiler for all projects"))
+        self.gui2exeSize = wx.CheckBox(self, -1, _("Remember GUI2Exe window size on exit"))
+        self.gui2exePosition = wx.CheckBox(self, -1, _("Remember GUI2Exe window position on exit"))
+        self.perspective = wx.CheckBox(self, -1, _("Use last UI perspective at start-up"))
+        self.transparency = wx.Slider(self, -1, 255, 100, 255, style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS|wx.SL_LABELS)
+        self.languages = wx.ComboBox(self, -1, choices=[], style=wx.CB_DROPDOWN|wx.CB_DROPDOWN|wx.CB_READONLY)
+        
+        # Do the hard work
+        self.CreateButtons()
+        self.SetProperties()
+        self.LayoutItems()
+        self.BindEvents()
+        
+        self.CenterOnParent()
+        
+    # ========================== #
+    # Methods called in __init__ #
+    # ========================== #
+    
+
+    def SetProperties(self):
+        """ Sets few properties for the dialog. """        
+
+        BaseDialog.SetProperties(self, _("GUI2Exe Preferences dialog"))
+        self.openedCompilers.SetValue(1)
+        
+
+    def LayoutItems(self):
+        """ Layouts the widgets with sizers. """        
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
+        languagesSizer = wx.StaticBoxSizer(self.languagesSizer_staticbox, wx.VERTICAL)
+        interfaceSizer = wx.StaticBoxSizer(self.interfaceSizer_staticbox, wx.VERTICAL)
+        projectSizer = wx.StaticBoxSizer(self.projectSizer_staticbox, wx.VERTICAL)
+        label = wx.StaticText(self, -1, _("Your GUI2Exe preferences can be edited below:"))
+        label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        mainSizer.Add(label, 0, wx.ALL, 10)
+        projectSizer.Add(self.loadProjects, 0, wx.LEFT|wx.RIGHT|wx.TOP, 5)
+        projectSizer.Add((0, 2), 0, 0, 0)
+        projectSizer.Add(self.openedCompilers, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM, 5)
+        mainSizer.Add(projectSizer, 0, wx.ALL|wx.EXPAND, 5)
+        interfaceSizer.Add(self.gui2exeSize, 0, wx.LEFT|wx.RIGHT|wx.TOP, 5)
+        interfaceSizer.Add((0, 2), 0, 0, 0)
+        interfaceSizer.Add(self.gui2exePosition, 0, wx.LEFT|wx.RIGHT, 5)
+        interfaceSizer.Add((0, 2), 0, 0, 0)
+        interfaceSizer.Add(self.perspective, 0, wx.LEFT|wx.RIGHT, 5)
+        interfaceSizer.Add((0, 20), 0, 0, 0)
+        label2 = wx.StaticText(self, -1, _("Window Transparency:"))
+        interfaceSizer.Add(label2, 0, wx.LEFT|wx.RIGHT, 5)
+        interfaceSizer.Add((0, 5), 0, 0, 0)
+        interfaceSizer.Add(self.transparency, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.BOTTOM, 5)
+        mainSizer.Add(interfaceSizer, 0, wx.ALL|wx.EXPAND, 5)
+        label3 = wx.StaticText(self, -1, _("Language:"))
+        languagesSizer.Add(label3, 0, wx.LEFT|wx.RIGHT|wx.TOP, 5)
+        languagesSizer.Add((0, 2), 0, 0, 0)
+        languagesSizer.Add(self.languages, 0, wx.LEFT|wx.RIGHT|wx.BOTTOM, 5)
+        mainSizer.Add(languagesSizer, 0, wx.LEFT|wx.RIGHT|wx.TOP|wx.EXPAND, 5)
+
+        # Add the fancy and useless buttons
+        bottomSizer.Add(self.okButton, 0, wx.ALL, 15)
+        bottomSizer.Add((0, 0), 1, wx.EXPAND)
+        bottomSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+
+        mainSizer.Add(bottomSizer, 0, wx.EXPAND)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        mainSizer.Layout()
+        
+
+    def BindEvents(self):
+        """ Binds the events to specific methods. """
+
+        BaseDialog.BindEvents(self)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.cancelButton)
+        self.Bind(wx.EVT_COMMAND_SCROLL, self.OnTransparency, self.transparency)
+        
+
+    def OnTransparency(self, event):
+
+        self.MainFrame.SetTransparent(self.transparency.GetValue())
+
+
+    def GetUserChoices(self):
+
+        pass
+
+    

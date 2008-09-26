@@ -325,3 +325,16 @@ class MessageWindow(wx.Panel):
         pageNum = book.GetSelection()
         self.dryrun.Enable(pageNum == 0)
 
+
+    def NoPagesLeft(self, enable):
+        """
+        Enables/disables all the buttons depending on the number of projects opened.
+
+        @param enable: whether to enable or disable the buttons.
+        """
+
+        self.dryrun.Enable(enable)
+        self.compile.Enable(enable)
+        self.kill.Enable(enable)
+
+        

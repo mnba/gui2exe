@@ -119,7 +119,7 @@ class Py2ExePanel(BaseBuilderPanel):
         # A list control for the "bitmap_resources" option
         self.bitmapResourceList = BaseListCtrl(self, columnNames=[_("Id  "), _("Bitmap Path")], name="bitmap_resources")
         # A list control for the "other_resources" option
-        self.otherResourceList = BaseListCtrl(self, columnNames=[_("Type"), _("Id  "), _("Icon Path")], name="other_resources")
+        self.otherResourceList = BaseListCtrl(self, columnNames=[_("Type"), _("Id  "), _("Path/Value")], name="other_resources")
 
         # This command line switch instructs py2exe to create a python module cross
         # reference and display it in the webbrowser.  This allows to answer question

@@ -336,7 +336,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         treeItems: the selected tree items, which will be loaded.
         """
 
-        busy = PyBusyInfo("Loading project(s) from database...")
+        busy = PyBusyInfo("Loading project(s) from database...", self.MainFrame)
         wx.SafeYield()
         
         # Freeze the main frame. It speeds up a bit the drawing
@@ -624,7 +624,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             return
 
         # Update the project with the information contained in the file
-        busy = PyBusyInfo(_("Updating project from file..."))
+        busy = PyBusyInfo(_("Updating project from file..."), self.MainFrame)
         wx.SafeYield()
 
         # Set the configurations for every compiler    
@@ -673,7 +673,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The selected project name already exists!
             return
 
-        busy = PyBusyInfo(_("Copying existing project configuration..."))
+        busy = PyBusyInfo(_("Copying existing project configuration..."), self.MainFrame)
         wx.SafeYield(self)
         
         # Go with the new project
