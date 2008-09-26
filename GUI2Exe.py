@@ -1682,11 +1682,17 @@ class GUI2Exe(wx.Frame):
         except:
             self.RunError(2, msg)
             return
-        
-        if not os.path.isfile(exeName):
-            # No such file, have you compiled it?
-            self.RunError(2, msg)
-            return
+
+        if wx.Platform != '__WXMAC__':
+            if not os.path.isfile(exeName):
+                # No such file, have you compiled it?
+                self.RunError(2, msg)
+                return
+        else:
+            # On OSX .app files are directories so just check that it exists
+            if not os.path.exists(exeName):
+                self.RunError(2, msg)
+                return
 
         # Starts the compiled exe file
         msg = _("Starting compiled executable...")
@@ -1714,11 +1720,11 @@ class GUI2Exe(wx.Frame):
         if wx.Platform == "__WXGTK__":
             exe = "./" + exe
         elif wx.Platform == "__WXMAC__":
-            exe = "open %s"%exe
+            exe = "open %s" % exe
 
         if sys.version[0:3] > "(2,4)":
             # subprocess is new in 2.4
-            subprocess.Popen(exe)
+            subprocess.Popen(exe, shell=(not subprocess.mswindows))
         else:
             if wx.Platform == "__WXGTK__":
                 # GTK doesn't like os.spawnl...
