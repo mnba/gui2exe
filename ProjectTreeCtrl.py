@@ -687,4 +687,19 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
 
         self.MainFrame.RunError(2, _("Project %s succesfully copied to %s")%(project.GetName(), projectName))
 
-        
+
+    def LoadFromPreferences(self, itemName):
+        """ Re-load a project at startup if the user chose so. """
+
+        child, cookie = self.GetFirstChild(self.rootItem)
+        # Walk the tree to look for itemName
+        while child:
+            childName = self.GetItemText(child)
+            if childName == itemName:
+                # Found it, load the project...
+                self.LoadProject([child])
+                break
+            
+            child, cookie = self.GetNextChild(self.rootItem, cookie)
+
+            

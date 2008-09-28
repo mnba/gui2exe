@@ -392,23 +392,23 @@ class PyInstallerPanel(BaseBuilderPanel):
         items = configuration["scripts"][:]
         pyInstallerPath += "/support/"
 
+        if not ascii:
+            # Using unicode
+            items.append(normpath(pyInstallerPath + "useUnicode.py").encode())
+
         if setupDict["level"] != "0":
             # Include zlib as user wants compression
-            items.append(normpath(pyInstallerPath + "_mountzlib.py"))
+            items.append(normpath(pyInstallerPath + "_mountzlib.py").encode())
         
         if includeTk:
             # That's a bit of a mess, but PyInstaller is not exactly user-friendly...
             if oneDir:
-                items.append(normpath(pyInstallerPath + "useTK.py"))
+                items.append(normpath(pyInstallerPath + "useTK.py").encode())
             else:
-                items.extend([normpath(pyInstallerPath + "unpackTK.py"),
-                              normpath(pyInstallerPath + "useTK.py"),
-                              normpath(pyInstallerPath + "removeTK.py")])
+                items.extend([normpath(pyInstallerPath + "unpackTK.py").encode(),
+                              normpath(pyInstallerPath + "useTK.py").encode(),
+                              normpath(pyInstallerPath + "removeTK.py").encode()])
         
-        if not ascii:
-            # Using unicode
-            items.append(normpath(pyInstallerPath + "useUnicode.py"))
-
         items.append(items[0])
         items.pop(0)
         

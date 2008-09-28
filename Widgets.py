@@ -8,6 +8,7 @@ import wx.lib.mixins.listctrl as listmix
 import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
+import wx.lib.langlistctrl as langlist
 
 if wx.Platform == "__WXMAC__":
     # For the PList editor
@@ -1232,7 +1233,9 @@ class CustomCodeViewer(wx.Frame):
         if readOnly:
             # No way, you can't change the text now
             self.pythonStc.SetReadOnly(True)
-            
+
+        self.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
+        
 
     def LayoutItems(self, readOnly):
         """
@@ -1688,6 +1691,7 @@ class Py2ExeMissing(wx.Frame):
         # We want the second column to fill all the available space
         self.list.setResizeColumn(2)    
         self.okButton.SetDefault()
+        self.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
 
 
     def LayoutItems(self, dll):
@@ -1773,6 +1777,9 @@ class BaseDialog(wx.Dialog):
             
         wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
         self.MainFrame = parent
+        
+        # Set the user transparency
+        self.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
         
 
     def CreateButtons(self):
@@ -2223,6 +2230,7 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         # Build the image list
         for png in images:
             self.imageList.append(self.MainFrame.CreateBitmap(png))
+
         
     def OnDrawItem(self, dc, rect, item, flags):
         """
@@ -3187,29 +3195,35 @@ class PListEditor(BaseDialog):
 class PreferencesDialog(BaseDialog):
     """ A dialog to show/edit preferences for GUI2Exe. """
 
-    def __init__(self, parent, preferences):
+    def __init__(self, parent):
         """
         Default class constructor.
 
-        @param parent: the dialog parent;
-        @param preferences: saved GUI2Exe preferences (if any).
+        @param parent: the dialog parent.
         """
 
         BaseDialog.__init__(self, parent)
         self.SetWindowStyleFlag(self.GetWindowStyleFlag() & ~wx.RESIZE_BORDER)
 
-        self.preferences = preferences
-
         self.interfaceSizer_staticbox = wx.StaticBox(self, -1, _("User Interface"))
         self.languagesSizer_staticbox = wx.StaticBox(self, -1, _("Locale Settings"))
         self.projectSizer_staticbox = wx.StaticBox(self, -1, _("Projects"))
-        self.loadProjects = wx.CheckBox(self, -1, _("Reload opened projects at start-up"))
-        self.openedCompilers = wx.CheckBox(self, -1, _("Remember last used compiler for all projects"))
-        self.gui2exeSize = wx.CheckBox(self, -1, _("Remember GUI2Exe window size on exit"))
-        self.gui2exePosition = wx.CheckBox(self, -1, _("Remember GUI2Exe window position on exit"))
-        self.perspective = wx.CheckBox(self, -1, _("Use last UI perspective at start-up"))
+        self.loadProjects = wx.CheckBox(self, -1, _("Reload opened projects at start-up"),
+                                        name="Reload_Projects")
+        self.openedCompilers = wx.CheckBox(self, -1, _("Remember last used compiler for all projects"),
+                                           name="Remember_Compiler")
+        self.gui2exeSize = wx.CheckBox(self, -1, _("Remember GUI2Exe window size on exit"),
+                                       name="Window_Size")
+        self.gui2exePosition = wx.CheckBox(self, -1, _("Remember GUI2Exe window position on exit"),
+                                           name="Window_Position")
+        self.perspective = wx.CheckBox(self, -1, _("Use last UI perspective at start-up"),
+                                       name="Perspective")
         self.transparency = wx.Slider(self, -1, 255, 100, 255, style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS|wx.SL_LABELS)
-        self.languages = wx.ComboBox(self, -1, choices=[], style=wx.CB_DROPDOWN|wx.CB_DROPDOWN|wx.CB_READONLY)
+        self.languages = LangListCombo(self, self.MainFrame.GetPreferences("Language"))
+
+        # Store the widgets for later use        
+        self.preferencesWidgets = [self.loadProjects, self.openedCompilers, self.gui2exeSize,
+                                   self.gui2exePosition, self.perspective]
         
         # Do the hard work
         self.CreateButtons()
@@ -3228,9 +3242,16 @@ class PreferencesDialog(BaseDialog):
         """ Sets few properties for the dialog. """        
 
         BaseDialog.SetProperties(self, _("GUI2Exe Preferences dialog"))
-        self.openedCompilers.SetValue(1)
-        
 
+        for widget in self.preferencesWidgets:
+            # Get all the user preferences
+            name = widget.GetName()
+            widget.SetValue(self.MainFrame.GetPreferences(name)[0])
+
+        transparency = self.MainFrame.GetPreferences("Transparency")
+        self.transparency.SetValue(transparency)
+        
+        
     def LayoutItems(self):
         """ Layouts the widgets with sizers. """        
 
@@ -3285,12 +3306,124 @@ class PreferencesDialog(BaseDialog):
         
 
     def OnTransparency(self, event):
+        """ Handles the wx.EVT_COMMAND_SCROLL event for the dialog. """
+        
+        for win in wx.GetTopLevelWindows():
+            win.SetTransparent(self.transparency.GetValue())
 
-        self.MainFrame.SetTransparent(self.transparency.GetValue())
+
+    def OnCancel(self, event):
+        """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
+
+        for win in wx.GetTopLevelWindows():
+            win.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
+
+        self.EndModal(wx.ID_CANCEL)
+        
+
+    def OnOk(self, event):
+        """ Applies the user choices and saves them to wx.Config. """
+
+        for widget in self.preferencesWidgets:
+            # Get all the user preferences
+            name = widget.GetName()
+            value = widget.GetValue()
+            preference = self.MainFrame.GetPreferences(name)
+            # Sets them back with the user choices
+            preference[0] = value
+            self.MainFrame.SetPreferences(name, preference)
+
+        self.MainFrame.SetPreferences("Transparency", self.transparency.GetValue())
+        self.EndModal(wx.ID_OK)
 
 
-    def GetUserChoices(self):
+    def OnClose(self, event):
+        """ User canceled the dialog. """
 
-        pass
+        self.OnCancel(event)
 
+
+#---- Language List Combo Box----#
+class LangListCombo(wx.combo.BitmapComboBox):
+    """ Combines a langlist and a BitmapComboBox. """
     
+    def __init__(self, parent, default=None):
+        """
+        Creates a combobox with a list of all translations for GUI2Exe
+        as well as displaying the countries flag next to the item
+        in the list.
+
+        @param default: The default item to show in the combo box
+        """
+
+        self.MainFrame = parent.MainFrame
+        
+        lang_ids = self.GetLocaleDict(self.GetAvailLocales()).values()
+        lang_items = langlist.CreateLanguagesResourceLists(langlist.LC_ONLY, \
+                                                           lang_ids)
+        wx.combo.BitmapComboBox.__init__(self, parent,
+                                         size=wx.Size(250, 26),
+                                         style=wx.CB_READONLY)
+        for lang_d in lang_items[1]:
+            bit_m = lang_items[0].GetBitmap(lang_items[1].index(lang_d))
+            self.Append(lang_d, bit_m)
+
+        if default:
+            self.SetValue(default)
+
+
+    def GetAvailLocales(self):
+        """
+        Gets a list of the available locales that have been installed.
+        Returning a list of strings that represent the
+        canonical names of each language.
+        
+        @return: list of all available local/languages available
+        """
+
+        avail_loc = []
+        langDir = self.MainFrame.installDir
+        loc = glob.glob(os.path.join(langDir, "locale", "*"))
+        for path in loc:
+            the_path = os.path.join(path, "LC_MESSAGES", "GUI2Exe.mo")
+            if os.path.exists(the_path):
+                avail_loc.append(os.path.basename(path))
+        return avail_loc
+
+
+    def GetLocaleDict(self, loc_list, opt=0):
+        """
+        Takes a list of cannonical locale names and by default returns a
+        dictionary of available language values using the canonical name as
+        the key. Supplying the Option OPT_DESCRIPT will return a dictionary
+        of language id's with languages description as the key.
+        
+        @param loc_list: list of locals
+        @keyword opt: option for configuring return data
+        @return: dict of locales mapped to wx.LANGUAGE_*** values
+        """
+        lang_dict = dict()
+        for lang in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
+            loc_i = wx.Locale(wx.LANGUAGE_DEFAULT).\
+                              GetLanguageInfo(getattr(wx, lang))
+            if loc_i:
+                if loc_i.CanonicalName in loc_list:
+                    if opt == 1:
+                        lang_dict[loc_i.Description] = getattr(wx, lang)
+                    else:
+                        lang_dict[loc_i.CanonicalName] = getattr(wx, lang)
+        return lang_dict
+
+
+    def GetLangId(self, lang_n):
+        """
+        Gets the ID of a language from the description string. If the
+        language cannot be found the function simply returns the default language
+
+        @param lang_n: Canonical name of a language
+        @return: wx.LANGUAGE_*** id of language
+
+        """
+        lang_desc = GetLocaleDict(GetAvailLocales(), OPT_DESCRIPT)
+        return lang_desc.get(lang_n, wx.LANGUAGE_DEFAULT)
+

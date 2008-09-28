@@ -55,8 +55,8 @@ from AllIcons import catalog
 # And import the fancy AdvancedSplash
 import AdvancedSplash as AS
 
-# I need that to have restorable perspectives
-ID_FirstPerspective = wx.ID_HIGHEST + 10001
+# I need this for restorable perspectives:
+ID_FirstPerspective = wx.NewId()
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -126,8 +126,7 @@ class GUI2Exe(wx.Frame):
         self.pythonVersion = sys.executable  # Default Python executable
         self.pyInstallerPath = None          # Where PyInstaller lives
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
-        self.showTips = False                # Show tooltips for various compiler options
-        self.openingPages = {}               # Used to remember the last used compiler for every project
+        self.showTips = True                 # Show tooltips for various compiler options
         
         self.perspectives = []
 
@@ -169,17 +168,19 @@ class GUI2Exe(wx.Frame):
         # Very nice the bug introduced in wxPython 2.8.3 about wxAUI Maximize buttons...
         self._mgr.AddPane(self.projectTree, wx.aui.AuiPaneInfo().Left().
                           Caption(_("GUI2Exe Projects")).MinSize(wx.Size(250, -1)).
-                          FloatingSize(wx.Size(200, 300)).Layer(1).MaximizeButton())
+                          FloatingSize(wx.Size(200, 300)).Layer(1).MaximizeButton().
+                          Name("GUI2ExeProjects"))
         self._mgr.AddPane(self.executablePanel, wx.aui.AuiPaneInfo().Left().
                           Caption(_("Executable Properties")).MinSize(wx.Size(200, 100)).
                           BestSize(wx.Size(200, size[1]/6)).MaxSize(wx.Size(200, 100)).
-                          FloatingSize(wx.Size(200, 200)).Layer(1).Position(1).MaximizeButton())
+                          FloatingSize(wx.Size(200, 200)).Layer(1).Position(1).MaximizeButton().
+                          Name("ExecutableProperties"))
         self._mgr.GetPane(self.executablePanel).dock_proportion = 100000/4
-        self._mgr.AddPane(self.mainPanel, wx.aui.AuiPaneInfo().CenterPane())
+        self._mgr.AddPane(self.mainPanel, wx.aui.AuiPaneInfo().CenterPane().Name("MainPanel"))
         self._mgr.AddPane(self.messageWindow, wx.aui.AuiPaneInfo().Bottom().
                           Caption(_("Messages And Actions")).MinSize(wx.Size(200, 100)).
                           FloatingSize(wx.Size(500, 300)).BestSize(wx.Size(200, size[1]/6)).
-                          MaximizeButton())
+                          MaximizeButton().Name("MessagesAction"))
         
         # Set all the flags for wxAUI
         self.SetAllFlags()
@@ -196,6 +197,9 @@ class GUI2Exe(wx.Frame):
         self.ReadConfigurationFile()
         # Disable the Run and Dry-Run buttons
         self.messageWindow.NoPagesLeft(False)
+
+        # Apply the user preferences
+        wx.CallAfter(self.ApplyPreferences)
 
 
     # ================================== #
@@ -286,13 +290,20 @@ class GUI2Exe(wx.Frame):
                 menu.AppendSeparator()
                 continue
 
+            id = -1
             # I need to find which menu holds the wxAUI-based "restore perspective"
             # as I have to bind on wx.EVT_MENU_RANGE with a specific start id 
-            id = (eachLabel.find(_("Restore")) >= 0 and [ID_FirstPerspective] or [-1])[0]
+            if eachLabel.find(_("Restore original")) >= 0:
+                id = ID_FirstPerspective
             # The about menu on Mac should go on the application menu
-            id = (eachLabel.find(_("About")) >= 0 and [wx.ID_ABOUT] or [-1])[0]
+            elif eachLabel.find(_("About")) >= 0:
+                id = wx.ID_ABOUT
+            # The preferences things has its own id...
+            elif eachLabel.find(_("Preferences")) >= 0:
+                id = wx.ID_PREFERENCES
             # The exit menu is more special
-            id = (eachLabel.find(_("Quit")) >= 0 and [wx.ID_EXIT] or [-1])[0]
+            elif eachLabel.find(_("Quit")) >= 0:
+                id = wx.ID_EXIT
             # There are also few check menu items around...
             kind = (eachKind and [eachKind] or [wx.ITEM_NORMAL])[0]
 
@@ -497,10 +508,70 @@ class GUI2Exe(wx.Frame):
             item = menuBar.FindMenuItem(_("Options"), _('Clean "dist" directory'))
             menuBar.Check(item, self.cleanDist)
 
-        val = options.Read('Opened_Pages')
+        preferences = {}
+        val = options.Read('Preferences')
         if val:
-            self.openingPages = eval(val)
+            preferences = eval(val)
+        else:
+            preferences["Transparency"] = 255
+            preferences["Reload_Projects"] = [0, []]
+            preferences["Remember_Compiler"] = [0, {}]
+            preferences["Window_Size"] = [0, (-1, -1)]
+            preferences["Window_Position"] = [0, (-1, -1)]
+            preferences["Language"] = "Default"
+            preferences["Perspective"] = [0, ""]
 
+        self.preferences = preferences
+
+
+    def ApplyPreferences(self):
+        """ Applies user preferences. """
+
+        # Alpha transparency
+        self.SetTransparent(self.preferences["Transparency"])
+
+        # AUI GUI perspective
+        choice, perspective = self.preferences["Perspective"]
+        if choice:
+            self._mgr.LoadPerspective(perspective)
+            self._mgr.Update()
+
+        # GUI2Exe Window size
+        choice, size = self.preferences["Window_Size"]
+        if choice and size > (20, 20):
+            self.SetSize(size)
+        # GUI2Exe Window position
+        choice, position = self.preferences["Window_Position"]
+        if choice and position > (20, 20):
+            self.SetPosition(position)
+
+        # Reload the projects?
+        choice, projects = self.preferences["Reload_Projects"]
+        if choice:
+            for prj in projects:
+                self.projectTree.LoadFromPreferences(prj)
+
+
+    def GetPreferences(self, key):
+        """
+        Returns the user preferences for a particular setting.
+
+        @param key: the preferences option name.
+        """
+
+        return self.preferences[key]
+
+
+    def SetPreferences(self, key, value):
+        """
+        Sets the user preferences for a particular setting.
+
+        @param key: the preferences option name;
+        @param value: the preferences option value.
+        """
+
+        self.preferences[key] = value
+        
 
     def GetDefaultConfiguration(self, compiler):
         """
@@ -637,12 +708,44 @@ class GUI2Exe(wx.Frame):
             self.process.Kill()
             self.processTimer.Stop()
 
+        reload_projects = self.GetPreferences("Reload_Projects")[0]
+        toReload = []
         # Loop over all the opened wx.aui.AuiNotebook pages to see if
         # there are unsaved projects
         for pageNumber in xrange(self.mainPanel.GetPageCount()-1, -1, -1):
+            toReload.append(self.mainPanel.GetPageText(pageNumber))
             if not self.HandlePageClosing(pageNumber, event):
                 # User pressed cancel
                 return
+
+        # Check the user preferences
+        if reload_projects:
+            # The user wants to reload the opened projects at startup
+            toReload.reverse()
+            self.SetPreferences("Reload_Projects", [1, toReload])
+
+        if self.GetPreferences("Window_Size")[0]:
+            # The user wants to remeber GUI2Exe window size at startup
+            size = self.GetSize()
+            if size.x > 20 and size.y > 20:
+                vector = (size.x, size.y)
+            else:
+                # Window size too small (?)
+                size = wx.GetDisplaySize()
+                # We run at 5/6 of that size
+                xvideo, yvideo = 5*size.x/6, 5*size.y/6
+                vector = (xvideo, yvideo)
+                
+            self.SetPreferences("Window_Size", [1, vector])
+            
+        if self.GetPreferences("Window_Position")[0]:
+            # The user wants to remeber GUI2Exe window positions at startup
+            pos = self.GetPosition()
+            self.SetPreferences("Window_Position", [1, (pos.x, pos.y)])
+
+        if self.GetPreferences("Perspective")[0]:
+            # The user wants to remember the AUI perspective
+            self.SetPreferences("Perspective", [1, self._mgr.SavePerspective()])        
 
         # Save back the configuration items
         config = self.GetConfig()
@@ -652,7 +755,7 @@ class GUI2Exe(wx.Frame):
         config.Write('Show_Tooltips', str(self.showTips))
         config.Write('Delete_Build', str(self.deleteBuild))
         config.Write('Clean_Dist', str(self.cleanDist))
-        config.Write('Opened_Pages', str(self.openingPages))
+        config.Write('Preferences', str(self.preferences))
         config.Flush()
 
         # Close down the database...
@@ -847,7 +950,7 @@ class GUI2Exe(wx.Frame):
     def OnPreferences(self, event):
         """ Edit/view pereferences and settings for GUI2Exe. """
 
-        dlg = PreferencesDialog(self, {})
+        dlg = PreferencesDialog(self)
         dlg.ShowModal()
         dlg.Destroy()
         
@@ -1197,11 +1300,16 @@ class GUI2Exe(wx.Frame):
         treeItem = page.GetTreeItem()
         # Check if it is a close event or a wx.aui.AuiNotebookEvent
         isCloseEvent = (event.GetId() == wx.ID_EXIT)
-            
+
+        # Get the preferences for the compiler
+        remember_compiler = self.GetPreferences("Remember_Compiler")
+        
         if not unSaved:
             # Mark the item as non-edited anymore (if it exists)
             self.projectTree.SetItemEditing(treeItem, False)
-            self.openingPages[projectName] = page.GetSelection()
+            # Save the preferences (if needed)
+            remember_compiler[1].update({projectName: page.GetSelection()})
+            self.SetPreferences("Remember_Compiler", remember_compiler)
             if not isCloseEvent:
                 event.Skip()
                 if not isAUI:
@@ -1221,7 +1329,8 @@ class GUI2Exe(wx.Frame):
         elif answer == wx.ID_YES:
             # Save the project, defer to the database
             self.dataBase.SaveProject(project)
-            self.openingPages[projectName] = page.GetSelection()
+            remember_compiler[1].update({projectName: page.GetSelection()})
+            self.SetPreferences("Remember_Compiler", remember_compiler)
             if not isCloseEvent:
                 # We are handling wx.aui.AuiNotebook close event
                 event.Skip()
@@ -1232,7 +1341,8 @@ class GUI2Exe(wx.Frame):
             # Check if the project exists
             projectExists = self.dataBase.IsProjectExisting(project)
             if projectExists:
-                self.openingPages[projectName] = page.GetSelection()
+                remember_compiler[1].update({projectName: page.GetSelection()})
+                self.SetPreferences("Remember_Compiler", remember_compiler)
 
             if not isCloseEvent:
                 event.Skip()
@@ -1340,7 +1450,7 @@ class GUI2Exe(wx.Frame):
         # The Project method adds a page to the center pane
         # I need it in another method as I use it also elsewhere below
         self.Project(project, treeItem, True)
-        self.openingPages[projectName] = 0
+        
         # Send a message to the log window at the bottom    
         self.SendMessage(0, _('New project "%s" added')%projectName)
 
@@ -1375,10 +1485,11 @@ class GUI2Exe(wx.Frame):
             # Disable the Run and Dry-Run buttons
             self.messageWindow.NoPagesLeft(True)
 
-        if projectName in self.openingPages:
+        remember, projects = self.GetPreferences("Remember_Compiler")
+        if projectName in projects and remember:
             # Get the current LabelBook
             book = self.GetCurrentBook()
-            book.SetSelection(self.openingPages[projectName])
+            book.SetSelection(projects[projectName])
             
         # Send a message to the log window at the bottom
         self.SendMessage(0, _('Project "%s" successfully loaded')%projectName)
