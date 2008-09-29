@@ -1,8 +1,12 @@
 # Start the imports
 
 import os
+import sys
 import time
 import wx
+import glob
+import traceback
+import platform
 
 # For the version checking
 import urllib2
@@ -385,3 +389,99 @@ def PrintTree(strs, tree, depth=0, written=False):
 
     return strs
 
+
+def GetAvailLocales(installDir):
+    """
+    Gets a list of the available locales that have been installed.
+    Returning a list of strings that represent the
+    canonical names of each language.
+    
+    @return: list of all available local/languages available
+    """
+
+    avail_loc = []
+    langDir = installDir
+    loc = glob.glob(os.path.join(langDir, "locale", "*"))
+    for path in loc:
+        the_path = os.path.join(path, "LC_MESSAGES", "GUI2Exe.mo")
+        if os.path.exists(the_path):
+            avail_loc.append(os.path.basename(path))
+    return avail_loc
+
+
+def GetLocaleDict(loc_list, opt=0):
+    """
+    Takes a list of cannonical locale names and by default returns a
+    dictionary of available language values using the canonical name as
+    the key. Supplying the Option OPT_DESCRIPT will return a dictionary
+    of language id's with languages description as the key.
+    
+    @param loc_list: list of locals
+    @keyword opt: option for configuring return data
+    @return: dict of locales mapped to wx.LANGUAGE_*** values
+    """
+    lang_dict = dict()
+    for lang in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
+        loc_i = wx.Locale(wx.LANGUAGE_DEFAULT).\
+                          GetLanguageInfo(getattr(wx, lang))
+        if loc_i:
+            if loc_i.CanonicalName in loc_list:
+                if opt == 1:
+                    lang_dict[loc_i.Description] = getattr(wx, lang)
+                else:
+                    lang_dict[loc_i.CanonicalName] = getattr(wx, lang)
+    return lang_dict
+
+
+def GetLangId(installDir, lang_n):
+    """
+    Gets the ID of a language from the description string. If the
+    language cannot be found the function simply returns the default language
+
+    @param lang_n: Canonical name of a language
+    @return: wx.LANGUAGE_*** id of language
+
+    """
+    lang_desc = GetLocaleDict(GetAvailLocales(installDir), 1)
+    return lang_desc.get(lang_n, wx.LANGUAGE_DEFAULT)
+
+
+def FormatTrace(etype, value, trace):
+    """Formats the given traceback
+    @return: Formatted string of traceback with attached timestamp
+
+    """
+    exc = traceback.format_exception(etype, value, trace)
+    exc.insert(0, "*** %s ***%s" % (now(), os.linesep))
+    return "".join(exc)
+
+
+def EnvironmentInfo(version):
+    """
+    Returns a string of the systems information.
+    
+    @return: System information string
+    """
+
+    info = list()
+    info.append("#---- Notes ----#")
+    info.append("Please provide additional information about the crash here")
+    info.extend(["", "", ""])
+    info.append("#---- System Information ----#")
+    info.append("GUI2Exe Version: %s" % version)
+    info.append("Operating System: %s" % wx.GetOsDescription())
+    if sys.platform == 'darwin':
+        info.append("Mac OSX: %s" % platform.mac_ver()[0])
+    info.append("Python Version: %s" % sys.version)
+    info.append("wxPython Version: %s" % wx.version())
+    info.append("wxPython Info: (%s)" % ", ".join(wx.PlatformInfo))
+    info.append("Python Encoding: Default=%s  File=%s" % \
+                (sys.getdefaultencoding(), sys.getfilesystemencoding()))
+    info.append("wxPython Encoding: %s" % wx.GetDefaultPyEncoding())
+    info.append("System Architecture: %s %s" % (platform.architecture()[0], \
+                                                platform.machine()))
+    info.append("Byte order: %s" % sys.byteorder)
+    info.append("Frozen: %s" % str(getattr(sys, 'frozen', 'False')))
+    info.append("#---- End System Information ----#")
+
+    return os.linesep.join(info)

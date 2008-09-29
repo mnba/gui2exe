@@ -36,7 +36,6 @@ import webbrowser
 import shutil
 
 # Get the translation module
-import gettext
 import locale
 
 # Let's import few modules I have written for GUI2Exe
@@ -48,6 +47,8 @@ from DataBase import DataBase
 from Project import Project
 from Process import Process
 from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog, PreferencesDialog
+from Widgets import ExceptionHook
+from Utilities import GetLangId, GetAvailLocales
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
 from AllIcons import catalog
@@ -56,7 +57,7 @@ from AllIcons import catalog
 import AdvancedSplash as AS
 
 # I need this for restorable perspectives:
-ID_FirstPerspective = wx.NewId()
+ID_FirstPerspective = wx.ID_HIGHEST + 10000
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -290,7 +291,7 @@ class GUI2Exe(wx.Frame):
                 menu.AppendSeparator()
                 continue
 
-            id = -1
+            id = wx.ID_ANY
             # I need to find which menu holds the wxAUI-based "restore perspective"
             # as I have to bind on wx.EVT_MENU_RANGE with a specific start id 
             if eachLabel.find(_("Restore original")) >= 0:
@@ -2073,9 +2074,51 @@ class GUI2ExeApp(wx.App):
 
         self.SetAppName("GUI2Exe")
 
+        try:
+            installDir = os.path.dirname(os.path.abspath(__file__))
+        except:
+            installDir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+        # Retrieve the user configuration directory (if any)
+        sp = wx.StandardPaths.Get()
+        userDir = sp.GetUserDataDir()
+        fileName = os.path.join(userDir, "options")
+        language = "Default"
+        # Check for the option configuration file
+        if os.path.isfile(fileName):
+            options = wx.FileConfig(localFilename=fileName)
+            # Check for preferences if they exist
+            val = options.Read('Preferences')
+            if val:
+                # Evaluate preferences
+                preferences = eval(val)
+                language = preferences["Language"]
+                
+        # Setup Locale
+        locale.setlocale(locale.LC_ALL, '')
+        self.locale = wx.Locale(GetLangId(installDir, language))
+        if self.locale.GetCanonicalName() in GetAvailLocales(installDir):
+            self.locale.AddCatalogLookupPathPrefix(os.path.join(installDir, "locale"))
+            self.locale.AddCatalog("GUI2Exe")
+        else:
+            del self.locale
+            self.locale = None
+
+        # Set up the exception handler...
+        sys.excepthook = ExceptionHook
+
         return True
         
+    def OnExit(self, evt=None, force=False):
+        """
+        Handle application exit request
 
+        @param evt: event that called this handler
+        """
+
+        self.Exit()
+
+                
 if __name__ == "__main__":
     # Start the whole thing
     app = GUI2ExeApp(0)
