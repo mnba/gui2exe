@@ -269,8 +269,10 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         @param projectName: the name of the current project;
         @param creationDate: the creation data of the project (as it is in the database).
         """
-                
-        self.label.SetLabel(_("%s options for: %s (Created: %s)")%(self.GetName(), projectName, creationDate))
+
+        transdict = dict(compiler=self.GetName(), projectName=projectName,
+                         creationDate=creationDate)
+        self.label.SetLabel(_("%(compiler)s options for: %(projectName)s (Created: %(creationDate)s)")%transdict)
         self.label.Refresh()
 
 

@@ -48,7 +48,7 @@ from Project import Project
 from Process import Process
 from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog, PreferencesDialog
 from Widgets import ExceptionHook
-from Utilities import GetLangId, GetAvailLocales
+from Utilities import GetLangId, GetAvailLocales, now
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
 from AllIcons import catalog
@@ -201,6 +201,8 @@ class GUI2Exe(wx.Frame):
 
         # Apply the user preferences
         wx.CallAfter(self.ApplyPreferences)
+        transdict = dict(dateAndTime=now())
+        self.SendMessage(0, _("GUI2Exe succesfully started at %(dateAndTime)s")%transdict)
 
 
     # ================================== #
@@ -650,7 +652,8 @@ class GUI2Exe(wx.Frame):
             fp = file(path, 'w') # Create file anew
             fp.write(setupScript)
             fp.close()
-            self.SendMessage(0, _("File %s successfully saved")%path)
+            transdict = dict(filePath=path)
+            self.SendMessage(0, _("File %(filePath)s successfully saved")%transdict)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -689,8 +692,8 @@ class GUI2Exe(wx.Frame):
             fp = file(path, 'w') # Create file anew
             fp.write(strs)
             fp.close()
-            self.SendMessage(0, _("Project %s successfully exported to file %s")% \
-                             (project.GetName(), path))
+            transdict = dict(projectName=project.GetName(), filePath=path)
+            self.SendMessage(0, _("Project %(projectName)s successfully exported to file %(filePath)s")%transdict)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -876,8 +879,9 @@ class GUI2Exe(wx.Frame):
                 if fileName.lower() != "python.exe":
                     self.RunError(2, _("The selected file is not a Python executable."))
                     return
-            
-            self.SendMessage(0, _("Python executable changed from %s to %s")%(self.pythonVersion, path))
+
+            transdict = dict(oldVersion=self.pythonVersion, newVersion=path)
+            self.SendMessage(0, _("Python executable changed from %(oldVersion)s to %(newVersion)s")%transdict)
             self.pythonVersion = path
             
         else:
@@ -1016,7 +1020,8 @@ class GUI2Exe(wx.Frame):
         outputText = project.GetBuildOutput(compiler)
         if not outputText:
             # No compilatin has been done
-            msg = _("This project has not been compiled with %s yet.")%compiler
+            transdict = dict(compiler=compiler)
+            msg = _("This project has not been compiled with %(compiler)s yet.")%transdict
             self.RunError(2, msg)
             return
 
@@ -1452,8 +1457,9 @@ class GUI2Exe(wx.Frame):
         # I need it in another method as I use it also elsewhere below
         self.Project(project, treeItem, True)
         
-        # Send a message to the log window at the bottom    
-        self.SendMessage(0, _('New project "%s" added')%projectName)
+        # Send a message to the log window at the bottom
+        transdict = dict(projectName=projectName)
+        self.SendMessage(0, _('New project "%(projectName)s" added')%transdict)
 
         # Time to warm up...        
         self.Thaw()
@@ -1493,7 +1499,8 @@ class GUI2Exe(wx.Frame):
             book.SetSelection(projects[projectName])
             
         # Send a message to the log window at the bottom
-        self.SendMessage(0, _('Project "%s" successfully loaded')%projectName)
+        transdict = dict(projectName=projectName)
+        self.SendMessage(0, _('Project "%(projectName)s" successfully loaded')%transdict)
 
         wx.EndBusyCursor()
         
@@ -1750,8 +1757,10 @@ class GUI2Exe(wx.Frame):
         project = self.GetCurrentProject()
         currentPage = self.mainPanel.GetSelection()
 
-        self.SendMessage(0, _("Starting compilation with Python executable: %s")%self.pythonVersion)
-        self.SendMessage(0, _("The compiler selected is ==> %s <==")%compiler.upper())
+        transdict = dict(pythonExecutable=self.pythonVersion)
+        self.SendMessage(0, _("Starting compilation with Python executable: %(pythonExecutable)s")%transdict)
+        transdict = dict(compiler=compiler.upper())
+        self.SendMessage(0, _("The compiler selected is ==> %(compiler)s <==")%transdict)
         
         # Start the external process, which is actually subclassed in
         # The Process class
@@ -1881,7 +1890,8 @@ class GUI2Exe(wx.Frame):
         self.SendMessage(2, _("Executable terminated with errors or warnings"))
         
         # Ask the user if he/she wants to examine the tracebacks in the log file
-        msg = _("It appears that the executable generated errors in file:\n\n%s\n\nDo you want to examine the tracebacks?")%logFile
+        transdict = dict(logFile=logFile)
+        msg = _("It appears that the executable generated errors in file:\n\n%(logFile)s\n\nDo you want to examine the tracebacks?")%transdict
         answer = self.RunError(3, msg)
         if answer != wx.ID_YES:
             return

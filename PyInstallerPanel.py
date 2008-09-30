@@ -47,7 +47,8 @@ class PyInstallerPanel(BaseBuilderPanel):
         self.scriptSizer_staticbox = wx.StaticBox(self, -1, _("Scripts"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, _("PyInstaller options for: %s (Created: %s)")%(projectName, creationDate))
+        transdict = dict(projectName=projectName, creationDate=creationDate)
+        self.label = wx.StaticText(self, -1, _("PyInstaller options for: %(projectName)s (Created: %(creationDate)s)")%transdict)
 
         # This list holds all the script files added by the user
         self.scriptsList = BaseListCtrl(self, columnNames=[_("Python Scripts")], name="scripts")
@@ -268,7 +269,8 @@ class PyInstallerPanel(BaseBuilderPanel):
         for indx in xrange(self.scriptsList.GetItemCount()):
             script = self.scriptsList.GetItem(indx, 1)
             if not os.path.isfile(script.GetText()):
-                msg = _("Python script:\n\n%s\n\nIs not a valid file.")%script.GetText()
+                transdict = dict(scriptName=script.GetText())
+                msg = _("Python script:\n\n%(scriptName)s\n\nIs not a valid file.")%transdict
                 self.MainFrame.RunError(2, msg, True)
                 return False
 
@@ -299,7 +301,8 @@ class PyInstallerPanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')%project.GetName())
+        transdict = dict(projectName=project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%(projectName)s" setup script...')%transdict)
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -392,10 +395,6 @@ class PyInstallerPanel(BaseBuilderPanel):
         items = configuration["scripts"][:]
         pyInstallerPath += "/support/"
 
-        if not ascii:
-            # Using unicode
-            items.append(normpath(pyInstallerPath + "useUnicode.py").encode())
-
         if setupDict["level"] != "0":
             # Include zlib as user wants compression
             items.append(normpath(pyInstallerPath + "_mountzlib.py").encode())
@@ -408,7 +407,11 @@ class PyInstallerPanel(BaseBuilderPanel):
                 items.extend([normpath(pyInstallerPath + "unpackTK.py").encode(),
                               normpath(pyInstallerPath + "useTK.py").encode(),
                               normpath(pyInstallerPath + "removeTK.py").encode()])
-        
+
+        if not ascii:
+            # Using unicode
+            items.append(normpath(pyInstallerPath + "useUnicode.py").encode())
+            
         items.append(items[0])
         items.pop(0)
         
@@ -443,6 +446,7 @@ class PyInstallerPanel(BaseBuilderPanel):
         setupScript += target % setupDict
 
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')%project.GetName())
+        transdict = dict(projectName=project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%(projectName)s" succesfully created')%transdict)
         return setupScript, buildDir
 

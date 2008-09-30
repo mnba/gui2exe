@@ -214,10 +214,14 @@ class Project(odict):
             # This is not 100% guaranteed to succeed...
             script = configuration["scripts"][-1]
             exename = configuration["exename"]
+            dist_dir = configuration["dist_dir"]
             if exename.strip():
                 script = os.path.normpath(os.path.split(script)[0] + "/" + exename)
             if configuration["onefile"]:
                 distDir = False
+            else:
+                if not dist_dir.strip():
+                    distDir = False
 
         elif compiler == "cx_Freeze":
             # Check if the executable has been renamed

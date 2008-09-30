@@ -42,9 +42,9 @@ class MessageWindow(wx.Panel):
         killBmp = self.MainFrame.CreateBitmap("kill")
 
         # This is a bit tailored over py2exe, but it's the only one I know
-        self.dryrun = buttons.ThemedGenBitmapTextButton(self, -1, dryBmp, _(" Dry Run "), size=(-1, 25))
-        self.compile = buttons.ThemedGenBitmapTextButton(self, -1, compileBmp, _(" Compile "), size=(-1, 25))
-        self.kill = buttons.ThemedGenBitmapTextButton(self, -1, killBmp, _(" Kill "), size=(-1, 25))
+        self.dryrun = buttons.ThemedGenBitmapTextButton(self, -1, dryBmp, _("Dry Run"), size=(-1, 25))
+        self.compile = buttons.ThemedGenBitmapTextButton(self, -1, compileBmp, _("Compile"), size=(-1, 25))
+        self.kill = buttons.ThemedGenBitmapTextButton(self, -1, killBmp, _("Kill"), size=(-1, 25))
         # The animation control
         ani = wx.animate.Animation(os.path.normpath(self.MainFrame.installDir +"/images/throbber.gif").encode())
         self.throb = wx.animate.AnimationCtrl(self, -1, ani)

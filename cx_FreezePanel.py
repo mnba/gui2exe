@@ -41,7 +41,8 @@ class cx_FreezePanel(BaseBuilderPanel):
         self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Class"))
 
         # A simple label that holds information about the project
-        self.label = wx.StaticText(self, -1, _("cx_Freeze options for: %s (Created: %s)")%(projectName, creationDate))
+        transdict = dict(projectName=projectName, creationDate=creationDate)
+        self.label = wx.StaticText(self, -1, _("cx_Freeze options for: %(projectName)s (Created: %(creationDate)s)")%transdict)
 
         # These text controls hold data used by VersionInfo in cx_Freeze
         self.versionTextCtrl = wx.TextCtrl(self, -1, "0.1", name="version")
@@ -325,7 +326,8 @@ class cx_FreezePanel(BaseBuilderPanel):
         # Retrieve the project stored in the parent (LabelBook) properties
         project = self.GetParent().GetProject()
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage(0, _('Generating "%s" setup script...')% project.GetName())
+        transdict = dict(projectName=project.GetName())
+        self.MainFrame.SendMessage(0, _('Generating "%(projectName)s" setup script...')% transdict)
 
         # Get the project configuration (all the options, basically)   
         configuration = project.GetConfiguration(self.GetName())
@@ -417,6 +419,7 @@ class cx_FreezePanel(BaseBuilderPanel):
         setupScript += _cx_Freeze_target % setupDict
         
         # Send a message to out fancy bottom log window
-        self.MainFrame.SendMessage(0, _('Setup script for "%s" succesfully created')% project.GetName())
+        transdict = dict(projectName=project.GetName())
+        self.MainFrame.SendMessage(0, _('Setup script for "%(projectName)s" succesfully created')% transdict)
         return setupScript, buildDir
 

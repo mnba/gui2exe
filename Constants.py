@@ -96,6 +96,11 @@ _comboImages = {"py2exe": {"bundle_files": ["bundle"]*3,
                              }
                 }
                            
+_bpPngs = [[_("New Child"), "new_child", _("Append a new tree item to the selected item")],
+           [_("New Sibling"), "new_sibling", _("Add a new tree item below the selected item")],
+           [_("Duplicate"), "duplicate", _("Duplicates the selected tree item")],
+           [_("Delete"), "delete", _("Deletes the selected tree item (and everything below)")]]
+
 
 if wx.Platform == '__WXMSW__':
     _faces = { 'times': 'Times New Roman',

@@ -10,11 +10,13 @@ import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 import wx.lib.langlistctrl as langlist
+import wx.lib.buttonpanel as bp
 
-if wx.Platform == "__WXMAC__":
+##if wx.Platform == "__WXMAC__":
     # For the PList editor
+if 1:
     from py2app.apptemplate import plist_template    
-    import plistlib
+##    import plistlib
     import wx.gizmos as gizmos
     
 # This is needed by BaseListCtrl
@@ -26,7 +28,7 @@ from Utilities import flatten, unique, RecurseSubDirs, GetLocaleDict, GetAvailLo
 from Utilities import FormatTrace, EnvironmentInfo
 from Constants import _iconFromName, _unWantedLists, _faces
 from Constants import _stcKeywords, _pywild, _pypackages, _dllbinaries
-from Constants import _xcdatawild, _dylibwild, _comboImages
+from Constants import _xcdatawild, _dylibwild, _comboImages, _bpPngs
 
 # Let's see if we can add few nice shadows to our tooltips (Windows only)
 _libimported = None
@@ -1192,8 +1194,8 @@ class CustomCodeViewer(wx.Frame):
             saveBmp = self.MainFrame.CreateBitmap("code_save")
             discardBmp = self.MainFrame.CreateBitmap("code_discard")
             # Create a couple of themed buttons to save or discard changes
-            self.saveButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, saveBmp, _(" Save "))
-            self.discardButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, discardBmp, _(" Discard "))
+            self.saveButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, saveBmp, _("Save"))
+            self.discardButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, -1, discardBmp, _("Discard"))
             self.saveButton.SetDefault()
             # If it is custom code, add the compiler name to the frame title
             self.SetTitle("%s - %s"%(self.GetTitle(), compiler))
@@ -1649,8 +1651,8 @@ class Py2ExeMissing(wx.Frame):
         # Build a couple of fancy and useless buttons        
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_OK, okBmp, _(" Ok "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
+        self.okButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_OK, okBmp, _("Ok"))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self.mainPanel, wx.ID_CANCEL, cancelBmp, _("Cancel"))
 
         # Do the hard work        
         self.SetProperties(dll)
@@ -1789,8 +1791,8 @@ class BaseDialog(wx.Dialog):
         # Build a couple of fancy and useless buttons        
         okBmp = self.MainFrame.CreateBitmap("project_ok")
         cancelBmp = self.MainFrame.CreateBitmap("exit")
-        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _(" Ok "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))        
+        self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _("Ok"))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _("Cancel"))        
 
 
     def SetProperties(self, title):
@@ -2350,9 +2352,9 @@ class BuildDialog(BaseDialog):
 
         # Create the fancy buttons to export to a file, copy to the clipboard
         # or close the dialog
-        self.exportButton = buttons.ThemedGenBitmapTextButton(self, -1, saveBmp, _(" Save to file... "))
-        self.clipboardButton = buttons.ThemedGenBitmapTextButton(self, -1, clipboardBmp, _(" Export to clipboard "))
-        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _(" Cancel "))
+        self.exportButton = buttons.ThemedGenBitmapTextButton(self, -1, saveBmp, _("Save to file..."))
+        self.clipboardButton = buttons.ThemedGenBitmapTextButton(self, -1, clipboardBmp, _("Export to clipboard"))
+        self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _("Cancel"))
 
         # Do the hard work, layout items and set dialog properties
         self.SetProperties()
@@ -2434,7 +2436,8 @@ class BuildDialog(BaseDialog):
             fp = file(path, 'w') # Create file anew
             fp.write(self.outputTextCtrl.GetValue())
             fp.close()
-            self.MainFrame.SendMessage(0, _("Build output file %s successfully saved") % path)
+            transdict = dict(filePath=path)
+            self.MainFrame.SendMessage(0, _("Build output file %(filePath)s successfully saved") % transdict)
 
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
@@ -2501,7 +2504,8 @@ class TransientBase(object):
         self.normalfont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.NORMAL, False)
         self.slantfont = wx.Font(8, wx.SWISS, wx.FONTSTYLE_ITALIC, wx.NORMAL, False)
         dc.SetFont(self.bigfont)
-        width1, height1 = dc.GetTextExtent(_("GUI2Exe Help Tip (%s)") % compiler)
+        transdict = dict(compiler=compiler)
+        width1, height1 = dc.GetTextExtent(_("GUI2Exe Help Tip (%(compiler)s)") % transdict)
         width1 += 25 
         height1 = max(height1, 16)
         dc.SetFont(self.boldfont)
@@ -2553,7 +2557,8 @@ class TransientBase(object):
         ypos = 13 - height/2
         dc.DrawBitmap(self.bmp, 5, ypos)
         # Draw the title text
-        dc.DrawText(_("GUI2Exe Help Tip (%s)") % self.compiler, 26, ypos)
+        transdict = dict(compiler=self.compiler)
+        dc.DrawText(_("GUI2Exe Help Tip (%(compiler)s)") % transdict, 26, ypos)
 
         # Draw a line separator between the title and the message
         newYpos = ypos + height + 6
@@ -2750,14 +2755,17 @@ class PListEditor(BaseDialog):
             # we do no update it reading the plist_template from py2app
             PTemplate = pListCode
 
-        self.vSplitter = wx.SplitterWindow(self, style=wx.SP_3D|wx.SP_LIVE_UPDATE)
+        self.vSplitter = wx.SplitterWindow(self, -1, style=wx.SP_3D|wx.SP_LIVE_UPDATE|wx.SP_HORIZONTAL)
+        
         self.topPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         self.bottomPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        self.titleBar = bp.ButtonPanel(self.topPanel, -1, "PList Actions",
+                                       style=bp.BP_USE_GRADIENT, alignment=bp.BP_ALIGN_LEFT)  
         
         boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
         self.codeCheck = wx.CheckBox(self.bottomPanel, -1, _("Add by Python code"))
         self.codeCheck.SetFont(boldFont)
-        self.staticText_1 = wx.StaticText(self.bottomPanel, -1, _("Select one item in the tree control above:"))
+        self.staticText_1 = wx.StaticText(self.bottomPanel, -1, _("Double-click on one item in the tree control above:"))
         self.staticText_1.SetFont(boldFont)
         self.itemParentText = wx.TextCtrl(self.bottomPanel, -1, "")
         self.staticText_2 = wx.StaticText(self.bottomPanel, -1, _("Add your key/value dictionary in Python code:"))
@@ -2765,7 +2773,7 @@ class PListEditor(BaseDialog):
         self.pythonStc = PythonSTC(self.bottomPanel, readOnly=True)
 
         addBmp = self.MainFrame.CreateBitmap("add")
-        self.addButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, -1, addBmp, _(" Append "), size=(-1, 22))
+        self.addButton = buttons.ThemedGenBitmapTextButton(self.bottomPanel, -1, addBmp, _("Append"), size=(-1, 22))
 
         self.enablingItems = [self.staticText_1, self.staticText_2, self.itemParentText,
                               self.pythonStc, self.addButton]
@@ -2777,6 +2785,7 @@ class PListEditor(BaseDialog):
         
         # Build a couple of fancy and useless buttons
         self.CreateButtons()
+        self.UpdateTitleBar()
 
         size = self.MainFrame.GetSize()
         self.SetSize((size.x/2, 4*size.y/5))
@@ -2801,6 +2810,54 @@ class PListEditor(BaseDialog):
         BaseDialog.SetProperties(self, _("Simple PList editor for py2app"))
         self.EnableCode(False)
 
+        bpArt = self.titleBar.GetBPArt()
+        bpArt.SetColor(bp.BP_TEXT_COLOR, wx.WHITE)
+
+        # These default to white and whatever is set in the system
+        # settings for the wx.SYS_COLOUR_ACTIVECAPTION.  We'll use
+        # some specific settings to ensure a consistent look for the
+        # demo.
+        activeCaption = wx.SystemSettings.GetColour(wx.SYS_COLOUR_ACTIVECAPTION)
+        bpArt.SetColor(bp.BP_BORDER_COLOR, activeCaption)
+        bpArt.SetColor(bp.BP_GRADIENT_COLOR_TO, bp.BrightenColour(activeCaption, 0.4))
+        bpArt.SetColor(bp.BP_GRADIENT_COLOR_FROM, activeCaption)
+        bpArt.SetColor(bp.BP_BUTTONTEXT_COLOR, wx.WHITE)
+        bpArt.SetColor(bp.BP_SEPARATOR_COLOR,
+                       bp.BrightenColour(wx.Colour(60, 11, 112), 0.85))
+        bpArt.SetColor(bp.BP_SELECTION_BRUSH_COLOR, bp.BrightenColour(activeCaption, 0.4))
+        bpArt.SetColor(bp.BP_SELECTION_PEN_COLOR, activeCaption)
+
+        self.titleBar.SetUseHelp(self.MainFrame.showTips)
+        
+
+    def UpdateTitleBar(self):
+        """ Actually builds the ButtonPanel. """
+
+        self.indices = []
+
+        # Populate the ButtonPanel
+        count = 0
+        for name, png, tip in _bpPngs:
+
+            btn = bp.ButtonInfo(self.titleBar, wx.NewId(),
+                                self.MainFrame.CreateBitmap(png), kind=wx.ITEM_NORMAL,
+                                shortHelp=tip)
+            
+            self.titleBar.AddButton(btn)
+            self.Bind(wx.EVT_BUTTON, self.OnManipulateTree, id=btn.GetId())
+            
+            self.indices.append(btn.GetId())
+            # Set the button text
+            btn.SetText(name)
+
+            if count > 0:
+                # Append a separator after the second button
+                self.titleBar.AddSeparator()
+                btn.SetBitmap(self.MainFrame.CreateBitmap(png+"_grey"), "Disabled")
+                btn.SetStatus("Disabled")
+
+            count += 1                
+
 
     def LayoutItems(self):
         """ Layouts the widgets with sizers. """        
@@ -2817,7 +2874,8 @@ class PListEditor(BaseDialog):
 
         topSizer.Add((0, 5))
         topSizer.Add(label, 0, wx.ALL, 5)
-        topSizer.Add(self.treeList, 2, wx.EXPAND|wx.ALL, 5)
+        topSizer.Add(self.titleBar, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 5)
+        topSizer.Add(self.treeList, 1, wx.EXPAND|wx.ALL, 5)
 
         bottomSizer.Add((0, 5))        
         bottomSizer.Add(self.codeCheck, 0, wx.ALL, 5)
@@ -2836,7 +2894,9 @@ class PListEditor(BaseDialog):
         buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
 
         self.vSplitter.SplitHorizontally(self.topPanel, self.bottomPanel)
-        self.vSplitter.SetMinimumPaneSize(200)
+        self.vSplitter.SetMinimumPaneSize(100)
+
+        self.titleBar.DoLayout()
         
         self.topPanel.SetSizer(topSizer)
         self.bottomPanel.SetSizer(bottomSizer)
@@ -2858,6 +2918,7 @@ class PListEditor(BaseDialog):
         self.Bind(wx.EVT_BUTTON, self.OnAddCode, self.addButton)
         self.treeList.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnLabelEdit)
         self.treeList.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnItemActivated)
+        self.treeList.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged)
         self.codeCheck.Bind(wx.EVT_CHECKBOX, self.OnEnableCode)
 
 
@@ -2895,7 +2956,7 @@ class PListEditor(BaseDialog):
         """
 
         # Add three columns for property name, class and value
-        self.treeList.AddColumn(_("Property List "))
+        self.treeList.AddColumn(_("Property List "), edit=True)
         self.treeList.AddColumn(_("Class          "), flag=wx.ALIGN_CENTER)
         self.treeList.AddColumn(_("Value"), edit=True)
         
@@ -2908,7 +2969,8 @@ class PListEditor(BaseDialog):
         # Sort the root's children
         self.treeList.SortChildren(self.root)
         self.treeList.SetItemText(self.root, "Dictionary", 1)
-        self.treeList.SetItemText(self.root, _("%d key/value pairs") % len(PTemplate.keys()), 2)
+        transdict = dict(dictionaryItems=len(PTemplate.keys()))
+        self.treeList.SetItemText(self.root, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
         self.treeList.SetPyData(self.root, ["Dictionary", 0])
 
         # Make the root item more visible
@@ -2952,7 +3014,8 @@ class PListEditor(BaseDialog):
             if isinstance(PTemplate[item], dict):
                 # Is a dictionary, recurse on it
                 treeList.SetItemText(child, "Dictionary", 1)
-                treeList.SetItemText(child, _("%d key/value pairs") % len(PTemplate[item].keys()), 2)
+                transdict = dict(dictionaryItems=len(PTemplate[item].keys()))
+                treeList.SetItemText(child, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
                 treeList.SetItemFont(child, boldFont)
                 treeList.SetPyData(child, ["Dictionary", level])
                 level = self.AutoAddChildren(child, PTemplate[item], level+1)
@@ -2983,7 +3046,8 @@ class PListEditor(BaseDialog):
                             grandChild = treeList.AppendItem(child, "%d"%indx, level+2)
                             self.itemCounter += 1
                             treeList.SetItemText(grandChild, "Dictionary", 1)
-                            treeList.SetItemText(grandChild, _("%d key/value pairs") % len(val.keys()), 2)
+                            transdict = dict(dictionaryItems=len(val.keys()))
+                            treeList.SetItemText(grandChild, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
                             treeList.SetPyData(grandChild, ["Dictionary", level+2])
                             colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
                             treeList.SetItemBackgroundColour(child, colour)
@@ -2992,7 +3056,8 @@ class PListEditor(BaseDialog):
 
                 if toSet:
                     treeList.SetItemFont(child, boldFont)
-                    treeList.SetItemText(child, _("%d ordered objects")%len(value), 2)
+                    transdict = dict(numberOfObjects=len(value))
+                    treeList.SetItemText(child, _("%(numberOfObjects)d ordered objects")%transdict, 2)
                     treeList.SetItemImage(child, -1, 2)
                     
         return level
@@ -3034,7 +3099,7 @@ class PListEditor(BaseDialog):
         """ Handles the wx.EVT_TREE_BEGIN_LABEL_EDIT event for the tree list control. """
 
         item = event.GetItem()
-        self.treeList.Select(event.m_itemIndex)
+        self.treeList.SelectItem(item)
         
         if self.treeList.HasChildren(item):
             # No no, you can't edit items with children
@@ -3057,6 +3122,21 @@ class PListEditor(BaseDialog):
         self.itemParentText.Refresh()
         # Store the tree item in the text control
         self.itemParentText.treeItem = event.GetItem()
+        
+
+    def OnSelChanged(self, event):
+        """ Handles the wx.EVT_TREE_SEL_CHANGED event for the tree list control. """
+        
+        buttons = self.titleBar._vButtons
+        item = event.GetItem()
+
+        # User can't delete or duplicate the root item
+        for btn in buttons[1:]:
+            btn.Enable(item != self.root)
+
+        self.titleBar.Refresh()
+            
+        event.Skip()
         
 
     def OnEnableCode(self, event):
@@ -3105,14 +3185,19 @@ class PListEditor(BaseDialog):
             exc = True
             trb = sys.exc_info()[1]
             error, line, msg = "NameError", 1, trb.message
+        except KeyError:
+            exc = True
+            trb = sys.exc_info()[1]
+            error, line, msg = "KeyError", 1, trb.message
         except:
             exc = True
             trb = sys.exc_info()[1]
             error, line, msg = trb.msg, trb.lineno, trb.text
 
         if exc:
+            transdict = dict(errorKind=error, errorAtLine=line, errorMessage=msg)
             msg = _("Invalid Python code entered.\n\n" \
-                    "The error returned by 'eval' is:\n\n%s\nLine: %d, %s")%(error, line, msg)
+                    "The error returned by 'eval' is:\n\n%(errorKind)s\nLine: %(errorAtLine)d, %(errorMessage)s")%transdict
             self.MainFrame.RunError(2, msg)
             return
 
@@ -3141,6 +3226,52 @@ class PListEditor(BaseDialog):
 
         event.Skip()
 
+
+    def OnManipulateTree(self, event):
+        """ Handles all the toolbar button actions. """
+
+        selection = self.treeList.GetSelection()
+        if not selection or not selection.IsOk():
+            # Is this possible?
+            self.MainFrame.RunError(2, _("Please select one item in the tree."))
+            return
+        
+        btn = event.GetId()
+        indx = self.indices.index(btn)
+
+        if indx in [0, 1]:
+            white, blue = wx.WHITE, wx.Colour(234, 242, 255)
+            boldFont = self.GetFont()
+            boldFont.SetWeight(wx.BOLD)
+
+            if indx == 1:
+                # siblings are just brothers...
+                selection = self.treeList.GetItemParent(selection)
+            # We add new child or a new sibling to the selected item
+            dlg = PListHelperDialog(self)
+            if dlg.ShowModal() != wx.ID_OK:
+                dlg.Destroy()
+                return
+
+            name, kind, value = dlg.GetValues()
+            level = self.treeList.GetPyData(selection)[1]
+            item = self.treeList.AppendItem(selection, name, level+1)
+            self.treeList.SetItemText(item, kind, 1)
+            if kind == "Dictionary":
+                self.treeList.SetItemFont(item, boldFont)
+                self.treeList.SetItemText(item, _("0 key/value pairs"), 2)
+            else:
+                self.treeList.SetItemText(item, value, 2)
+                self.treeList.SetItemImage(item, 6, 2)
+
+            self.itemCounter += 1
+            colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
+            self.treeList.SetItemBackgroundColour(item, colour)
+            self.treeList.SetItemImage(item, level+1)
+            
+            self.treeList.SetPyData(item, [kind, level+1])
+            self.treeList.EnsureVisible(item)
+    
 
     def GetPList(self, item=None, PList={}):
         """ Returns the newly edited PList as a dictionary. """
@@ -3192,6 +3323,98 @@ class PListEditor(BaseDialog):
 
         return PList
         
+
+class PListHelperDialog(BaseDialog):
+    """ A helper class for the PListEditor. """
+    
+    def __init__(self, parent):
+        """
+        Default class constructor.
+
+        @param parent: the widget parent.
+        """        
+
+        BaseDialog.__init__(self, parent.MainFrame)
+        
+        self.propertyText = wx.TextCtrl(self, -1, "")
+        self.typeCombo = wx.ComboBox(self, -1, choices=["String", "List", "Dictionary"],
+                                     style=wx.CB_DROPDOWN|wx.CB_DROPDOWN|wx.CB_READONLY)
+        self.valueText = wx.TextCtrl(self, -1, "")
+
+        self.CreateButtons()
+        self.SetProperties(_("New property dialog"))
+        self.DoLayout()
+        self.BindEvents()
+
+
+    def SetProperties(self, title):
+        """
+        Sets few properties for the dialog.
+
+        @param title: the dialog title.
+        """
+
+        BaseDialog.SetProperties(self, title)
+        self.typeCombo.SetValue("String")
+
+
+    def DoLayout(self):
+        """ Layout the widgets using sizers. """
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        sizer_1 = wx.BoxSizer(wx.VERTICAL)
+        gridSizer = wx.FlexGridSizer(2, 2, 2, 5)
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        label = wx.StaticText(self, -1, _("Please insert the property name and select its type below:"))
+        label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        mainSizer.Add(label, 0, wx.ALL, 10)
+        label1 = wx.StaticText(self, -1, _("Property Name:"))
+        gridSizer.Add(label1, 0, 0, 0)
+        label2 = wx.StaticText(self, -1, _("Property Type:"))
+        gridSizer.Add(label2, 0, 0, 0)
+        gridSizer.Add(self.propertyText, 1, wx.EXPAND, 0)
+        gridSizer.Add(self.typeCombo, 0, 0, 0)
+        gridSizer.AddGrowableCol(0)
+        mainSizer.Add(gridSizer, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 10)
+        mainSizer.Add((0, 10), 0, 0, 0)
+        label3 = wx.StaticText(self, -1, _("Property Value (optional)"))
+        sizer_1.Add(label3, 0, 0, 0)
+        sizer_1.Add((0, 2), 0, 0, 0)
+        sizer_1.Add(self.valueText, 0, wx.EXPAND, 0)
+        mainSizer.Add(sizer_1, 0, wx.LEFT|wx.RIGHT|wx.EXPAND, 10)
+        # Add the fancy buttons
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        self.Layout()
+
+
+    def OnOk(self, event):
+        """ Handles the Ok event generated by a button. """
+
+        name, kind, value = self.GetValues()
+        if not name:
+            # No way we can allow an empty name...
+            self.MainFrame.RunError(2, _("Invalid or empty property name."))
+            return
+
+        self.EndModal(wx.ID_OK)
+
+
+    def GetValues(self):
+        """ Returns the property name, type and value (if any). """
+
+        name = self.propertyText.GetValue().strip()
+        kind = self.typeCombo.GetValue()
+        value = self.valueText.GetValue().strip()
+
+        return name, kind, value
+
         
 class PreferencesDialog(BaseDialog):
     """ A dialog to show/edit preferences for GUI2Exe. """
@@ -3448,7 +3671,7 @@ class ErrorReporter(object):
 
         
 ID_SEND = wx.NewId()
-class ErrorDialog(wx.Dialog):
+class ErrorDialog(BaseDialog):
     """
     Dialog for showing errors and and notifying Editra.org should the
     user choose so.
@@ -3462,20 +3685,40 @@ class ErrorDialog(wx.Dialog):
 
         """
         ErrorDialog.REPORTER_ACTIVE = True
-        wx.Dialog.__init__(self, None, title="Error/Crash Reporter", 
-                           style=wx.DEFAULT_DIALOG_STYLE)
+
+        topWindow = wx.GetApp().GetTopWindow()
+        version = topWindow.GetVersion()
+        
+        BaseDialog.__init__(self, topWindow)
         
         # Give message to ErrorReporter
         ErrorReporter().AddMessage(message)
-        topWindow = wx.GetApp().GetTopWindow()
-        version = topWindow.GetVersion()
+        
         self.SetIcon(topWindow.GetIcon())
+        self.SetTitle("Error/Crash Reporter")
 
         # Attributes
         self.err_msg = "%s\n\n%s\n%s\n%s" % (EnvironmentInfo(version), \
                                              "#---- Traceback Info ----#", \
                                              ErrorReporter().GetErrorStack(), \
                                              "#---- End Traceback Info ----#")
+
+        errorBmp = topWindow.CreateBitmap("gui2exe_bug")
+        abortBmp = topWindow.CreateBitmap("abort")
+        sendBmp = topWindow.CreateBitmap("send")
+        cancelBmp = topWindow.CreateBitmap("exit")
+
+        self.errorBmp = wx.StaticBitmap(self, -1, errorBmp)
+
+        
+        self.textCtrl = wx.TextCtrl(self, value=self.err_msg, style=wx.TE_MULTILINE |
+                                    wx.TE_READONLY)
+        
+        self.abortButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_ABORT, abortBmp, _("Abort"), size=(-1, 26))
+        self.sendButton = buttons.ThemedGenBitmapTextButton(self, ID_SEND, sendBmp, _("Report Error"), size=(-1, 26))
+        self.sendButton.SetDefault()
+        self.closeButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CLOSE, cancelBmp, _("Close"), size=(-1, 26))
+
         # Layout
         self.DoLayout()
 
@@ -3496,33 +3739,36 @@ class ErrorDialog(wx.Dialog):
         """
 
         # Objects
-        icon = wx.StaticBitmap(self, 
-                               bitmap=wx.ArtProvider.GetBitmap(wx.ART_ERROR))
         mainmsg = wx.StaticText(self, 
                                 label=_("Error: Oh no, something bad happened!\n"
                                         "Help improve GUI2Exe by clicking on "
                                         "Report Error\nto send the Error "
                                         "Traceback shown below."))
         t_lbl = wx.StaticText(self, label=_("Error Traceback:"))
-        tctrl = wx.TextCtrl(self, value=self.err_msg, style=wx.TE_MULTILINE | 
-                                                            wx.TE_READONLY)
-        abort_b = wx.Button(self, wx.ID_ABORT, _("Abort"))
-        send_b = wx.Button(self, ID_SEND, _("Report Error"))
-        send_b.SetDefault()
-        close_b = wx.Button(self, wx.ID_CLOSE)
 
+        t_lbl.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
         # Layout
-        sizer = wx.GridBagSizer()
-        sizer.AddMany([(icon, (1, 1), (1, 1), wx.ALIGN_CENTER), (mainmsg, (1, 2), (1, 2)), 
-                       ((2, 2), (3, 0)), (t_lbl, (3, 1), (1, 2)),
-                       (tctrl, (4, 1), (8, 5), wx.EXPAND), ((5, 5), (4, 6)),
-                       ((2, 2), (12, 0)),
-                       (abort_b, (13, 1), (1, 1), wx.ALIGN_LEFT),
-                       (send_b, (13, 3), (1, 2), wx.ALIGN_RIGHT),
-                       (close_b, (13, 5), (1, 1), wx.ALIGN_RIGHT),
-                       ((2, 2), (14, 0))])
-        self.SetSizer(sizer)
-        self.SetInitialSize()
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        topSizer = wx.BoxSizer(wx.HORIZONTAL)
+        bottomSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        topSizer.Add(self.errorBmp, 0, wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER, 20)
+        topSizer.Add(mainmsg, 0, wx.EXPAND|wx.RIGHT, 20)
+        mainSizer.Add(topSizer, 0, wx.EXPAND|wx.TOP|wx.BOTTOM, 20)
+        mainSizer.Add(t_lbl, 0, wx.LEFT|wx.TOP|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.textCtrl, 1, wx.EXPAND|wx.LEFT|wx.BOTTOM|wx.RIGHT, 5)
+        bottomSizer.Add(self.abortButton, 0, wx.ALL, 5)
+        bottomSizer.Add((0, 0), 1, wx.EXPAND)
+        bottomSizer.Add(self.sendButton, 0, wx.TOP|wx.BOTTOM, 5)
+        bottomSizer.Add((0, 10))
+        bottomSizer.Add(self.closeButton, 0, wx.TOP|wx.BOTTOM|wx.RIGHT, 5)
+        mainSizer.Add(bottomSizer, 0, wx.EXPAND)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Layout()
+        
+        self.Fit()
         
 
     def OnButton(self, evt):

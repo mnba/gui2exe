@@ -685,7 +685,8 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         del busy
         wx.SafeYield(self)
 
-        self.MainFrame.RunError(2, _("Project %s succesfully copied to %s")%(project.GetName(), projectName))
+        transdict = dict(existingProject=project.GetName(), newProject=projectName)
+        self.MainFrame.RunError(0, _("Project %(existingProject)s succesfully copied to %(newProject)s")%transdict)
 
 
     def LoadFromPreferences(self, itemName):
