@@ -438,7 +438,7 @@ class Py2AppPanel(BaseBuilderPanel):
 
         if not self.ValidateOptions():
             # No way, something went wrong with the options set by the user
-            return None
+            return
 
         programName = self.scriptPicker.GetPath()
         programName = os.path.split(os.path.splitext(programName)[0])[1]
@@ -460,7 +460,12 @@ class Py2AppPanel(BaseBuilderPanel):
             dlg.Destroy()
             return
 
-        PList = dlg.GetPList()
+        try:
+            PList = dlg.GetPList()
+        except:
+            self.MainFrame.RunError(2, _("Invalid PList code encountered."))
+            return
+        
         project["py2app"]["plist_code"] = PList
         # Update the icon and the project name on the wx.aui.AuiNotebook tab
         self.MainFrame.UpdatePageBitmap(project.GetName() + "*", 1)

@@ -211,6 +211,7 @@ class AdvancedSplash(wx.Frame):
         self.Bind(wx.EVT_CHAR, self.OnCharEvents)
         
         self.Show()
+        self.Update()
 
 
     def SetSplashShape(self, event=None):

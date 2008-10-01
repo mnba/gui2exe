@@ -114,7 +114,7 @@ class Py2ExePanel(BaseBuilderPanel):
         # A list control for the "data_files" option. "data_files" should contain
         # a sequence of (target-dir, files) tuples, where files is a sequence of
         # files to be copied
-        self.datafileList = BaseListCtrl(self, columnNames=[_("Directory"+" "*15), _("Files Path")], name="data_files")
+        self.datafileList = BaseListCtrl(self, columnNames=[_("Directory")+" "*15, _("Files Path")], name="data_files")
         # A list control for the "icon_resources" option
         self.iconResourceList = BaseListCtrl(self, columnNames=[_("Id  "), _("Icon Path")], name="icon_resources")
         # A list control for the "bitmap_resources" option

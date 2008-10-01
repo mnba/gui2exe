@@ -1497,6 +1497,8 @@ class GUI2Exe(wx.Frame):
             # Get the current LabelBook
             book = self.GetCurrentBook()
             book.SetSelection(projects[projectName])
+            page = book.GetPage(projects[projectName])
+            wx.CallAfter(page.SetFocusIgnoringChildren)
             
         # Send a message to the log window at the bottom
         transdict = dict(projectName=projectName)

@@ -68,6 +68,8 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
             if isMac:
                 # On the Mac we use smaller widgets
                 child.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         
 
     def BindToolTips(self):
@@ -182,6 +184,12 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         event.Skip()
 
 
+    def OnLeftDown(self, event):
+        """ Handles the wx.EVT_LEFT_DOWN event for the scrolledpanel. """
+
+        self.SetFocusIgnoringChildren()
+
+            
     # ================= #
     # Auxiliary methods #
     # ================= #

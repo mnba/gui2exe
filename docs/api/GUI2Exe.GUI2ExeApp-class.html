@@ -34,7 +34,7 @@
       <th class="navbar" align="right" width="100%">
         <table border="0" cellpadding="0" cellspacing="0">
           <tr><th class="navbar" align="center"
-            ><a class="navbar" target="_top" href="http://xoomer.alice.it/infinity77">GUI2Exe</a></th>
+            ><a class="navbar" target="_top" href="http://code.google.com/p/gui2exe/">GUI2Exe</a></th>
           </tr></table></th>
   </tr>
 </table>
@@ -49,8 +49,8 @@
     <td>
       <table cellpadding="0" cellspacing="0">
         <!-- hide/show private -->
-        <tr><td align="right"><span class="options">[<a href="javascript: void(0);" class="privatelink"
-    onclick="toggle_private();">hide private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
         <tr><td align="right"><span class="options"
             >[<a href="frames.html" target="_top">frames</a
             >]&nbsp;|&nbsp;<a href="GUI2Exe.GUI2ExeApp-class.html"
@@ -60,7 +60,7 @@
   </tr>
 </table>
 <!-- ==================== CLASS DESCRIPTION ==================== -->
-<h1 class="epydoc">Class GUI2ExeApp</h1><span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp">source&nbsp;code</a></span><br /><br />
+<h1 class="epydoc">Class GUI2ExeApp</h1><p class="nomargin-top"><span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp">source&nbsp;code</a></span></p>
 <pre class="base-tree">
      object --+                
               |                
@@ -76,6 +76,8 @@ wx._core.EvtHandler --+
 </pre>
 
 <hr />
+<p>The main application class.</p>
+
 <!-- ==================== NESTED CLASSES ==================== -->
 <a name="section-NestedClasses"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -101,8 +103,6 @@ wx._core.EvtHandler --+
     </td>
   </tr>
 </table>
-
-<br />
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -121,12 +121,41 @@ wx._core.EvtHandler --+
   </td>
 </tr>
 <tr>
-  <td width="15%" align="right" valign="top" class="summary">
-    <code class="summary-type">&nbsp;</code>
-  </td><td class="summary">
-    <span class="summary-sig"><a href="GUI2Exe.GUI2ExeApp-class.html#OnInit" class="summary-sig-name">OnInit</a>(<span class="summary-sig-arg">self</span>)</span>
-  </td>
-</tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="OnInit"></a><span class="summary-sig-name">OnInit</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Default wx.App initialization.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp.OnInit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="GUI2Exe.GUI2ExeApp-class.html#OnExit" class="summary-sig-name">OnExit</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">evt</span>=<span class="summary-sig-default">None</span>,
+        <span class="summary-sig-arg">force</span>=<span class="summary-sig-default">False</span>)</span><br />
+      Handle application exit request</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp.OnExit">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
   <tr>
     <td colspan="2" class="summary">
     <p class="indent-wrapped-lines"><b>Inherited from <code>wx._core.App</code></b>:
@@ -155,6 +184,8 @@ wx._core.EvtHandler --+
       <code>GetUseBestVisual</code>,
       <code>GetVendorName</code>,
       <code>IsActive</code>,
+      <code>MacHideApp</code>,
+      <code>MacRequestUserAttention</code>,
       <code>Pending</code>,
       <code>ProcessIdle</code>,
       <code>ProcessPendingEvents</code>,
@@ -208,8 +239,6 @@ wx._core.EvtHandler --+
     </td>
   </tr>
 </table>
-
-<br />
 <!-- ==================== STATIC METHODS ==================== -->
 <a name="section-StaticMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -247,8 +276,6 @@ wx._core.EvtHandler --+
     </td>
   </tr>
 </table>
-
-<br />
 <!-- ==================== PROPERTIES ==================== -->
 <a name="section-Properties"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -293,11 +320,9 @@ wx._core.EvtHandler --+
     </td>
   </tr>
 </table>
-
-<br />
 <!-- ==================== METHOD DETAILS ==================== -->
 <a name="section-MethodDetails"></a>
-<table class="summary" border="1" cellpadding="3"
+<table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr bgcolor="#70b0f0" class="table-header">
   <td colspan="2" class="table-header">
@@ -313,23 +338,29 @@ wx._core.EvtHandler --+
   </td>
 </tr>
 </table>
-<a name="OnInit"></a>
+<a name="OnExit"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">OnInit</span>(<span class="sig-arg">self</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">OnExit</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">evt</span>=<span class="sig-default">None</span>,
+        <span class="sig-arg">force</span>=<span class="sig-default">False</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp.OnInit">source&nbsp;code</a></span>&nbsp;</span
-    ></td>
-  </table>
+    ><span class="codelink"><a href="GUI2Exe-pysrc.html#GUI2ExeApp.OnExit">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
   
-  None
-  <dl><dt></dt><dd>
-  </dd></dl>
+  <p>Handle application exit request</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>evt</code></strong> - event that called this handler</li>
+    </ul></dd>
+  </dl>
 </td></tr></table>
 </div>
 <br />
@@ -357,16 +388,18 @@ wx._core.EvtHandler --+
       <th class="navbar" align="right" width="100%">
         <table border="0" cellpadding="0" cellspacing="0">
           <tr><th class="navbar" align="center"
-            ><a class="navbar" target="_top" href="http://xoomer.alice.it/infinity77">GUI2Exe</a></th>
+            ><a class="navbar" target="_top" href="http://code.google.com/p/gui2exe/">GUI2Exe</a></th>
           </tr></table></th>
   </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
-    <td align="left" class="footer">Generated by Epydoc
-        3.0alpha3 on Sun Apr 01 19:20:36 2007</td>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Wed Oct 01 12:46:28 2008
+    </td>
     <td align="right" class="footer">
-      <a href="http://epydoc.sourceforge.net">http://epydoc.sourceforge.net</a>
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
     </td>
   </tr>
 </table>
@@ -377,9 +410,8 @@ wx._core.EvtHandler --+
   // javascript is turned off then we want them to be
   // visible); but by default, we want to hide them.  So hide
   // them unless we have a cookie that says to show them.
-  checkCookie()
+  checkCookie();
   // -->
 </script>
-  
 </body>
 </html>

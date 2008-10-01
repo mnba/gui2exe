@@ -132,4 +132,9 @@ class AUINotebookPage(LB.FlatImageBook):
             # Disable the dry-run button if not using py2exe
             self.MainFrame.messageWindow.EnableDryRun(self)
 
+        page = self.GetPage(event.GetSelection())
+        wx.CallAfter(page.SetFocusIgnoringChildren)
+
+        
+
 

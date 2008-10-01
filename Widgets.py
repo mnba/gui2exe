@@ -73,6 +73,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if name not in _unWantedLists:
             # But we don't always want text edit mixin
             listmix.TextEditMixin.__init__(self)
+            self._defaultb, self._color = None, None
 
         if name == "multipleexe":
             self.setResizeColumn(3)
@@ -176,7 +177,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp)
             # for wxGTK
             self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+            # Fix a bug
             self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, lambda event: None)
+            # Handle the scrolling of lists
             self.popupId1, self.popupId2, self.popupId3 = wx.NewId(), wx.NewId(), wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnDeleteSelected, id=self.popupId1)
             self.Bind(wx.EVT_MENU, self.OnClearAll, id=self.popupId2)
@@ -236,15 +239,24 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             event.Skip()
             return
 
+        col = event.GetColumn()
+        indx = event.GetItem().GetId()
+        # Check if the user has really modified the item text
+        oldLabel = self.GetItem(indx, col).GetText().encode().strip()
+        newLabel = event.GetLabel().strip()
+        if newLabel == oldLabel:
+            # they seems the same, go back...
+            event.Skip()
+            return
+        
         event.Skip()
 
         # Adjust the data for the column sorter mixin
-        indx = event.GetItem().GetId()
         tuple = ()
         # Loop over all the columns, populating a tuple
         for col in xrange(self.GetColumnCount()):
             item = self.GetItem(indx, col)
-            tuple += (item.GetText(),)
+            tuple += (item.GetText().encode(),)
 
         # Store the data
         self.SetItemData(indx, indx)
@@ -280,6 +292,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.DeleteItem(ind)
             self.Thaw()
             wx.CallAfter(self.UpdateProject)
+            wx.CallAfter(self.Recolor)
         # Otherwise skip the event
         event.Skip()
 
@@ -352,7 +365,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         # Multiple exe list does not use ColumnSorterMixin
         isMultipleExe = self.GetName() == "multipleexe"
-        # Loop over all the indices        
+        # Loop over all the indices
         for ind in indices:
             # Pop the data from the column sorter mixin dictionary
             indx = self.GetItemData(ind)
@@ -368,6 +381,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if indices:
             # Update the project, something changed
             wx.CallAfter(self.UpdateProject)
+            wx.CallAfter(self.Recolor)
 
 
     def OnClearAll(self, event):
@@ -418,6 +432,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             else:
                 # New modules, simply enter one item and start editing
                 self.HandleNewModule()
+
+        self.Recolor()
 
         
     def OnItemActivated(self, event):
@@ -533,7 +549,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Destroy the dialog. Don't do this until you are done with it!
         # BAD things can happen otherwise!
         dlg.Destroy()
-        
+        self.Recolor()
         self.UpdateProject()
 
             
@@ -595,6 +611,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         # Initialize the column sorter mixin (if needed)
         self.InizializeSorter()
+        self.Recolor()
 
 
     def InizializeSorter(self):
@@ -668,6 +685,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Update the data for the column sorter mixins
         self.SetItemData(indx, indx)
         self.itemDataMap[indx] = tuple(items)
+        self.Recolor()
         
 
     def DeleteManifest(self):
@@ -683,6 +701,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Just as simple as it gets
         self.itemDataMap.pop(0)
         self.DeleteItem(0)
+        self.Recolor()
 
 
     def HandleNewResource(self, name):
@@ -1154,6 +1173,37 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Give feedback to the user if something changed (different icon)
         self.GetParent().GiveScreenFeedback(self.GetName(), values, changeIcon)
         
+
+    def Recolor(self):
+        """ Re-color all the rows. """
+
+        containingSizer = self.GetContainingSizer().GetStaticBox()
+        oldLabelText = containingSizer.GetLabelText()
+        if "(" in oldLabelText:
+            oldLabelText = oldLabelText[0:oldLabelText.rindex("(")-1]
+            
+        newLabelText = oldLabelText + " (%d)"%self.GetItemCount()
+        containingSizer.SetLabel(newLabelText)
+        
+        for row in xrange(self.GetItemCount()):
+            if self._defaultb is None:
+                self._defaultb = wx.WHITE
+
+            dohlight = row % 2
+
+            if dohlight:
+                if self._color is None:
+                    if wx.Platform in ['__WXGTK__', '__WXMSW__']:
+                        color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DLIGHT)
+                    else:
+                        color = wx.Colour(237, 243, 254)
+                else:
+                    color = self._color
+            else:
+                color = self._defaultb
+
+            self.SetItemBackgroundColour(row, color)
+
 
 class CustomCodeViewer(wx.Frame):
     """ A custom frame class to view the Setup.py code or to add code. """
@@ -2781,8 +2831,7 @@ class PListEditor(BaseDialog):
         # Create a tree list control to handle the Plist dictionary
         self.treeList = gizmos.TreeListCtrl(self.topPanel, -1, style=wx.TR_DEFAULT_STYLE | wx.TR_ROW_LINES |
                                             wx.TR_COLUMN_LINES | wx.TR_FULL_ROW_HIGHLIGHT)
-
-        
+   
         # Build a couple of fancy and useless buttons
         self.CreateButtons()
         self.UpdateTitleBar()
@@ -2853,6 +2902,9 @@ class PListEditor(BaseDialog):
             if count > 0:
                 # Append a separator after the second button
                 self.titleBar.AddSeparator()
+                if count == 2:
+                    self.titleBar.AddSpacer()
+                    
                 btn.SetBitmap(self.MainFrame.CreateBitmap(png+"_grey"), "Disabled")
                 btn.SetStatus("Disabled")
 
@@ -2963,7 +3015,6 @@ class PListEditor(BaseDialog):
         self.treeList.SetMainColumn(0) # the one with the tree in it...
         self.root = self.treeList.AddRoot("Root", 0)
 
-        self.itemCounter = 1
         # Recursively add children
         self.AutoAddChildren(self.root, PTemplate, 0)
         # Sort the root's children
@@ -2972,6 +3023,8 @@ class PListEditor(BaseDialog):
         transdict = dict(dictionaryItems=len(PTemplate.keys()))
         self.treeList.SetItemText(self.root, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
         self.treeList.SetPyData(self.root, ["Dictionary", 0])
+
+        self.Recolor()
 
         # Make the root item more visible
         boldFont = self.GetFont()
@@ -2996,11 +3049,6 @@ class PListEditor(BaseDialog):
         @param level: the hierarchy level (root=0)
         """
 
-        # Define the colours for alternate row colouring
-        white, blue = wx.WHITE, wx.Colour(234, 242, 255)
-        # Define some bold font for items with children
-        boldFont = self.GetFont()
-        boldFont.SetWeight(wx.BOLD)
         treeList = self.treeList
 
         # Loop around the key/value pairs
@@ -3008,15 +3056,11 @@ class PListEditor(BaseDialog):
         keys.sort()
         for item in keys:
             child = treeList.AppendItem(itemParent, item, level+1)
-            colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
-            treeList.SetItemBackgroundColour(child, colour)
-            self.itemCounter += 1
             if isinstance(PTemplate[item], dict):
                 # Is a dictionary, recurse on it
                 treeList.SetItemText(child, "Dictionary", 1)
                 transdict = dict(dictionaryItems=len(PTemplate[item].keys()))
                 treeList.SetItemText(child, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
-                treeList.SetItemFont(child, boldFont)
                 treeList.SetPyData(child, ["Dictionary", level])
                 level = self.AutoAddChildren(child, PTemplate[item], level+1)
             else:
@@ -3044,18 +3088,13 @@ class PListEditor(BaseDialog):
                         if isinstance(val, dict):
                             toSet = True
                             grandChild = treeList.AppendItem(child, "%d"%indx, level+2)
-                            self.itemCounter += 1
                             treeList.SetItemText(grandChild, "Dictionary", 1)
                             transdict = dict(dictionaryItems=len(val.keys()))
                             treeList.SetItemText(grandChild, _("%(dictionaryItems)d key/value pairs") % transdict, 2)
                             treeList.SetPyData(grandChild, ["Dictionary", level+2])
-                            colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
-                            treeList.SetItemBackgroundColour(child, colour)
-                            treeList.SetItemFont(grandChild, boldFont)
                             level = self.AutoAddChildren(grandChild, val, level+2)
 
                 if toSet:
-                    treeList.SetItemFont(child, boldFont)
                     transdict = dict(numberOfObjects=len(value))
                     treeList.SetItemText(child, _("%(numberOfObjects)d ordered objects")%transdict, 2)
                     treeList.SetItemImage(child, -1, 2)
@@ -3208,7 +3247,8 @@ class PListEditor(BaseDialog):
         self.treeList.ExpandAll(self.root)
         self.codeCheck.SetValue(0)
         self.EnableCode(False)
-        
+        self.Recolor()
+
 
     def OnKeyUp(self, event):
         """ Handles the wx.EVT_CHAR_HOOK event for the dialog. """
@@ -3238,12 +3278,9 @@ class PListEditor(BaseDialog):
         
         btn = event.GetId()
         indx = self.indices.index(btn)
+        self.treeList.Freeze()
 
         if indx in [0, 1]:
-            white, blue = wx.WHITE, wx.Colour(234, 242, 255)
-            boldFont = self.GetFont()
-            boldFont.SetWeight(wx.BOLD)
-
             if indx == 1:
                 # siblings are just brothers...
                 selection = self.treeList.GetItemParent(selection)
@@ -3257,21 +3294,85 @@ class PListEditor(BaseDialog):
             level = self.treeList.GetPyData(selection)[1]
             item = self.treeList.AppendItem(selection, name, level+1)
             self.treeList.SetItemText(item, kind, 1)
+            # Try to be clever, but not too much...
             if kind == "Dictionary":
-                self.treeList.SetItemFont(item, boldFont)
-                self.treeList.SetItemText(item, _("0 key/value pairs"), 2)
+                if value:
+                    self.treeList.SetItemText(item, value, 2)
+                else:
+                    self.treeList.SetItemText(item, _("0 key/value pairs"), 2)
             else:
                 self.treeList.SetItemText(item, value, 2)
                 self.treeList.SetItemImage(item, 6, 2)
 
-            self.itemCounter += 1
-            colour = (self.itemCounter%2 == 0 and [white] or [blue])[0]
-            self.treeList.SetItemBackgroundColour(item, colour)
-            self.treeList.SetItemImage(item, level+1)
-            
+            self.treeList.SetItemImage(item, level+1)            
             self.treeList.SetPyData(item, [kind, level+1])
             self.treeList.EnsureVisible(item)
-    
+
+        elif indx == 2:
+            # Duplicate an item...
+            oldItem = selection
+            parent = self.treeList.GetItemParent(oldItem)
+            self.Duplicate(parent, oldItem)
+
+        else:
+            # Delete the item
+            self.treeList.Delete(selection)
+            
+        # Recolor the tree list control
+        self.Recolor()
+        self.treeList.Thaw()
+
+
+    def Duplicate(self, parent, oldItem):
+
+        text, img = self.treeList.GetItemText(oldItem), self.treeList.GetItemImage(oldItem)
+        newItem = self.treeList.AppendItem(parent, text, img)
+        for col in xrange(1, 3):
+            text, img = self.treeList.GetItemText(oldItem, col), self.treeList.GetItemImage(oldItem, col)
+            self.treeList.SetItemImage(newItem, img, col)
+            self.treeList.SetItemText(newItem, text, col)
+        
+        child, cookie = self.treeList.GetFirstChild(oldItem)
+        while child.IsOk():
+            self.Duplicate(newItem, child)
+            child, cookie = self.treeList.GetNextChild(oldItem, cookie)
+
+        self.treeList.ExpandAll(newItem)
+        self.treeList.EnsureVisible(newItem)
+        
+
+    def Recolor(self, item=None, itemCounter=0):
+        """
+        Uses alternate colours for the tree list rows and sets the font.
+
+        @param item: the item to be checked;
+        @param itemCounter: the number of items already checked.
+        """
+
+        if item is None:
+            item = self.root
+            
+        # Define the colours for alternate row colouring
+        white, blue = wx.WHITE, wx.Colour(234, 242, 255)
+        # Define some bold font for items with children
+        boldFont = self.GetFont()
+        boldFont.SetWeight(wx.BOLD)
+
+        child, cookie = self.treeList.GetFirstChild(item)
+        while child.IsOk():
+            # Loop over all the items
+            colour = (itemCounter%2 == 0 and [blue] or [white])[0]
+            self.treeList.SetItemBackgroundColour(child, colour)
+            itemCounter += 1
+            if self.treeList.HasChildren(child):
+                # Call ourselves recursively
+                self.treeList.SetItemFont(child, boldFont)
+                itemCounter = self.Recolor(child, itemCounter)
+
+            child, cookie = self.treeList.GetNextChild(item, cookie)
+
+        return itemCounter            
+
 
     def GetPList(self, item=None, PList={}):
         """ Returns the newly edited PList as a dictionary. """
@@ -3284,12 +3385,12 @@ class PListEditor(BaseDialog):
         treeList = self.treeList        
         child, cookie = treeList.GetFirstChild(item)
         itemKind = treeList.GetPyData(item)[0]
-        itemKey = treeList.GetItemText(item)
+        itemKey = treeList.GetItemText(item).encode()
         
         # Loop over all the item's children
         while child.IsOk():
             
-            key = treeList.GetItemText(child)
+            key = treeList.GetItemText(child).encode()
             value = treeList.GetItemText(child, 2)
             kind = treeList.GetPyData(child)[0]
 
@@ -3311,7 +3412,7 @@ class PListEditor(BaseDialog):
                     PList[key] = self.GetPList(child, {})
                 else:
                     if kind == "String":
-                        PList[key] = value
+                        PList[key] = value.encode()
                     else:
                         # NOTE: array should be treated differently, as
                         # they may be array of dictionaries, for which we
@@ -3398,7 +3499,7 @@ class PListHelperDialog(BaseDialog):
         """ Handles the Ok event generated by a button. """
 
         name, kind, value = self.GetValues()
-        if not name:
+        if len(name) == 0:
             # No way we can allow an empty name...
             self.MainFrame.RunError(2, _("Invalid or empty property name."))
             return
