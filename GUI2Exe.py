@@ -117,6 +117,10 @@ class GUI2Exe(wx.Frame):
         except:
             self.installDir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
+        # If we don't use this black magic, it bombs on Cyrillic folder
+        # names (?)
+        self.installDir = self.installDir.decode(sys.getfilesystemencoding())
+
         self.autoSave = False                # use autoSave? (not implemented yet...)
         self.deleteBuild = True              # delete the "build" directory (recommended)
         self.cleanDist = False               # Clean up the "dist" directory
@@ -2091,6 +2095,7 @@ class GUI2ExeApp(wx.App):
         except:
             installDir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
+        installDir = installDir.decode(sys.getfilesystemencoding())
         # Retrieve the user configuration directory (if any)
         sp = wx.StandardPaths.Get()
         userDir = sp.GetUserDataDir()

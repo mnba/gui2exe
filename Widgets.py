@@ -12,12 +12,14 @@ import wx.lib.buttons as buttons
 import wx.lib.langlistctrl as langlist
 import wx.lib.buttonpanel as bp
 
-##if wx.Platform == "__WXMAC__":
+_hasMacThings = True
+try:
     # For the PList editor
-if 1:
     from py2app.apptemplate import plist_template    
-##    import plistlib
+    import plistlib
     import wx.gizmos as gizmos
+except ImportError:
+    _hasMacThings = False
     
 # This is needed by BaseListCtrl
 from bisect import bisect
@@ -3671,7 +3673,10 @@ class PreferencesDialog(BaseDialog):
 
 #---- Language List Combo Box----#
 class LangListCombo(wx.combo.BitmapComboBox):
-    """ Combines a langlist and a BitmapComboBox. """
+    """
+    Combines a langlist and a BitmapComboBox.
+    @note: from Editra.dev_tool
+    """
     
     def __init__(self, parent, default=None):
         """
@@ -3680,7 +3685,6 @@ class LangListCombo(wx.combo.BitmapComboBox):
         in the list.
 
         @param default: The default item to show in the combo box
-        @note: from Editra.i18n
         """
 
         self.MainFrame = parent.MainFrame
@@ -3777,17 +3781,15 @@ class ErrorReporter(object):
 ID_SEND = wx.NewId()
 class ErrorDialog(BaseDialog):
     """
-    Dialog for showing errors and and notifying Editra.org should the
+    Dialog for showing errors and and notifying gui2exe-users should the
     user choose so.
     @note: from Editra.dev_tool
-
     """
     ABORT = False
     REPORTER_ACTIVE = False
     def __init__(self, message):
         """Initialize the dialog
         @param message: Error message to display
-
         """
         ErrorDialog.REPORTER_ACTIVE = True
 

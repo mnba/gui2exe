@@ -8,7 +8,7 @@ import pprint
 import wx.lib.buttons as buttons
 
 from BaseBuilderPanel import BaseBuilderPanel
-from Widgets import BaseListCtrl, MultiComboBox, PListEditor
+from Widgets import BaseListCtrl, MultiComboBox, PListEditor, _hasMacThings
 from Constants import _py2app_target, _py2app_imports, _pywild, _iconwild, _plistwild, ListType
 from Utilities import setupString
 
@@ -143,6 +143,7 @@ class Py2AppPanel(BaseBuilderPanel):
         self.LayoutItems()
         self.SetProperties()
         self.BindEvents()
+        wx.CallAfter(self.EnableMacPList)
 
         self.Bind(wx.EVT_BUTTON, self.OnPListAdd, self.pListAddButton)
         self.Bind(wx.EVT_BUTTON, self.OnPListRemove, self.pListRemoveButton)
@@ -167,7 +168,7 @@ class Py2AppPanel(BaseBuilderPanel):
         for child in self.GetChildren():
             if isinstance(child, wx.StaticText) or isinstance(child, wx.CheckBox):
                 child.SetFont(font)
-        
+
 
     def LayoutItems(self):
         """ Layouts the widgets using sizers. """
@@ -300,6 +301,21 @@ class Py2AppPanel(BaseBuilderPanel):
         self.SetupScrolling()
         self.label.SetFocus()
 
+
+    def EnableMacPList(self):
+        """
+        Checks whether all the imports needed to build the PList editor are
+        available.
+        """
+
+        if not _hasMacThings:
+            # It was not possible to import py2app and
+            # other Mac goodies...
+            self.pListChoice.SetValue(0)
+            self.pListChoice.Enable(False)
+            self.pListAddButton.Enable(False)
+            self.pListRemoveButton.Enable(False)
+        
     
     def ValidateOptions(self):
         """ Validates the py2app input options before compiling. """

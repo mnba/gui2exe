@@ -46,7 +46,7 @@ class MessageWindow(wx.Panel):
         self.compile = buttons.ThemedGenBitmapTextButton(self, -1, compileBmp, _("Compile"), size=(-1, 25))
         self.kill = buttons.ThemedGenBitmapTextButton(self, -1, killBmp, _("Kill"), size=(-1, 25))
         # The animation control
-        ani = wx.animate.Animation(os.path.normpath(self.MainFrame.installDir +"/images/throbber.gif").encode())
+        ani = wx.animate.Animation(os.path.normpath(self.MainFrame.installDir +"/images/throbber.gif"))
         self.throb = wx.animate.AnimationCtrl(self, -1, ani)
         self.throb.SetUseWindowBackgroundColour()
 
