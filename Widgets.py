@@ -3680,6 +3680,7 @@ class LangListCombo(wx.combo.BitmapComboBox):
         in the list.
 
         @param default: The default item to show in the combo box
+        @note: from Editra.i18n
         """
 
         self.MainFrame = parent.MainFrame
@@ -3705,6 +3706,7 @@ def ExceptionHook(exctype, value, trace):
     @param exctype: Exception Type
     @param value: Error Value
     @param trace: Trace back info
+    @note: from Editra.dev_tool
     """
     ftrace = FormatTrace(exctype, value, trace)
 
@@ -3721,6 +3723,7 @@ class ErrorReporter(object):
               is implemented as a singleton so that all errors pushed
               onto it are kept in one central location no matter where
               the object is called from.
+    @note: from Editra.dev_tool
 
     """
     instance = None
@@ -3776,6 +3779,7 @@ class ErrorDialog(BaseDialog):
     """
     Dialog for showing errors and and notifying Editra.org should the
     user choose so.
+    @note: from Editra.dev_tool
 
     """
     ABORT = False

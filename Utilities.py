@@ -397,6 +397,7 @@ def GetAvailLocales(installDir):
     canonical names of each language.
     
     @return: list of all available local/languages available
+    @note: from Editra.i18n
     """
 
     avail_loc = []
@@ -419,6 +420,7 @@ def GetLocaleDict(loc_list, opt=0):
     @param loc_list: list of locals
     @keyword opt: option for configuring return data
     @return: dict of locales mapped to wx.LANGUAGE_*** values
+    @note: from Editra.i18n
     """
     lang_dict = dict()
     for lang in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
@@ -440,6 +442,7 @@ def GetLangId(installDir, lang_n):
 
     @param lang_n: Canonical name of a language
     @return: wx.LANGUAGE_*** id of language
+    @note: from Editra.i18n
 
     """
     lang_desc = GetLocaleDict(GetAvailLocales(installDir), 1)
@@ -449,6 +452,7 @@ def GetLangId(installDir, lang_n):
 def FormatTrace(etype, value, trace):
     """Formats the given traceback
     @return: Formatted string of traceback with attached timestamp
+    @note: from Editra.dev_tool
 
     """
     exc = traceback.format_exception(etype, value, trace)
@@ -461,6 +465,7 @@ def EnvironmentInfo(version):
     Returns a string of the systems information.
     
     @return: System information string
+    @note: from Editra.dev_tool
     """
 
     info = list()
