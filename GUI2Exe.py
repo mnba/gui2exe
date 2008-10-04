@@ -351,7 +351,7 @@ class GUI2Exe(wx.Frame):
                   id2=ID_FirstPerspective+1000)
 
         # I need to keep track of this menu
-        id = menuBar.FindMenu(_("View"))
+        id = menuBar.FindMenu(_("&View"))
         self.configMenu = menuBar.GetMenu(id)
 
         # We're done with the menubar
@@ -494,25 +494,25 @@ class GUI2Exe(wx.Frame):
         val = options.Read('Recurse_Subdirs')
         if val:
             self.recurseSubDirs = eval(val)
-            item = menuBar.FindMenuItem(_("Options"), _("Recurse sub-dirs for data_files option"))
+            item = menuBar.FindMenuItem(_("&Options"), _("Recurse sub-dirs for data_files option"))
             menuBar.Check(item, self.recurseSubDirs)
 
         val = options.Read('Show_Tooltips')
         if val:
             self.showTips = eval(val)
-            item = menuBar.FindMenuItem(_("Options"), _("Show tooltips"))
+            item = menuBar.FindMenuItem(_("&Options"), _("Show t&ooltips"))
             menuBar.Check(item, self.showTips)
 
         val = options.Read('Delete_Build')
         if val:
             self.deleteBuild = eval(val)
-            item = menuBar.FindMenuItem(_("Options"), _('Delete "build" directory'))
+            item = menuBar.FindMenuItem(_("&Options"), _('Delete "build" directory'))
             menuBar.Check(item, self.deleteBuild)
             
         val = options.Read('Clean_Dist')
         if val:
             self.cleanDist = eval(val)
-            item = menuBar.FindMenuItem(_("Options"), _('Clean "dist" directory'))
+            item = menuBar.FindMenuItem(_("&Options"), _('Clean "dist" directory'))
             menuBar.Check(item, self.cleanDist)
 
         preferences = {}
@@ -2084,9 +2084,6 @@ class GUI2ExeApp(wx.App):
 
         # Set the default python encoding (not that it helps...)
         wx.SetDefaultPyEncoding("utf-8")
-        # Start our application
-        splash = GUI2ExeSplashScreen(self)
-        splash.Show()
 
         self.SetAppName("GUI2Exe")
 
@@ -2123,6 +2120,10 @@ class GUI2ExeApp(wx.App):
 
         # Set up the exception handler...
         sys.excepthook = ExceptionHook
+
+        # Start our application
+        splash = GUI2ExeSplashScreen(self)
+        splash.Show()
 
         return True
         
