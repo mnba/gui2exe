@@ -1936,7 +1936,7 @@ class GUI2Exe(wx.Frame):
     def GetVersion(self):
         """ Return the current GUI2Exe version. """
 
-        return __version__
+        return wx.GetApp().GetVersion()
     
 
     def GetPyInstallerPath(self):
@@ -2135,6 +2135,12 @@ class GUI2ExeApp(wx.App):
 
         self.Exit()
 
+    def GetVersion(self):
+        """ Return the current GUI2Exe version. """
+
+        return __version__
+
+#----------------------------------------------------------------------------#
                 
 if __name__ == "__main__":
     # Start the whole thing

@@ -3783,7 +3783,7 @@ class ErrorDialog(BaseDialog):
     """
     Dialog for showing errors and and notifying gui2exe-users should the
     user choose so.
-    @note: from Editra.dev_tool
+    @note: partially from Editra.dev_tool
     """
     ABORT = False
     REPORTER_ACTIVE = False
@@ -3794,7 +3794,10 @@ class ErrorDialog(BaseDialog):
         ErrorDialog.REPORTER_ACTIVE = True
 
         topWindow = wx.GetApp().GetTopWindow()
-        version = topWindow.GetVersion()
+
+        # Get version from the app since the main window may be dead or
+        # not even ready yet.
+        version = wx.GetApp().GetVersion()
         
         BaseDialog.__init__(self, topWindow)
         
@@ -3802,7 +3805,7 @@ class ErrorDialog(BaseDialog):
         ErrorReporter().AddMessage(message)
         
         self.SetIcon(topWindow.GetIcon())
-        self.SetTitle("Error/Crash Reporter")
+        self.SetTitle(_("Error/Crash Reporter"))
 
         # Attributes
         self.err_msg = "%s\n\n%s\n%s\n%s" % (EnvironmentInfo(version), \
