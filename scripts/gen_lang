@@ -188,10 +188,11 @@ do_one_build () {
         echo "${RED}**${OFF} ${GREEN}Complete${OFF} ${RED}**${OFF}"
     else
         SRC=''
-        find_pkg_dir $WORKPATH
-        MO="$WORKPATH/$SRC/$LOCALEDIR"
+        MO="$WORKPATH/$LOCALEDIR"
         echo "${CYAN}Outputting${OFF} object files to ${GREEN}$MO${OFF}..."
-        $(python mki18n.py  -mv --domain=$WORKPATH --podir=$PO --moTarget=$MO) 2>/dev/null
+        echo "MY PO $PO, MY MO $MO"
+        pwd
+        $(python mki18n.py  -mv --domain=$APPNAME --podir=./$PO --moTarget=$MO) 2>/dev/null
         echo "${RED}**${OFF} ${GREEN}Complete${OFF} ${RED}**${OFF}"
     fi
 
