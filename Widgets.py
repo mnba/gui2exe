@@ -27,7 +27,7 @@ from bisect import bisect
 import keyword
 
 from Utilities import flatten, unique, RecurseSubDirs, GetLocaleDict, GetAvailLocales
-from Utilities import FormatTrace, EnvironmentInfo
+from Utilities import FormatTrace, EnvironmentInfo, CreateBitmap
 from Constants import _iconFromName, _unWantedLists, _faces
 from Constants import _stcKeywords, _pywild, _pypackages, _dllbinaries
 from Constants import _xcdatawild, _dylibwild, _comboImages, _bpPngs
@@ -1832,17 +1832,19 @@ class BaseDialog(wx.Dialog):
             
         wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
         self.MainFrame = parent
-        
-        # Set the user transparency
-        self.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
+
+        transparency = wx.GetApp().GetPreferences("Transparency")
+        if transparency is not None:
+            # Set the user transparency
+            self.SetTransparent(transparency)
         
 
     def CreateButtons(self):
         """ Creates the Ok and cancel bitmap buttons. """
         
         # Build a couple of fancy and useless buttons        
-        okBmp = self.MainFrame.CreateBitmap("project_ok")
-        cancelBmp = self.MainFrame.CreateBitmap("exit")
+        okBmp = CreateBitmap("project_ok")
+        cancelBmp = CreateBitmap("exit")
         self.okButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_OK, okBmp, _("Ok"))
         self.cancelButton = buttons.ThemedGenBitmapTextButton(self, wx.ID_CANCEL, cancelBmp, _("Cancel"))        
 
@@ -1851,7 +1853,7 @@ class BaseDialog(wx.Dialog):
         """ Sets few properties for the dialog. """        
 
         self.SetTitle(title)
-        self.SetIcon(self.MainFrame.GetIcon())
+        self.SetIcon(wx.IconFromBitmap(CreateBitmap("GUI2Exe")))
         self.okButton.SetDefault()        
 
 
@@ -3546,7 +3548,11 @@ class PreferencesDialog(BaseDialog):
         self.perspective = wx.CheckBox(self, -1, _("Use last UI perspective at start-up"),
                                        name="Perspective")
         self.transparency = wx.Slider(self, -1, 255, 100, 255, style=wx.SL_HORIZONTAL|wx.SL_AUTOTICKS|wx.SL_LABELS)
-        self.languages = LangListCombo(self, self.MainFrame.GetPreferences("Language"))
+        language = wx.GetApp().GetPreferences("Language")
+        if not language:
+            language = "Default"
+            
+        self.languages = LangListCombo(self, language)
 
         # Store the widgets for later use        
         self.preferencesWidgets = [self.loadProjects, self.openedCompilers, self.gui2exeSize,
@@ -3573,9 +3579,9 @@ class PreferencesDialog(BaseDialog):
         for widget in self.preferencesWidgets:
             # Get all the user preferences
             name = widget.GetName()
-            widget.SetValue(self.MainFrame.GetPreferences(name)[0])
+            widget.SetValue(wx.GetApp().GetPreferences(name)[0])
 
-        transparency = self.MainFrame.GetPreferences("Transparency")
+        transparency = wx.GetApp().GetPreferences("Transparency")
         self.transparency.SetValue(transparency)
         
         
@@ -3643,7 +3649,7 @@ class PreferencesDialog(BaseDialog):
         """ Handles the Cancel wx.EVT_BUTTON event for the dialog. """
 
         for win in wx.GetTopLevelWindows():
-            win.SetTransparent(self.MainFrame.GetPreferences("Transparency"))
+            win.SetTransparent(wx.GetApp().GetPreferences("Transparency"))
 
         self.EndModal(wx.ID_CANCEL)
         
@@ -3651,17 +3657,20 @@ class PreferencesDialog(BaseDialog):
     def OnOk(self, event):
         """ Applies the user choices and saves them to wx.Config. """
 
+        allPreferences = {}
         for widget in self.preferencesWidgets:
             # Get all the user preferences
             name = widget.GetName()
             value = widget.GetValue()
-            preference = self.MainFrame.GetPreferences(name)
+            preference = wx.GetApp().GetPreferences(name)
             # Sets them back with the user choices
             preference[0] = value
-            self.MainFrame.SetPreferences(name, preference)
+            allPreferences[name] = preference
 
-        self.MainFrame.SetPreferences("Language", self.languages.GetValue())
-        self.MainFrame.SetPreferences("Transparency", self.transparency.GetValue())
+        allPreferences["Language"] = self.languages.GetValue()
+        allPreferences["Transparency"] = self.transparency.GetValue()
+        wx.GetApp().SetPreferences(allPreferences)
+        
         self.EndModal(wx.ID_OK)
 
 
@@ -3689,7 +3698,7 @@ class LangListCombo(wx.combo.BitmapComboBox):
 
         self.MainFrame = parent.MainFrame
         
-        lang_ids = GetLocaleDict(GetAvailLocales(self.MainFrame.installDir)).values()
+        lang_ids = GetLocaleDict(GetAvailLocales(wx.GetApp().GetInstallDir())).values()
         lang_items = langlist.CreateLanguagesResourceLists(langlist.LC_ONLY, \
                                                            lang_ids)
         wx.combo.BitmapComboBox.__init__(self, parent,
@@ -3793,18 +3802,16 @@ class ErrorDialog(BaseDialog):
         """
         ErrorDialog.REPORTER_ACTIVE = True
 
-        topWindow = wx.GetApp().GetTopWindow()
-
         # Get version from the app since the main window may be dead or
         # not even ready yet.
         version = wx.GetApp().GetVersion()
         
-        BaseDialog.__init__(self, topWindow)
+        BaseDialog.__init__(self, None)
         
         # Give message to ErrorReporter
         ErrorReporter().AddMessage(message)
-        
-        self.SetIcon(topWindow.GetIcon())
+
+        self.SetIcon(wx.IconFromBitmap(CreateBitmap("GUI2Exe")))
         self.SetTitle(_("Error/Crash Reporter"))
 
         # Attributes
@@ -3813,10 +3820,10 @@ class ErrorDialog(BaseDialog):
                                              ErrorReporter().GetErrorStack(), \
                                              "#---- End Traceback Info ----#")
 
-        errorBmp = topWindow.CreateBitmap("gui2exe_bug")
-        abortBmp = topWindow.CreateBitmap("abort")
-        sendBmp = topWindow.CreateBitmap("send")
-        cancelBmp = topWindow.CreateBitmap("exit")
+        errorBmp = CreateBitmap("gui2exe_bug")
+        abortBmp = CreateBitmap("abort")
+        sendBmp = CreateBitmap("send")
+        cancelBmp = CreateBitmap("exit")
 
         self.errorBmp = wx.StaticBitmap(self, -1, errorBmp)
 

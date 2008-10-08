@@ -17,6 +17,7 @@ import fnmatch
 
 from UserDict import UserDict
 from Constants import ListType
+from AllIcons import catalog
 
 # This class keeps an ordered dictionary
 class odict(UserDict):
@@ -490,3 +491,11 @@ def EnvironmentInfo(version):
     info.append("#---- End System Information ----#")
 
     return os.linesep.join(info)
+
+
+def CreateBitmap(bmpName):
+    """ Retrieves a bitmap from the catalog based on the bitmap name. """
+    
+    return catalog[bmpName].GetBitmap()
+
+    

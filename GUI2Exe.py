@@ -10,7 +10,7 @@ import time
 
 import sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding(sys.getfilesystemencoding())
 del sys.setdefaultencoding
 
 # Used to start the compiled executable
@@ -48,7 +48,7 @@ from Project import Project
 from Process import Process
 from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog, PreferencesDialog
 from Widgets import ExceptionHook
-from Utilities import GetLangId, GetAvailLocales, now
+from Utilities import GetLangId, GetAvailLocales, now, CreateBitmap
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
 from AllIcons import catalog
@@ -112,14 +112,7 @@ class GUI2Exe(wx.Frame):
 
         # Some default starting values for our class
         # where are we
-        try:
-            self.installDir = os.path.dirname(os.path.abspath(__file__))
-        except:
-            self.installDir = os.path.dirname(os.path.abspath(sys.argv[0]))
-
-        # If we don't use this black magic, it bombs on Cyrillic folder
-        # names (?)
-        self.installDir = self.installDir.decode(sys.getfilesystemencoding())
+        self.installDir = wx.GetApp().GetInstallDir()
 
         self.autoSave = False                # use autoSave? (not implemented yet...)
         self.deleteBuild = True              # delete the "build" directory (recommended)
@@ -229,15 +222,15 @@ class GUI2Exe(wx.Frame):
         # That's really a bunch of data...
         
         return ((_("&File"),
-                    (_("&New project...\tCtrl+N"), _("Add a new project to the project tree"), "project", self.OnNewProject, ""),
-                    (_("Switch project &database...\tCtrl+D"), _("Load another GUI2Exe database file"), "switch_db", self.OnSwitchDB, ""),
+                    (_("&New project...")+"\tCtrl+N", _("Add a new project to the project tree"), "project", self.OnNewProject, ""),
+                    (_("Switch project &database...")+"\tCtrl+D", _("Load another GUI2Exe database file"), "switch_db", self.OnSwitchDB, ""),
                     ("", "", "", "", ""),
-                    (_("&Save project\tCtrl+S"), _("Save the current project to database"), "save_project", self.OnSaveProject, ""),
-                    (_("&Save project as...\tCtrl+Shift+S"), _("Save the current project to a file"), "save_to_file", self.OnExportProject, ""),
+                    (_("&Save project") + "\tCtrl+S", _("Save the current project to database"), "save_project", self.OnSaveProject, ""),
+                    (_("&Save project as...")+"\tCtrl+Shift+S", _("Save the current project to a file"), "save_to_file", self.OnExportProject, ""),
                     ("", "", "", "", ""),
-                    (_("&Export setup file...\tCtrl+E"), _("Export the Setup.py file"), "export_setup", self.OnExportSetup, ""),
+                    (_("&Export setup file...")+"\tCtrl+E", _("Export the Setup.py file"), "export_setup", self.OnExportSetup, ""),
                     ("", "", "", "", ""),
-                    (_("&Quit\tCtrl+Q"), _("Exit GUI2Exe"), "exit", self.OnClose, "")),
+                    (_("&Quit") + "\tCtrl+Q", _("Exit GUI2Exe"), "exit", self.OnClose, "")),
                 (_("&Options"),
                     (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", self.OnAutoSave, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
@@ -247,34 +240,34 @@ class GUI2Exe(wx.Frame):
                     (_("&Recurse sub-dirs for data_files option"), _("Recurse sub-directories for data_files option if checked"), "", self.OnRecurseSubDir, wx.ITEM_CHECK),
                     (_("Show t&ooltips"), _("show tooltips for the various compiler options"), "", self.OnShowTip, wx.ITEM_CHECK),
                     ("", "", "", "", ""),
-                    (_("Change &Python version...\tCtrl+H"), _("Temporarily changes the Python version"), "python_version", self.OnChangePython, ""),
-                    (_("Set P&yInstaller path...\tCtrl+Y"), _("Sets the PyInstaller installation path"), "PyInstaller_small", self.OnSetPyInstaller, ""),
+                    (_("Change &Python version...") + "\tCtrl+H", _("Temporarily changes the Python version"), "python_version", self.OnChangePython, ""),
+                    (_("Set P&yInstaller path...") + "\tCtrl+Y", _("Sets the PyInstaller installation path"), "PyInstaller_small", self.OnSetPyInstaller, ""),
                     ("", "", "", "", ""),
-                    (_("Add &custom code...\tCtrl+U"), _("Add custom code to the setup script"), "custom_code", self.OnCustomCode, ""),
-                    (_("&Insert post compilation code...\tCtrl+I"), _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, ""),
+                    (_("Add &custom code...")+"\tCtrl+U", _("Add custom code to the setup script"), "custom_code", self.OnCustomCode, ""),
+                    (_("&Insert post compilation code...")+"\tCtrl+I", _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, ""),
                     ("", "", "", "", ""),
                     (_("Preferences..."), _("Edit preferences/settings"), "preferences", self.OnPreferences, "")),
                 (_("&Builds"),
-                    (_("&Test executable\tCtrl+R"), _("Test the compiled file (if it exists)"), "runexe", self.OnTestExecutable, ""),
+                    (_("&Test executable") + "\tCtrl+R", _("Test the compiled file (if it exists)"), "runexe", self.OnTestExecutable, ""),
                     ("", "", "", "", ""),
-                    (_("View &setup script\tCtrl+P"), _("View the auto-generated setup script"), "view_setup", self.OnViewSetup, ""),
-                    (_("&Check setup script syntax\tCtrl+X"), _("Check the syntax of the auto-generated setup script"), "spellcheck", self.OnCheckSyntax, ""),
+                    (_("View &setup script") + "\tCtrl+P", _("View the auto-generated setup script"), "view_setup", self.OnViewSetup, ""),
+                    (_("&Check setup script syntax") + "\tCtrl+X", _("Check the syntax of the auto-generated setup script"), "spellcheck", self.OnCheckSyntax, ""),
                     ("", "", "", "", ""),
-                    (_("Show &full build output\tCtrl+F"), _("View the full build output for the current compiler"), "full_build", self.OnViewFullBuild, ""),
+                    (_("Show &full build output")+"\tCtrl+F", _("View the full build output for the current compiler"), "full_build", self.OnViewFullBuild, ""),
                     ("", "", "", "", ""),                 
-                    (_("&Missing modules\tCtrl+M"), _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", self.OnViewMissing, ""),
-                    (_("&Binary dependencies\tCtrl+B"), _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", self.OnViewMissing, "")),
+                    (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", self.OnViewMissing, ""),
+                    (_("&Binary dependencies") + "\tCtrl+B", _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", self.OnViewMissing, "")),
                 (_("&View"),
                     (_("Save &panes configuration..."), _("Save the current GUI panes configuration"), "save_aui_config", self.OnSaveConfig, ""),
-                    (_("Restore original &GUI\tCtrl+G"), _("Restore the original GUI appearance"), "restore_aui", self.OnRestorePerspective, "")),
+                    (_("Restore original &GUI") + "\tCtrl+G", _("Restore the original GUI appearance"), "restore_aui", self.OnRestorePerspective, "")),
                 (_("&Help"),
-                    (_("GUI2Exe &help\tF1"), _("Opens the GUI2Exe help"), "help", self.OnHelp, ""),
-                    (_("GUI2Exe &API\tF2"), _("Opens the GUI2Exe API reference"), "api_reference", self.OnAPI, ""),
+                    (_("GUI2Exe &help") + "\tF1", _("Opens the GUI2Exe help"), "help", self.OnHelp, ""),
+                    (_("GUI2Exe &API") + "\tF2", _("Opens the GUI2Exe API reference"), "api_reference", self.OnAPI, ""),
                     ("", "", "", "", ""),
-                    (_("Compiler s&witches\tF3"), _("Show compilers switches and common options"), "compiler_switches", self.OnCompilerSwitches, ""),
-                    (_("&Tips and tricks\tF4"), _("Show compilation tips and tricks"), "tips_and_tricks", self.OnTipsAndTricks, ""),
+                    (_("Compiler s&witches") + "\tF3", _("Show compilers switches and common options"), "compiler_switches", self.OnCompilerSwitches, ""),
+                    (_("&Tips and tricks") + "\tF4", _("Show compilation tips and tricks"), "tips_and_tricks", self.OnTipsAndTricks, ""),
                     ("", "", "", "", ""),
-                    (_("Check for &upgrade\tF9"), _("Check for a GUI2Exe upgrade"), "upgrade", self.OnCheckUpgrade, ""),
+                    (_("Check for &upgrade") + "\tF9", _("Check for a GUI2Exe upgrade"), "upgrade", self.OnCheckUpgrade, ""),
                     ("", "", "", "", ""),
                     (_("&Contact the Author..."), _("Contact Andrea Gavana by e-mail"), "contact", self.OnContact, ""),
                     (_("&About GUI2Exe..."), _("About GUI2Exe and the Creator..."), "about", self.OnAbout, "")))
@@ -482,7 +475,7 @@ class GUI2Exe(wx.Frame):
             current[config] = projectSwitches
 
         # Read the data from the config file
-        options = self.GetConfig()
+        options = wx.GetApp().GetConfig()
         menuBar = self.GetMenuBar()
 
         val = options.Read('PythonVersion')
@@ -529,6 +522,7 @@ class GUI2Exe(wx.Frame):
             preferences["Perspective"] = [0, ""]
 
         self.preferences = preferences
+        wx.GetApp().SetPreferences(preferences)
 
 
     def ApplyPreferences(self):
@@ -549,8 +543,10 @@ class GUI2Exe(wx.Frame):
             self.SetSize(size)
         # GUI2Exe Window position
         choice, position = self.preferences["Window_Position"]
-        if choice and position > (20, 20):
+        if choice:
             self.SetPosition(position)
+        else:
+            self.CenterOnScreen()
 
         # Reload the projects?
         choice, projects = self.preferences["Reload_Projects"]
@@ -566,7 +562,7 @@ class GUI2Exe(wx.Frame):
         @param key: the preferences option name.
         """
 
-        return self.preferences[key]
+        return wx.GetApp().GetPreferences(key)
 
 
     def SetPreferences(self, key, value):
@@ -577,9 +573,12 @@ class GUI2Exe(wx.Frame):
         @param value: the preferences option value.
         """
 
-        self.preferences[key] = value
+        app = wx.GetApp()
+        preferences = app.GetPreferences()
+        preferences[key] = value
+        app.SetPreferences(preferences)
         
-
+        
     def GetDefaultConfiguration(self, compiler):
         """
         Returns the default configuration for a given compiler.
@@ -601,6 +600,9 @@ class GUI2Exe(wx.Frame):
         wx.BeginBusyCursor()
         self.projectTree.NewProject()
         wx.EndBusyCursor()
+        if self.mainPanel.GetPageCount() == 1:
+            # Only one page, enable the compile buttons!
+            self.messageWindow.NoPagesLeft(True)
 
 
     def OnSwitchDB(self, event):
@@ -716,7 +718,9 @@ class GUI2Exe(wx.Frame):
             self.process.Kill()
             self.processTimer.Stop()
 
-        reload_projects = self.GetPreferences("Reload_Projects")[0]
+        preferences = wx.GetApp().GetPreferences()
+
+        reload_projects = preferences["Reload_Projects"][0]
         toReload = []
         # Loop over all the opened wx.aui.AuiNotebook pages to see if
         # there are unsaved projects
@@ -730,9 +734,9 @@ class GUI2Exe(wx.Frame):
         if reload_projects:
             # The user wants to reload the opened projects at startup
             toReload.reverse()
-            self.SetPreferences("Reload_Projects", [1, toReload])
+            preferences["Reload_Projects"] = [1, toReload]
 
-        if self.GetPreferences("Window_Size")[0]:
+        if preferences["Window_Size"][0]:
             # The user wants to remeber GUI2Exe window size at startup
             size = self.GetSize()
             if size.x > 20 and size.y > 20:
@@ -744,26 +748,26 @@ class GUI2Exe(wx.Frame):
                 xvideo, yvideo = 5*size.x/6, 5*size.y/6
                 vector = (xvideo, yvideo)
                 
-            self.SetPreferences("Window_Size", [1, vector])
+            preferences["Window_Size"] = [1, vector]
             
-        if self.GetPreferences("Window_Position")[0]:
+        if preferences["Window_Position"][0]:
             # The user wants to remeber GUI2Exe window positions at startup
             pos = self.GetPosition()
-            self.SetPreferences("Window_Position", [1, (pos.x, pos.y)])
+            preferences["Window_Position"] =  [1, (pos.x, pos.y)]
 
-        if self.GetPreferences("Perspective")[0]:
+        if preferences["Perspective"][0]:
             # The user wants to remember the AUI perspective
-            self.SetPreferences("Perspective", [1, self._mgr.SavePerspective()])        
+            preferences["Perspective"] =  [1, self._mgr.SavePerspective()]
 
         # Save back the configuration items
-        config = self.GetConfig()
+        config = wx.GetApp().GetConfig()
         config.Write('PythonVersion', str(self.pythonVersion))
         config.Write('PyInstaller_Path', str(self.pyInstallerPath))
         config.Write('Recurse_Subdirs', str(self.recurseSubDirs))
         config.Write('Show_Tooltips', str(self.showTips))
         config.Write('Delete_Build', str(self.deleteBuild))
         config.Write('Clean_Dist', str(self.cleanDist))
-        config.Write('Preferences', str(self.preferences))
+        config.Write('Preferences', str(preferences))
         config.Flush()
 
         # Close down the database...
@@ -959,7 +963,7 @@ class GUI2Exe(wx.Frame):
     def OnPreferences(self, event):
         """ Edit/view pereferences and settings for GUI2Exe. """
 
-        dlg = PreferencesDialog(self)
+        dlg = PreferencesDialog(None)
         dlg.ShowModal()
         dlg.Destroy()
         
@@ -1198,8 +1202,8 @@ class GUI2Exe(wx.Frame):
               "Please report any bug/request of improvements\n" + \
               "to me at the following addresses:\n\n" + \
               "andrea.gavana@gmail.com\ngavana@kpo.kz\n\n" + \
-              "Thanks to Robin Dunn and the wxPython mailing list\n" + \
-              "for the ideas and useful suggestions.")%__version__
+              "Thanks to Cody Precord and the wxPython mailing list\n" + \
+              "for the help, ideas and useful suggestions.")%__version__
               
         self.RunError(0, msg)
 
@@ -1645,8 +1649,8 @@ class GUI2Exe(wx.Frame):
 
         @param bmpName: the bitmap name (without extension).
         """
-        
-        return catalog[bmpName].GetBitmap()
+
+        return CreateBitmap(bmpName)
     
 
     def GetCurrentPage(self):
@@ -1945,24 +1949,6 @@ class GUI2Exe(wx.Frame):
         return self.pyInstallerPath
         
 
-    def GetDataDir(self):
-        """ Return the standard location on this platform for application data. """
-        
-        sp = wx.StandardPaths.Get()
-        return sp.GetUserDataDir()
-
-
-    def GetConfig(self):
-        """ Returns the configuration for GUI2Exe. """
-        
-        if not os.path.exists(self.GetDataDir()):
-            # Create the data folder, it still doesn't exist
-            os.makedirs(self.GetDataDir())
-
-        config = wx.FileConfig(localFilename=os.path.join(self.GetDataDir(), "options"))
-        return config
-
-
     def CreateManifestFile(self, project, compiler):
         """
         Create a XP-style manifest file if requested.
@@ -2068,7 +2054,6 @@ class GUI2ExeSplashScreen(AS.AdvancedSplash):
         frame = GUI2Exe(None, -1, "", size=(xvideo, yvideo))
 
         self.app.SetTopWindow(frame)
-        frame.CenterOnScreen()
         frame.Show()
 
         if self.fc.IsRunning():
@@ -2084,7 +2069,6 @@ class GUI2ExeApp(wx.App):
 
         # Set the default python encoding (not that it helps...)
         wx.SetDefaultPyEncoding("utf-8")
-
         self.SetAppName("GUI2Exe")
 
         try:
@@ -2092,21 +2076,13 @@ class GUI2ExeApp(wx.App):
         except:
             installDir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
-        installDir = installDir.decode(sys.getfilesystemencoding())
+        self.installDir = installDir.decode(sys.getfilesystemencoding())
+
         # Retrieve the user configuration directory (if any)
-        sp = wx.StandardPaths.Get()
-        userDir = sp.GetUserDataDir()
-        fileName = os.path.join(userDir, "options")
-        language = "Default"
-        # Check for the option configuration file
-        if os.path.isfile(fileName):
-            options = wx.FileConfig(localFilename=fileName)
-            # Check for preferences if they exist
-            val = options.Read('Preferences')
-            if val:
-                # Evaluate preferences
-                preferences = eval(val)
-                language = preferences["Language"]
+        language = self.GetPreferences("Language")
+        if not language:
+            # Missing preferences...
+            language = "Default"
                 
         # Setup Locale
         locale.setlocale(locale.LC_ALL, '')
@@ -2127,6 +2103,7 @@ class GUI2ExeApp(wx.App):
 
         return True
         
+
     def OnExit(self, evt=None, force=False):
         """
         Handle application exit request
@@ -2136,10 +2113,86 @@ class GUI2ExeApp(wx.App):
 
         self.Exit()
 
+
     def GetVersion(self):
         """ Return the current GUI2Exe version. """
 
         return __version__
+
+
+    def GetInstallDir(self):
+        """ Returns the installation directory for GUI2Exe. """
+
+        return self.installDir        
+
+
+    def GetDataDir(self):
+        """ Returns the option directory for GUI2Exe. """
+        
+        sp = wx.StandardPaths.Get()
+        return sp.GetUserDataDir()
+
+
+    def GetConfig(self):
+        """ Returns the configuration for GUI2Exe. """
+        
+        if not os.path.exists(self.GetDataDir()):
+            # Create the data folder, it still doesn't exist
+            os.makedirs(self.GetDataDir())
+
+        config = wx.FileConfig(localFilename=os.path.join(self.GetDataDir(), "options"))
+        return config
+
+
+    def LoadConfig(self):
+        """ Checks for the option file in wx.Config. """
+
+        userDir = self.GetDataDir()
+        fileName = os.path.join(userDir, "options")
+        preferences = {}
+        
+        # Check for the option configuration file
+        if os.path.isfile(fileName):
+            options = wx.FileConfig(localFilename=fileName)
+            # Check for preferences if they exist
+            val = options.Read('Preferences')
+            if val:
+                # Evaluate preferences
+                preferences = eval(val)
+        
+        return preferences
+    
+
+    def GetPreferences(self, preferenceKey=None):
+        """
+        Returns the user preferences as stored in wx.Config.
+
+        @param preferenceKey: the preference to load
+        """
+
+        preferences = self.LoadConfig()
+        if preferenceKey is None:
+            return preferences
+
+        optionVal = None        
+        if preferenceKey in preferences:            
+            optionVal = preferences[preferenceKey]
+
+        return optionVal        
+
+
+    def SetPreferences(self, newPreferences):
+        """ Save the user preferences in wx.Config. """
+
+        preferences = self.LoadConfig()
+        config = self.GetConfig()
+        for key in newPreferences:
+            preferences[key] = newPreferences[key]
+            
+        config.Write("Preferences", str(preferences))
+                    
+        config.Flush()
+
 
 #----------------------------------------------------------------------------#
                 
