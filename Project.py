@@ -2,6 +2,8 @@
 
 import sys
 import os
+import time
+
 from Utilities import odict, now
 
 
@@ -28,7 +30,7 @@ class Project(odict):
 
         # Store the data we are going to need later        
         self.name = name
-        self.creationDate = now()
+        self.creationDate = time.localtime(time.time())
         self.customCode = {}
         self.postCompile = {}
         self.hasBeenCompiled = False
@@ -89,6 +91,9 @@ class Project(odict):
     def GetCreationDate(self):
         """ Returns the project creation date. """
 
+        if type(self.creationDate) == time.struct_time:
+            return time.strftime("%d %B %Y @ %H:%M:%S", self.creationDate)
+        
         return self.creationDate
     
 

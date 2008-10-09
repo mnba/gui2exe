@@ -39,12 +39,37 @@ class AUINotebookPage(LB.FlatImageBook):
         """ Builds the image list for FlatImageBook. """
 
         imgList = wx.ImageList(32, 32)
+        bmpC, bmpP = self.MainFrame.CreateBitmap("cLetter"), self.MainFrame.CreateBitmap("pLetter")
+
         # Maybe the icons are not that nice...
-        for png in _bookIcons:
-            imgList.Add(self.MainFrame.CreateBitmap(png))
+        for indx in xrange(4):
+            for png in _bookIcons:
+                if indx == 0:
+                    imgList.Add(self.MainFrame.CreateBitmap(png))
+                else:
+                    image = self.AddOverlay(self.MainFrame.CreateBitmap(png), indx, bmpC, bmpP)
+                    imgList.Add(image)
 
         # Assign the image list to the book
         self.AssignImageList(imgList)
+
+
+    def AddOverlay(self, bitmap, index, bmpC, bmpP):
+        """ Adds small letters C and P as overlay. """
+
+        mdc = wx.MemoryDC(bitmap)
+        # Draw overlay onto bitmap
+        mdc.SetBackground(wx.TRANSPARENT_BRUSH)
+        if index == 1:
+            # Only the C Letter on the top right
+            mdc.DrawBitmap(bmpC, 2, 2, True)
+        elif index == 2:
+            mdc.DrawBitmap(bmpP, 2, 18, True)
+        else:
+            mdc.DrawBitmap(bmpC, 2, 2, True)
+            mdc.DrawBitmap(bmpP, 2, 18, True)
+            
+        return mdc.GetAsBitmap()       
 
 
     def CreateBookPages(self, project, compilers):
@@ -55,7 +80,7 @@ class AUINotebookPage(LB.FlatImageBook):
         @param compilers: the available compilers in GUI2Exe.
         """
 
-        # Loop over all the icons we have (4 at the moment)
+        # Loop over all the icons we have (5 at the moment)
         for ii, png in enumerate(_bookIcons):
             if ii == 0:
                 # Is a py2exe
@@ -136,5 +161,30 @@ class AUINotebookPage(LB.FlatImageBook):
         wx.CallAfter(page.SetFocusIgnoringChildren)
 
         
+    def UpdatePageImages(self):
+        """
+        Updates the Labelbook images depending on the presence of user custom code
+        and/or post-compilation code.
+        """
 
+        project = self.GetProject()
+        
+        for indx, compiler in enumerate(_defaultCompilers):
+            customCode, postCode = project.GetCustomCode(compiler).strip(), \
+                                   project.GetPostCompileCode(compiler).strip()
+            if customCode and postCode:
+                # Both are there, use the double overlay
+                self.SetPageImage(indx, 15+indx)
+            elif postCode:
+                # We only have post-compilation code
+                self.SetPageImage(indx, 10+indx)
+            elif customCode:
+                # We only have custom code
+                self.SetPageImage(indx, 5+indx)
+            else:
+                # No custom or post-compilation code...
+                self.SetPageImage(indx, indx)
+                
+        self._pages.Refresh()
 
+        

@@ -486,15 +486,19 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         node1, node2 = database.LoadProject(key1), database.LoadProject(key2)
 
         # Compare their creation date
-        creationDate1 = time.strptime(node1.creationDate, "%d %B %Y @ %H:%M:%S")
-        creationDate2 = time.strptime(node2.creationDate, "%d %B %Y @ %H:%M:%S")
+        try:
+            creationDate1 = time.strptime(node1.creationDate, "%d %B %Y @ %H:%M:%S")
+            creationDate2 = time.strptime(node2.creationDate, "%d %B %Y @ %H:%M:%S")
+        except (ValueError, TypeError):
+            # Older projects...
+            return node1.creationDate < node2.creationDate
         
         if creationDate1 < creationDate2:
             return -1
         elif creationDate1 == creationDate2:
             return 0
         else:
-            return 1        
+            return 1
 
     
     def PopulateTree(self, dbKeys):

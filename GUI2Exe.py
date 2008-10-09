@@ -51,6 +51,7 @@ from Widgets import ExceptionHook
 from Utilities import GetLangId, GetAvailLocales, now, CreateBitmap
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
+from Constants import _standaloneString
 from AllIcons import catalog
 
 # And import the fancy AdvancedSplash
@@ -58,6 +59,11 @@ import AdvancedSplash as AS
 
 # I need this for restorable perspectives:
 ID_FirstPerspective = wx.ID_HIGHEST + 10000
+# Some ids to avoid using FindMenu...
+ID_CleanDist = ID_FirstPerspective + 2000
+ID_DeleteBuild = ID_CleanDist + 1
+ID_ShowTip = ID_CleanDist + 2
+ID_Recurse = ID_CleanDist + 3
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -222,55 +228,55 @@ class GUI2Exe(wx.Frame):
         # That's really a bunch of data...
         
         return ((_("&File"),
-                    (_("&New project...")+"\tCtrl+N", _("Add a new project to the project tree"), "project", self.OnNewProject, ""),
-                    (_("Switch project &database...")+"\tCtrl+D", _("Load another GUI2Exe database file"), "switch_db", self.OnSwitchDB, ""),
-                    ("", "", "", "", ""),
-                    (_("&Save project") + "\tCtrl+S", _("Save the current project to database"), "save_project", self.OnSaveProject, ""),
-                    (_("&Save project as...")+"\tCtrl+Shift+S", _("Save the current project to a file"), "save_to_file", self.OnExportProject, ""),
-                    ("", "", "", "", ""),
-                    (_("&Export setup file...")+"\tCtrl+E", _("Export the Setup.py file"), "export_setup", self.OnExportSetup, ""),
-                    ("", "", "", "", ""),
-                    (_("&Quit") + "\tCtrl+Q", _("Exit GUI2Exe"), "exit", self.OnClose, "")),
+                    (_("&New project...")+"\tCtrl+N", _("Add a new project to the project tree"), "project", -1, self.OnNewProject, ""),
+                    (_("Switch project &database...")+"\tCtrl+D", _("Load another GUI2Exe database file"), "switch_db", -1, self.OnSwitchDB, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Save project") + "\tCtrl+S", _("Save the current project to database"), "save_project", -1, self.OnSaveProject, ""),
+                    (_("&Save project as...")+"\tCtrl+Shift+S", _("Save the current project to a file"), "save_to_file", -1, self.OnExportProject, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Export setup file...")+"\tCtrl+E", _("Export the Setup.py file"), "export_setup", -1, self.OnExportSetup, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Quit") + "\tCtrl+Q", _("Exit GUI2Exe"), "exit", wx.ID_EXIT, self.OnClose, "")),
                 (_("&Options"),
-                    (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", self.OnAutoSave, wx.ITEM_CHECK),
-                    ("", "", "", "", ""),
-                    (_('De&lete "build" directory'), _("Delete the build folder at every compilation"), "", self.OnDeleteBuild, wx.ITEM_CHECK),
-                    (_('Clea&n "dist" directory'), _("Clean the distribution folder at every compilation"), "", self.OnCleanDist, wx.ITEM_CHECK),
-                    ("", "", "", "", ""),
-                    (_("&Recurse sub-dirs for data_files option"), _("Recurse sub-directories for data_files option if checked"), "", self.OnRecurseSubDir, wx.ITEM_CHECK),
-                    (_("Show t&ooltips"), _("show tooltips for the various compiler options"), "", self.OnShowTip, wx.ITEM_CHECK),
-                    ("", "", "", "", ""),
-                    (_("Change &Python version...") + "\tCtrl+H", _("Temporarily changes the Python version"), "python_version", self.OnChangePython, ""),
-                    (_("Set P&yInstaller path...") + "\tCtrl+Y", _("Sets the PyInstaller installation path"), "PyInstaller_small", self.OnSetPyInstaller, ""),
-                    ("", "", "", "", ""),
-                    (_("Add &custom code...")+"\tCtrl+U", _("Add custom code to the setup script"), "custom_code", self.OnCustomCode, ""),
-                    (_("&Insert post compilation code...")+"\tCtrl+I", _("Add custom code to be executed after the building process"), "post_compile", self.OnPostCompilationCode, ""),
-                    ("", "", "", "", ""),
-                    (_("Preferences..."), _("Edit preferences/settings"), "preferences", self.OnPreferences, "")),
+                    (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", -1, self.OnAutoSave, wx.ITEM_CHECK),
+                    ("", "", "", "", "", ""),
+                    (_('De&lete "build" directory'), _("Delete the build folder at every compilation"), "", ID_DeleteBuild, self.OnDeleteBuild, wx.ITEM_CHECK),
+                    (_('Clea&n "dist" directory'), _("Clean the distribution folder at every compilation"), "", ID_CleanDist, self.OnCleanDist, wx.ITEM_CHECK),
+                    ("", "", "", "", "", ""),
+                    (_("&Recurse sub-dirs for data_files option"), _("Recurse sub-directories for data_files option if checked"), "", ID_Recurse, self.OnRecurseSubDir, wx.ITEM_CHECK),
+                    (_("Show t&ooltips"), _("show tooltips for the various compiler options"), "", ID_ShowTip, self.OnShowTip, wx.ITEM_CHECK),
+                    ("", "", "", "", "", ""),
+                    (_("Change &Python version...") + "\tCtrl+H", _("Temporarily changes the Python version"), "python_version", -1, self.OnChangePython, ""),
+                    (_("Set P&yInstaller path...") + "\tCtrl+Y", _("Sets the PyInstaller installation path"), "PyInstaller_small", -1, self.OnSetPyInstaller, ""),
+                    ("", "", "", "", "", ""),
+                    (_("Add &custom code...")+"\tCtrl+U", _("Add custom code to the setup script"), "custom_code", -1, self.OnCustomCode, ""),
+                    (_("&Insert post compilation code...")+"\tCtrl+I", _("Add custom code to be executed after the building process"), "post_compile", -1, self.OnPostCompilationCode, ""),
+                    ("", "", "", "", "", ""),
+                    (_("Preferences..."), _("Edit preferences/settings"), "preferences", wx.ID_PREFERENCES, self.OnPreferences, "")),
                 (_("&Builds"),
-                    (_("&Test executable") + "\tCtrl+R", _("Test the compiled file (if it exists)"), "runexe", self.OnTestExecutable, ""),
-                    ("", "", "", "", ""),
-                    (_("View &setup script") + "\tCtrl+P", _("View the auto-generated setup script"), "view_setup", self.OnViewSetup, ""),
-                    (_("&Check setup script syntax") + "\tCtrl+X", _("Check the syntax of the auto-generated setup script"), "spellcheck", self.OnCheckSyntax, ""),
-                    ("", "", "", "", ""),
-                    (_("Show &full build output")+"\tCtrl+F", _("View the full build output for the current compiler"), "full_build", self.OnViewFullBuild, ""),
-                    ("", "", "", "", ""),                 
-                    (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", self.OnViewMissing, ""),
-                    (_("&Binary dependencies") + "\tCtrl+B", _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", self.OnViewMissing, "")),
+                    (_("&Test executable") + "\tCtrl+R", _("Test the compiled file (if it exists)"), "runexe", -1, self.OnTestExecutable, ""),
+                    ("", "", "", "", "", ""),
+                    (_("View &setup script") + "\tCtrl+P", _("View the auto-generated setup script"), "view_setup", -1, self.OnViewSetup, ""),
+                    (_("&Check setup script syntax") + "\tCtrl+X", _("Check the syntax of the auto-generated setup script"), "spellcheck", -1, self.OnCheckSyntax, ""),
+                    ("", "", "", "", "", ""),
+                    (_("Show &full build output")+"\tCtrl+F", _("View the full build output for the current compiler"), "full_build", -1, self.OnViewFullBuild, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", -1, self.OnViewMissing, ""),
+                    (_("&Binary dependencies") + "\tCtrl+B", _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", -1, self.OnViewMissing, "")),
                 (_("&View"),
-                    (_("Save &panes configuration..."), _("Save the current GUI panes configuration"), "save_aui_config", self.OnSaveConfig, ""),
-                    (_("Restore original &GUI") + "\tCtrl+G", _("Restore the original GUI appearance"), "restore_aui", self.OnRestorePerspective, "")),
+                    (_("Save &panes configuration..."), _("Save the current GUI panes configuration"), "save_aui_config", -1, self.OnSaveConfig, ""),
+                    (_("Restore original &GUI") + "\tCtrl+G", _("Restore the original GUI appearance"), "restore_aui", ID_FirstPerspective, self.OnRestorePerspective, "")),
                 (_("&Help"),
-                    (_("GUI2Exe &help") + "\tF1", _("Opens the GUI2Exe help"), "help", self.OnHelp, ""),
-                    (_("GUI2Exe &API") + "\tF2", _("Opens the GUI2Exe API reference"), "api_reference", self.OnAPI, ""),
-                    ("", "", "", "", ""),
-                    (_("Compiler s&witches") + "\tF3", _("Show compilers switches and common options"), "compiler_switches", self.OnCompilerSwitches, ""),
-                    (_("&Tips and tricks") + "\tF4", _("Show compilation tips and tricks"), "tips_and_tricks", self.OnTipsAndTricks, ""),
-                    ("", "", "", "", ""),
-                    (_("Check for &upgrade") + "\tF9", _("Check for a GUI2Exe upgrade"), "upgrade", self.OnCheckUpgrade, ""),
-                    ("", "", "", "", ""),
-                    (_("&Contact the Author..."), _("Contact Andrea Gavana by e-mail"), "contact", self.OnContact, ""),
-                    (_("&About GUI2Exe..."), _("About GUI2Exe and the Creator..."), "about", self.OnAbout, "")))
+                    (_("GUI2Exe &help") + "\tF1", _("Opens the GUI2Exe help"), "help", -1, self.OnHelp, ""),
+                    (_("GUI2Exe &API") + "\tF2", _("Opens the GUI2Exe API reference"), "api_reference", -1, self.OnAPI, ""),
+                    ("", "", "", "", "", ""),
+                    (_("Compiler s&witches") + "\tF3", _("Show compilers switches and common options"), "compiler_switches", -1, self.OnCompilerSwitches, ""),
+                    (_("&Tips and tricks") + "\tF4", _("Show compilation tips and tricks"), "tips_and_tricks", -1, self.OnTipsAndTricks, ""),
+                    ("", "", "", "", "", ""),
+                    (_("Check for &upgrade") + "\tF9", _("Check for a GUI2Exe upgrade"), "upgrade", -1, self.OnCheckUpgrade, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Contact the Author..."), _("Contact Andrea Gavana by e-mail"), "contact", -1, self.OnContact, ""),
+                    (_("&About GUI2Exe..."), _("About GUI2Exe and the Creator..."), "about", wx.ID_ABOUT, self.OnAbout, "")))
                     
                     
     def CreateMenu(self, menuData):
@@ -284,47 +290,37 @@ class GUI2Exe(wx.Frame):
 
         # Here is a bit trickier than what presented in Robin and Noel book,
         # but not that much.
-        for eachLabel, eachStatus, eachIcon, eachHandler, eachKind in menuData:
+        for eachLabel, eachStatus, eachIcon, eachId, eachHandler, eachKind in menuData:
 
             if not eachLabel:
                 menu.AppendSeparator()
                 continue
 
-            id = wx.ID_ANY
-            # I need to find which menu holds the wxAUI-based "restore perspective"
-            # as I have to bind on wx.EVT_MENU_RANGE with a specific start id 
-            if eachLabel.find(_("Restore original")) >= 0:
-                id = ID_FirstPerspective
-            # The about menu on Mac should go on the application menu
-            elif eachLabel.find(_("About")) >= 0:
-                id = wx.ID_ABOUT
-            # The preferences things has its own id...
-            elif eachLabel.find(_("Preferences")) >= 0:
-                id = wx.ID_PREFERENCES
-            # The exit menu is more special
-            elif eachLabel.find(_("Quit")) >= 0:
-                id = wx.ID_EXIT
             # There are also few check menu items around...
             kind = (eachKind and [eachKind] or [wx.ITEM_NORMAL])[0]
 
-            menuItem = wx.MenuItem(menu, id, eachLabel, eachStatus, kind=kind)
+            menuItem = wx.MenuItem(menu, eachId, eachLabel, eachStatus, kind=kind)
             if eachIcon:
                 # Check menu items usually don't have associated icons
                 menuItem.SetBitmap(self.CreateBitmap(eachIcon))
 
             menu.AppendItem(menuItem)
-            if eachLabel.find('"build"') >= 0:
+            if eachId == ID_DeleteBuild:
                 # By default the "remove build directory" is on
                 menuItem.Check(True)
 
-            if eachLabel.find(_("tooltips")) >= 0:
+            if eachId == ID_ShowTip:
                 # By default we activate the tooltips, unless in the wx.Config
                 # it's set to False
                 menuItem.Check(True)
-                
+
+            # Only store the meanningful menus...
+            if eachId == ID_FirstPerspective:
+                self.configMenu = menu
+
             # Bind the event
             self.Bind(wx.EVT_MENU, eachHandler, menuItem)
-
+            
         return menu
 
 
@@ -342,10 +338,6 @@ class GUI2Exe(wx.Frame):
         # Bind the special "restore perspective" menu item
         self.Bind(wx.EVT_MENU_RANGE, self.OnRestorePerspective, id=ID_FirstPerspective,
                   id2=ID_FirstPerspective+1000)
-
-        # I need to keep track of this menu
-        id = menuBar.FindMenu(_("&View"))
-        self.configMenu = menuBar.GetMenu(id)
 
         # We're done with the menubar
         self.SetMenuBar(menuBar)
@@ -480,33 +472,29 @@ class GUI2Exe(wx.Frame):
 
         val = options.Read('PythonVersion')
         if val:
-            self.pythonVersion = val
+            self.pythonVersion = val.encode()
         val = options.Read('PyInstaller_Path')
         if val:
-            self.pyInstallerPath = val
+            self.pyInstallerPath = val.encode()
         val = options.Read('Recurse_Subdirs')
         if val:
             self.recurseSubDirs = eval(val)
-            item = menuBar.FindMenuItem(_("&Options"), _("Recurse sub-dirs for data_files option"))
-            menuBar.Check(item, self.recurseSubDirs)
+            menuBar.Check(ID_Recurse, self.recurseSubDirs)
 
         val = options.Read('Show_Tooltips')
         if val:
             self.showTips = eval(val)
-            item = menuBar.FindMenuItem(_("&Options"), _("Show t&ooltips"))
-            menuBar.Check(item, self.showTips)
+            menuBar.Check(ID_ShowTip, self.showTips)
 
         val = options.Read('Delete_Build')
         if val:
             self.deleteBuild = eval(val)
-            item = menuBar.FindMenuItem(_("&Options"), _('Delete "build" directory'))
-            menuBar.Check(item, self.deleteBuild)
+            menuBar.Check(ID_DeleteBuild, self.deleteBuild)
             
         val = options.Read('Clean_Dist')
         if val:
             self.cleanDist = eval(val)
-            item = menuBar.FindMenuItem(_("&Options"), _('Clean "dist" directory'))
-            menuBar.Check(item, self.cleanDist)
+            menuBar.Check(ID_CleanDist, self.cleanDist)
 
         preferences = {}
         val = options.Read('Preferences')
@@ -646,7 +634,7 @@ class GUI2Exe(wx.Frame):
 
         # Launch the save dialog        
         dlg = wx.FileDialog(self, message=_("Save file as ..."), defaultDir=buildDir,
-                            defaultFile="Setup.py", wildcard=_pywildspec,
+                            defaultFile="setup.py", wildcard=_pywildspec,
                             style=wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
 
         # Show the dialog and retrieve the user response. If it is the OK response, 
@@ -656,7 +644,13 @@ class GUI2Exe(wx.Frame):
             # Normally, at this point you would save your data using the file and path
             # data that the user provided to you.
             fp = file(path, 'w') # Create file anew
-            fp.write(setupScript)
+            text = setupScript + _standaloneString
+            if os.name != "nt":
+                text = text.replace("\r\n", "\n").replace("\n", "\r\n")
+            else:
+                text = text.replace('\r\n', '\n').replace('\r', '\n')
+
+            fp.write(text)
             fp.close()
             transdict = dict(filePath=path)
             self.SendMessage(0, _("File %(filePath)s successfully saved")%transdict)
@@ -1500,10 +1494,10 @@ class GUI2Exe(wx.Frame):
             # Disable the Run and Dry-Run buttons
             self.messageWindow.NoPagesLeft(True)
 
+        book = self.GetCurrentBook()
         remember, projects = self.GetPreferences("Remember_Compiler")
         if projectName in projects and remember:
             # Get the current LabelBook
-            book = self.GetCurrentBook()
             book.SetSelection(projects[projectName])
             page = book.GetPage(projects[projectName])
             wx.CallAfter(page.SetFocusIgnoringChildren)
@@ -1512,6 +1506,7 @@ class GUI2Exe(wx.Frame):
         transdict = dict(projectName=projectName)
         self.SendMessage(0, _('Project "%(projectName)s" successfully loaded')%transdict)
 
+        book.UpdatePageImages()
         wx.EndBusyCursor()
         
 
@@ -1749,7 +1744,7 @@ class GUI2Exe(wx.Frame):
         setupScript, buildDir = outputs
     
         if view:    # we just want to view the code
-            frame = CustomCodeViewer(self, readOnly=True, text=setupScript)
+            frame = CustomCodeViewer(self, readOnly=True, text=setupScript+_standaloneString)
             return
 
         # Show the throbber

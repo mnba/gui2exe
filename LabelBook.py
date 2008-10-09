@@ -371,6 +371,13 @@ class ImageContainerBase(wx.Panel):
         self.Refresh()
 
 
+    def SetPageImage(self, page, imgIdx):
+        """ Sets the page image. """
+
+        imgInfo = self._pagesInfoVec[page]
+        imgInfo.SetImageIndex(imgIdx)
+        
+
     def ClearAll(self):
         """ Deletes all the pages in the container. """
 
@@ -1690,6 +1697,12 @@ class FlatBookBase(wx.Panel):
         self._pages.AddPage(text, select, imageId)            
         self.Refresh()
 
+
+    def SetPageImage(self, page, imgIdx):
+        """ Sets the page image. """
+
+        self._pages.SetPageImage(page, imgIdx)
+        
 
     def DeletePage(self, page):
         """

@@ -1,5 +1,6 @@
 # Start the imports
 import os
+import sys
 import wx
 # This is needed to create a temporary file for the compilation process
 import tempfile

@@ -249,6 +249,10 @@ _toolTips["cx_Freeze"]["dist_dir"] = _toolTips["cx_Freeze"]["dist_dir_choice"]
 
 _toolTips["bbfreeze"]["dist_dir"] = _toolTips["bbfreeze"]["dist_dir_choice"]
 
+_standaloneString = "# Run setup standalone...\n" \
+                    'if __name__ == "__main__":\n' \
+                    "    setup()\n"
+
 
 # --------------------------------------------------------------
 # PY2EXE SECTION

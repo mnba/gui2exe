@@ -1359,16 +1359,18 @@ class CustomCodeViewer(wx.Frame):
     def OnSave(self, event):
         """ Handles the wx.EVT_BUTTON event for CustomCodeViewer. """
 
+        text = self.pythonStc.GetText()
         # Save the custom code added by the user in the project
         if self.postBuild:
             # is a post-compilation code
-            self.project.SetPostCompileCode(self.compiler, self.pythonStc.GetText())
+            self.project.SetPostCompileCode(self.compiler, text)
         else:
             # is a standard custom code that goes in Setup.py
-            self.project.SetCustomCode(self.compiler, self.pythonStc.GetText())
-            
+            self.project.SetCustomCode(self.compiler, text)
+
         # Update the page itmap for our main wx.aui.AuiNotebook
         self.MainFrame.UpdatePageBitmap(self.project.GetName()+ "*", 1, self.page)
+        self.MainFrame.GetCurrentBook().UpdatePageImages()
         # Change the modified flag, we are saved now
         self.modified = False
         
@@ -1414,6 +1416,7 @@ class CustomCodeViewer(wx.Frame):
                 self.project.SetCustomCode(self.compiler, self.pythonStc.GetText())
 
             self.MainFrame.SaveProject(self.project)
+            self.MainFrame.GetCurrentBook().UpdatePageImages()
 
         event.Skip()
 
@@ -2061,7 +2064,7 @@ class PyInfoFrame(wx.Frame):
     """ Base class for PyBusyInfo. """
 
     def __init__(self, parent, message, useCustom):
-        """ Defaults class constructor.
+        """ Default class constructor.
 
         @param parent: the frame parent;
         @param message: the message to display in the PyBusyInfo;
