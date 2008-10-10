@@ -1,195 +1,195 @@
 # Japanese translation for gui2exe
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the gui2exe package.
-# Cody Precord <cprecord@editra.org>, 2008.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gui2exe\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2008-10-01 11:27+0100\n"
-"PO-Revision-Date: 2008-10-03 13:06+0000\n"
+"POT-Creation-Date: 2008-10-08 16:55-0500\n"
+"PO-Revision-Date: 2008-10-09 23:50+0000\n"
 "Last-Translator: Cody Precord <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-10-04 00:24+0000\n"
+"X-Launchpad-Export-Date: 2008-10-10 00:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: BaseBuilderPanel.py:283
-#, possible-python-format
+#: ..//BaseBuilderPanel.py:283
+#, python-format
 msgid "%(compiler)s options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr "%(projectName)sの%(compiler)sのオプション (作成: %(creationDate)s)"
 
-#: Widgets.py:3024 Widgets.py:3063 Widgets.py:3093
-#, possible-python-format
+#: ..//Widgets.py:3028 ..//Widgets.py:3067 ..//Widgets.py:3097
+#, python-format
 msgid "%(dictionaryItems)d key/value pairs"
 msgstr "%(dictionaryItems)d キー/値のペア"
 
-#: Widgets.py:3099
-#, possible-python-format
+#: ..//Widgets.py:3103
+#, python-format
 msgid "%(numberOfObjects)d ordered objects"
 msgstr ""
 
-#: GUI2Exe.py:276
+#: ..//GUI2Exe.py:273
 msgid "&About GUI2Exe..."
 msgstr "GUI2exeのバージョン情報(&A)"
 
-#: GUI2Exe.py:262
-msgid "&Binary dependencies\tCtrl+B"
-msgstr ""
+#: ..//GUI2Exe.py:259
+msgid "&Binary dependencies"
+msgstr "バイナリの依存関係(&B)"
 
-#: GUI2Exe.py:253
+#: ..//GUI2Exe.py:250
 msgid "&Builds"
 msgstr "ビルド(&B)"
 
-#: GUI2Exe.py:257
-msgid "&Check setup script syntax\tCtrl+X"
+#: ..//GUI2Exe.py:254
+msgid "&Check setup script syntax"
 msgstr ""
 
-#: GUI2Exe.py:275
+#: ..//GUI2Exe.py:272
 msgid "&Contact the Author..."
 msgstr "お問い合わせの著者する(&C)"
 
-#: GUI2Exe.py:234
-msgid "&Export setup file...\tCtrl+E"
+#: ..//GUI2Exe.py:231
+msgid "&Export setup file..."
 msgstr ""
 
-#: GUI2Exe.py:227
+#: ..//GUI2Exe.py:224
 msgid "&File"
 msgstr "ファイル(&F)"
 
-#: GUI2Exe.py:266
+#: ..//GUI2Exe.py:263
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: GUI2Exe.py:250
-msgid "&Insert post compilation code...\tCtrl+I"
+#: ..//GUI2Exe.py:247
+msgid "&Insert post compilation code..."
 msgstr ""
 
-#: GUI2Exe.py:261
-msgid "&Missing modules\tCtrl+M"
+#: ..//GUI2Exe.py:258
+msgid "&Missing modules"
 msgstr ""
 
-#: GUI2Exe.py:228
-msgid "&New project...\tCtrl+N"
-msgstr "新しいプロジェクト(&N)...\tCtrl+N"
+#: ..//GUI2Exe.py:225
+msgid "&New project..."
+msgstr "新規プロジェクト(&N)..."
 
-#: GUI2Exe.py:237
+#: ..//GUI2Exe.py:234 ..//GUI2Exe.py:490 ..//GUI2Exe.py:496 ..//GUI2Exe.py:502
+#: ..//GUI2Exe.py:508
 msgid "&Options"
 msgstr "オプション(&O)"
 
-#: GUI2Exe.py:236
-msgid "&Quit\tCtrl+Q"
-msgstr "終了(&Q)\tCtrl+Q"
+#: ..//GUI2Exe.py:233
+msgid "&Quit"
+msgstr "終了(&Q)"
 
-#: GUI2Exe.py:243
+#: ..//GUI2Exe.py:240
 msgid "&Recurse sub-dirs for data_files option"
 msgstr ""
 
-#: GUI2Exe.py:231
-msgid "&Save project\tCtrl+S"
+#: ..//GUI2Exe.py:228
+msgid "&Save project"
+msgstr "プロジェクトの保存(&S)"
+
+#: ..//GUI2Exe.py:229
+msgid "&Save project as..."
 msgstr ""
 
-#: GUI2Exe.py:232
-msgid "&Save project as...\tCtrl+Shift+S"
+#: ..//GUI2Exe.py:251
+msgid "&Test executable"
 msgstr ""
 
-#: GUI2Exe.py:254
-msgid "&Test executable\tCtrl+R"
-msgstr ""
+#: ..//GUI2Exe.py:268
+msgid "&Tips and tricks"
+msgstr "ヒントとトリック(&T)"
 
-#: GUI2Exe.py:271
-msgid "&Tips and tricks\tF4"
-msgstr ""
-
-#: GUI2Exe.py:263
+#: ..//GUI2Exe.py:260 ..//GUI2Exe.py:347
 msgid "&View"
 msgstr "ビュー(&V)"
 
-#: Widgets.py:3302
+#: ..//Widgets.py:3306
 msgid "0 key/value pairs"
 msgstr "０キー/値のペア"
 
-#: Constants.py:197
+#: ..//Constants.py:197
 msgid ""
 "A list of scripts specified as file names.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python files."
 msgstr ""
 
-#: GUI2Exe.py:1171
+#: ..//GUI2Exe.py:1179
 msgid ""
 "A new version of GUI2Exe is available!\n"
 "\n"
-"Please go to http://xoomer.alice.it/infinity77/main/GUI2Exe.html\n"
-"if you wish to upgrade."
+"Please go to "
 msgstr ""
 
-#: Constants.py:153
+#: ..//Constants.py:153
 msgid "A short description of your application."
 msgstr ""
 
-#: Widgets.py:3818
+#: ..//Widgets.py:3834
 msgid "Abort"
 msgstr "中止"
 
-#: GUI2Exe.py:302
+#: ..//GUI2Exe.py:299
 msgid "About"
 msgstr "アバウト"
 
-#: GUI2Exe.py:276
+#: ..//GUI2Exe.py:273
 msgid "About GUI2Exe and the Creator..."
 msgstr ""
 
-#: GUI2Exe.py:249
-msgid "Add &custom code...\tCtrl+U"
+#: ..//GUI2Exe.py:246
+msgid "Add &custom code..."
 msgstr ""
 
-#: Widgets.py:957
+#: ..//Widgets.py:959
 msgid "Add Data Files"
 msgstr "データファイルを追加する"
 
-#: Widgets.py:951
+#: ..//Widgets.py:953
 msgid "Add Dll/Binary Files"
 msgstr ""
 
-#: Widgets.py:910
+#: ..//Widgets.py:912
 msgid "Add Dylib/Frameworks"
 msgstr ""
 
-#: Widgets.py:313 Widgets.py:338
+#: ..//Widgets.py:315 ..//Widgets.py:340
 msgid "Add Item(s)"
 msgstr "アイテムの追加する"
 
-#: Constants.py:238
+#: ..//Constants.py:238
 msgid ""
 "Add Plist dictionary key/value pairs or edit\n"
 "an existing PList configuration."
 msgstr ""
 
-#: Widgets.py:945
+#: ..//Widgets.py:947
 msgid "Add Python Modules"
 msgstr "Pythonのモジュールを追加する"
 
-#: Widgets.py:948
+#: ..//Widgets.py:950
 msgid "Add Python Packages"
 msgstr "Pythonパッケージを追加する"
 
-#: Widgets.py:535
+#: ..//Widgets.py:537
 msgid "Add Python Script..."
 msgstr "Pythonスクリプトを追加する"
 
-#: Widgets.py:942
+#: ..//Widgets.py:944
 msgid "Add Python Scripts"
 msgstr "Pythonスクリプトを追加する"
 
-#: Widgets.py:913
+#: ..//Widgets.py:915
 msgid "Add XC Data Models"
 msgstr ""
 
-#: Constants.py:148
+#: ..//Constants.py:148
 msgid ""
 "Add a custom icon to your application.\n"
 "The icon will be shown in Windows Explorer.\n"
@@ -197,7 +197,7 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Constants.py:141
+#: ..//Constants.py:141
 msgid ""
 "Add a new list item by hitting Ctrl+A and click on the\n"
 "third list control column to select your Python Main\n"
@@ -209,31 +209,31 @@ msgid ""
 "not implemented in GUI2Exe."
 msgstr ""
 
-#: GUI2Exe.py:228
+#: ..//GUI2Exe.py:225
 msgid "Add a new project to the project tree"
 msgstr ""
 
-#: Constants.py:100
+#: ..//Constants.py:100
 msgid "Add a new tree item below the selected item"
 msgstr ""
 
-#: Widgets.py:2816
+#: ..//Widgets.py:2820
 msgid "Add by Python code"
 msgstr "Pythonのコードを追加する"
 
-#: GUI2Exe.py:250
+#: ..//GUI2Exe.py:247
 msgid "Add custom code to be executed after the building process"
 msgstr ""
 
-#: GUI2Exe.py:249
+#: ..//GUI2Exe.py:246
 msgid "Add custom code to the setup script"
 msgstr ""
 
-#: Widgets.py:1149
+#: ..//Widgets.py:1151
 msgid "Add items to the list"
 msgstr "リストに項目を追加する"
 
-#: Constants.py:149
+#: ..//Constants.py:149
 msgid ""
 "Add one or more bitmaps as Windows resources,\n"
 "so that they get packaged in the executable.\n"
@@ -241,69 +241,69 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Widgets.py:2821
+#: ..//Widgets.py:2825
 msgid "Add your key/value dictionary in Python code:"
 msgstr ""
 
-#: Py2AppPanel.py:83
+#: ..//Py2AppPanel.py:83
 msgid "Add/Edit"
 msgstr "追加/編集"
 
-#: Constants.py:225
+#: ..//Constants.py:225
 msgid "Allow PYTHONPATH to effect the interpreter's environment."
 msgstr ""
 
-#: Constants.py:184
+#: ..//Constants.py:184
 msgid ""
 "Always 1 on Linux/unix. On Windows, governs whether to use\n"
 "the console executable, or the Windows subsystem executable."
 msgstr ""
 
-#: Constants.py:202
+#: ..//Constants.py:202
 msgid ""
 "An optional list of binary files to exclude.\n"
 "\n"
 "Hit Ctrl+A to select one or more binary files."
 msgstr ""
 
-#: Constants.py:203
+#: ..//Constants.py:203
 msgid ""
 "An optional list of binary files to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more binary files."
 msgstr ""
 
-#: Constants.py:200
+#: ..//Constants.py:200
 msgid ""
 "An optional list of paths to be searched before sys.path.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: Constants.py:201
+#: ..//Constants.py:201
 msgid ""
 "An optional list of paths used to extend the hooks package.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: Widgets.py:2826
+#: ..//Widgets.py:2830
 msgid "Append"
 msgstr "追加"
 
-#: cx_FreezePanel.py:93
+#: ..//cx_FreezePanel.py:93
 msgid "Append Script To Executable"
 msgstr ""
 
-#: cx_FreezePanel.py:94
+#: ..//cx_FreezePanel.py:94
 msgid "Append Script To Library"
 msgstr ""
 
-#: Constants.py:99
+#: ..//Constants.py:99
 msgid "Append a new tree item to the selected item"
 msgstr ""
 
-#: Constants.py:204
+#: ..//Constants.py:204
 msgid ""
 "Arbitrary files to include in your distribution.\n"
 "\n"
@@ -318,76 +318,70 @@ msgid ""
 "Hit Ctrl+A to select one or more data files."
 msgstr ""
 
-#: ProjectTreeCtrl.py:297
+#: ..//ProjectTreeCtrl.py:297
 msgid "Are you sure you want to delete all the projects from your database?"
 msgstr ""
 
-#: ProjectTreeCtrl.py:275 ProjectTreeCtrl.py:312
+#: ..//ProjectTreeCtrl.py:275 ..//ProjectTreeCtrl.py:312
 msgid ""
 "Are you sure you want to delete the selected project(s) from your database?"
 msgstr ""
 
-#: GUI2Exe.py:1177
+#: ..//GUI2Exe.py:1185
 msgid "At present you have the latest version of GUI2Exe."
 msgstr ""
 
-#: GUI2Exe.py:1140
+#: ..//GUI2Exe.py:1148
 msgid "Attempting to connect to the internet..."
 msgstr ""
 
-#: cx_FreezePanel.py:183
+#: ..//cx_FreezePanel.py:183
 msgid "Author"
 msgstr "作者"
 
-#: GUI2Exe.py:1193
-msgid ""
-"Author: Andrea Gavana @ 01 Apr 2007\n"
-"\n"
-msgstr ""
-
-#: GUI2Exe.py:238
+#: ..//GUI2Exe.py:235
 msgid "AutoSaves your work every minute"
 msgstr ""
 
-#: GUI2Exe.py:1063
+#: ..//GUI2Exe.py:1071
 msgid "Binary"
 msgstr "バイナリ"
 
-#: Py2ExePanel.py:121
+#: ..//Py2ExePanel.py:121
 msgid "Bitmap Path"
 msgstr "ビットマップのパス"
 
-#: Py2ExePanel.py:43
+#: ..//Py2ExePanel.py:43
 msgid "Bitmap Resources"
 msgstr "ビットマップのリソース"
 
-#: Constants.py:162
+#: ..//Constants.py:162
 msgid ""
 "Boolean value indicating if dependent files should be\n"
 "copied to the target directory or not."
 msgstr ""
 
-#: Constants.py:164
+#: ..//Constants.py:164
 msgid ""
 "Boolean value indicating if the script module should\n"
 "be appended to the shared library zipfile."
 msgstr ""
 
-#: Constants.py:163
+#: ..//Constants.py:163
 msgid ""
 "Boolean value indicating if the script module should be\n"
 "appended to the executable itself."
 msgstr ""
 
-#: Widgets.py:1037
+#: ..//Widgets.py:1039
 msgid "Browse For Folders..."
 msgstr "フォルダをブラウズする"
 
-#: PyInstallerPanel.py:108
+#: ..//PyInstallerPanel.py:108
 msgid "Build Optimized"
-msgstr ""
+msgstr "ビルドの最適化"
 
-#: Constants.py:211
+#: ..//Constants.py:211
 msgid ""
 "Build optimized.\n"
 "\n"
@@ -395,37 +389,37 @@ msgid ""
 "if it is run optimized."
 msgstr ""
 
-#: Widgets.py:2490
-#, possible-python-format
+#: ..//Widgets.py:2494
+#, python-format
 msgid "Build output file %(filePath)s successfully saved"
 msgstr ""
 
-#: Widgets.py:2441
-#, possible-python-format
+#: ..//Widgets.py:2445
+#, python-format
 msgid ""
 "Build output text for %(projectName)s (%(compiler)s):\n"
 "Built on %(header)s"
 msgstr ""
 
-#: Widgets.py:2509
+#: ..//Widgets.py:2513
 msgid "Build output text successfully copied to the clipboard"
 msgstr ""
 
-#: ExecutableProperties.py:77
+#: ..//ExecutableProperties.py:77
 msgid "Builder"
 msgstr "ビルダー"
 
-#: Py2ExePanel.py:235
+#: ..//Py2ExePanel.py:235
 msgid "Bundle Files"
 msgstr "バンドルファイル"
 
-#: Constants.py:218
+#: ..//Constants.py:218
 msgid ""
 "Bundle extension (default: '.app' for app, '.plugin'\n"
 "for plugins)."
 msgstr ""
 
-#: Constants.py:133
+#: ..//Constants.py:133
 msgid ""
 "Bundling options for the final dist directory.\n"
 "\n"
@@ -439,11 +433,11 @@ msgid ""
 "bit machines."
 msgstr ""
 
-#: Widgets.py:2067
+#: ..//Widgets.py:2071
 msgid "Busy"
 msgstr "ビジー"
 
-#: Constants.py:134
+#: ..//Constants.py:134
 msgid ""
 "By activating this option in GUI2Exe, you can specify a name\n"
 "for the compressed zip file where py2exe will put all the\n"
@@ -455,7 +449,7 @@ msgid ""
 "None."
 msgstr ""
 
-#: Constants.py:136
+#: ..//Constants.py:136
 msgid ""
 "By choosing this option, py2exe will copy\n"
 "the Python bytecode files directly into the dist\n"
@@ -463,7 +457,7 @@ msgid ""
 "archive is used."
 msgstr ""
 
-#: Constants.py:140
+#: ..//Constants.py:140
 msgid ""
 "By selecting a file for this option, your custom\n"
 "Python file can do things like installing a customized\n"
@@ -472,82 +466,82 @@ msgid ""
 "boot_common.py is executed."
 msgstr ""
 
-#: Process.py:214
+#: ..//Process.py:214
 msgid "Byte-compiling Python files..."
 msgstr "Pythonのファイルをバイトコンパイルしています。。。"
 
-#: Widgets.py:1705 Widgets.py:1845 Widgets.py:2407
+#: ..//Widgets.py:1707 ..//Widgets.py:1849 ..//Widgets.py:2411
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: GUI2Exe.py:246
-msgid "Change &Python version...\tCtrl+H"
-msgstr "Pythonのバージョンを変更する"
-
-#: GUI2Exe.py:273
-msgid "Check for &upgrade\tF9"
+#: ..//GUI2Exe.py:243
+msgid "Change &Python version..."
 msgstr ""
 
-#: GUI2Exe.py:273
+#: ..//GUI2Exe.py:270
+msgid "Check for &upgrade"
+msgstr "アップグレードをチェックする"
+
+#: ..//GUI2Exe.py:270
 msgid "Check for a GUI2Exe upgrade"
 msgstr ""
 
-#: GUI2Exe.py:257
+#: ..//GUI2Exe.py:254
 msgid "Check the syntax of the auto-generated setup script"
 msgstr ""
 
-#: Widgets.py:1014
+#: ..//Widgets.py:1016
 msgid "Choose a data files directory:"
 msgstr ""
 
-#: Widgets.py:1976
+#: ..//Widgets.py:1980
 msgid "Choose one or more folders:"
 msgstr ""
 
-#: GUI2Exe.py:905
+#: ..//GUI2Exe.py:913
 msgid "Choose the PyInstaller location:"
 msgstr ""
 
-#: Widgets.py:3012
+#: ..//Widgets.py:3016
 msgid "Class          "
 msgstr "クラス          "
 
-#: GUI2Exe.py:241
+#: ..//GUI2Exe.py:238
 msgid "Clea&n \"dist\" directory"
 msgstr ""
 
-#: GUI2Exe.py:511
+#: ..//GUI2Exe.py:508
 msgid "Clean \"dist\" directory"
 msgstr ""
 
-#: GUI2Exe.py:241
+#: ..//GUI2Exe.py:238
 msgid "Clean the distribution folder at every compilation"
 msgstr ""
 
-#: GUI2Exe.py:1687
+#: ..//GUI2Exe.py:1695
 msgid "Cleaning the distribution folder..."
 msgstr ""
 
-#: MessageWindow.py:153
+#: ..//MessageWindow.py:153
 msgid "Clear History"
 msgstr "履歴のクリア"
 
-#: Widgets.py:324
+#: ..//Widgets.py:326
 msgid "Clear all"
 msgstr "すべてクリア"
 
-#: Widgets.py:3821
+#: ..//Widgets.py:3837
 msgid "Close"
 msgstr "閉じる"
 
-#: Constants.py:146
+#: ..//Constants.py:146
 msgid ""
 "Comma-separated list of DLLs to exclude.\n"
 "\n"
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: Constants.py:143 Constants.py:232
+#: ..//Constants.py:143 ..//Constants.py:232
 msgid ""
 "Comma-separated list of Python modules to exclude.\n"
 "\n"
@@ -557,7 +551,7 @@ msgid ""
 "it will be included in your final distribution."
 msgstr ""
 
-#: Constants.py:145
+#: ..//Constants.py:145
 msgid ""
 "Comma-separated list of Python modules to ignore\n"
 "if they are found during the building process.\n"
@@ -565,7 +559,7 @@ msgid ""
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: Constants.py:142 Constants.py:231
+#: ..//Constants.py:142 ..//Constants.py:231
 msgid ""
 "Comma-separated list of Python modules to include.\n"
 "\n"
@@ -575,14 +569,14 @@ msgid ""
 "it will be included in your final distribution."
 msgstr ""
 
-#: Constants.py:144 Constants.py:233
+#: ..//Constants.py:144 ..//Constants.py:233
 msgid ""
 "Comma-separated list of Python packages to include.\n"
 "\n"
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: Constants.py:234
+#: ..//Constants.py:234
 msgid ""
 "Comma-separated list of frameworks or dylibs to\n"
 "exclude.\n"
@@ -590,7 +584,7 @@ msgid ""
 "Hit Ctrl+A to select one or more dylibs or frameworks."
 msgstr ""
 
-#: Constants.py:236
+#: ..//Constants.py:236
 msgid ""
 "Comma-separated list of frameworks or dylibs to\n"
 "include in your distribution.\n"
@@ -598,72 +592,73 @@ msgid ""
 "Hit Ctrl+A to select one or more dylibs or frameworks."
 msgstr ""
 
-#: bbFreezePanel.py:35 cx_FreezePanel.py:35 Py2AppPanel.py:38
-#: Py2ExePanel.py:35 PyInstallerPanel.py:39
+#: ..//Py2AppPanel.py:38 ..//Py2ExePanel.py:35 ..//PyInstallerPanel.py:39
+#: ..//bbFreezePanel.py:35 ..//cx_FreezePanel.py:35
 msgid "Common Options"
 msgstr "共通オプション"
 
-#: Py2ExePanel.py:57
+#: ..//Py2ExePanel.py:57
 msgid "Company Name"
 msgstr "会社名"
 
-#: GUI2Exe.py:1791
+#: ..//GUI2Exe.py:1799
 msgid "Compilation killed by user"
 msgstr "ユーザーはコンパイルを止まりました"
 
-#: MessageWindow.py:46
+#: ..//MessageWindow.py:46
 msgid "Compile"
 msgstr "コンパイル"
 
-#: MessageWindow.py:36
+#: ..//MessageWindow.py:36
 msgid "Compiler Messages"
 msgstr "コンパイラメッセージ"
 
-#: GUI2Exe.py:270
-msgid "Compiler s&witches\tF3"
-msgstr "コンパイラスイッチ(&w)\tF3"
+#: ..//GUI2Exe.py:267
+msgid "Compiler s&witches"
+msgstr "コンパイラスイッチ"
 
-#: bbFreezePanel.py:150 cx_FreezePanel.py:211 Py2ExePanel.py:231
+#: ..//Py2ExePanel.py:231 ..//bbFreezePanel.py:150 ..//cx_FreezePanel.py:211
 msgid "Compressed"
 msgstr "圧縮済"
 
-#: PyInstallerPanel.py:176
+#: ..//PyInstallerPanel.py:176
 msgid "Compression Level"
 msgstr "圧縮のレベル"
 
-#: PyInstallerPanel.py:66
+#: ..//PyInstallerPanel.py:66
 msgid "Console Application"
 msgstr "コンソールのアプリケーション"
 
-#: GUI2Exe.py:275
+#: ..//GUI2Exe.py:272
 msgid "Contact Andrea Gavana by e-mail"
 msgstr ""
 
-#: cx_FreezePanel.py:92
+#: ..//cx_FreezePanel.py:92
 msgid "Copy Dependent Files"
 msgstr ""
 
-#: ProjectTreeCtrl.py:254
+#: ..//ProjectTreeCtrl.py:254
 msgid "Copy to new project..."
-msgstr ""
+msgstr "新しいプロジェクトにコピーする"
 
-#: ProjectTreeCtrl.py:676
+#: ..//ProjectTreeCtrl.py:676
 msgid "Copying existing project configuration..."
 msgstr ""
 
-#: Process.py:216
+#: ..//Process.py:216
 msgid "Copying files..."
 msgstr "ファイルをコピーしています..."
 
-#: Py2ExePanel.py:57
+#: ..//Py2ExePanel.py:57
 msgid "Copyrights"
 msgstr "著作権"
 
-#: bbFreezePanel.py:72 cx_FreezePanel.py:95 PyInstallerPanel.py:109
+#: ..//PyInstallerPanel.py:109 ..//bbFreezePanel.py:72
+#: ..//cx_FreezePanel.py:95
 msgid "Create Manifest File (MSW)"
-msgstr ""
+msgstr "マニフェストファイルを作成する(MSW)"
 
-#: Constants.py:132
+#: ..//Constants.py:132
 msgid ""
 "Creates a compressed zip archive (zipfile).\n"
 "\n"
@@ -678,109 +673,109 @@ msgid ""
 "be activated (no zipfile to compress)."
 msgstr ""
 
-#: Constants.py:159 Constants.py:175
+#: ..//Constants.py:159 ..//Constants.py:175
 msgid "Creates a compressed zip file."
 msgstr ""
 
-#: Constants.py:137
+#: ..//Constants.py:137
 msgid ""
 "Creates a file that instructs Windows on how to correctly\n"
 "render the widgets in your user interface. This file lives\n"
 "under 'other_resources' in py2exe."
 msgstr ""
 
-#: GUI2Exe.py:1449
+#: ..//GUI2Exe.py:1457
 msgid "Creating new project..."
 msgstr "新しいプロジェクトを作成しています。。。"
 
-#: Py2ExePanel.py:304
+#: ..//Py2ExePanel.py:304
 msgid "Custom Boot Script"
-msgstr ""
+msgstr "カスタム起動スクリプト"
 
-#: Py2ExePanel.py:337
+#: ..//Py2ExePanel.py:337
 msgid "Custom boot file is not a valid file."
 msgstr ""
 
-#: Py2ExePanel.py:39
+#: ..//Py2ExePanel.py:39
 msgid "DLL Excludes"
-msgstr ""
+msgstr "DLLを除外する"
 
-#: Widgets.py:1692
+#: ..//Widgets.py:1694
 msgid "DLL Name"
 msgstr "DLLの名前"
 
-#: Py2ExePanel.py:110
+#: ..//Py2ExePanel.py:110
 msgid "DLL Names"
 msgstr "DLLの名前"
 
-#: Widgets.py:1692
+#: ..//Widgets.py:1694
 msgid "DLL Path"
 msgstr "DLLのパス"
 
-#: PyInstallerPanel.py:43
+#: ..//PyInstallerPanel.py:43
 msgid "DLL/Binary Excludes"
 msgstr ""
 
-#: PyInstallerPanel.py:44
+#: ..//PyInstallerPanel.py:44
 msgid "DLL/Binary Includes"
 msgstr ""
 
-#: Py2ExePanel.py:41 PyInstallerPanel.py:45
+#: ..//Py2ExePanel.py:41 ..//PyInstallerPanel.py:45
 msgid "Data Files"
 msgstr "データファイル"
 
-#: DataBase.py:61
+#: ..//DataBase.py:61
 msgid "Database file is corrupted: using backup file"
 msgstr ""
 
-#: Constants.py:192
+#: ..//Constants.py:192
 msgid ""
 "Ddo not include encodings.<note>The default (on Python versions with unicode "
 "support)\n"
 "is now to include all encodings."
 msgstr ""
 
-#: GUI2Exe.py:240
+#: ..//GUI2Exe.py:237
 msgid "De&lete \"build\" directory"
 msgstr ""
 
-#: PyInstallerPanel.py:60
+#: ..//PyInstallerPanel.py:60
 msgid "Debug"
 msgstr "デバグ"
 
-#: Constants.py:102
+#: ..//Constants.py:102
 msgid "Delete"
 msgstr "削除"
 
-#: GUI2Exe.py:505
+#: ..//GUI2Exe.py:502
 msgid "Delete \"build\" directory"
 msgstr ""
 
-#: ProjectTreeCtrl.py:221
+#: ..//ProjectTreeCtrl.py:221
 msgid "Delete all projects"
 msgstr "すべてのプロジェクトを削除する"
 
-#: ProjectTreeCtrl.py:244
+#: ..//ProjectTreeCtrl.py:244
 msgid "Delete project(s)"
-msgstr ""
+msgstr "プロジェクトを削除する"
 
-#: Widgets.py:319
+#: ..//Widgets.py:321
 msgid "Delete selected"
-msgstr ""
+msgstr "選択したアイテムを削除する"
 
-#: GUI2Exe.py:240
+#: ..//GUI2Exe.py:237
 msgid "Delete the build folder at every compilation"
 msgstr ""
 
-#: Constants.py:102
+#: ..//Constants.py:102
 msgid "Deletes the selected tree item (and everything below)"
 msgstr ""
 
-#: Constants.py:223
+#: ..//Constants.py:223
 msgid "Depend on an existing installation of Python 2.4+."
 msgstr ""
 
-#: Constants.py:156
+#: ..//Constants.py:156
 msgid ""
 "Depends on the kind of executable you wish to build:\n"
 "\n"
@@ -789,420 +784,408 @@ msgid ""
 "  (i.e., no graphical interface stuff involved)."
 msgstr ""
 
-#: cx_FreezePanel.py:179
+#: ..//cx_FreezePanel.py:179
 msgid "Description"
 msgstr "説明"
 
-#: Py2ExePanel.py:117
+#: ..//Py2ExePanel.py:117
 msgid "Directory"
 msgstr "ディレクトリ"
 
-#: Widgets.py:833
+#: ..//Widgets.py:835
 msgid "Directory Name"
 msgstr "ディレクトリ名"
 
-#: Constants.py:214
+#: ..//Constants.py:214
 msgid ""
 "Directory to put final built distributions in\n"
 "(default is dist)."
 msgstr ""
 
-#: Widgets.py:1248
+#: ..//Widgets.py:1250
 msgid "Discard"
 msgstr "破棄"
 
-#: bbFreezePanel.py:60 cx_FreezePanel.py:75 Py2AppPanel.py:62
-#: Py2ExePanel.py:90
+#: ..//Py2AppPanel.py:62 ..//Py2ExePanel.py:90 ..//bbFreezePanel.py:60
+#: ..//cx_FreezePanel.py:75
 msgid "Dist Directory"
 msgstr "Distのディレクトリ"
 
-#: PyInstallerPanel.py:193
+#: ..//PyInstallerPanel.py:193
 msgid "Dist Directory Name"
 msgstr "Distのディレクトリの名前"
 
-#: Constants.py:222
+#: ..//Constants.py:222
 msgid ""
 "Do not change to the data directory (Contents/Resources).<note> This is "
 "forced for plugins."
 msgstr ""
 
-#: Constants.py:221
+#: ..//Constants.py:221
 msgid "Do not strip debug and local symbols from output."
 msgstr ""
 
-#: Widgets.py:2818
+#: ..//Widgets.py:2822
 msgid "Double-click on one item in the tree control above:"
 msgstr ""
 
-#: Constants.py:228
+#: ..//Constants.py:228
 msgid "Drop to pdb console after the module finding phase is complete."
 msgstr ""
 
-#: MessageWindow.py:45
+#: ..//MessageWindow.py:45
 msgid "Dry Run"
-msgstr ""
+msgstr "予行演習をする"
 
-#: Constants.py:101
+#: ..//Constants.py:101
 msgid "Duplicate"
 msgstr "複製"
 
-#: Constants.py:101
+#: ..//Constants.py:101
 msgid "Duplicates the selected tree item"
 msgstr ""
 
-#: Py2AppPanel.py:42
+#: ..//Py2AppPanel.py:42
 msgid "Dylib/Frameworks Excludes"
 msgstr ""
 
-#: Py2AppPanel.py:44
+#: ..//Py2AppPanel.py:44
 msgid "Dylib/Frameworks Includes"
 msgstr ""
 
-#: Py2AppPanel.py:96 Py2AppPanel.py:102
+#: ..//Py2AppPanel.py:96 ..//Py2AppPanel.py:102
 msgid "Dylib/Frameworks Names"
 msgstr ""
 
-#: GUI2Exe.py:252
+#: ..//GUI2Exe.py:249
 msgid "Edit preferences/settings"
 msgstr ""
 
-#: ProjectTreeCtrl.py:238
+#: ..//ProjectTreeCtrl.py:238
 msgid "Edit project name"
 msgstr "プロジェクトの名前を編集する"
 
-#: Process.py:175
-#, possible-python-format
+#: ..//Process.py:175
+#, python-format
 msgid "Elapsed time for the process: %02d:%02d:%02d"
 msgstr ""
 
-#: bbFreezePanel.py:265 cx_FreezePanel.py:385 Py2AppPanel.py:390
-#: Py2ExePanel.py:411
+#: ..//Py2AppPanel.py:406 ..//Py2ExePanel.py:411 ..//bbFreezePanel.py:265
+#: ..//cx_FreezePanel.py:385
 msgid "Empty dist_dir option. Using default value \"dist\""
 msgstr ""
 
-#: cx_FreezePanel.py:390
+#: ..//cx_FreezePanel.py:390
 msgid "Empty targetName option. Using Python script name"
 msgstr ""
 
-#: GUI2Exe.py:1086
+#: ..//GUI2Exe.py:1094
 msgid "Enter a name for the new configuration:"
 msgstr ""
 
-#: ProjectTreeCtrl.py:362 ProjectTreeCtrl.py:662
+#: ..//ProjectTreeCtrl.py:362 ..//ProjectTreeCtrl.py:662
 msgid "Enter a name for the new project:"
+msgstr "新しいプロジェクトの名前を入力："
+
+#: ..//Widgets.py:1311
+msgid "Enter your custom code below and it will be inserted inside the\n"
 msgstr ""
 
-#: Widgets.py:1309
-msgid ""
-"Enter your custom code below and it will be inserted inside the\n"
-"Setup script. Note that you can use as 'keywords' also the compiler\n"
-"options like data_files, ignores and icon_resources."
-msgstr ""
-
-#: GUI2Exe.py:1418
+#: ..//GUI2Exe.py:1426
 msgid "Error"
 msgstr "エラー"
 
-#: MessageWindow.py:223
+#: ..//MessageWindow.py:223
 msgid "Error Message"
 msgstr "エラーメッセージ"
 
-#: Widgets.py:3848
+#: ..//Widgets.py:3864
 msgid "Error Traceback:"
 msgstr "エラーのトレースバック"
 
-#: Widgets.py:3844
-msgid ""
-"Error: Oh no, something bad happened!\n"
-"Help improve GUI2Exe by clicking on Report Error\n"
-"to send the Error Traceback shown below."
+#: ..//Widgets.py:3815
+msgid "Error/Crash Reporter"
 msgstr ""
 
-#: bbFreezePanel.py:37 cx_FreezePanel.py:39 Py2AppPanel.py:41
-#: Py2ExePanel.py:38 PyInstallerPanel.py:41
+#: ..//Widgets.py:3860
+msgid "Error: Oh no, something bad happened!\n"
+msgstr ""
+
+#: ..//Py2AppPanel.py:41 ..//Py2ExePanel.py:38 ..//PyInstallerPanel.py:41
+#: ..//bbFreezePanel.py:37 ..//cx_FreezePanel.py:39
 msgid "Excludes"
 msgstr "除外"
 
-#: bbFreezePanel.py:136 cx_FreezePanel.py:197 Py2ExePanel.py:55
+#: ..//Py2ExePanel.py:55 ..//bbFreezePanel.py:136 ..//cx_FreezePanel.py:197
 msgid "Exe Kind"
 msgstr "Exeのタイプ"
 
-#: cx_FreezePanel.py:69 Py2ExePanel.py:56 PyInstallerPanel.py:174
+#: ..//Py2ExePanel.py:56 ..//PyInstallerPanel.py:174 ..//cx_FreezePanel.py:69
 msgid "Executable Name"
-msgstr ""
+msgstr "実行可能ファイルの名前"
 
-#: GUI2Exe.py:175
+#: ..//GUI2Exe.py:172
 msgid "Executable Properties"
-msgstr ""
+msgstr "実行可能ファイルのプロパティ"
 
-#: GUI2Exe.py:1892
+#: ..//GUI2Exe.py:1900
 msgid "Executable terminated with errors or warnings"
 msgstr ""
 
-#: GUI2Exe.py:236
+#: ..//GUI2Exe.py:233
 msgid "Exit GUI2Exe"
 msgstr "GUI2Exeを終了する"
 
-#: GUI2Exe.py:234
+#: ..//GUI2Exe.py:231
 msgid "Export the Setup.py file"
 msgstr ""
 
-#: Widgets.py:2406
+#: ..//Widgets.py:2410
 msgid "Export to clipboard"
-msgstr ""
+msgstr "クリップボードに輸出"
 
-#: Py2AppPanel.py:210
+#: ..//Py2AppPanel.py:211
 msgid "Extension"
-msgstr ""
+msgstr "拡張"
 
-#: GUI2Exe.py:656
-#, possible-python-format
+#: ..//GUI2Exe.py:662
+#, python-format
 msgid "File %(filePath)s successfully saved"
 msgstr ""
 
-#: PyInstallerPanel.py:96 PyInstallerPanel.py:97 PyInstallerPanel.py:101
+#: ..//PyInstallerPanel.py:96 ..//PyInstallerPanel.py:97
+#: ..//PyInstallerPanel.py:101
 msgid "File Name"
 msgstr "ファイル名"
 
-#: ExecutableProperties.py:77
+#: ..//ExecutableProperties.py:77
 msgid "Files     "
 msgstr "ファイル     "
 
-#: Py2AppPanel.py:109 Py2ExePanel.py:117
+#: ..//Py2AppPanel.py:109 ..//Py2ExePanel.py:117
 msgid "Files Path"
 msgstr "ファイルのパス"
 
-#: Widgets.py:1985
+#: ..//Widgets.py:1989
 msgid "Filter file extensions using wildcard separated by a comma:"
 msgstr ""
 
-#: Process.py:222
+#: ..//Process.py:222
 msgid "Filtering Dependencies..."
 msgstr ""
 
-#: Process.py:218
+#: ..//Process.py:218
 msgid "Finding required modules..."
-msgstr ""
+msgstr "必要なモジュールを探しています"
 
-#: Constants.py:178
+#: ..//Constants.py:178
 msgid "Flag whether to create the included python interpreter."
 msgstr ""
 
-#: PyInstallerPanel.py:105
+#: ..//PyInstallerPanel.py:105
 msgid "Force Execpv"
 msgstr ""
 
-#: Constants.py:227
+#: ..//Constants.py:227
 msgid "Force application to run translated on i386."
 msgstr ""
 
-#: Constants.py:208
+#: ..//Constants.py:208
 msgid ""
 "Force execpv (Linux/Unix only).\n"
 "\n"
 "Ensures that LD_LIBRARY_PATH is set properly."
 msgstr ""
 
-#: Widgets.py:2420
+#: ..//Widgets.py:2424
 msgid "Full Build Output Dialog"
 msgstr ""
 
-#: GUI2Exe.py:268
-msgid "GUI2Exe &API\tF2"
-msgstr "GUI2Exe &API\tF2"
+#: ..//GUI2Exe.py:265
+msgid "GUI2Exe &API"
+msgstr "GUI2Exeの&API"
 
-#: GUI2Exe.py:267
-msgid "GUI2Exe &help\tF1"
-msgstr "GUI2Exe ヘルプ(&h)\tF1"
+#: ..//GUI2Exe.py:264
+msgid "GUI2Exe &help"
+msgstr "GUI2Exeのヘルプ(&h)"
 
-#: Widgets.py:2165
+#: ..//Widgets.py:2169
 msgid "GUI2Exe Busy Message"
 msgstr "GUI2Exeのビジーメッセージ"
 
-#: Widgets.py:1227
+#: ..//Widgets.py:1229
 msgid "GUI2Exe Code Viewer"
 msgstr "GUI2Exeのコードビューア"
 
-#: Widgets.py:2606
+#: ..//Widgets.py:2610
 msgid "GUI2Exe Help Tip"
 msgstr "GUI2Exeのヘルプヒント"
 
-#: Widgets.py:2558 Widgets.py:2611
-#, possible-python-format
+#: ..//Widgets.py:2562 ..//Widgets.py:2615
+#, python-format
 msgid "GUI2Exe Help Tip (%(compiler)s)"
 msgstr "GUI2Exeの(%(compiler)s)のヘルプヒント"
 
-#: Widgets.py:3569
+#: ..//Widgets.py:3577
 msgid "GUI2Exe Preferences dialog"
 msgstr "GUI2Exeの環境設定ダイアログ"
 
-#: GUI2Exe.py:171
+#: ..//GUI2Exe.py:168
 msgid "GUI2Exe Projects"
 msgstr "GUI2Exeのプロジェクト"
 
-#: GUI2Exe.py:205
-#, possible-python-format
+#: ..//GUI2Exe.py:202
+#, python-format
 msgid "GUI2Exe succesfully started at %(dateAndTime)s"
-msgstr ""
+msgstr "GUI2Exeは%(dateAndTime)sに正常に起動しました"
 
-#: GUI2Exe.py:1139
+#: ..//GUI2Exe.py:1147
 msgid "GUI2Exe: Check for upgrade"
-msgstr ""
+msgstr "GUI2Exe:　アップグレード をチェックする"
 
-#: bbFreezePanel.py:217 cx_FreezePanel.py:330 Py2AppPanel.py:342
-#: Py2ExePanel.py:356 PyInstallerPanel.py:305
-#, possible-python-format
+#: ..//Py2AppPanel.py:358 ..//Py2ExePanel.py:356 ..//PyInstallerPanel.py:305
+#: ..//bbFreezePanel.py:217 ..//cx_FreezePanel.py:330
+#, python-format
 msgid "Generating \"%(projectName)s\" setup script..."
 msgstr ""
 
-#: PyInstallerPanel.py:38
+#: ..//PyInstallerPanel.py:38
 msgid "Hooks Extensions"
 msgstr ""
 
-#: cx_FreezePanel.py:263 Py2AppPanel.py:226 PyInstallerPanel.py:180
+#: ..//Py2AppPanel.py:227 ..//PyInstallerPanel.py:180
+#: ..//cx_FreezePanel.py:263
 msgid "Icon File"
 msgstr "アイコンファイル"
 
-#: Py2ExePanel.py:119
+#: ..//Py2ExePanel.py:119
 msgid "Icon Path"
 msgstr "アイコンのパス"
 
-#: Py2ExePanel.py:42
+#: ..//Py2ExePanel.py:42
 msgid "Icon Resources"
 msgstr "アイコンのリソース"
 
-#: cx_FreezePanel.py:311 Py2AppPanel.py:323 PyInstallerPanel.py:280
+#: ..//Py2AppPanel.py:339 ..//PyInstallerPanel.py:280
+#: ..//cx_FreezePanel.py:311
 msgid "Icon file is not a valid file."
 msgstr ""
 
-#: Constants.py:216
+#: ..//Constants.py:216
 msgid "Icon file to use for your application."
 msgstr ""
 
-#: Py2ExePanel.py:119 Py2ExePanel.py:121 Py2ExePanel.py:123
+#: ..//Py2ExePanel.py:119 ..//Py2ExePanel.py:121 ..//Py2ExePanel.py:123
 msgid "Id  "
 msgstr ""
 
-#: Constants.py:237
+#: ..//Constants.py:237
 msgid ""
 "If activated, it allows you to add/edit PList\n"
 "dictionary key/value pairs, or to remove it altogether."
 msgstr ""
 
-#: Constants.py:135
+#: ..//Constants.py:135
 msgid ""
 "If you activate this switch, you will be able to\n"
 "specify the name the directory to put final built\n"
 "distributions in (the default is 'dist')."
 msgstr ""
 
-#: Constants.py:186
+#: ..//Constants.py:186
 msgid ""
 "If you have UPX installed (detected by Configure), this will use\n"
 "it to compress your executable (and, on Windows, your dlls)"
 msgstr ""
 
-#: Py2ExePanel.py:40
+#: ..//Py2ExePanel.py:40
 msgid "Ignores"
 msgstr ""
 
-#: ProjectTreeCtrl.py:249
+#: ..//ProjectTreeCtrl.py:249
 msgid "Import from file..."
-msgstr ""
+msgstr "ファイルからプロジェクトをインポートする。。。"
 
-#: bbFreezePanel.py:71
+#: ..//bbFreezePanel.py:71
 msgid "Include Python Interpreter"
 msgstr ""
 
-#: Constants.py:194
+#: ..//Constants.py:194
 msgid "Include TCL/TK in the deployment."
 msgstr ""
 
-#: PyInstallerPanel.py:83
+#: ..//PyInstallerPanel.py:83
 msgid "Include Tk"
 msgstr ""
 
-#: Constants.py:226
+#: ..//Constants.py:226
 msgid "Include the system and user site-packages into sys.path."
 msgstr ""
 
-#: bbFreezePanel.py:36 cx_FreezePanel.py:37 Py2AppPanel.py:39
-#: Py2ExePanel.py:36 PyInstallerPanel.py:40
+#: ..//Py2AppPanel.py:39 ..//Py2ExePanel.py:36 ..//PyInstallerPanel.py:40
+#: ..//bbFreezePanel.py:36 ..//cx_FreezePanel.py:37
 msgid "Includes"
 msgstr "含む"
 
-#: Constants.py:217
+#: ..//Constants.py:217
 msgid "Info.plist template file."
 msgstr ""
 
-#: Constants.py:154
+#: ..//Constants.py:154
 msgid "Information about the programmer."
 msgstr ""
 
-#: cx_FreezePanel.py:266
+#: ..//cx_FreezePanel.py:266
 msgid "Initialization Script"
-msgstr ""
+msgstr "初期化スクリプ"
 
-#: cx_FreezePanel.py:304
+#: ..//cx_FreezePanel.py:304
 msgid "Initialization file is not a valid file."
 msgstr ""
 
-#: Constants.py:150
+#: ..//Constants.py:150
 msgid ""
 "Insert a custom named resource into the executable.\n"
 "\n"
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Py2AppPanel.py:466
+#: ..//Py2AppPanel.py:482
 msgid "Invalid PList code encountered."
 msgstr ""
 
-#: GUI2Exe.py:917
+#: ..//GUI2Exe.py:925
 msgid "Invalid PyInstaller path: no file named 'Build.py' has been found."
 msgstr ""
 
-#: Widgets.py:3238
-#, possible-python-format
+#: ..//Widgets.py:3210 ..//Widgets.py:3242
 msgid ""
 "Invalid Python code entered.\n"
 "\n"
-"The error returned by 'eval' is:\n"
-"\n"
-"%(errorKind)s\n"
-"Line: %(errorAtLine)d, %(errorMessage)s"
 msgstr ""
 
-#: Widgets.py:3206
-msgid ""
-"Invalid Python code entered.\n"
-"\n"
-"You should enter code in the form 'property = value',\n"
-"where 'value' can be any Python dictionary, string or list."
-msgstr ""
-
-#: Widgets.py:846
+#: ..//Widgets.py:848
 msgid "Invalid folder name."
 msgstr "無効なフォルダ名"
 
-#: ProjectTreeCtrl.py:623
+#: ..//ProjectTreeCtrl.py:623
 msgid "Invalid or corrupted project file."
 msgstr ""
 
-#: Widgets.py:3504
+#: ..//Widgets.py:3508
 msgid "Invalid or empty property name."
 msgstr ""
 
-#: GUI2Exe.py:1099
+#: ..//GUI2Exe.py:1107
 msgid "Invalid perspective name!"
 msgstr ""
 
-#: ProjectTreeCtrl.py:425
+#: ..//ProjectTreeCtrl.py:425
 msgid "Invalid project name (empty string)."
 msgstr ""
 
-#: GUI2Exe.py:1896
-#, possible-python-format
+#: ..//GUI2Exe.py:1904
+#, python-format
 msgid ""
 "It appears that the executable generated errors in file:\n"
 "\n"
@@ -1211,43 +1194,43 @@ msgid ""
 "Do you want to examine the tracebacks?"
 msgstr ""
 
-#: MessageWindow.py:47
+#: ..//MessageWindow.py:47
 msgid "Kill"
 msgstr "中止"
 
-#: Widgets.py:3606
+#: ..//Widgets.py:3614
 msgid "Language:"
 msgstr "言語："
 
-#: Constants.py:169 Constants.py:181
+#: ..//Constants.py:169 ..//Constants.py:181
 msgid ""
 "List of names of modules to exclude.\n"
 "\n"
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Constants.py:199
+#: ..//Constants.py:199
 msgid ""
 "List of names of modules to exclude.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python modules."
 msgstr ""
 
-#: Constants.py:168 Constants.py:180
+#: ..//Constants.py:168 ..//Constants.py:180
 msgid ""
 "List of names of modules to include.\n"
 "\n"
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Constants.py:198
+#: ..//Constants.py:198
 msgid ""
 "List of names of modules to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python modules."
 msgstr ""
 
-#: Constants.py:170
+#: ..//Constants.py:170
 msgid ""
 "List of names of packages to include, including all\n"
 "of the package's submodules.\n"
@@ -1255,154 +1238,153 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: Constants.py:205
+#: ..//Constants.py:205
 msgid ""
 "List of names of packages to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python packages."
 msgstr ""
 
-#: Constants.py:171
+#: ..//Constants.py:171
 msgid ""
 "List of paths to search for modules.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: GUI2Exe.py:229
+#: ..//GUI2Exe.py:226
 msgid "Load another GUI2Exe database file"
-msgstr ""
+msgstr "別のGUI2Exeのデータベースファイルを負荷する"
 
-#: ProjectTreeCtrl.py:234
+#: ..//ProjectTreeCtrl.py:234
 msgid "Load project(s)"
-msgstr ""
+msgstr "プロジェクトを開きます"
 
-#: Widgets.py:3534
+#: ..//Widgets.py:3538
 msgid "Locale Settings"
 msgstr "ロケールの設定"
 
-#: Widgets.py:1695
+#: ..//Widgets.py:1697
 msgid "Main Module"
 msgstr "メインモジュール"
 
-#: Widgets.py:1763
-msgid ""
-"Make sure you have the license if you distribute any of them, and\n"
-"make sure you don't distribute files belonging to the operating system."
+#: ..//Widgets.py:1765
+msgid "Make sure you have the license if you distribute any of them, and\n"
 msgstr ""
 
-#: GUI2Exe.py:1418 GUI2Exe.py:1421
+#: ..//GUI2Exe.py:1426 ..//GUI2Exe.py:1429
 msgid "Message"
 msgstr "メッセージ"
 
-#: GUI2Exe.py:182
+#: ..//GUI2Exe.py:179
 msgid "Messages And Actions"
 msgstr ""
 
-#: ProjectTreeCtrl.py:42
+#: ..//ProjectTreeCtrl.py:42
 msgid "My Projects"
 msgstr "私のプロジェクト"
 
-#: Constants.py:166
+#: ..//Constants.py:166
 msgid ""
 "Name of icon which should be included in the executable\n"
 "itself on Windows or placed in the target directory for\n"
 "other platforms."
 msgstr ""
 
-#: Constants.py:99
+#: ..//Constants.py:99
 msgid "New Child"
 msgstr "新規の子供"
 
-#: Constants.py:100
+#: ..//Constants.py:100
 msgid "New Sibling"
 msgstr ""
 
-#: Widgets.py:813
+#: ..//Widgets.py:815
 msgid "New data files"
 msgstr "新しいデタファイル"
 
-#: ProjectTreeCtrl.py:362 ProjectTreeCtrl.py:662
+#: ..//ProjectTreeCtrl.py:362 ..//ProjectTreeCtrl.py:662
 msgid "New project"
 msgstr "新しいプロジェクト"
 
-#: GUI2Exe.py:1462
-#, possible-python-format
+#: ..//GUI2Exe.py:1470
+#, python-format
 msgid "New project \"%(projectName)s\" added"
 msgstr ""
 
-#: ProjectTreeCtrl.py:217
+#: ..//ProjectTreeCtrl.py:217
 msgid "New project..."
 msgstr "新しいプロジェクト。。。"
 
-#: Widgets.py:3446
+#: ..//Widgets.py:3450
 msgid "New property dialog"
 msgstr ""
 
-#: Widgets.py:722
+#: ..//Widgets.py:724
 msgid "New resources"
 msgstr "新しいリソース"
 
-#: cx_FreezePanel.py:50
+#: ..//cx_FreezePanel.py:50
 msgid "No Author"
 msgstr "著者いない"
 
-#: Widgets.py:879
+#: ..//Widgets.py:881
 msgid "No Company"
 msgstr "会社なし"
 
-#: Widgets.py:880
+#: ..//Widgets.py:882
 msgid "No Copyrights"
 msgstr "著作権なし"
 
-#: cx_FreezePanel.py:49
+#: ..//cx_FreezePanel.py:49
 msgid "No Description"
 msgstr "説明なし"
 
-#: Widgets.py:3200
+#: ..//Widgets.py:3204
 msgid "No Python code has been entered."
 msgstr ""
 
-#: Py2ExePanel.py:323 PyInstallerPanel.py:265
+#: ..//Py2ExePanel.py:323 ..//PyInstallerPanel.py:265
 msgid "No Python scripts have been added."
 msgstr ""
 
-#: GUI2Exe.py:994
+#: ..//GUI2Exe.py:1002
 msgid "No SyntaxError detected in the automatically generated Setup.py file."
 msgstr ""
 
-#: Widgets.py:1704 Widgets.py:1844
+#: ..//Widgets.py:1706 ..//Widgets.py:1848
 msgid "Ok"
 msgstr "OK"
 
-#: Constants.py:165 Constants.py:179 Constants.py:196
+#: ..//Constants.py:165 ..//Constants.py:179 ..//Constants.py:196
 msgid ""
 "On Windows, it creates a manifest file that instructs\n"
 "Windows on how to correctly render the widgets in your\n"
 "user interface."
 msgstr ""
 
-#: PyInstallerPanel.py:68
+#: ..//PyInstallerPanel.py:68
 msgid "One Directory"
 msgstr "1つのディレクトリ"
 
-#: PyInstallerPanel.py:62
+#: ..//PyInstallerPanel.py:62
 msgid "One File"
 msgstr "1つのファイル"
 
-#: GUI2Exe.py:1705
+#: ..//GUI2Exe.py:1713
 msgid "One instance of the building process is already running."
 msgstr ""
 
-#: GUI2Exe.py:268
+#: ..//GUI2Exe.py:265
 msgid "Opens the GUI2Exe API reference"
 msgstr ""
 
-#: GUI2Exe.py:267
+#: ..//GUI2Exe.py:264
 msgid "Opens the GUI2Exe help"
-msgstr ""
+msgstr "GUI2Exeのヘルプを見る"
 
-#: Constants.py:131 Constants.py:158 Constants.py:174 Constants.py:215
+#: ..//Constants.py:131 ..//Constants.py:158 ..//Constants.py:174
+#: ..//Constants.py:215
 msgid ""
 "Optimization level for the compiled bytecode.\n"
 "\n"
@@ -1411,182 +1393,172 @@ msgid ""
 "2 (Python -OO): remove doc-strings in addition to the -O optimizations."
 msgstr ""
 
-#: bbFreezePanel.py:146 cx_FreezePanel.py:207 Py2AppPanel.py:222
-#: Py2ExePanel.py:227
+#: ..//Py2AppPanel.py:223 ..//Py2ExePanel.py:227 ..//bbFreezePanel.py:146
+#: ..//cx_FreezePanel.py:207
 msgid "Optimize"
 msgstr "最適化"
 
-#: GUI2Exe.py:493 GUI2Exe.py:499 GUI2Exe.py:505 GUI2Exe.py:511
-msgid "Options"
-msgstr "オプション"
-
-#: bbFreezePanel.py:38 cx_FreezePanel.py:40 Py2AppPanel.py:47
-#: Py2ExePanel.py:45 PyInstallerPanel.py:46
+#: ..//Py2AppPanel.py:47 ..//Py2ExePanel.py:45 ..//PyInstallerPanel.py:46
+#: ..//bbFreezePanel.py:38 ..//cx_FreezePanel.py:40
 msgid "Other Options"
 msgstr "その他のオプション"
 
-#: Py2ExePanel.py:44
+#: ..//Py2ExePanel.py:44
 msgid "Other Resources"
 msgstr ""
 
-#: Constants.py:219
+#: ..//Constants.py:219
 msgid "Output module dependency graph."
 msgstr ""
 
-#: Py2AppPanel.py:80
+#: ..//Py2AppPanel.py:80
 msgid "PList Code"
 msgstr "PListのコード"
 
-#: Py2AppPanel.py:230
+#: ..//Py2AppPanel.py:231
 msgid "PList File"
 msgstr "PListのファイル"
 
-#: Py2AppPanel.py:316
+#: ..//Py2AppPanel.py:332
 msgid "PList file is not a valid file."
 msgstr ""
 
-#: cx_FreezePanel.py:38 Py2AppPanel.py:40 Py2ExePanel.py:37
+#: ..//Py2AppPanel.py:40 ..//Py2ExePanel.py:37 ..//cx_FreezePanel.py:38
 msgid "Packages"
 msgstr "パッケージ"
 
-#: PyInstallerPanel.py:42
+#: ..//PyInstallerPanel.py:42
 msgid "Packages (PKG)"
 msgstr "パッケージ(PKG)"
 
-#: cx_FreezePanel.py:36 PyInstallerPanel.py:88 PyInstallerPanel.py:94
-#: PyInstallerPanel.py:96 PyInstallerPanel.py:97 PyInstallerPanel.py:101
+#: ..//PyInstallerPanel.py:88 ..//PyInstallerPanel.py:94
+#: ..//PyInstallerPanel.py:96 ..//PyInstallerPanel.py:97
+#: ..//PyInstallerPanel.py:101 ..//cx_FreezePanel.py:36
 msgid "Path"
 msgstr "パス"
 
-#: PyInstallerPanel.py:37
+#: ..//PyInstallerPanel.py:37
 msgid "Path Extensions"
 msgstr ""
 
-#: Py2ExePanel.py:123
+#: ..//Py2ExePanel.py:123
 msgid "Path/Value"
 msgstr ""
 
-#: cx_FreezePanel.py:90 PyInstallerPanel.py:56 PyInstallerPanel.py:58
+#: ..//PyInstallerPanel.py:56 ..//PyInstallerPanel.py:58
+#: ..//cx_FreezePanel.py:90
 msgid "Paths"
 msgstr "パス"
 
-#: GUI2Exe.py:1088
-#, possible-python-format
+#: ..//GUI2Exe.py:1096
+#, python-format
 msgid "Perspective %d"
 msgstr ""
 
-#: Widgets.py:3191
-msgid ""
-"Please double-click on one of the tree items, to which the\n"
-"new property will be appended."
+#: ..//Widgets.py:3195
+msgid "Please double-click on one of the tree items, to which the\n"
 msgstr ""
 
-#: Widgets.py:832
+#: ..//Widgets.py:834
 msgid "Please enter the name of the folder for py2exe:"
 msgstr ""
 
-#: Widgets.py:3470
+#: ..//Widgets.py:3474
 msgid "Please insert the property name and select its type below:"
 msgstr ""
 
-#: GUI2Exe.py:1194
-msgid "Please report any bug/request of improvements\n"
-msgstr ""
-
-#: ProjectTreeCtrl.py:587
+#: ..//ProjectTreeCtrl.py:587
 msgid "Please select a GUI2Exe project file..."
 msgstr ""
 
-#: Widgets.py:791
+#: ..//Widgets.py:793
 msgid "Please select one directory..."
 msgstr ""
 
-#: Widgets.py:3276
+#: ..//Widgets.py:3280
 msgid "Please select one item in the tree."
 msgstr ""
 
-#: GUI2Exe.py:868
+#: ..//GUI2Exe.py:876
 msgid "Please select the new Python executable ..."
 msgstr ""
 
-#: GUI2Exe.py:305
+#: ..//GUI2Exe.py:302
 msgid "Preferences"
 msgstr "設定"
 
-#: GUI2Exe.py:252
+#: ..//GUI2Exe.py:249
 msgid "Preferences..."
 msgstr "設定..."
 
-#: Constants.py:190
+#: ..//Constants.py:190
 msgid "Produces a single directory deployment (default)."
 msgstr ""
 
-#: Constants.py:189
+#: ..//Constants.py:189
 msgid "Produces a single file deployment."
 msgstr ""
 
-#: cx_FreezePanel.py:187 Py2ExePanel.py:58
+#: ..//Py2ExePanel.py:58 ..//cx_FreezePanel.py:187
 msgid "Program Name"
 msgstr "プログラム名"
 
-#: GUI2Exe.py:1505
-#, possible-python-format
+#: ..//GUI2Exe.py:1513
+#, python-format
 msgid "Project \"%(projectName)s\" successfully loaded"
 msgstr ""
 
-#: ProjectTreeCtrl.py:689
-#, possible-python-format
+#: ..//ProjectTreeCtrl.py:689
+#, python-format
 msgid "Project %(existingProject)s succesfully copied to %(newProject)s"
 msgstr ""
 
-#: GUI2Exe.py:696
-#, possible-python-format
+#: ..//GUI2Exe.py:702
+#, python-format
 msgid "Project %(projectName)s successfully exported to file %(filePath)s"
 msgstr ""
 
-#: GUI2Exe.py:2002 GUI2Exe.py:2016
+#: ..//GUI2Exe.py:1992 ..//GUI2Exe.py:2006
 msgid "Project successfully updated from file."
 msgstr ""
 
-#: Widgets.py:3535
+#: ..//Widgets.py:3539
 msgid "Projects"
 msgstr "プロジェクト"
 
-#: Widgets.py:3011
+#: ..//Widgets.py:3015
 msgid "Property List "
-msgstr ""
+msgstr "特性リスト "
 
-#: Widgets.py:3473
+#: ..//Widgets.py:3477
 msgid "Property Name:"
-msgstr ""
+msgstr "特性名前："
 
-#: Widgets.py:3475
+#: ..//Widgets.py:3479
 msgid "Property Type:"
-msgstr ""
+msgstr "特性タイプ："
 
-#: Widgets.py:3482
+#: ..//Widgets.py:3486
 msgid "Property Value (optional)"
 msgstr ""
 
-#: Widgets.py:1736
+#: ..//Widgets.py:1738
 msgid "Py2Exe Binary Dependencies"
 msgstr ""
 
-#: Widgets.py:1739
+#: ..//Widgets.py:1741
 msgid "Py2Exe Missing Modules"
 msgstr ""
 
-#: Widgets.py:881
+#: ..//Widgets.py:883
 msgid "Py2Exe Sample File"
+msgstr "Py2Exeのサンプルファイル"
+
+#: ..//Widgets.py:1769
+msgid "Py2Exe thinks that these modules (and sub-modules) are missing.\n"
 msgstr ""
 
-#: Widgets.py:1767
-msgid ""
-"Py2Exe thinks that these modules (and sub-modules) are missing.\n"
-"Inclusion of one or more of them may allow your compiled application to run."
-msgstr ""
-
-#: Constants.py:230
+#: ..//Constants.py:230
 msgid ""
 "Py2app allows you to include one (or more) series of files\n"
 "that you are going to need to run your executable\n"
@@ -1602,12 +1574,12 @@ msgid ""
 "Hit Ctrl+A to add data files to the list."
 msgstr ""
 
-#: Py2AppPanel.py:51
-#, possible-python-format
+#: ..//Py2AppPanel.py:51
+#, python-format
 msgid "Py2app options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: Constants.py:147
+#: ..//Constants.py:147
 msgid ""
 "Py2exe allows you to include one (or more) series of files\n"
 "that you are going to need to run your executable\n"
@@ -1623,56 +1595,55 @@ msgid ""
 "Hit Ctrl+A to add data files to the list."
 msgstr ""
 
-#: Py2ExePanel.py:50
-#, possible-python-format
+#: ..//Py2ExePanel.py:50
+#, python-format
 msgid "Py2exe options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: PyInstallerPanel.py:51
-#, possible-python-format
+#: ..//PyInstallerPanel.py:51
+#, python-format
 msgid "PyInstaller options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: PyInstallerPanel.py:390
+#: ..//PyInstallerPanel.py:390
 msgid ""
 "PyInstaller path has not been set.\n"
 "\n"
-"Please set the PyInstallerpath using the menu Options ==> Set PyInstaller "
-"path."
+"Please set the PyInstaller"
 msgstr ""
 
-#: bbFreezePanel.py:141 cx_FreezePanel.py:202 Py2AppPanel.py:214
-#: Py2ExePanel.py:55
+#: ..//Py2AppPanel.py:215 ..//Py2ExePanel.py:55 ..//bbFreezePanel.py:141
+#: ..//cx_FreezePanel.py:202
 msgid "Python Main Script"
 msgstr ""
 
-#: bbFreezePanel.py:66 bbFreezePanel.py:69 cx_FreezePanel.py:81
-#: cx_FreezePanel.py:87 Py2AppPanel.py:90 Py2AppPanel.py:99 Py2ExePanel.py:101
-#: Py2ExePanel.py:107 Py2ExePanel.py:113 PyInstallerPanel.py:88
-#: PyInstallerPanel.py:91
+#: ..//Py2AppPanel.py:90 ..//Py2AppPanel.py:99 ..//Py2ExePanel.py:101
+#: ..//Py2ExePanel.py:107 ..//Py2ExePanel.py:113 ..//PyInstallerPanel.py:88
+#: ..//PyInstallerPanel.py:91 ..//bbFreezePanel.py:66 ..//bbFreezePanel.py:69
+#: ..//cx_FreezePanel.py:81 ..//cx_FreezePanel.py:87
 msgid "Python Modules"
-msgstr ""
+msgstr "Pythonのモジュール"
 
-#: cx_FreezePanel.py:84 Py2AppPanel.py:93 Py2ExePanel.py:104
-#: PyInstallerPanel.py:94
+#: ..//Py2AppPanel.py:93 ..//Py2ExePanel.py:104 ..//PyInstallerPanel.py:94
+#: ..//cx_FreezePanel.py:84
 msgid "Python Packages"
-msgstr ""
+msgstr "Pythonのパッケージ"
 
-#: PyInstallerPanel.py:54
+#: ..//PyInstallerPanel.py:54
 msgid "Python Scripts"
 msgstr "Pythonスクリプト"
 
-#: GUI2Exe.py:884
-#, possible-python-format
+#: ..//GUI2Exe.py:892
+#, python-format
 msgid "Python executable changed from %(oldVersion)s to %(newVersion)s"
 msgstr ""
 
-#: cx_FreezePanel.py:297 Py2AppPanel.py:309 Py2ExePanel.py:330
+#: ..//Py2AppPanel.py:325 ..//Py2ExePanel.py:330 ..//cx_FreezePanel.py:297
 msgid "Python main script is not a valid file."
 msgstr ""
 
-#: PyInstallerPanel.py:273
-#, possible-python-format
+#: ..//PyInstallerPanel.py:273
+#, python-format
 msgid ""
 "Python script:\n"
 "\n"
@@ -1681,305 +1652,293 @@ msgid ""
 "Is not a valid file."
 msgstr ""
 
-#: GUI2Exe.py:1418 GUI2Exe.py:1425 GUI2Exe.py:1435
+#: ..//GUI2Exe.py:1426 ..//GUI2Exe.py:1433 ..//GUI2Exe.py:1443
 msgid "Question"
-msgstr ""
+msgstr "疑問"
 
-#: GUI2Exe.py:308
+#: ..//GUI2Exe.py:305
 msgid "Quit"
 msgstr "終了"
 
-#: GUI2Exe.py:243
+#: ..//GUI2Exe.py:240
 msgid "Recurse sub-directories for data_files option if checked"
 msgstr ""
 
-#: GUI2Exe.py:493
+#: ..//GUI2Exe.py:490
 msgid "Recurse sub-dirs for data_files option"
 msgstr ""
 
-#: Widgets.py:3536
+#: ..//Widgets.py:3540
 msgid "Reload opened projects at start-up"
 msgstr ""
 
-#: Widgets.py:3542
+#: ..//Widgets.py:3546
 msgid "Remember GUI2Exe window position on exit"
 msgstr ""
 
-#: Widgets.py:3540
+#: ..//Widgets.py:3544
 msgid "Remember GUI2Exe window size on exit"
 msgstr ""
 
-#: Widgets.py:3538
+#: ..//Widgets.py:3542
 msgid "Remember last used compiler for all projects"
 msgstr ""
 
-#: Py2AppPanel.py:85
+#: ..//Py2AppPanel.py:85
 msgid "Remove"
 msgstr "削除"
 
-#: Constants.py:239
+#: ..//Constants.py:239
 msgid "Remove existing PList code."
 msgstr ""
 
-#: Widgets.py:1150
+#: ..//Widgets.py:1152
 msgid "Remove items from the list"
 msgstr ""
 
-#: Widgets.py:3819
+#: ..//Widgets.py:3835
 msgid "Report Error"
 msgstr "エラーを報告書する"
 
-#: Py2AppPanel.py:45
+#: ..//Py2AppPanel.py:45
 msgid "Resources"
-msgstr ""
+msgstr "リソース"
 
-#: GUI2Exe.py:1108
-#, possible-python-format
+#: ..//GUI2Exe.py:1116
+#, python-format
 msgid "Restore GUI configuration: %s"
 msgstr ""
 
-#: GUI2Exe.py:299
+#: ..//GUI2Exe.py:296
 msgid "Restore original"
 msgstr ""
 
-#: GUI2Exe.py:265
-msgid "Restore original &GUI\tCtrl+G"
+#: ..//GUI2Exe.py:262
+msgid "Restore original &GUI"
 msgstr ""
 
-#: GUI2Exe.py:265
+#: ..//GUI2Exe.py:262
 msgid "Restore the original GUI appearance"
 msgstr ""
 
-#: Process.py:235 Process.py:240
+#: ..//Process.py:235 ..//Process.py:240
 msgid "Running compilation steps..."
 msgstr ""
 
-#: Widgets.py:1247
+#: ..//Widgets.py:1249
 msgid "Save"
 msgstr "保存"
 
-#: GUI2Exe.py:264
+#: ..//GUI2Exe.py:261
 msgid "Save &panes configuration..."
 msgstr ""
 
-#: GUI2Exe.py:642 GUI2Exe.py:681
+#: ..//GUI2Exe.py:648 ..//GUI2Exe.py:687
 msgid "Save file as ..."
 msgstr ""
 
-#: Widgets.py:2476
+#: ..//Widgets.py:2480
 msgid "Save file as..."
 msgstr "ファイルを別名で保存..."
 
-#: GUI2Exe.py:264
+#: ..//GUI2Exe.py:261
 msgid "Save the current GUI panes configuration"
 msgstr ""
 
-#: GUI2Exe.py:232
+#: ..//GUI2Exe.py:229
 msgid "Save the current project to a file"
 msgstr ""
 
-#: GUI2Exe.py:231
+#: ..//GUI2Exe.py:228
 msgid "Save the current project to database"
 msgstr ""
 
-#: Widgets.py:2405
+#: ..//Widgets.py:2409
 msgid "Save to file..."
-msgstr ""
+msgstr "ファイルに保存..."
 
-#: GUI2Exe.py:1087
+#: ..//GUI2Exe.py:1095
 msgid "Saving panels configuration"
 msgstr ""
 
-#: PyInstallerPanel.py:47
+#: ..//PyInstallerPanel.py:47
 msgid "Scripts"
 msgstr "スクリプト"
 
-#: GUI2Exe.py:247
-msgid "Set P&yInstaller path...\tCtrl+Y"
+#: ..//GUI2Exe.py:244
+msgid "Set P&yInstaller path..."
 msgstr ""
 
-#: GUI2Exe.py:247
+#: ..//GUI2Exe.py:244
 msgid "Sets the PyInstaller installation path"
 msgstr ""
 
-#: Constants.py:183
+#: ..//Constants.py:183
 msgid ""
 "Setting to 1 gives you progress messages from the executable\n"
 "(for a console=0, these will be annoying MessageBoxes)."
 msgstr ""
 
-#: Process.py:172
+#: ..//Process.py:172
 msgid "Setup file succesfully compiled"
 msgstr ""
 
-#: bbFreezePanel.py:293 cx_FreezePanel.py:423 Py2AppPanel.py:432
-#: Py2ExePanel.py:479 PyInstallerPanel.py:450
-#, possible-python-format
+#: ..//Py2AppPanel.py:448 ..//Py2ExePanel.py:479 ..//PyInstallerPanel.py:450
+#: ..//bbFreezePanel.py:293 ..//cx_FreezePanel.py:423
+#, python-format
 msgid "Setup script for \"%(projectName)s\" succesfully created"
 msgstr ""
 
-#: GUI2Exe.py:259
-msgid "Show &full build output\tCtrl+F"
+#: ..//GUI2Exe.py:256
+msgid "Show &full build output"
 msgstr ""
 
-#: GUI2Exe.py:271
+#: ..//GUI2Exe.py:268
 msgid "Show compilation tips and tricks"
 msgstr ""
 
-#: GUI2Exe.py:270
+#: ..//GUI2Exe.py:267
 msgid "Show compilers switches and common options"
 msgstr ""
 
-#: GUI2Exe.py:244
+#: ..//GUI2Exe.py:241 ..//GUI2Exe.py:496
 msgid "Show t&ooltips"
-msgstr ""
+msgstr "ツールチップを表示する"
 
-#: GUI2Exe.py:499
-msgid "Show tooltips"
-msgstr "ツールチップを表示"
-
-#: Widgets.py:2859
+#: ..//Widgets.py:2863
 msgid "Simple PList editor for py2app"
 msgstr ""
 
-#: ExecutableProperties.py:77
+#: ..//ExecutableProperties.py:77
 msgid "Size (MB)   "
-msgstr ""
+msgstr "サイズ(MB)   "
 
-#: Constants.py:229
+#: ..//Constants.py:229
 msgid "Skip macholib phase.<note>Your App will not be standalone."
 msgstr ""
 
-#: Process.py:220
+#: ..//Process.py:220
 msgid "Skipping Python loaders/byte-compilation..."
 msgstr ""
 
-#: GUI2Exe.py:1763
-#, possible-python-format
+#: ..//GUI2Exe.py:1771
+#, python-format
 msgid "Starting compilation with Python executable: %(pythonExecutable)s"
 msgstr ""
 
-#: GUI2Exe.py:1838
+#: ..//GUI2Exe.py:1846
 msgid "Starting compiled executable..."
 msgstr ""
 
-#: PyInstallerPanel.py:72
+#: ..//PyInstallerPanel.py:72
 msgid "Strip Executable"
 msgstr ""
 
-#: Widgets.py:1695
+#: ..//Widgets.py:1697
 msgid "Sub-Module 1"
-msgstr ""
+msgstr "サブモジュールの１"
 
-#: Widgets.py:1696
+#: ..//Widgets.py:1698
 msgid "Sub-Module 2"
-msgstr ""
+msgstr "サブモジュールの２"
 
-#: Widgets.py:1696
+#: ..//Widgets.py:1698
 msgid "Sub-Module 3"
+msgstr "サブモジュールの３"
+
+#: ..//GUI2Exe.py:226
+msgid "Switch project &database..."
 msgstr ""
 
-#: GUI2Exe.py:229
-msgid "Switch project &database...\tCtrl+D"
-msgstr ""
-
-#: GUI2Exe.py:998
-#, possible-python-format
+#: ..//GUI2Exe.py:1006
+#, python-format
 msgid "SyntaxError at line %d, column %d"
 msgstr ""
 
-#: cx_FreezePanel.py:41
+#: ..//cx_FreezePanel.py:41
 msgid "Target Class"
-msgstr ""
+msgstr "ターゲットクラス"
 
-#: Py2ExePanel.py:46
+#: ..//Py2ExePanel.py:46
 msgid "Target Classes"
-msgstr ""
+msgstr "ターゲットクラス"
 
-#: GUI2Exe.py:246
+#: ..//GUI2Exe.py:243
 msgid "Temporarily changes the Python version"
 msgstr ""
 
-#: GUI2Exe.py:254
+#: ..//GUI2Exe.py:251
 msgid "Test the compiled file (if it exists)"
 msgstr ""
 
-#: GUI2Exe.py:1197
-msgid "Thanks to Robin Dunn and the wxPython mailing list\n"
-msgstr ""
-
-#: GUI2Exe.py:1731
+#: ..//GUI2Exe.py:1739
 msgid "The Dry-Run option is available only for Py2Exe."
 msgstr ""
 
-#: Constants.py:157 Constants.py:173 Constants.py:213
+#: ..//Constants.py:157 ..//Constants.py:173 ..//Constants.py:213
 msgid ""
 "The Python main script you want to convert\n"
 "to an executable."
 msgstr ""
 
-#: Constants.py:195
+#: ..//Constants.py:195
 msgid ""
 "The Zlib compression level to use.\n"
 "\n"
 "If 0, the zlib module is not required."
 msgstr ""
 
-#: GUI2Exe.py:1812
-msgid ""
-"The compiler has successfully built your executable.\n"
-"Do you wish to test your application?"
+#: ..//GUI2Exe.py:1820
+msgid "The compiler has successfully built your executable.\n"
 msgstr ""
 
-#: GUI2Exe.py:1765
-#, possible-python-format
+#: ..//GUI2Exe.py:1773
+#, python-format
 msgid "The compiler selected is ==> %(compiler)s <=="
 msgstr ""
 
-#: Widgets.py:1399
+#: ..//Widgets.py:1401
 msgid ""
 "The current code has changed.\n"
 "Do you want to save changes?"
 msgstr ""
 
-#: GUI2Exe.py:161
+#: ..//GUI2Exe.py:158
 msgid ""
 "The database file and its backup seem to be broken.\n"
 "\n"
-"Please go to the /USER/Application Data/.GUI2Exe/ folder\n"
-"and delete the GUI2Exe database file."
 msgstr ""
 
-#: Constants.py:161 Constants.py:176
+#: ..//Constants.py:161 ..//Constants.py:176
 msgid ""
 "The directory in which to place the target executable and\n"
 "any dependent files."
 msgstr ""
 
-#: Constants.py:193
+#: ..//Constants.py:193
 msgid ""
 "The directory in which to place the target executable and\n"
 "any dependent files.<note>This is used only when 'onedir' is set to 1."
 msgstr ""
 
-#: Constants.py:185
+#: ..//Constants.py:185
 msgid ""
 "The executable and all shared libraries will be run through\n"
 "strip.<note>Note that cygwin's strip tends to render normal Win32\n"
 "dlls unusable."
 msgstr ""
 
-#: Constants.py:191
+#: ..//Constants.py:191
 msgid "The filename for the executable."
-msgstr ""
+msgstr "実行可能ファイルの名"
 
-#: Constants.py:177
+#: ..//Constants.py:177
 msgid ""
 "The gui_only flag only has a meaning on Windows: If set, the\n"
 "executable created for this script will not open a console window."
 msgstr ""
 
-#: Constants.py:167
+#: ..//Constants.py:167
 msgid ""
 "The name of the initialization script that will be executed\n"
 "before the actual script is executed; this script is used to\n"
@@ -1988,26 +1947,26 @@ msgid ""
 "subdirectory of the cx_Freeze package is searched."
 msgstr ""
 
-#: Constants.py:160
+#: ..//Constants.py:160
 msgid ""
 "The name of the target executable; the default value is\n"
 "the name of the script with the extension exchanged with\n"
 "the extension for the base executable."
 msgstr ""
 
-#: Constants.py:155
+#: ..//Constants.py:155
 msgid "The program name"
 msgstr "プログラム名"
 
-#: ProjectTreeCtrl.py:430
+#: ..//ProjectTreeCtrl.py:430
 msgid "The project name you chose already exists."
 msgstr ""
 
-#: GUI2Exe.py:880
+#: ..//GUI2Exe.py:888
 msgid "The selected file is not a Python executable."
 msgstr ""
 
-#: Constants.py:220
+#: ..//Constants.py:220
 msgid ""
 "This command line switch instructs py2app to create a Python\n"
 "module cross reference and display it in the webbrowser.\n"
@@ -2016,7 +1975,7 @@ msgid ""
 "and its dependencies."
 msgstr ""
 
-#: Constants.py:138
+#: ..//Constants.py:138
 msgid ""
 "This command line switch instructs py2exe to create a Python\n"
 "module cross reference and display it in the webbrowser.\n"
@@ -2025,49 +1984,47 @@ msgid ""
 "and its dependencies."
 msgstr ""
 
-#: Widgets.py:1306
-msgid ""
-"This is the Setup file as it comes out after the pre-processing\n"
-"work done by GUI2Exe."
+#: ..//Widgets.py:1308
+msgid "This is the Setup file as it comes out after the pre-processing\n"
 msgstr ""
 
-#: GUI2Exe.py:1191
+#: ..//GUI2Exe.py:1199
 msgid ""
 "This is the about dialog of GUI2Exe.\n"
 "\n"
 msgstr ""
 
-#: GUI2Exe.py:606 GUI2Exe.py:1127
+#: ..//GUI2Exe.py:612 ..//GUI2Exe.py:1135
 msgid "This option has not been implemented yet."
 msgstr ""
 
-#: GUI2Exe.py:1049
+#: ..//GUI2Exe.py:1057
 msgid "This option is available only for Py2Exe."
 msgstr ""
 
-#: GUI2Exe.py:1818
+#: ..//GUI2Exe.py:1826
 msgid ""
 "This project has never been compiled or its executable has been deleted."
 msgstr ""
 
-#: GUI2Exe.py:1024
-#, possible-python-format
+#: ..//GUI2Exe.py:1032
+#, python-format
 msgid "This project has not been compiled with %(compiler)s yet."
 msgstr ""
 
-#: GUI2Exe.py:934 GUI2Exe.py:1055
+#: ..//GUI2Exe.py:942 ..//GUI2Exe.py:1063
 msgid "This project has not been compiled yet."
 msgstr ""
 
-#: ProjectTreeCtrl.py:611 ProjectTreeCtrl.py:656
+#: ..//ProjectTreeCtrl.py:611 ..//ProjectTreeCtrl.py:656
 msgid "This project has not been saved yet. Please save it and retry."
 msgstr ""
 
-#: MessageWindow.py:36
+#: ..//MessageWindow.py:36
 msgid "Time        "
 msgstr "時間        "
 
-#: Constants.py:139
+#: ..//Constants.py:139
 msgid ""
 "To prevent unicode encoding error, py2exe now by default\n"
 "includes the codecs module and the encodings package.\n"
@@ -2077,55 +2034,55 @@ msgid ""
 "check box in GUI2Exe."
 msgstr ""
 
-#: GUI2Exe.py:1908
+#: ..//GUI2Exe.py:1916
 msgid "Tracebacks in log file"
 msgstr ""
 
-#: Py2ExePanel.py:123
+#: ..//Py2ExePanel.py:123
 msgid "Type"
 msgstr "タイプ"
 
-#: PyInstallerPanel.py:81
+#: ..//PyInstallerPanel.py:81
 msgid "UPX Compression"
-msgstr ""
+msgstr "UPX圧縮"
 
-#: GUI2Exe.py:1162
+#: ..//GUI2Exe.py:1170
 msgid "Unable to connect to the internet."
 msgstr ""
 
-#: Widgets.py:2512
+#: ..//Widgets.py:2516
 msgid "Unable to open the clipboard."
 msgstr ""
 
-#: PyInstallerPanel.py:106
+#: ..//PyInstallerPanel.py:106
 msgid "Unbuffered STDIO"
 msgstr ""
 
-#: Constants.py:209
+#: ..//Constants.py:209
 msgid "Unbuffered STDIO (same as Python -u)."
 msgstr ""
 
-#: ProjectTreeCtrl.py:627
+#: ..//ProjectTreeCtrl.py:627
 msgid "Updating project from file..."
 msgstr ""
 
-#: GUI2Exe.py:238
+#: ..//GUI2Exe.py:235
 msgid "Use &AutoSave"
 msgstr ""
 
-#: PyInstallerPanel.py:107
+#: ..//PyInstallerPanel.py:107
 msgid "Use Site.py"
-msgstr ""
+msgstr "Site.pyを使う"
 
-#: Constants.py:224
+#: ..//Constants.py:224
 msgid "Use argv emulation.<note> This is disabled for plugins."
 msgstr ""
 
-#: Widgets.py:3544
+#: ..//Widgets.py:3548
 msgid "Use last UI perspective at start-up"
 msgstr ""
 
-#: Constants.py:210
+#: ..//Constants.py:210
 msgid ""
 "Use site.py.\n"
 "\n"
@@ -2134,95 +2091,86 @@ msgid ""
 "directory to be used."
 msgstr ""
 
-#: Widgets.py:3533
+#: ..//Widgets.py:3537
 msgid "User Interface"
 msgstr "ユーザ・インタフェース"
 
-#: Widgets.py:3013
+#: ..//Widgets.py:3017
 msgid "Value"
-msgstr ""
+msgstr "値"
 
-#: PyInstallerPanel.py:103
+#: ..//PyInstallerPanel.py:103
 msgid "Verbose Import"
 msgstr ""
 
-#: Constants.py:206
+#: ..//Constants.py:206
 msgid "Verbose imports (same as Python -v)."
 msgstr ""
 
-#: cx_FreezePanel.py:175 Py2ExePanel.py:56
+#: ..//Py2ExePanel.py:56 ..//cx_FreezePanel.py:175
 msgid "Version"
 msgstr "ヴァージョン"
 
-#: GUI2Exe.py:1192
-#, possible-python-format
-msgid "Version %s \n"
-msgstr ""
-
-#: PyInstallerPanel.py:198
+#: ..//PyInstallerPanel.py:198
 msgid "Version File"
 msgstr "ヴァージョンファイル"
 
-#: PyInstallerPanel.py:286
+#: ..//PyInstallerPanel.py:286
 msgid "Version file is not a valid file."
 msgstr ""
 
-#: GUI2Exe.py:350
-msgid "View"
-msgstr "閲覧"
-
-#: GUI2Exe.py:256
-msgid "View &setup script\tCtrl+P"
+#: ..//GUI2Exe.py:253
+msgid "View &setup script"
 msgstr ""
 
-#: GUI2Exe.py:256
+#: ..//GUI2Exe.py:253
 msgid "View the auto-generated setup script"
 msgstr ""
 
-#: GUI2Exe.py:259
+#: ..//GUI2Exe.py:256
 msgid "View the full build output for the current compiler"
 msgstr ""
 
-#: GUI2Exe.py:1418 GUI2Exe.py:1423
+#: ..//GUI2Exe.py:1426 ..//GUI2Exe.py:1431
 msgid "Warning"
 msgstr "警告"
 
-#: PyInstallerPanel.py:104
+#: ..//PyInstallerPanel.py:104
 msgid "Warning Option"
 msgstr "警告オプション"
 
-#: Constants.py:207
+#: ..//Constants.py:207
 msgid "Warning option (Python 2.1+)."
 msgstr ""
 
-#: GUI2Exe.py:1327
+#: ..//GUI2Exe.py:1335
 msgid ""
 "Warning: the selected page contains unsaved data.\n"
 "\n"
 "Do you wish to save this project?"
 msgstr ""
 
-#: GUI2Exe.py:1635
+#: ..//GUI2Exe.py:1643
 msgid "Welcome to GUI2Exe"
-msgstr ""
+msgstr "ようこそ"
 
-#: GUI2Exe.py:262
+#: ..//GUI2Exe.py:259
 msgid "What the compiler says are the binary dependencies (py2exe only)"
 msgstr ""
 
-#: GUI2Exe.py:261
+#: ..//GUI2Exe.py:258
 msgid "What the compiler thinks are the missing modules (py2exe only)"
 msgstr ""
 
-#: Widgets.py:3601
+#: ..//Widgets.py:3609
 msgid "Window Transparency:"
 msgstr ""
 
-#: Constants.py:187
+#: ..//Constants.py:187
 msgid "Windows NT family only. icon='myicon.ico' to use an icon file."
 msgstr ""
 
-#: Constants.py:188
+#: ..//Constants.py:188
 msgid ""
 "Windows NT family only. version='myversion.txt'.<note>Use the PyInstaller "
 "Python file 'GrabVersion.py' to steal a\n"
@@ -2231,66 +2179,49 @@ msgid ""
 "wouldn't attempt to write one from scratch)."
 msgstr ""
 
-#: Py2AppPanel.py:43
+#: ..//Py2AppPanel.py:43
 msgid "XC Data Models"
 msgstr ""
 
-#: Py2AppPanel.py:105
+#: ..//Py2AppPanel.py:105
 msgid "XC Data Models Names"
 msgstr ""
 
-#: Widgets.py:2922
+#: ..//Widgets.py:2926
 msgid "You can edit the properties below or add new ones:"
 msgstr ""
 
-#: Widgets.py:3588
+#: ..//Widgets.py:3596
 msgid "Your GUI2Exe preferences can be edited below:"
 msgstr ""
 
-#: Constants.py:152
+#: ..//Constants.py:152
 msgid "Your program version."
-msgstr ""
+msgstr "プログラムのバージョン"
 
-#: GUI2Exe.py:1196
-msgid ""
-"andrea.gavana@gmail.com\n"
-"gavana@kpo.kz\n"
-"\n"
-msgstr ""
-
-#: bbFreezePanel.py:42
-#, possible-python-format
+#: ..//bbFreezePanel.py:42
+#, python-format
 msgid "bbFreeze options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: cx_FreezePanel.py:51
+#: ..//cx_FreezePanel.py:51
 msgid "cx_Freeze Sample File"
 msgstr ""
 
-#: cx_FreezePanel.py:45
-#, possible-python-format
+#: ..//cx_FreezePanel.py:45
+#, python-format
 msgid "cx_Freeze options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: GUI2Exe.py:1198
-msgid "for the ideas and useful suggestions."
-msgstr ""
-
-#: GUI2Exe.py:244
+#: ..//GUI2Exe.py:241
 msgid "show tooltips for the various compiler options"
 msgstr ""
 
-#: GUI2Exe.py:1195
-msgid ""
-"to me at the following addresses:\n"
-"\n"
-msgstr ""
-
-#: GUI2Exe.py:323
+#: ..//GUI2Exe.py:320
 msgid "tooltips"
-msgstr ""
+msgstr "ツールチップ"
 
-#: Constants.py:235
+#: ..//Constants.py:235
 msgid ""
 "xcdatamodels to be compiled and copied into\n"
 "Resources.\n"
@@ -2298,6 +2229,6 @@ msgid ""
 "Hit Ctrl+A to select one or more xcdatamodels."
 msgstr ""
 
-#: Py2ExePanel.py:401
+#: ..//Py2ExePanel.py:401
 msgid "zipfile does not have \".zip\" extension"
 msgstr ""

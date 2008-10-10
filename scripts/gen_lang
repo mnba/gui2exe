@@ -190,8 +190,6 @@ do_one_build () {
         SRC=''
         MO="$WORKPATH/$LOCALEDIR"
         echo "${CYAN}Outputting${OFF} object files to ${GREEN}$MO${OFF}..."
-        echo "MY PO $PO, MY MO $MO"
-        pwd
         $(python mki18n.py  -mv --domain=$APPNAME --podir=./$PO --moTarget=$MO) 2>/dev/null
         echo "${RED}**${OFF} ${GREEN}Complete${OFF} ${RED}**${OFF}"
     fi
