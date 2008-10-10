@@ -140,6 +140,7 @@ class GUI2Exe(wx.Frame):
         self.SetProperties()
         # Create the menu bar (lots of code, mostly always the same)
         self.CreateMenuBar()
+
         # Build the wx.aui.AuiNotebook image list
         # But why in the world is so different from wx.Notebook???
         self.BuildNBImageList()
@@ -338,6 +339,12 @@ class GUI2Exe(wx.Frame):
         # Bind the special "restore perspective" menu item
         self.Bind(wx.EVT_MENU_RANGE, self.OnRestorePerspective, id=ID_FirstPerspective,
                   id2=ID_FirstPerspective+1000)
+
+        # On mac, do this to make help menu appear in correct location
+        # Note it must be done before setting the menu bar and after the
+        # menus have been created.
+        if wx.Platform == '__WXMAC__':
+            wx.GetApp().SetMacHelpMenuTitleName(_("&Help"))
 
         # We're done with the menubar
         self.SetMenuBar(menuBar)
