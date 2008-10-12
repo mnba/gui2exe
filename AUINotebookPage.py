@@ -57,19 +57,29 @@ class AUINotebookPage(LB.FlatImageBook):
     def AddOverlay(self, bitmap, index, bmpC, bmpP):
         """ Adds small letters C and P as overlay. """
 
-        mdc = wx.MemoryDC(bitmap)
+        img = bitmap.ConvertToImage()
+        img.ConvertAlphaToMask()
+        bitmap = img.ConvertToBitmap()
+
+        baseBMP = wx.EmptyBitmap(32, 32)
+        memory = wx.MemoryDC()
+        memory.SelectObject(baseBMP)
+        
+        mdc = wx.GraphicsContext.Create(memory)
+        mdc.DrawBitmap(bitmap, 0, 0, 32, 32)
+
         # Draw overlay onto bitmap
-        mdc.SetBackground(wx.TRANSPARENT_BRUSH)
         if index == 1:
             # Only the C Letter on the top right
-            mdc.DrawBitmap(bmpC, 2, 2, True)
+            mdc.DrawBitmap(bmpC, 0, 0, 12, 12)
         elif index == 2:
-            mdc.DrawBitmap(bmpP, 2, 18, True)
+            mdc.DrawBitmap(bmpP, 20, 20, 12, 12)
         else:
-            mdc.DrawBitmap(bmpC, 2, 2, True)
-            mdc.DrawBitmap(bmpP, 2, 18, True)
-            
-        return mdc.GetAsBitmap()       
+            mdc.DrawBitmap(bmpC, 0, 0, 12, 12)
+            mdc.DrawBitmap(bmpP, 20, 20, 12, 12)
+
+        memory.SelectObject(wx.NullBitmap)            
+        return baseBMP
 
 
     def CreateBookPages(self, project, compilers):

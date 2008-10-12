@@ -3,12 +3,29 @@ __date__    = "01 Apr 2007, 13:15 GMT"
 __version__ = "0.2alpha"
 __docformat__ = "epytext"
 
-# Start the imports
+import sys
 import os
+
+if not hasattr(sys, "frozen"):
+    # A check to ensure the correct wxPython version is there...
+    try:
+
+        import wxversion
+        wxversion.ensureMinimal("2.8")
+
+    except ImportError:
+        # No wxversion?
+        
+        import wx
+        if wx.VERSION < (2, 8, 8, 0):
+            print "wxPython >= 2.8.8.0 is required"
+            import sys
+            sys.exit(1)
+
+# Start the imports
 import wx
 import time
 
-import sys
 reload(sys)
 sys.setdefaultencoding(sys.getfilesystemencoding())
 del sys.setdefaultencoding

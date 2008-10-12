@@ -514,13 +514,16 @@ getclear_allBitmap = clear_all.GetBitmap
 
 #----------------------------------------------------------------------
 cLetter = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABHNCSVQICAgIfAhkiAAAARdJ"
-    "REFUKJFtksErRFEUxn/3vlcz5IXpxU4Raso0hExNDEo2YkGWNiMr/4ON/AFWLGZhJWVpZ6HY"
-    "ka00SyyEhZLdzWcxeTN3nlNn8d3zfZ3vnnOMsQHtcXjq9OMg6oDqRmi8orGBl91l6fhM+sOz"
-    "VSlebmLbKtawU34ACiNfydt0Hj4empxEMLftxBOsVL4pT/UmNpZmIB76xxJdEqPS5c2b2m2u"
-    "7TYtYWzA/pFEKI1vKkU2NuD61vl/qD83us0XUwMDoFLKJBYtgM02QGnsPUWunTu1Ygtwshca"
-    "Qujvy6YE93UfJ1PqLMLLa+QVD2pOixO+wLRuemHHqboKuQjuHmEwhq11f9Om/TQurpwyIeR6"
-    "PpksxP5ZAL+3V06ST/mbQQAAAABJRU5ErkJggg==")
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABHNCSVQICAgIfAhkiAAAActJ"
+    "REFUKJF9jztok2EYRs/3f0lMQi82LbQWJVqwIAG3ipu4OLgKDkIROxTEQUSL0CWLbnZWsdoi"
+    "iIPghaJCQVtBjIpWDcbGQlKbREuT2CQkf27/5XUQRZee9TnDeRT/cL4kezqD7fH1XG6iNTio"
+    "CyLkrUY85/M/bP4MTpd2qqwCiIoY659Tk33DAxeSXro/mZqCCbYG3SE0fAon7/8oVQ4qgNNt"
+    "c8RQ7ttFUSyvBnDffIWaOUeoP8LwriFCQAOoclkdKEpXuMOMx70SXlkJIs/fQTpxjKmx+wAs"
+    "yCzV0kl+rIFdx2MXs6OZUHc4VQ4g2Trks1GmTj2Asd/HXs7fYjPzgq6+BQD2WpXpXrcspES4"
+    "s1rl7I19bEWgXnxs2HUhIcJcOb2lDHicb9Wj7lAPGEBv93/jePr7kc6B7ddjbXctJr5FSdhL"
+    "hu3vf0LFAB/Qww6Schzg8OyjiPa5txN+Z3fc2nZIPjSiOhX3QEIiJMQkKUJOxGs1ZaRUkRPt"
+    "muxvmWIkLeHqe9ETN68BKABeyTls9xLaDRIUPH4X1XSwchVY/uLojfRMIBObrN2bKai/wU9b"
+    "EbX07KKubYwaWuPYJF3c12Kbd7lyZv6P9guh6eFVU8NOQwAAAABJRU5ErkJggg==")
 index.append('cLetter')
 catalog['cLetter'] = cLetter
 getcLetterData = cLetter.GetData
@@ -5097,12 +5100,15 @@ getpathiconBitmap = pathicon.GetBitmap
 
 #----------------------------------------------------------------------
 pLetter = PyEmbeddedImage(
-    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABHNCSVQICAgIfAhkiAAAAOFJ"
-    "REFUKJGVkjFKxGAQhb+ZP6KFQUghWriljYVgb6GlhSss2CnewBN4hW32BiltlJQ2dhaKhaCd"
-    "NiLuAWSrkBmLrFnIT4QMTDGP9+a9gRHRQJ9K2oDdVg7A1gVsDGF6A185ehIEQNoOVqhjZUNo"
-    "lugSemyikaeVkKzGWawEIBYAVXa44L2P64hre7HAHkcOEJYz7DN3ezp1Xi8h20cPXiQ++vsa"
-    "gFmyTTo4n98QgIeGEkda2STdvZIIbwvsY1JnXT/q4tYlGhAN+P2Oe4H/zV2tAPZ85vy81U53"
-    "A//XoO9r/AJs6j3jJh0EKAAAAABJRU5ErkJggg==")
+    "iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABHNCSVQICAgIfAhkiAAAAZtJ"
+    "REFUKJF9jr1rE2EAh5/3Ppq7a8I1JBgkasWpoBAQ0aldChWUolic7OAibq7+AS5O/guCCJVC"
+    "xyL1Y1JLKRShmJJQo0avtIm0ac/c5Xpv3jcO1bF95t/z8BP84/PL2ftK289d0UNoCQNN1Isw"
+    "UPHlYjzXSn+urgTZOfFfSN/eWrBj6w4H65DZg8whaBO6LkQSPdIhPWM+FABLL0rDV9NcfWTQ"
+    "LjMWsmMStv/wsZClUIJr1h7gg/T4YQBM5Rzbt3UZOwIPgl0alevcXH7DhNg33pEADnQk5w2A"
+    "aqRuiESBq0GDio9u3p2ZztO7UiG1STNQbfLaAigeOpdQIQwNoAvnElFZezbWO2h4hq/CIXlW"
+    "8mkDmgEL1lFL30YkMAy4ULowME6dbjg4DbZkSv0XqvadxW81XllPH+f9vLA8zARysK1pfWlS"
+    "DbspSQLCYH73NxuPnvABwHownrtotuQoXh/lwtdN3k/Nco9jMFTHHzX7ErIaKWCnzdJxYwCr"
+    "4DQncSNkGWoBJDHBiUKnGE73M7Beh/2Q7eomaycJfwEUZKgFkoB/hwAAAABJRU5ErkJggg==")
 index.append('pLetter')
 catalog['pLetter'] = pLetter
 getpLetterData = pLetter.GetData
