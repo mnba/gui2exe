@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-09 19:34-0500\n"
+"POT-Creation-Date: 2008-10-14 19:02-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,79 +31,79 @@ msgstr ""
 msgid "%(numberOfObjects)d ordered objects"
 msgstr ""
 
-#: ..//GUI2Exe.py:279
+#: ..//GUI2Exe.py:297
 msgid "&About GUI2Exe..."
 msgstr ""
 
-#: ..//GUI2Exe.py:265
+#: ..//GUI2Exe.py:283
 msgid "&Binary dependencies"
 msgstr ""
 
-#: ..//GUI2Exe.py:256
+#: ..//GUI2Exe.py:274
 msgid "&Builds"
 msgstr ""
 
-#: ..//GUI2Exe.py:260
+#: ..//GUI2Exe.py:278
 msgid "&Check setup script syntax"
 msgstr ""
 
-#: ..//GUI2Exe.py:278
+#: ..//GUI2Exe.py:296
 msgid "&Contact the Author..."
 msgstr ""
 
-#: ..//GUI2Exe.py:237
+#: ..//GUI2Exe.py:255
 msgid "&Export setup file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:230
+#: ..//GUI2Exe.py:248
 msgid "&File"
 msgstr ""
 
-#: ..//GUI2Exe.py:269
+#: ..//GUI2Exe.py:287 ..//GUI2Exe.py:364
 msgid "&Help"
 msgstr ""
 
-#: ..//GUI2Exe.py:253
+#: ..//GUI2Exe.py:271
 msgid "&Insert post compilation code..."
 msgstr ""
 
-#: ..//GUI2Exe.py:264
+#: ..//GUI2Exe.py:282
 msgid "&Missing modules"
 msgstr ""
 
-#: ..//GUI2Exe.py:231
+#: ..//GUI2Exe.py:249
 msgid "&New project..."
 msgstr ""
 
-#: ..//GUI2Exe.py:240
+#: ..//GUI2Exe.py:258
 msgid "&Options"
 msgstr ""
 
-#: ..//GUI2Exe.py:239
+#: ..//GUI2Exe.py:257
 msgid "&Quit"
 msgstr ""
 
-#: ..//GUI2Exe.py:246
+#: ..//GUI2Exe.py:264
 msgid "&Recurse sub-dirs for data_files option"
 msgstr ""
 
-#: ..//GUI2Exe.py:234
+#: ..//GUI2Exe.py:252
 msgid "&Save project"
 msgstr ""
 
-#: ..//GUI2Exe.py:235
+#: ..//GUI2Exe.py:253
 msgid "&Save project as..."
 msgstr ""
 
-#: ..//GUI2Exe.py:257
+#: ..//GUI2Exe.py:275
 msgid "&Test executable"
 msgstr ""
 
-#: ..//GUI2Exe.py:274
+#: ..//GUI2Exe.py:292
 msgid "&Tips and tricks"
 msgstr ""
 
-#: ..//GUI2Exe.py:266
+#: ..//GUI2Exe.py:284
 msgid "&View"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgid ""
 "Hit Ctrl+A to select one or more Python files."
 msgstr ""
 
-#: ..//GUI2Exe.py:1173
+#: ..//GUI2Exe.py:1197
 msgid ""
 "A new version of GUI2Exe is available!\n"
 "\n"
@@ -133,11 +133,11 @@ msgstr ""
 msgid "Abort"
 msgstr ""
 
-#: ..//GUI2Exe.py:279
+#: ..//GUI2Exe.py:297
 msgid "About GUI2Exe and the Creator..."
 msgstr ""
 
-#: ..//GUI2Exe.py:252
+#: ..//GUI2Exe.py:270
 msgid "Add &custom code..."
 msgstr ""
 
@@ -202,7 +202,7 @@ msgid ""
 "not implemented in GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:231
+#: ..//GUI2Exe.py:249
 msgid "Add a new project to the project tree"
 msgstr ""
 
@@ -214,11 +214,11 @@ msgstr ""
 msgid "Add by Python code"
 msgstr ""
 
-#: ..//GUI2Exe.py:253
+#: ..//GUI2Exe.py:271
 msgid "Add custom code to be executed after the building process"
 msgstr ""
 
-#: ..//GUI2Exe.py:252
+#: ..//GUI2Exe.py:270
 msgid "Add custom code to the setup script"
 msgstr ""
 
@@ -319,11 +319,11 @@ msgstr ""
 msgid "Are you sure you want to delete the selected project(s) from your database?"
 msgstr ""
 
-#: ..//GUI2Exe.py:1179
+#: ..//GUI2Exe.py:1203
 msgid "At present you have the latest version of GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1142
+#: ..//GUI2Exe.py:1166
 msgid "Attempting to connect to the internet..."
 msgstr ""
 
@@ -331,11 +331,11 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: ..//GUI2Exe.py:241
+#: ..//GUI2Exe.py:259
 msgid "AutoSaves your work every minute"
 msgstr ""
 
-#: ..//GUI2Exe.py:1065
+#: ..//GUI2Exe.py:1089
 msgid "Binary"
 msgstr ""
 
@@ -464,19 +464,19 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ..//GUI2Exe.py:249
+#: ..//GUI2Exe.py:267
 msgid "Change &Python version..."
 msgstr ""
 
-#: ..//GUI2Exe.py:276
+#: ..//GUI2Exe.py:294
 msgid "Check for &upgrade"
 msgstr ""
 
-#: ..//GUI2Exe.py:276
+#: ..//GUI2Exe.py:294
 msgid "Check for a GUI2Exe upgrade"
 msgstr ""
 
-#: ..//GUI2Exe.py:260
+#: ..//GUI2Exe.py:278
 msgid "Check the syntax of the auto-generated setup script"
 msgstr ""
 
@@ -488,7 +488,7 @@ msgstr ""
 msgid "Choose one or more folders:"
 msgstr ""
 
-#: ..//GUI2Exe.py:907
+#: ..//GUI2Exe.py:931
 msgid "Choose the PyInstaller location:"
 msgstr ""
 
@@ -496,15 +496,15 @@ msgstr ""
 msgid "Class          "
 msgstr ""
 
-#: ..//GUI2Exe.py:244
+#: ..//GUI2Exe.py:262
 msgid "Clea&n \"dist\" directory"
 msgstr ""
 
-#: ..//GUI2Exe.py:244
+#: ..//GUI2Exe.py:262
 msgid "Clean the distribution folder at every compilation"
 msgstr ""
 
-#: ..//GUI2Exe.py:1690
+#: ..//GUI2Exe.py:1714
 msgid "Cleaning the distribution folder..."
 msgstr ""
 
@@ -585,7 +585,7 @@ msgstr ""
 msgid "Company Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1794
+#: ..//GUI2Exe.py:1818
 msgid "Compilation killed by user"
 msgstr ""
 
@@ -597,7 +597,7 @@ msgstr ""
 msgid "Compiler Messages"
 msgstr ""
 
-#: ..//GUI2Exe.py:273
+#: ..//GUI2Exe.py:291
 msgid "Compiler s&witches"
 msgstr ""
 
@@ -613,7 +613,7 @@ msgstr ""
 msgid "Console Application"
 msgstr ""
 
-#: ..//GUI2Exe.py:278
+#: ..//GUI2Exe.py:296
 msgid "Contact Andrea Gavana by e-mail"
 msgstr ""
 
@@ -667,7 +667,7 @@ msgid ""
 "under 'other_resources' in py2exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1451
+#: ..//GUI2Exe.py:1475
 msgid "Creating new project..."
 msgstr ""
 
@@ -717,7 +717,7 @@ msgid ""
 "is now to include all encodings."
 msgstr ""
 
-#: ..//GUI2Exe.py:243
+#: ..//GUI2Exe.py:261
 msgid "De&lete \"build\" directory"
 msgstr ""
 
@@ -741,7 +741,7 @@ msgstr ""
 msgid "Delete selected"
 msgstr ""
 
-#: ..//GUI2Exe.py:243
+#: ..//GUI2Exe.py:261
 msgid "Delete the build folder at every compilation"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgstr ""
 msgid "Dylib/Frameworks Names"
 msgstr ""
 
-#: ..//GUI2Exe.py:255
+#: ..//GUI2Exe.py:273
 msgid "Edit preferences/settings"
 msgstr ""
 
@@ -855,7 +855,7 @@ msgstr ""
 msgid "Empty targetName option. Using Python script name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1088
+#: ..//GUI2Exe.py:1112
 msgid "Enter a name for the new configuration:"
 msgstr ""
 
@@ -867,7 +867,7 @@ msgstr ""
 msgid "Enter your custom code below and it will be inserted inside the\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1420
+#: ..//GUI2Exe.py:1444
 msgid "Error"
 msgstr ""
 
@@ -900,19 +900,19 @@ msgstr ""
 msgid "Executable Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:178
+#: ..//GUI2Exe.py:196
 msgid "Executable Properties"
 msgstr ""
 
-#: ..//GUI2Exe.py:1895
+#: ..//GUI2Exe.py:1919
 msgid "Executable terminated with errors or warnings"
 msgstr ""
 
-#: ..//GUI2Exe.py:239
+#: ..//GUI2Exe.py:257
 msgid "Exit GUI2Exe"
 msgstr ""
 
-#: ..//GUI2Exe.py:237
+#: ..//GUI2Exe.py:255
 msgid "Export the Setup.py file"
 msgstr ""
 
@@ -924,7 +924,7 @@ msgstr ""
 msgid "Extension"
 msgstr ""
 
-#: ..//GUI2Exe.py:656
+#: ..//GUI2Exe.py:680
 #, python-format
 msgid "File %(filePath)s successfully saved"
 msgstr ""
@@ -977,11 +977,11 @@ msgstr ""
 msgid "Full Build Output Dialog"
 msgstr ""
 
-#: ..//GUI2Exe.py:271
+#: ..//GUI2Exe.py:289
 msgid "GUI2Exe &API"
 msgstr ""
 
-#: ..//GUI2Exe.py:270
+#: ..//GUI2Exe.py:288
 msgid "GUI2Exe &help"
 msgstr ""
 
@@ -1006,16 +1006,16 @@ msgstr ""
 msgid "GUI2Exe Preferences dialog"
 msgstr ""
 
-#: ..//GUI2Exe.py:174
+#: ..//GUI2Exe.py:192
 msgid "GUI2Exe Projects"
 msgstr ""
 
-#: ..//GUI2Exe.py:208
+#: ..//GUI2Exe.py:226
 #, python-format
 msgid "GUI2Exe succesfully started at %(dateAndTime)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:1141
+#: ..//GUI2Exe.py:1165
 msgid "GUI2Exe: Check for upgrade"
 msgstr ""
 
@@ -1130,7 +1130,7 @@ msgstr ""
 msgid "Invalid PList code encountered."
 msgstr ""
 
-#: ..//GUI2Exe.py:919
+#: ..//GUI2Exe.py:943
 msgid "Invalid PyInstaller path: no file named 'Build.py' has been found."
 msgstr ""
 
@@ -1152,7 +1152,7 @@ msgstr ""
 msgid "Invalid or empty property name."
 msgstr ""
 
-#: ..//GUI2Exe.py:1101
+#: ..//GUI2Exe.py:1125
 msgid "Invalid perspective name!"
 msgstr ""
 
@@ -1160,7 +1160,7 @@ msgstr ""
 msgid "Invalid project name (empty string)."
 msgstr ""
 
-#: ..//GUI2Exe.py:1899
+#: ..//GUI2Exe.py:1923
 #, python-format
 msgid ""
 "It appears that the executable generated errors in file:\n"
@@ -1228,7 +1228,7 @@ msgid ""
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: ..//GUI2Exe.py:232
+#: ..//GUI2Exe.py:250
 msgid "Load another GUI2Exe database file"
 msgstr ""
 
@@ -1248,11 +1248,11 @@ msgstr ""
 msgid "Make sure you have the license if you distribute any of them, and\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1420 ..//GUI2Exe.py:1423
+#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1447
 msgid "Message"
 msgstr ""
 
-#: ..//GUI2Exe.py:185
+#: ..//GUI2Exe.py:203
 msgid "Messages And Actions"
 msgstr ""
 
@@ -1283,7 +1283,7 @@ msgstr ""
 msgid "New project"
 msgstr ""
 
-#: ..//GUI2Exe.py:1464
+#: ..//GUI2Exe.py:1488
 #, python-format
 msgid "New project \"%(projectName)s\" added"
 msgstr ""
@@ -1324,7 +1324,7 @@ msgstr ""
 msgid "No Python scripts have been added."
 msgstr ""
 
-#: ..//GUI2Exe.py:996
+#: ..//GUI2Exe.py:1020
 msgid "No SyntaxError detected in the automatically generated Setup.py file."
 msgstr ""
 
@@ -1347,15 +1347,15 @@ msgstr ""
 msgid "One File"
 msgstr ""
 
-#: ..//GUI2Exe.py:1708
+#: ..//GUI2Exe.py:1732
 msgid "One instance of the building process is already running."
 msgstr ""
 
-#: ..//GUI2Exe.py:271
+#: ..//GUI2Exe.py:289
 msgid "Opens the GUI2Exe API reference"
 msgstr ""
 
-#: ..//GUI2Exe.py:270
+#: ..//GUI2Exe.py:288
 msgid "Opens the GUI2Exe help"
 msgstr ""
 
@@ -1426,7 +1426,7 @@ msgstr ""
 msgid "Paths"
 msgstr ""
 
-#: ..//GUI2Exe.py:1090
+#: ..//GUI2Exe.py:1114
 #, python-format
 msgid "Perspective %d"
 msgstr ""
@@ -1455,11 +1455,11 @@ msgstr ""
 msgid "Please select one item in the tree."
 msgstr ""
 
-#: ..//GUI2Exe.py:870
+#: ..//GUI2Exe.py:894
 msgid "Please select the new Python executable ..."
 msgstr ""
 
-#: ..//GUI2Exe.py:255
+#: ..//GUI2Exe.py:273
 msgid "Preferences..."
 msgstr ""
 
@@ -1475,7 +1475,7 @@ msgstr ""
 msgid "Program Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1507
+#: ..//GUI2Exe.py:1531
 #, python-format
 msgid "Project \"%(projectName)s\" successfully loaded"
 msgstr ""
@@ -1485,12 +1485,12 @@ msgstr ""
 msgid "Project %(existingProject)s succesfully copied to %(newProject)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:696
+#: ..//GUI2Exe.py:720
 #, python-format
 msgid "Project %(projectName)s successfully exported to file %(filePath)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:1987 ..//GUI2Exe.py:2001
+#: ..//GUI2Exe.py:2011 ..//GUI2Exe.py:2025
 msgid "Project successfully updated from file."
 msgstr ""
 
@@ -1605,7 +1605,7 @@ msgstr ""
 msgid "Python Scripts"
 msgstr ""
 
-#: ..//GUI2Exe.py:886
+#: ..//GUI2Exe.py:910
 #, python-format
 msgid "Python executable changed from %(oldVersion)s to %(newVersion)s"
 msgstr ""
@@ -1624,11 +1624,11 @@ msgid ""
 "Is not a valid file."
 msgstr ""
 
-#: ..//GUI2Exe.py:1420 ..//GUI2Exe.py:1427 ..//GUI2Exe.py:1437
+#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1451 ..//GUI2Exe.py:1461
 msgid "Question"
 msgstr ""
 
-#: ..//GUI2Exe.py:246
+#: ..//GUI2Exe.py:264
 msgid "Recurse sub-directories for data_files option if checked"
 msgstr ""
 
@@ -1668,16 +1668,16 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: ..//GUI2Exe.py:1110
+#: ..//GUI2Exe.py:1134
 #, python-format
 msgid "Restore GUI configuration: %s"
 msgstr ""
 
-#: ..//GUI2Exe.py:268
+#: ..//GUI2Exe.py:286
 msgid "Restore original &GUI"
 msgstr ""
 
-#: ..//GUI2Exe.py:268
+#: ..//GUI2Exe.py:286
 msgid "Restore the original GUI appearance"
 msgstr ""
 
@@ -1689,11 +1689,11 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ..//GUI2Exe.py:267
+#: ..//GUI2Exe.py:285
 msgid "Save &panes configuration..."
 msgstr ""
 
-#: ..//GUI2Exe.py:636 ..//GUI2Exe.py:681
+#: ..//GUI2Exe.py:660 ..//GUI2Exe.py:705
 msgid "Save file as ..."
 msgstr ""
 
@@ -1701,15 +1701,15 @@ msgstr ""
 msgid "Save file as..."
 msgstr ""
 
-#: ..//GUI2Exe.py:267
+#: ..//GUI2Exe.py:285
 msgid "Save the current GUI panes configuration"
 msgstr ""
 
-#: ..//GUI2Exe.py:235
+#: ..//GUI2Exe.py:253
 msgid "Save the current project to a file"
 msgstr ""
 
-#: ..//GUI2Exe.py:234
+#: ..//GUI2Exe.py:252
 msgid "Save the current project to database"
 msgstr ""
 
@@ -1717,7 +1717,7 @@ msgstr ""
 msgid "Save to file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1089
+#: ..//GUI2Exe.py:1113
 msgid "Saving panels configuration"
 msgstr ""
 
@@ -1725,11 +1725,11 @@ msgstr ""
 msgid "Scripts"
 msgstr ""
 
-#: ..//GUI2Exe.py:250
+#: ..//GUI2Exe.py:268
 msgid "Set P&yInstaller path..."
 msgstr ""
 
-#: ..//GUI2Exe.py:250
+#: ..//GUI2Exe.py:268
 msgid "Sets the PyInstaller installation path"
 msgstr ""
 
@@ -1749,19 +1749,19 @@ msgstr ""
 msgid "Setup script for \"%(projectName)s\" succesfully created"
 msgstr ""
 
-#: ..//GUI2Exe.py:262
+#: ..//GUI2Exe.py:280
 msgid "Show &full build output"
 msgstr ""
 
-#: ..//GUI2Exe.py:274
+#: ..//GUI2Exe.py:292
 msgid "Show compilation tips and tricks"
 msgstr ""
 
-#: ..//GUI2Exe.py:273
+#: ..//GUI2Exe.py:291
 msgid "Show compilers switches and common options"
 msgstr ""
 
-#: ..//GUI2Exe.py:247
+#: ..//GUI2Exe.py:265
 msgid "Show t&ooltips"
 msgstr ""
 
@@ -1781,12 +1781,12 @@ msgstr ""
 msgid "Skipping Python loaders/byte-compilation..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1766
+#: ..//GUI2Exe.py:1790
 #, python-format
 msgid "Starting compilation with Python executable: %(pythonExecutable)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:1841
+#: ..//GUI2Exe.py:1865
 msgid "Starting compiled executable..."
 msgstr ""
 
@@ -1806,11 +1806,11 @@ msgstr ""
 msgid "Sub-Module 3"
 msgstr ""
 
-#: ..//GUI2Exe.py:232
+#: ..//GUI2Exe.py:250
 msgid "Switch project &database..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1000
+#: ..//GUI2Exe.py:1024
 #, python-format
 msgid "SyntaxError at line %d, column %d"
 msgstr ""
@@ -1823,15 +1823,15 @@ msgstr ""
 msgid "Target Classes"
 msgstr ""
 
-#: ..//GUI2Exe.py:249
+#: ..//GUI2Exe.py:267
 msgid "Temporarily changes the Python version"
 msgstr ""
 
-#: ..//GUI2Exe.py:257
+#: ..//GUI2Exe.py:275
 msgid "Test the compiled file (if it exists)"
 msgstr ""
 
-#: ..//GUI2Exe.py:1734
+#: ..//GUI2Exe.py:1758
 msgid "The Dry-Run option is available only for Py2Exe."
 msgstr ""
 
@@ -1848,11 +1848,11 @@ msgid ""
 "If 0, the zlib module is not required."
 msgstr ""
 
-#: ..//GUI2Exe.py:1815
+#: ..//GUI2Exe.py:1839
 msgid "The compiler has successfully built your executable.\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1768
+#: ..//GUI2Exe.py:1792
 #, python-format
 msgid "The compiler selected is ==> %(compiler)s <=="
 msgstr ""
@@ -1863,7 +1863,7 @@ msgid ""
 "Do you want to save changes?"
 msgstr ""
 
-#: ..//GUI2Exe.py:164
+#: ..//GUI2Exe.py:182
 msgid ""
 "The database file and its backup seem to be broken.\n"
 "\n"
@@ -1922,7 +1922,7 @@ msgstr ""
 msgid "The project name you chose already exists."
 msgstr ""
 
-#: ..//GUI2Exe.py:882
+#: ..//GUI2Exe.py:906
 msgid "The selected file is not a Python executable."
 msgstr ""
 
@@ -1948,30 +1948,30 @@ msgstr ""
 msgid "This is the Setup file as it comes out after the pre-processing\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1193
+#: ..//GUI2Exe.py:1217
 msgid ""
 "This is the about dialog of GUI2Exe.\n"
 "\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:600 ..//GUI2Exe.py:1129
+#: ..//GUI2Exe.py:624 ..//GUI2Exe.py:1153
 msgid "This option has not been implemented yet."
 msgstr ""
 
-#: ..//GUI2Exe.py:1051
+#: ..//GUI2Exe.py:1075
 msgid "This option is available only for Py2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1821
+#: ..//GUI2Exe.py:1845
 msgid "This project has never been compiled or its executable has been deleted."
 msgstr ""
 
-#: ..//GUI2Exe.py:1026
+#: ..//GUI2Exe.py:1050
 #, python-format
 msgid "This project has not been compiled with %(compiler)s yet."
 msgstr ""
 
-#: ..//GUI2Exe.py:936 ..//GUI2Exe.py:1057
+#: ..//GUI2Exe.py:960 ..//GUI2Exe.py:1081
 msgid "This project has not been compiled yet."
 msgstr ""
 
@@ -1993,7 +1993,7 @@ msgid ""
 "check box in GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1911
+#: ..//GUI2Exe.py:1935
 msgid "Tracebacks in log file"
 msgstr ""
 
@@ -2005,7 +2005,7 @@ msgstr ""
 msgid "UPX Compression"
 msgstr ""
 
-#: ..//GUI2Exe.py:1164
+#: ..//GUI2Exe.py:1188
 msgid "Unable to connect to the internet."
 msgstr ""
 
@@ -2025,7 +2025,7 @@ msgstr ""
 msgid "Updating project from file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:241
+#: ..//GUI2Exe.py:259
 msgid "Use &AutoSave"
 msgstr ""
 
@@ -2077,19 +2077,19 @@ msgstr ""
 msgid "Version file is not a valid file."
 msgstr ""
 
-#: ..//GUI2Exe.py:259
+#: ..//GUI2Exe.py:277
 msgid "View &setup script"
 msgstr ""
 
-#: ..//GUI2Exe.py:259
+#: ..//GUI2Exe.py:277
 msgid "View the auto-generated setup script"
 msgstr ""
 
-#: ..//GUI2Exe.py:262
+#: ..//GUI2Exe.py:280
 msgid "View the full build output for the current compiler"
 msgstr ""
 
-#: ..//GUI2Exe.py:1420 ..//GUI2Exe.py:1425
+#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1449
 msgid "Warning"
 msgstr ""
 
@@ -2101,22 +2101,22 @@ msgstr ""
 msgid "Warning option (Python 2.1+)."
 msgstr ""
 
-#: ..//GUI2Exe.py:1329
+#: ..//GUI2Exe.py:1353
 msgid ""
 "Warning: the selected page contains unsaved data.\n"
 "\n"
 "Do you wish to save this project?"
 msgstr ""
 
-#: ..//GUI2Exe.py:1638
+#: ..//GUI2Exe.py:1662
 msgid "Welcome to GUI2Exe"
 msgstr ""
 
-#: ..//GUI2Exe.py:265
+#: ..//GUI2Exe.py:283
 msgid "What the compiler says are the binary dependencies (py2exe only)"
 msgstr ""
 
-#: ..//GUI2Exe.py:264
+#: ..//GUI2Exe.py:282
 msgid "What the compiler thinks are the missing modules (py2exe only)"
 msgstr ""
 
@@ -2170,7 +2170,7 @@ msgstr ""
 msgid "cx_Freeze options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: ..//GUI2Exe.py:247
+#: ..//GUI2Exe.py:265
 msgid "show tooltips for the various compiler options"
 msgstr ""
 
