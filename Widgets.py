@@ -70,12 +70,13 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         wx.ListCtrl.__init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.SUNKEN_BORDER,
                              name=name)
 
+        self._defaultb, self._color = None, None
+
         # Initialize the auto width mixin. We always need it        
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         if name not in _unWantedLists:
             # But we don't always want text edit mixin
             listmix.TextEditMixin.__init__(self)
-            self._defaultb, self._color = None, None
 
         if name == "multipleexe":
             self.setResizeColumn(3)
@@ -1179,13 +1180,14 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     def Recolor(self):
         """ Re-color all the rows. """
 
-        containingSizer = self.GetContainingSizer().GetStaticBox()
-        oldLabelText = containingSizer.GetLabelText()
-        if "(" in oldLabelText:
-            oldLabelText = oldLabelText[0:oldLabelText.rindex("(")-1]
-            
-        newLabelText = oldLabelText + " (%d)"%self.GetItemCount()
-        containingSizer.SetLabel(newLabelText)
+        if isinstance(self.GetContainingSizer(), wx.StaticBoxSizer):
+            containingSizer = self.GetContainingSizer().GetStaticBox()
+            oldLabelText = containingSizer.GetLabelText()
+            if "(" in oldLabelText:
+                oldLabelText = oldLabelText[0:oldLabelText.rindex("(")-1]
+                
+            newLabelText = oldLabelText + " (%d)"%self.GetItemCount()
+            containingSizer.SetLabel(newLabelText)
         
         for row in xrange(self.GetItemCount()):
             if self._defaultb is None:

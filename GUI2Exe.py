@@ -81,6 +81,7 @@ ID_CleanDist = ID_FirstPerspective + 2000
 ID_DeleteBuild = ID_CleanDist + 1
 ID_ShowTip = ID_CleanDist + 2
 ID_Recurse = ID_CleanDist + 3
+ID_Missing = ID_CleanDist + 4
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -279,7 +280,7 @@ class GUI2Exe(wx.Frame):
                     ("", "", "", "", "", ""),
                     (_("Show &full build output")+"\tCtrl+F", _("View the full build output for the current compiler"), "full_build", -1, self.OnViewFullBuild, ""),
                     ("", "", "", "", "", ""),
-                    (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", -1, self.OnViewMissing, ""),
+                    (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", ID_Missing, self.OnViewMissing, ""),
                     (_("&Binary dependencies") + "\tCtrl+B", _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", -1, self.OnViewMissing, "")),
                 (_("&View"),
                     (_("Save &panes configuration..."), _("Save the current GUI panes configuration"), "save_aui_config", -1, self.OnSaveConfig, ""),
@@ -1085,8 +1086,7 @@ class GUI2Exe(wx.Frame):
         wx.BeginBusyCursor()
 
         # Switch between the "show missing modules" and "show binary dependencies"        
-        label = self.GetMenuBar().GetLabel(event.GetId())
-        dll = (label.find(_("Binary")) >= 0 and [True] or [False])[0]
+        dll = event.GetId() != ID_Missing
         # Run the appropriate frame
         frame = Py2ExeMissing(self, project, dll)
         
