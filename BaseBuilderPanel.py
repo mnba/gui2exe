@@ -3,7 +3,7 @@
 import wx
 import wx.lib.scrolledpanel as scrolled
 
-from Constants import _toolTips
+from Constants import GetTooltips
 
 # Import our fancy tooltips
 if wx.Platform != "__WXMAC__":
@@ -116,6 +116,8 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         compiler = self.GetName()
         option = obj.GetName()
 
+        _toolTips = GetTooltips()
+        
         if compiler not in _toolTips:
             # This should not happen, but you never know...
             return
