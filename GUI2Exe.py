@@ -1,7 +1,86 @@
+"""
+
+Description
+===========
+
+GUI2Exe is a Graphical User Interface frontend to all the "executable builders"
+available for the Python programming language. It can be used to build standalone
+Windows executables, Linux applications and Mac OS application bundles and
+plugins starting from Python scripts.
+
+GUI2Exe is (my) first attempt to unify all the available "executable builders"
+for Python in a single and simple to use graphical user interface.
+GUI2Exe supports the following compilers:
+
+* py2exe (Windows)
+* py2app (Mac OS)
+* PyInstaller (all platforms)
+* cx_Freeze (Windows and Linux)
+* bbFreeze (Windows and Linux)
+
+Features
+========
+
+GUI2Exe has a number of features, namely:
+
+* Saves and stores your work in a database, displaying all your projects in a
+  tree control. To load an existing project, simply double click on it;
+* Possibility to export the Setup.py file (menu File => Export setup file...),
+  even though you shouldn't ever need anymore to have a Setup.py file.
+  Everything is done automagically inside GUI2Exe;
+* Ability to change the Python version to use to build the executable (menu
+  Options => Change Python version);
+* Allows the user to insert custom Python code in the "in-memory" Setup.py
+  file, which will be properly included at runtime during the building process
+  (menu Options => Add custom code...);
+* Allows the user to add post-processing custom code, which will be executed
+  at the end of the building process. Useful for cleaning up (menu Options =>
+  Insert post compilation code);
+* Possibility to view the full build output coming from the compiler (menu
+  Builds => Show full build output);
+* Allows the user to add data_files (for the executable builders that support
+  this option) either by selecting a bunch of files all together or using a
+  directory-recursive approach, which will include all files and sub-folders
+  in the selected folders as data_files (menu Options => Recurse sub-dirs for
+  data_files option);
+* "Super" tooltips for the users to better understand the various options
+  (menu Options => Show tooltips);
+* GUI2Exe projects can be saved also to a file (and not only in the database):
+  the exported project may then be checked into version control software like
+  CVS or SVN, modified and then reloaded into GUI2Exe (menu File => Save
+  project as...);
+* Ability to test the executable: if the executable crashes, GUI2Exe will
+  notice it and report to you the traceback for inspection (menu Builds =>
+  Test executable);
+* [py2exe-only]: After a building process, choosing the menu Builds => Missing
+  modules or Builds => Binary dependencies, you will be presented respectively
+  with a list of modules py2exe thinks are missing or a list of binary
+  dependencies (dlls) py2exe has found.
+
+And much more :-D
+
+Project information
+===================
+
+Project home page & downloads:
+http://code.google.com/p/gui2exe
+
+Bleeding edge SVN repository:
+svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
+
+Project mailing list:
+http://groups.google.com/group/gui2exe
+
+Latest revision: Andrea Gavana, 21 Oct 2008 10.00 GMT
+Version 0.2
+  
+"""
+
 __author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <gavana@kpo.kz>"
 __date__    = "01 Apr 2007, 13:15 GMT"
-__version__ = "0.2alpha"
+__version__ = "0.2"
 __docformat__ = "epytext"
+
 
 import sys
 import os
@@ -293,6 +372,7 @@ class GUI2Exe(wx.Frame):
                     (_("&Tips and tricks") + "\tF4", _("Show compilation tips and tricks"), "tips_and_tricks", -1, self.OnTipsAndTricks, ""),
                     ("", "", "", "", "", ""),
                     (_("Check for &upgrade") + "\tF9", _("Check for a GUI2Exe upgrade"), "upgrade", -1, self.OnCheckUpgrade, ""),
+                    (_("Translate &GUI2Exe") + "\tF10", _("Help translating GUI2Exe in your language!"), "translate", -1, self.OnTranslate, ""),
                     ("", "", "", "", "", ""),
                     (_("&Contact the Author..."), _("Contact Andrea Gavana by e-mail"), "contact", -1, self.OnContact, ""),
                     (_("&About GUI2Exe..."), _("About GUI2Exe and the Creator..."), "about", wx.ID_ABOUT, self.OnAbout, "")))
@@ -1176,6 +1256,17 @@ class GUI2Exe(wx.Frame):
         wx.SafeYield()
         
 
+    def OnTranslate(self, event):
+        """
+        Launches the web browser and go to the GUI2Exe translation page in LaunchPad.
+        If you like GUI2Exe, please help translate it in your language!
+        """
+
+        wx.BeginBusyCursor()
+        webbrowser.open_new("https://translations.launchpad.net/gui2exe/trunk/+translations")
+        wx.CallAfter(wx.EndBusyCursor)
+        
+
     def CheckVersion(self, text):
         """
         Called by a worker thread which check my web page on the internet.
@@ -1189,13 +1280,14 @@ class GUI2Exe(wx.Frame):
             return
 
         # A bit shaky, but it seems to work...
-        indx = text.find("<small><strong>GUI2Exe")
-        version = text[indx:indx+40].split(";")[1]
-        version = version[0:version.find("<")]
+        indx = text.find('http://gui2exe.googlecode.com/files/')
+        indx2 = text[indx:].find("_")
+        indx3 = text[indx:].find(".zip")
+        version = text[indx+indx2+1:indx+indx3]
         if version > __version__:
             # Time to upgrade maybe? :-D
             strs = _("A new version of GUI2Exe is available!\n\nPlease go to " \
-                   "http://xoomer.alice.it/infinity77/main/GUI2Exe.html\nif you wish to upgrade.")
+                     "http://code.google.com/p/gui2exe/\nif you wish to upgrade.")
             self.RunError(0, strs)
             return
 

@@ -127,7 +127,7 @@ class ConnectionThread(Thread):
 
         try:
             # Try to read my web page
-            url = "http://xoomer.alice.it/infinity77/main/GUI2Exe.html"
+            url = "http://code.google.com/p/gui2exe/"
             infinityPage = urllib2.urlopen(url)
             text = infinityPage.read()
             infinityPage.close()
