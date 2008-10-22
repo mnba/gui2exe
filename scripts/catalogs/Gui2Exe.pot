@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-14 19:09-0500\n"
+"POT-Creation-Date: 2008-10-22 16:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,174 +16,174 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ..//BaseBuilderPanel.py:283
+#: ..//BaseBuilderPanel.py:285
 #, python-format
 msgid "%(compiler)s options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: ..//Widgets.py:3031 ..//Widgets.py:3070 ..//Widgets.py:3100
+#: ..//Widgets.py:3033 ..//Widgets.py:3072 ..//Widgets.py:3102
 #, python-format
 msgid "%(dictionaryItems)d key/value pairs"
 msgstr ""
 
-#: ..//Widgets.py:3106
+#: ..//Widgets.py:3108
 #, python-format
 msgid "%(numberOfObjects)d ordered objects"
 msgstr ""
 
-#: ..//GUI2Exe.py:297
+#: ..//GUI2Exe.py:378
 msgid "&About GUI2Exe..."
 msgstr ""
 
-#: ..//GUI2Exe.py:283
+#: ..//GUI2Exe.py:363
 msgid "&Binary dependencies"
 msgstr ""
 
-#: ..//GUI2Exe.py:274
+#: ..//GUI2Exe.py:354
 msgid "&Builds"
 msgstr ""
 
-#: ..//GUI2Exe.py:278
+#: ..//GUI2Exe.py:358
 msgid "&Check setup script syntax"
 msgstr ""
 
-#: ..//GUI2Exe.py:296
+#: ..//GUI2Exe.py:377
 msgid "&Contact the Author..."
 msgstr ""
 
-#: ..//GUI2Exe.py:255
+#: ..//GUI2Exe.py:335
 msgid "&Export setup file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:248
+#: ..//GUI2Exe.py:328
 msgid "&File"
 msgstr ""
 
-#: ..//GUI2Exe.py:287 ..//GUI2Exe.py:364
+#: ..//GUI2Exe.py:367 ..//GUI2Exe.py:445
 msgid "&Help"
 msgstr ""
 
-#: ..//GUI2Exe.py:271
+#: ..//GUI2Exe.py:351
 msgid "&Insert post compilation code..."
 msgstr ""
 
-#: ..//GUI2Exe.py:282
+#: ..//GUI2Exe.py:362
 msgid "&Missing modules"
 msgstr ""
 
-#: ..//GUI2Exe.py:249
+#: ..//GUI2Exe.py:329
 msgid "&New project..."
 msgstr ""
 
-#: ..//GUI2Exe.py:258
+#: ..//GUI2Exe.py:338
 msgid "&Options"
 msgstr ""
 
-#: ..//GUI2Exe.py:257
+#: ..//GUI2Exe.py:337
 msgid "&Quit"
 msgstr ""
 
-#: ..//GUI2Exe.py:264
+#: ..//GUI2Exe.py:344
 msgid "&Recurse sub-dirs for data_files option"
 msgstr ""
 
-#: ..//GUI2Exe.py:252
+#: ..//GUI2Exe.py:332
 msgid "&Save project"
 msgstr ""
 
-#: ..//GUI2Exe.py:253
+#: ..//GUI2Exe.py:333
 msgid "&Save project as..."
 msgstr ""
 
-#: ..//GUI2Exe.py:275
+#: ..//GUI2Exe.py:355
 msgid "&Test executable"
 msgstr ""
 
-#: ..//GUI2Exe.py:292
+#: ..//GUI2Exe.py:372
 msgid "&Tips and tricks"
 msgstr ""
 
-#: ..//GUI2Exe.py:284
+#: ..//GUI2Exe.py:364
 msgid "&View"
 msgstr ""
 
-#: ..//Widgets.py:3309
+#: ..//Widgets.py:3311
 msgid "0 key/value pairs"
 msgstr ""
 
-#: ..//Constants.py:197
+#: ..//Constants.py:204
 msgid ""
 "A list of scripts specified as file names.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python files."
 msgstr ""
 
-#: ..//GUI2Exe.py:1197
+#: ..//GUI2Exe.py:1289
 msgid ""
 "A new version of GUI2Exe is available!\n"
 "\n"
 "Please go to "
 msgstr ""
 
-#: ..//Constants.py:153
+#: ..//Constants.py:160
 msgid "A short description of your application."
 msgstr ""
 
-#: ..//Widgets.py:3837
+#: ..//Widgets.py:3839
 msgid "Abort"
 msgstr ""
 
-#: ..//GUI2Exe.py:297
+#: ..//GUI2Exe.py:378
 msgid "About GUI2Exe and the Creator..."
 msgstr ""
 
-#: ..//GUI2Exe.py:270
+#: ..//GUI2Exe.py:350
 msgid "Add &custom code..."
 msgstr ""
 
-#: ..//Widgets.py:959
+#: ..//Widgets.py:960
 msgid "Add Data Files"
 msgstr ""
 
-#: ..//Widgets.py:953
+#: ..//Widgets.py:954
 msgid "Add Dll/Binary Files"
 msgstr ""
 
-#: ..//Widgets.py:912
+#: ..//Widgets.py:913
 msgid "Add Dylib/Frameworks"
 msgstr ""
 
-#: ..//Widgets.py:315 ..//Widgets.py:340
+#: ..//Widgets.py:316 ..//Widgets.py:341
 msgid "Add Item(s)"
 msgstr ""
 
-#: ..//Constants.py:238
+#: ..//Constants.py:245
 msgid ""
 "Add Plist dictionary key/value pairs or edit\n"
 "an existing PList configuration."
 msgstr ""
 
-#: ..//Widgets.py:947
+#: ..//Widgets.py:948
 msgid "Add Python Modules"
 msgstr ""
 
-#: ..//Widgets.py:950
+#: ..//Widgets.py:951
 msgid "Add Python Packages"
 msgstr ""
 
-#: ..//Widgets.py:537
+#: ..//Widgets.py:538
 msgid "Add Python Script..."
 msgstr ""
 
-#: ..//Widgets.py:944
+#: ..//Widgets.py:945
 msgid "Add Python Scripts"
 msgstr ""
 
-#: ..//Widgets.py:915
+#: ..//Widgets.py:916
 msgid "Add XC Data Models"
 msgstr ""
 
-#: ..//Constants.py:148
+#: ..//Constants.py:155
 msgid ""
 "Add a custom icon to your application.\n"
 "The icon will be shown in Windows Explorer.\n"
@@ -191,7 +191,7 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:141
+#: ..//Constants.py:148
 msgid ""
 "Add a new list item by hitting Ctrl+A and click on the\n"
 "third list control column to select your Python Main\n"
@@ -202,7 +202,7 @@ msgid ""
 "not implemented in GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:249
+#: ..//GUI2Exe.py:329
 msgid "Add a new project to the project tree"
 msgstr ""
 
@@ -210,23 +210,23 @@ msgstr ""
 msgid "Add a new tree item below the selected item"
 msgstr ""
 
-#: ..//Widgets.py:2823
+#: ..//Widgets.py:2825
 msgid "Add by Python code"
 msgstr ""
 
-#: ..//GUI2Exe.py:271
+#: ..//GUI2Exe.py:351
 msgid "Add custom code to be executed after the building process"
 msgstr ""
 
-#: ..//GUI2Exe.py:270
+#: ..//GUI2Exe.py:350
 msgid "Add custom code to the setup script"
 msgstr ""
 
-#: ..//Widgets.py:1151
+#: ..//Widgets.py:1152
 msgid "Add items to the list"
 msgstr ""
 
-#: ..//Constants.py:149
+#: ..//Constants.py:156
 msgid ""
 "Add one or more bitmaps as Windows resources,\n"
 "so that they get packaged in the executable.\n"
@@ -234,7 +234,7 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: ..//Widgets.py:2828
+#: ..//Widgets.py:2830
 msgid "Add your key/value dictionary in Python code:"
 msgstr ""
 
@@ -242,45 +242,45 @@ msgstr ""
 msgid "Add/Edit"
 msgstr ""
 
-#: ..//Constants.py:225
+#: ..//Constants.py:232
 msgid "Allow PYTHONPATH to effect the interpreter's environment."
 msgstr ""
 
-#: ..//Constants.py:184
+#: ..//Constants.py:191
 msgid ""
 "Always 1 on Linux/unix. On Windows, governs whether to use\n"
 "the console executable, or the Windows subsystem executable."
 msgstr ""
 
-#: ..//Constants.py:202
+#: ..//Constants.py:209
 msgid ""
 "An optional list of binary files to exclude.\n"
 "\n"
 "Hit Ctrl+A to select one or more binary files."
 msgstr ""
 
-#: ..//Constants.py:203
+#: ..//Constants.py:210
 msgid ""
 "An optional list of binary files to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more binary files."
 msgstr ""
 
-#: ..//Constants.py:200
+#: ..//Constants.py:207
 msgid ""
 "An optional list of paths to be searched before sys.path.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: ..//Constants.py:201
+#: ..//Constants.py:208
 msgid ""
 "An optional list of paths used to extend the hooks package.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: ..//Widgets.py:2833
+#: ..//Widgets.py:2835
 msgid "Append"
 msgstr ""
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Append a new tree item to the selected item"
 msgstr ""
 
-#: ..//Constants.py:204
+#: ..//Constants.py:211
 msgid ""
 "Arbitrary files to include in your distribution.\n"
 "\n"
@@ -319,11 +319,11 @@ msgstr ""
 msgid "Are you sure you want to delete the selected project(s) from your database?"
 msgstr ""
 
-#: ..//GUI2Exe.py:1203
+#: ..//GUI2Exe.py:1295
 msgid "At present you have the latest version of GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1166
+#: ..//GUI2Exe.py:1246
 msgid "Attempting to connect to the internet..."
 msgstr ""
 
@@ -331,12 +331,8 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: ..//GUI2Exe.py:259
+#: ..//GUI2Exe.py:339
 msgid "AutoSaves your work every minute"
-msgstr ""
-
-#: ..//GUI2Exe.py:1089
-msgid "Binary"
 msgstr ""
 
 #: ..//Py2ExePanel.py:121
@@ -347,25 +343,25 @@ msgstr ""
 msgid "Bitmap Resources"
 msgstr ""
 
-#: ..//Constants.py:162
+#: ..//Constants.py:169
 msgid ""
 "Boolean value indicating if dependent files should be\n"
 "copied to the target directory or not."
 msgstr ""
 
-#: ..//Constants.py:164
+#: ..//Constants.py:171
 msgid ""
 "Boolean value indicating if the script module should\n"
 "be appended to the shared library zipfile."
 msgstr ""
 
-#: ..//Constants.py:163
+#: ..//Constants.py:170
 msgid ""
 "Boolean value indicating if the script module should be\n"
 "appended to the executable itself."
 msgstr ""
 
-#: ..//Widgets.py:1039
+#: ..//Widgets.py:1040
 msgid "Browse For Folders..."
 msgstr ""
 
@@ -373,7 +369,7 @@ msgstr ""
 msgid "Build Optimized"
 msgstr ""
 
-#: ..//Constants.py:211
+#: ..//Constants.py:218
 msgid ""
 "Build optimized.\n"
 "\n"
@@ -381,19 +377,19 @@ msgid ""
 "if it is run optimized."
 msgstr ""
 
-#: ..//Widgets.py:2497
+#: ..//Widgets.py:2499
 #, python-format
 msgid "Build output file %(filePath)s successfully saved"
 msgstr ""
 
-#: ..//Widgets.py:2448
+#: ..//Widgets.py:2450
 #, python-format
 msgid ""
 "Build output text for %(projectName)s (%(compiler)s):\n"
 "Built on %(header)s"
 msgstr ""
 
-#: ..//Widgets.py:2516
+#: ..//Widgets.py:2518
 msgid "Build output text successfully copied to the clipboard"
 msgstr ""
 
@@ -405,13 +401,13 @@ msgstr ""
 msgid "Bundle Files"
 msgstr ""
 
-#: ..//Constants.py:218
+#: ..//Constants.py:225
 msgid ""
 "Bundle extension (default: '.app' for app, '.plugin'\n"
 "for plugins)."
 msgstr ""
 
-#: ..//Constants.py:133
+#: ..//Constants.py:140
 msgid ""
 "Bundling options for the final dist directory.\n"
 "\n"
@@ -424,11 +420,11 @@ msgid ""
 "bit machines."
 msgstr ""
 
-#: ..//Widgets.py:2074
+#: ..//Widgets.py:2076
 msgid "Busy"
 msgstr ""
 
-#: ..//Constants.py:134
+#: ..//Constants.py:141
 msgid ""
 "By activating this option in GUI2Exe, you can specify a name\n"
 "for the compressed zip file where py2exe will put all the\n"
@@ -439,7 +435,7 @@ msgid ""
 "None."
 msgstr ""
 
-#: ..//Constants.py:136
+#: ..//Constants.py:143
 msgid ""
 "By choosing this option, py2exe will copy\n"
 "the Python bytecode files directly into the dist\n"
@@ -447,7 +443,7 @@ msgid ""
 "archive is used."
 msgstr ""
 
-#: ..//Constants.py:140
+#: ..//Constants.py:147
 msgid ""
 "By selecting a file for this option, your custom\n"
 "Python file can do things like installing a customized\n"
@@ -460,51 +456,51 @@ msgstr ""
 msgid "Byte-compiling Python files..."
 msgstr ""
 
-#: ..//Widgets.py:1710 ..//Widgets.py:1852 ..//Widgets.py:2414
+#: ..//Widgets.py:1712 ..//Widgets.py:1854 ..//Widgets.py:2416
 msgid "Cancel"
 msgstr ""
 
-#: ..//GUI2Exe.py:267
+#: ..//GUI2Exe.py:347
 msgid "Change &Python version..."
 msgstr ""
 
-#: ..//GUI2Exe.py:294
+#: ..//GUI2Exe.py:374
 msgid "Check for &upgrade"
 msgstr ""
 
-#: ..//GUI2Exe.py:294
+#: ..//GUI2Exe.py:374
 msgid "Check for a GUI2Exe upgrade"
 msgstr ""
 
-#: ..//GUI2Exe.py:278
+#: ..//GUI2Exe.py:358
 msgid "Check the syntax of the auto-generated setup script"
 msgstr ""
 
-#: ..//Widgets.py:1016
+#: ..//Widgets.py:1017
 msgid "Choose a data files directory:"
 msgstr ""
 
-#: ..//Widgets.py:1983
+#: ..//Widgets.py:1985
 msgid "Choose one or more folders:"
 msgstr ""
 
-#: ..//GUI2Exe.py:931
+#: ..//GUI2Exe.py:1012
 msgid "Choose the PyInstaller location:"
 msgstr ""
 
-#: ..//Widgets.py:3019
+#: ..//Widgets.py:3021
 msgid "Class          "
 msgstr ""
 
-#: ..//GUI2Exe.py:262
+#: ..//GUI2Exe.py:342
 msgid "Clea&n \"dist\" directory"
 msgstr ""
 
-#: ..//GUI2Exe.py:262
+#: ..//GUI2Exe.py:342
 msgid "Clean the distribution folder at every compilation"
 msgstr ""
 
-#: ..//GUI2Exe.py:1714
+#: ..//GUI2Exe.py:1806
 msgid "Cleaning the distribution folder..."
 msgstr ""
 
@@ -512,22 +508,22 @@ msgstr ""
 msgid "Clear History"
 msgstr ""
 
-#: ..//Widgets.py:326
+#: ..//Widgets.py:327
 msgid "Clear all"
 msgstr ""
 
-#: ..//Widgets.py:3840
+#: ..//Widgets.py:3842
 msgid "Close"
 msgstr ""
 
-#: ..//Constants.py:146
+#: ..//Constants.py:153
 msgid ""
 "Comma-separated list of DLLs to exclude.\n"
 "\n"
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:143 ..//Constants.py:232
+#: ..//Constants.py:150 ..//Constants.py:239
 msgid ""
 "Comma-separated list of Python modules to exclude.\n"
 "\n"
@@ -536,7 +532,7 @@ msgid ""
 "it will be included in your final distribution."
 msgstr ""
 
-#: ..//Constants.py:145
+#: ..//Constants.py:152
 msgid ""
 "Comma-separated list of Python modules to ignore\n"
 "if they are found during the building process.\n"
@@ -544,7 +540,7 @@ msgid ""
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:142 ..//Constants.py:231
+#: ..//Constants.py:149 ..//Constants.py:238
 msgid ""
 "Comma-separated list of Python modules to include.\n"
 "\n"
@@ -553,14 +549,14 @@ msgid ""
 "it will be included in your final distribution."
 msgstr ""
 
-#: ..//Constants.py:144 ..//Constants.py:233
+#: ..//Constants.py:151 ..//Constants.py:240
 msgid ""
 "Comma-separated list of Python packages to include.\n"
 "\n"
 "Hit Ctrl+A to add a new item in the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:234
+#: ..//Constants.py:241
 msgid ""
 "Comma-separated list of frameworks or dylibs to\n"
 "exclude.\n"
@@ -568,7 +564,7 @@ msgid ""
 "Hit Ctrl+A to select one or more dylibs or frameworks."
 msgstr ""
 
-#: ..//Constants.py:236
+#: ..//Constants.py:243
 msgid ""
 "Comma-separated list of frameworks or dylibs to\n"
 "include in your distribution.\n"
@@ -585,7 +581,7 @@ msgstr ""
 msgid "Company Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1818
+#: ..//GUI2Exe.py:1910
 msgid "Compilation killed by user"
 msgstr ""
 
@@ -597,7 +593,7 @@ msgstr ""
 msgid "Compiler Messages"
 msgstr ""
 
-#: ..//GUI2Exe.py:291
+#: ..//GUI2Exe.py:371
 msgid "Compiler s&witches"
 msgstr ""
 
@@ -613,7 +609,7 @@ msgstr ""
 msgid "Console Application"
 msgstr ""
 
-#: ..//GUI2Exe.py:296
+#: ..//GUI2Exe.py:377
 msgid "Contact Andrea Gavana by e-mail"
 msgstr ""
 
@@ -642,7 +638,7 @@ msgstr ""
 msgid "Create Manifest File (MSW)"
 msgstr ""
 
-#: ..//Constants.py:132
+#: ..//Constants.py:139
 msgid ""
 "Creates a compressed zip archive (zipfile).\n"
 "\n"
@@ -656,18 +652,18 @@ msgid ""
 "be activated (no zipfile to compress)."
 msgstr ""
 
-#: ..//Constants.py:159 ..//Constants.py:175
+#: ..//Constants.py:166 ..//Constants.py:182
 msgid "Creates a compressed zip file."
 msgstr ""
 
-#: ..//Constants.py:137
+#: ..//Constants.py:144
 msgid ""
 "Creates a file that instructs Windows on how to correctly\n"
 "render the widgets in your user interface. This file lives\n"
 "under 'other_resources' in py2exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1475
+#: ..//GUI2Exe.py:1567
 msgid "Creating new project..."
 msgstr ""
 
@@ -683,7 +679,7 @@ msgstr ""
 msgid "DLL Excludes"
 msgstr ""
 
-#: ..//Widgets.py:1697
+#: ..//Widgets.py:1699
 msgid "DLL Name"
 msgstr ""
 
@@ -691,7 +687,7 @@ msgstr ""
 msgid "DLL Names"
 msgstr ""
 
-#: ..//Widgets.py:1697
+#: ..//Widgets.py:1699
 msgid "DLL Path"
 msgstr ""
 
@@ -711,13 +707,13 @@ msgstr ""
 msgid "Database file is corrupted: using backup file"
 msgstr ""
 
-#: ..//Constants.py:192
+#: ..//Constants.py:199
 msgid ""
 "Ddo not include encodings.<note>The default (on Python versions with unicode support)\n"
 "is now to include all encodings."
 msgstr ""
 
-#: ..//GUI2Exe.py:261
+#: ..//GUI2Exe.py:341
 msgid "De&lete \"build\" directory"
 msgstr ""
 
@@ -737,11 +733,11 @@ msgstr ""
 msgid "Delete project(s)"
 msgstr ""
 
-#: ..//Widgets.py:321
+#: ..//Widgets.py:322
 msgid "Delete selected"
 msgstr ""
 
-#: ..//GUI2Exe.py:261
+#: ..//GUI2Exe.py:341
 msgid "Delete the build folder at every compilation"
 msgstr ""
 
@@ -749,11 +745,11 @@ msgstr ""
 msgid "Deletes the selected tree item (and everything below)"
 msgstr ""
 
-#: ..//Constants.py:223
+#: ..//Constants.py:230
 msgid "Depend on an existing installation of Python 2.4+."
 msgstr ""
 
-#: ..//Constants.py:156
+#: ..//Constants.py:163
 msgid ""
 "Depends on the kind of executable you wish to build:\n"
 "\n"
@@ -770,17 +766,17 @@ msgstr ""
 msgid "Directory"
 msgstr ""
 
-#: ..//Widgets.py:835
+#: ..//Widgets.py:836
 msgid "Directory Name"
 msgstr ""
 
-#: ..//Constants.py:214
+#: ..//Constants.py:221
 msgid ""
 "Directory to put final built distributions in\n"
 "(default is dist)."
 msgstr ""
 
-#: ..//Widgets.py:1250
+#: ..//Widgets.py:1252
 msgid "Discard"
 msgstr ""
 
@@ -793,19 +789,19 @@ msgstr ""
 msgid "Dist Directory Name"
 msgstr ""
 
-#: ..//Constants.py:222
+#: ..//Constants.py:229
 msgid "Do not change to the data directory (Contents/Resources).<note> This is forced for plugins."
 msgstr ""
 
-#: ..//Constants.py:221
+#: ..//Constants.py:228
 msgid "Do not strip debug and local symbols from output."
 msgstr ""
 
-#: ..//Widgets.py:2825
+#: ..//Widgets.py:2827
 msgid "Double-click on one item in the tree control above:"
 msgstr ""
 
-#: ..//Constants.py:228
+#: ..//Constants.py:235
 msgid "Drop to pdb console after the module finding phase is complete."
 msgstr ""
 
@@ -833,7 +829,7 @@ msgstr ""
 msgid "Dylib/Frameworks Names"
 msgstr ""
 
-#: ..//GUI2Exe.py:273
+#: ..//GUI2Exe.py:353
 msgid "Edit preferences/settings"
 msgstr ""
 
@@ -855,7 +851,7 @@ msgstr ""
 msgid "Empty targetName option. Using Python script name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1112
+#: ..//GUI2Exe.py:1192
 msgid "Enter a name for the new configuration:"
 msgstr ""
 
@@ -863,11 +859,11 @@ msgstr ""
 msgid "Enter a name for the new project:"
 msgstr ""
 
-#: ..//Widgets.py:1311
+#: ..//Widgets.py:1313
 msgid "Enter your custom code below and it will be inserted inside the\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1444
+#: ..//GUI2Exe.py:1536
 msgid "Error"
 msgstr ""
 
@@ -875,15 +871,15 @@ msgstr ""
 msgid "Error Message"
 msgstr ""
 
-#: ..//Widgets.py:3867
+#: ..//Widgets.py:3869
 msgid "Error Traceback:"
 msgstr ""
 
-#: ..//Widgets.py:3818
+#: ..//Widgets.py:3820
 msgid "Error/Crash Reporter"
 msgstr ""
 
-#: ..//Widgets.py:3863
+#: ..//Widgets.py:3865
 msgid "Error: Oh no, something bad happened!\n"
 msgstr ""
 
@@ -900,23 +896,23 @@ msgstr ""
 msgid "Executable Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:196
+#: ..//GUI2Exe.py:276
 msgid "Executable Properties"
 msgstr ""
 
-#: ..//GUI2Exe.py:1919
+#: ..//GUI2Exe.py:2011
 msgid "Executable terminated with errors or warnings"
 msgstr ""
 
-#: ..//GUI2Exe.py:257
+#: ..//GUI2Exe.py:337
 msgid "Exit GUI2Exe"
 msgstr ""
 
-#: ..//GUI2Exe.py:255
+#: ..//GUI2Exe.py:335
 msgid "Export the Setup.py file"
 msgstr ""
 
-#: ..//Widgets.py:2413
+#: ..//Widgets.py:2415
 msgid "Export to clipboard"
 msgstr ""
 
@@ -924,7 +920,7 @@ msgstr ""
 msgid "Extension"
 msgstr ""
 
-#: ..//GUI2Exe.py:680
+#: ..//GUI2Exe.py:761
 #, python-format
 msgid "File %(filePath)s successfully saved"
 msgstr ""
@@ -942,7 +938,7 @@ msgstr ""
 msgid "Files Path"
 msgstr ""
 
-#: ..//Widgets.py:1992
+#: ..//Widgets.py:1994
 msgid "Filter file extensions using wildcard separated by a comma:"
 msgstr ""
 
@@ -954,7 +950,7 @@ msgstr ""
 msgid "Finding required modules..."
 msgstr ""
 
-#: ..//Constants.py:178
+#: ..//Constants.py:185
 msgid "Flag whether to create the included python interpreter."
 msgstr ""
 
@@ -962,60 +958,60 @@ msgstr ""
 msgid "Force Execpv"
 msgstr ""
 
-#: ..//Constants.py:227
+#: ..//Constants.py:234
 msgid "Force application to run translated on i386."
 msgstr ""
 
-#: ..//Constants.py:208
+#: ..//Constants.py:215
 msgid ""
 "Force execpv (Linux/Unix only).\n"
 "\n"
 "Ensures that LD_LIBRARY_PATH is set properly."
 msgstr ""
 
-#: ..//Widgets.py:2427
+#: ..//Widgets.py:2429
 msgid "Full Build Output Dialog"
 msgstr ""
 
-#: ..//GUI2Exe.py:289
+#: ..//GUI2Exe.py:369
 msgid "GUI2Exe &API"
 msgstr ""
 
-#: ..//GUI2Exe.py:288
+#: ..//GUI2Exe.py:368
 msgid "GUI2Exe &help"
 msgstr ""
 
-#: ..//Widgets.py:2172
+#: ..//Widgets.py:2174
 msgid "GUI2Exe Busy Message"
 msgstr ""
 
-#: ..//Widgets.py:1229
+#: ..//Widgets.py:1231
 msgid "GUI2Exe Code Viewer"
 msgstr ""
 
-#: ..//Widgets.py:2613
+#: ..//Widgets.py:2615
 msgid "GUI2Exe Help Tip"
 msgstr ""
 
-#: ..//Widgets.py:2565 ..//Widgets.py:2618
+#: ..//Widgets.py:2567 ..//Widgets.py:2620
 #, python-format
 msgid "GUI2Exe Help Tip (%(compiler)s)"
 msgstr ""
 
-#: ..//Widgets.py:3580
+#: ..//Widgets.py:3582
 msgid "GUI2Exe Preferences dialog"
 msgstr ""
 
-#: ..//GUI2Exe.py:192
+#: ..//GUI2Exe.py:272
 msgid "GUI2Exe Projects"
 msgstr ""
 
-#: ..//GUI2Exe.py:226
+#: ..//GUI2Exe.py:306
 #, python-format
 msgid "GUI2Exe succesfully started at %(dateAndTime)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:1165
+#: ..//GUI2Exe.py:1245
 msgid "GUI2Exe: Check for upgrade"
 msgstr ""
 
@@ -1023,6 +1019,10 @@ msgstr ""
 #: ..//bbFreezePanel.py:217 ..//cx_FreezePanel.py:330
 #, python-format
 msgid "Generating \"%(projectName)s\" setup script..."
+msgstr ""
+
+#: ..//GUI2Exe.py:375
+msgid "Help translating GUI2Exe in your language!"
 msgstr ""
 
 #: ..//PyInstallerPanel.py:38
@@ -1047,7 +1047,7 @@ msgstr ""
 msgid "Icon file is not a valid file."
 msgstr ""
 
-#: ..//Constants.py:216
+#: ..//Constants.py:223
 msgid "Icon file to use for your application."
 msgstr ""
 
@@ -1055,20 +1055,20 @@ msgstr ""
 msgid "Id  "
 msgstr ""
 
-#: ..//Constants.py:237
+#: ..//Constants.py:244
 msgid ""
 "If activated, it allows you to add/edit PList\n"
 "dictionary key/value pairs, or to remove it altogether."
 msgstr ""
 
-#: ..//Constants.py:135
+#: ..//Constants.py:142
 msgid ""
 "If you activate this switch, you will be able to\n"
 "specify the name the directory to put final built\n"
 "distributions in (the default is 'dist')."
 msgstr ""
 
-#: ..//Constants.py:186
+#: ..//Constants.py:193
 msgid ""
 "If you have UPX installed (detected by Configure), this will use\n"
 "it to compress your executable (and, on Windows, your dlls)"
@@ -1086,7 +1086,7 @@ msgstr ""
 msgid "Include Python Interpreter"
 msgstr ""
 
-#: ..//Constants.py:194
+#: ..//Constants.py:201
 msgid "Include TCL/TK in the deployment."
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "Include Tk"
 msgstr ""
 
-#: ..//Constants.py:226
+#: ..//Constants.py:233
 msgid "Include the system and user site-packages into sys.path."
 msgstr ""
 
@@ -1103,11 +1103,11 @@ msgstr ""
 msgid "Includes"
 msgstr ""
 
-#: ..//Constants.py:217
+#: ..//Constants.py:224
 msgid "Info.plist template file."
 msgstr ""
 
-#: ..//Constants.py:154
+#: ..//Constants.py:161
 msgid "Information about the programmer."
 msgstr ""
 
@@ -1119,7 +1119,7 @@ msgstr ""
 msgid "Initialization file is not a valid file."
 msgstr ""
 
-#: ..//Constants.py:150
+#: ..//Constants.py:157
 msgid ""
 "Insert a custom named resource into the executable.\n"
 "\n"
@@ -1130,17 +1130,17 @@ msgstr ""
 msgid "Invalid PList code encountered."
 msgstr ""
 
-#: ..//GUI2Exe.py:943
+#: ..//GUI2Exe.py:1024
 msgid "Invalid PyInstaller path: no file named 'Build.py' has been found."
 msgstr ""
 
-#: ..//Widgets.py:3213 ..//Widgets.py:3245
+#: ..//Widgets.py:3215 ..//Widgets.py:3247
 msgid ""
 "Invalid Python code entered.\n"
 "\n"
 msgstr ""
 
-#: ..//Widgets.py:848
+#: ..//Widgets.py:849
 msgid "Invalid folder name."
 msgstr ""
 
@@ -1148,11 +1148,11 @@ msgstr ""
 msgid "Invalid or corrupted project file."
 msgstr ""
 
-#: ..//Widgets.py:3511
+#: ..//Widgets.py:3513
 msgid "Invalid or empty property name."
 msgstr ""
 
-#: ..//GUI2Exe.py:1125
+#: ..//GUI2Exe.py:1205
 msgid "Invalid perspective name!"
 msgstr ""
 
@@ -1160,7 +1160,7 @@ msgstr ""
 msgid "Invalid project name (empty string)."
 msgstr ""
 
-#: ..//GUI2Exe.py:1923
+#: ..//GUI2Exe.py:2015
 #, python-format
 msgid ""
 "It appears that the executable generated errors in file:\n"
@@ -1174,39 +1174,39 @@ msgstr ""
 msgid "Kill"
 msgstr ""
 
-#: ..//Widgets.py:3617
+#: ..//Widgets.py:3619
 msgid "Language:"
 msgstr ""
 
-#: ..//Constants.py:169 ..//Constants.py:181
+#: ..//Constants.py:176 ..//Constants.py:188
 msgid ""
 "List of names of modules to exclude.\n"
 "\n"
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:199
+#: ..//Constants.py:206
 msgid ""
 "List of names of modules to exclude.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python modules."
 msgstr ""
 
-#: ..//Constants.py:168 ..//Constants.py:180
+#: ..//Constants.py:175 ..//Constants.py:187
 msgid ""
 "List of names of modules to include.\n"
 "\n"
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:198
+#: ..//Constants.py:205
 msgid ""
 "List of names of modules to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python modules."
 msgstr ""
 
-#: ..//Constants.py:170
+#: ..//Constants.py:177
 msgid ""
 "List of names of packages to include, including all\n"
 "of the package's submodules.\n"
@@ -1214,21 +1214,21 @@ msgid ""
 "Hit Ctrl+A to add an item to the list and edit it."
 msgstr ""
 
-#: ..//Constants.py:205
+#: ..//Constants.py:212
 msgid ""
 "List of names of packages to include.\n"
 "\n"
 "Hit Ctrl+A to select one or more Python packages."
 msgstr ""
 
-#: ..//Constants.py:171
+#: ..//Constants.py:178
 msgid ""
 "List of paths to search for modules.\n"
 "\n"
 "Hit Ctrl+A to select one or more directories."
 msgstr ""
 
-#: ..//GUI2Exe.py:250
+#: ..//GUI2Exe.py:330
 msgid "Load another GUI2Exe database file"
 msgstr ""
 
@@ -1236,23 +1236,23 @@ msgstr ""
 msgid "Load project(s)"
 msgstr ""
 
-#: ..//Widgets.py:3541
+#: ..//Widgets.py:3543
 msgid "Locale Settings"
 msgstr ""
 
-#: ..//Widgets.py:1700
+#: ..//Widgets.py:1702
 msgid "Main Module"
 msgstr ""
 
-#: ..//Widgets.py:1768
+#: ..//Widgets.py:1770
 msgid "Make sure you have the license if you distribute any of them, and\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1447
+#: ..//GUI2Exe.py:1536 ..//GUI2Exe.py:1539
 msgid "Message"
 msgstr ""
 
-#: ..//GUI2Exe.py:203
+#: ..//GUI2Exe.py:283
 msgid "Messages And Actions"
 msgstr ""
 
@@ -1260,7 +1260,7 @@ msgstr ""
 msgid "My Projects"
 msgstr ""
 
-#: ..//Constants.py:166
+#: ..//Constants.py:173
 msgid ""
 "Name of icon which should be included in the executable\n"
 "itself on Windows or placed in the target directory for\n"
@@ -1275,7 +1275,7 @@ msgstr ""
 msgid "New Sibling"
 msgstr ""
 
-#: ..//Widgets.py:815
+#: ..//Widgets.py:816
 msgid "New data files"
 msgstr ""
 
@@ -1283,7 +1283,7 @@ msgstr ""
 msgid "New project"
 msgstr ""
 
-#: ..//GUI2Exe.py:1488
+#: ..//GUI2Exe.py:1580
 #, python-format
 msgid "New project \"%(projectName)s\" added"
 msgstr ""
@@ -1292,11 +1292,11 @@ msgstr ""
 msgid "New project..."
 msgstr ""
 
-#: ..//Widgets.py:3453
+#: ..//Widgets.py:3455
 msgid "New property dialog"
 msgstr ""
 
-#: ..//Widgets.py:724
+#: ..//Widgets.py:725
 msgid "New resources"
 msgstr ""
 
@@ -1304,11 +1304,11 @@ msgstr ""
 msgid "No Author"
 msgstr ""
 
-#: ..//Widgets.py:881
+#: ..//Widgets.py:882
 msgid "No Company"
 msgstr ""
 
-#: ..//Widgets.py:882
+#: ..//Widgets.py:883
 msgid "No Copyrights"
 msgstr ""
 
@@ -1316,7 +1316,7 @@ msgstr ""
 msgid "No Description"
 msgstr ""
 
-#: ..//Widgets.py:3207
+#: ..//Widgets.py:3209
 msgid "No Python code has been entered."
 msgstr ""
 
@@ -1324,15 +1324,15 @@ msgstr ""
 msgid "No Python scripts have been added."
 msgstr ""
 
-#: ..//GUI2Exe.py:1020
+#: ..//GUI2Exe.py:1101
 msgid "No SyntaxError detected in the automatically generated Setup.py file."
 msgstr ""
 
-#: ..//Widgets.py:1709 ..//Widgets.py:1851
+#: ..//Widgets.py:1711 ..//Widgets.py:1853
 msgid "Ok"
 msgstr ""
 
-#: ..//Constants.py:165 ..//Constants.py:179 ..//Constants.py:196
+#: ..//Constants.py:172 ..//Constants.py:186 ..//Constants.py:203
 msgid ""
 "On Windows, it creates a manifest file that instructs\n"
 "Windows on how to correctly render the widgets in your\n"
@@ -1347,20 +1347,20 @@ msgstr ""
 msgid "One File"
 msgstr ""
 
-#: ..//GUI2Exe.py:1732
+#: ..//GUI2Exe.py:1824
 msgid "One instance of the building process is already running."
 msgstr ""
 
-#: ..//GUI2Exe.py:289
+#: ..//GUI2Exe.py:369
 msgid "Opens the GUI2Exe API reference"
 msgstr ""
 
-#: ..//GUI2Exe.py:288
+#: ..//GUI2Exe.py:368
 msgid "Opens the GUI2Exe help"
 msgstr ""
 
-#: ..//Constants.py:131 ..//Constants.py:158 ..//Constants.py:174
-#: ..//Constants.py:215
+#: ..//Constants.py:138 ..//Constants.py:165 ..//Constants.py:181
+#: ..//Constants.py:222
 msgid ""
 "Optimization level for the compiled bytecode.\n"
 "\n"
@@ -1383,7 +1383,7 @@ msgstr ""
 msgid "Other Resources"
 msgstr ""
 
-#: ..//Constants.py:219
+#: ..//Constants.py:226
 msgid "Output module dependency graph."
 msgstr ""
 
@@ -1426,20 +1426,20 @@ msgstr ""
 msgid "Paths"
 msgstr ""
 
-#: ..//GUI2Exe.py:1114
+#: ..//GUI2Exe.py:1194
 #, python-format
 msgid "Perspective %d"
 msgstr ""
 
-#: ..//Widgets.py:3198
+#: ..//Widgets.py:3200
 msgid "Please double-click on one of the tree items, to which the\n"
 msgstr ""
 
-#: ..//Widgets.py:834
+#: ..//Widgets.py:835
 msgid "Please enter the name of the folder for py2exe:"
 msgstr ""
 
-#: ..//Widgets.py:3477
+#: ..//Widgets.py:3479
 msgid "Please insert the property name and select its type below:"
 msgstr ""
 
@@ -1447,27 +1447,27 @@ msgstr ""
 msgid "Please select a GUI2Exe project file..."
 msgstr ""
 
-#: ..//Widgets.py:793
+#: ..//Widgets.py:794
 msgid "Please select one directory..."
 msgstr ""
 
-#: ..//Widgets.py:3283
+#: ..//Widgets.py:3285
 msgid "Please select one item in the tree."
 msgstr ""
 
-#: ..//GUI2Exe.py:894
+#: ..//GUI2Exe.py:975
 msgid "Please select the new Python executable ..."
 msgstr ""
 
-#: ..//GUI2Exe.py:273
+#: ..//GUI2Exe.py:353
 msgid "Preferences..."
 msgstr ""
 
-#: ..//Constants.py:190
+#: ..//Constants.py:197
 msgid "Produces a single directory deployment (default)."
 msgstr ""
 
-#: ..//Constants.py:189
+#: ..//Constants.py:196
 msgid "Produces a single file deployment."
 msgstr ""
 
@@ -1475,7 +1475,7 @@ msgstr ""
 msgid "Program Name"
 msgstr ""
 
-#: ..//GUI2Exe.py:1531
+#: ..//GUI2Exe.py:1623
 #, python-format
 msgid "Project \"%(projectName)s\" successfully loaded"
 msgstr ""
@@ -1485,52 +1485,52 @@ msgstr ""
 msgid "Project %(existingProject)s succesfully copied to %(newProject)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:720
+#: ..//GUI2Exe.py:801
 #, python-format
 msgid "Project %(projectName)s successfully exported to file %(filePath)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:2011 ..//GUI2Exe.py:2025
+#: ..//GUI2Exe.py:2103 ..//GUI2Exe.py:2117
 msgid "Project successfully updated from file."
 msgstr ""
 
-#: ..//Widgets.py:3542
+#: ..//Widgets.py:3544
 msgid "Projects"
 msgstr ""
 
-#: ..//Widgets.py:3018
+#: ..//Widgets.py:3020
 msgid "Property List "
 msgstr ""
 
-#: ..//Widgets.py:3480
+#: ..//Widgets.py:3482
 msgid "Property Name:"
 msgstr ""
 
-#: ..//Widgets.py:3482
+#: ..//Widgets.py:3484
 msgid "Property Type:"
 msgstr ""
 
-#: ..//Widgets.py:3489
+#: ..//Widgets.py:3491
 msgid "Property Value (optional)"
 msgstr ""
 
-#: ..//Widgets.py:1741
+#: ..//Widgets.py:1743
 msgid "Py2Exe Binary Dependencies"
 msgstr ""
 
-#: ..//Widgets.py:1744
+#: ..//Widgets.py:1746
 msgid "Py2Exe Missing Modules"
 msgstr ""
 
-#: ..//Widgets.py:883
+#: ..//Widgets.py:884
 msgid "Py2Exe Sample File"
 msgstr ""
 
-#: ..//Widgets.py:1772
+#: ..//Widgets.py:1774
 msgid "Py2Exe thinks that these modules (and sub-modules) are missing.\n"
 msgstr ""
 
-#: ..//Constants.py:230
+#: ..//Constants.py:237
 msgid ""
 "Py2app allows you to include one (or more) series of files\n"
 "that you are going to need to run your executable\n"
@@ -1551,7 +1551,7 @@ msgstr ""
 msgid "Py2app options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: ..//Constants.py:147
+#: ..//Constants.py:154
 msgid ""
 "Py2exe allows you to include one (or more) series of files\n"
 "that you are going to need to run your executable\n"
@@ -1605,7 +1605,7 @@ msgstr ""
 msgid "Python Scripts"
 msgstr ""
 
-#: ..//GUI2Exe.py:910
+#: ..//GUI2Exe.py:991
 #, python-format
 msgid "Python executable changed from %(oldVersion)s to %(newVersion)s"
 msgstr ""
@@ -1624,27 +1624,27 @@ msgid ""
 "Is not a valid file."
 msgstr ""
 
-#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1451 ..//GUI2Exe.py:1461
+#: ..//GUI2Exe.py:1536 ..//GUI2Exe.py:1543 ..//GUI2Exe.py:1553
 msgid "Question"
 msgstr ""
 
-#: ..//GUI2Exe.py:264
+#: ..//GUI2Exe.py:344
 msgid "Recurse sub-directories for data_files option if checked"
 msgstr ""
 
-#: ..//Widgets.py:3543
+#: ..//Widgets.py:3545
 msgid "Reload opened projects at start-up"
 msgstr ""
 
-#: ..//Widgets.py:3549
+#: ..//Widgets.py:3551
 msgid "Remember GUI2Exe window position on exit"
 msgstr ""
 
-#: ..//Widgets.py:3547
+#: ..//Widgets.py:3549
 msgid "Remember GUI2Exe window size on exit"
 msgstr ""
 
-#: ..//Widgets.py:3545
+#: ..//Widgets.py:3547
 msgid "Remember last used compiler for all projects"
 msgstr ""
 
@@ -1652,15 +1652,15 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: ..//Constants.py:239
+#: ..//Constants.py:246
 msgid "Remove existing PList code."
 msgstr ""
 
-#: ..//Widgets.py:1152
+#: ..//Widgets.py:1153
 msgid "Remove items from the list"
 msgstr ""
 
-#: ..//Widgets.py:3838
+#: ..//Widgets.py:3840
 msgid "Report Error"
 msgstr ""
 
@@ -1668,16 +1668,16 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: ..//GUI2Exe.py:1134
+#: ..//GUI2Exe.py:1214
 #, python-format
 msgid "Restore GUI configuration: %s"
 msgstr ""
 
-#: ..//GUI2Exe.py:286
+#: ..//GUI2Exe.py:366
 msgid "Restore original &GUI"
 msgstr ""
 
-#: ..//GUI2Exe.py:286
+#: ..//GUI2Exe.py:366
 msgid "Restore the original GUI appearance"
 msgstr ""
 
@@ -1685,39 +1685,39 @@ msgstr ""
 msgid "Running compilation steps..."
 msgstr ""
 
-#: ..//Widgets.py:1249
+#: ..//Widgets.py:1251
 msgid "Save"
 msgstr ""
 
-#: ..//GUI2Exe.py:285
+#: ..//GUI2Exe.py:365
 msgid "Save &panes configuration..."
 msgstr ""
 
-#: ..//GUI2Exe.py:660 ..//GUI2Exe.py:705
+#: ..//GUI2Exe.py:741 ..//GUI2Exe.py:786
 msgid "Save file as ..."
 msgstr ""
 
-#: ..//Widgets.py:2483
+#: ..//Widgets.py:2485
 msgid "Save file as..."
 msgstr ""
 
-#: ..//GUI2Exe.py:285
+#: ..//GUI2Exe.py:365
 msgid "Save the current GUI panes configuration"
 msgstr ""
 
-#: ..//GUI2Exe.py:253
+#: ..//GUI2Exe.py:333
 msgid "Save the current project to a file"
 msgstr ""
 
-#: ..//GUI2Exe.py:252
+#: ..//GUI2Exe.py:332
 msgid "Save the current project to database"
 msgstr ""
 
-#: ..//Widgets.py:2412
+#: ..//Widgets.py:2414
 msgid "Save to file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1113
+#: ..//GUI2Exe.py:1193
 msgid "Saving panels configuration"
 msgstr ""
 
@@ -1725,15 +1725,15 @@ msgstr ""
 msgid "Scripts"
 msgstr ""
 
-#: ..//GUI2Exe.py:268
+#: ..//GUI2Exe.py:348
 msgid "Set P&yInstaller path..."
 msgstr ""
 
-#: ..//GUI2Exe.py:268
+#: ..//GUI2Exe.py:348
 msgid "Sets the PyInstaller installation path"
 msgstr ""
 
-#: ..//Constants.py:183
+#: ..//Constants.py:190
 msgid ""
 "Setting to 1 gives you progress messages from the executable\n"
 "(for a console=0, these will be annoying MessageBoxes)."
@@ -1749,23 +1749,23 @@ msgstr ""
 msgid "Setup script for \"%(projectName)s\" succesfully created"
 msgstr ""
 
-#: ..//GUI2Exe.py:280
+#: ..//GUI2Exe.py:360
 msgid "Show &full build output"
 msgstr ""
 
-#: ..//GUI2Exe.py:292
+#: ..//GUI2Exe.py:372
 msgid "Show compilation tips and tricks"
 msgstr ""
 
-#: ..//GUI2Exe.py:291
+#: ..//GUI2Exe.py:371
 msgid "Show compilers switches and common options"
 msgstr ""
 
-#: ..//GUI2Exe.py:265
+#: ..//GUI2Exe.py:345
 msgid "Show t&ooltips"
 msgstr ""
 
-#: ..//Widgets.py:2866
+#: ..//Widgets.py:2868
 msgid "Simple PList editor for py2app"
 msgstr ""
 
@@ -1773,7 +1773,7 @@ msgstr ""
 msgid "Size (MB)   "
 msgstr ""
 
-#: ..//Constants.py:229
+#: ..//Constants.py:236
 msgid "Skip macholib phase.<note>Your App will not be standalone."
 msgstr ""
 
@@ -1781,12 +1781,12 @@ msgstr ""
 msgid "Skipping Python loaders/byte-compilation..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1790
+#: ..//GUI2Exe.py:1882
 #, python-format
 msgid "Starting compilation with Python executable: %(pythonExecutable)s"
 msgstr ""
 
-#: ..//GUI2Exe.py:1865
+#: ..//GUI2Exe.py:1957
 msgid "Starting compiled executable..."
 msgstr ""
 
@@ -1794,23 +1794,23 @@ msgstr ""
 msgid "Strip Executable"
 msgstr ""
 
-#: ..//Widgets.py:1700
+#: ..//Widgets.py:1702
 msgid "Sub-Module 1"
 msgstr ""
 
-#: ..//Widgets.py:1701
+#: ..//Widgets.py:1703
 msgid "Sub-Module 2"
 msgstr ""
 
-#: ..//Widgets.py:1701
+#: ..//Widgets.py:1703
 msgid "Sub-Module 3"
 msgstr ""
 
-#: ..//GUI2Exe.py:250
+#: ..//GUI2Exe.py:330
 msgid "Switch project &database..."
 msgstr ""
 
-#: ..//GUI2Exe.py:1024
+#: ..//GUI2Exe.py:1105
 #, python-format
 msgid "SyntaxError at line %d, column %d"
 msgstr ""
@@ -1823,82 +1823,82 @@ msgstr ""
 msgid "Target Classes"
 msgstr ""
 
-#: ..//GUI2Exe.py:267
+#: ..//GUI2Exe.py:347
 msgid "Temporarily changes the Python version"
 msgstr ""
 
-#: ..//GUI2Exe.py:275
+#: ..//GUI2Exe.py:355
 msgid "Test the compiled file (if it exists)"
 msgstr ""
 
-#: ..//GUI2Exe.py:1758
+#: ..//GUI2Exe.py:1850
 msgid "The Dry-Run option is available only for Py2Exe."
 msgstr ""
 
-#: ..//Constants.py:157 ..//Constants.py:173 ..//Constants.py:213
+#: ..//Constants.py:164 ..//Constants.py:180 ..//Constants.py:220
 msgid ""
 "The Python main script you want to convert\n"
 "to an executable."
 msgstr ""
 
-#: ..//Constants.py:195
+#: ..//Constants.py:202
 msgid ""
 "The Zlib compression level to use.\n"
 "\n"
 "If 0, the zlib module is not required."
 msgstr ""
 
-#: ..//GUI2Exe.py:1839
+#: ..//GUI2Exe.py:1931
 msgid "The compiler has successfully built your executable.\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1792
+#: ..//GUI2Exe.py:1884
 #, python-format
 msgid "The compiler selected is ==> %(compiler)s <=="
 msgstr ""
 
-#: ..//Widgets.py:1403
+#: ..//Widgets.py:1405
 msgid ""
 "The current code has changed.\n"
 "Do you want to save changes?"
 msgstr ""
 
-#: ..//GUI2Exe.py:182
+#: ..//GUI2Exe.py:262
 msgid ""
 "The database file and its backup seem to be broken.\n"
 "\n"
 msgstr ""
 
-#: ..//Constants.py:161 ..//Constants.py:176
+#: ..//Constants.py:168 ..//Constants.py:183
 msgid ""
 "The directory in which to place the target executable and\n"
 "any dependent files."
 msgstr ""
 
-#: ..//Constants.py:193
+#: ..//Constants.py:200
 msgid ""
 "The directory in which to place the target executable and\n"
 "any dependent files.<note>This is used only when 'onedir' is set to 1."
 msgstr ""
 
-#: ..//Constants.py:185
+#: ..//Constants.py:192
 msgid ""
 "The executable and all shared libraries will be run through\n"
 "strip.<note>Note that cygwin's strip tends to render normal Win32\n"
 "dlls unusable."
 msgstr ""
 
-#: ..//Constants.py:191
+#: ..//Constants.py:198
 msgid "The filename for the executable."
 msgstr ""
 
-#: ..//Constants.py:177
+#: ..//Constants.py:184
 msgid ""
 "The gui_only flag only has a meaning on Windows: If set, the\n"
 "executable created for this script will not open a console window."
 msgstr ""
 
-#: ..//Constants.py:167
+#: ..//Constants.py:174
 msgid ""
 "The name of the initialization script that will be executed\n"
 "before the actual script is executed; this script is used to\n"
@@ -1907,14 +1907,14 @@ msgid ""
 "subdirectory of the cx_Freeze package is searched."
 msgstr ""
 
-#: ..//Constants.py:160
+#: ..//Constants.py:167
 msgid ""
 "The name of the target executable; the default value is\n"
 "the name of the script with the extension exchanged with\n"
 "the extension for the base executable."
 msgstr ""
 
-#: ..//Constants.py:155
+#: ..//Constants.py:162
 msgid "The program name"
 msgstr ""
 
@@ -1922,11 +1922,11 @@ msgstr ""
 msgid "The project name you chose already exists."
 msgstr ""
 
-#: ..//GUI2Exe.py:906
+#: ..//GUI2Exe.py:987
 msgid "The selected file is not a Python executable."
 msgstr ""
 
-#: ..//Constants.py:220
+#: ..//Constants.py:227
 msgid ""
 "This command line switch instructs py2app to create a Python\n"
 "module cross reference and display it in the webbrowser.\n"
@@ -1935,7 +1935,7 @@ msgid ""
 "and its dependencies."
 msgstr ""
 
-#: ..//Constants.py:138
+#: ..//Constants.py:145
 msgid ""
 "This command line switch instructs py2exe to create a Python\n"
 "module cross reference and display it in the webbrowser.\n"
@@ -1944,34 +1944,34 @@ msgid ""
 "and its dependencies."
 msgstr ""
 
-#: ..//Widgets.py:1308
+#: ..//Widgets.py:1310
 msgid "This is the Setup file as it comes out after the pre-processing\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:1217
+#: ..//GUI2Exe.py:1309
 msgid ""
 "This is the about dialog of GUI2Exe.\n"
 "\n"
 msgstr ""
 
-#: ..//GUI2Exe.py:624 ..//GUI2Exe.py:1153
+#: ..//GUI2Exe.py:705 ..//GUI2Exe.py:1233
 msgid "This option has not been implemented yet."
 msgstr ""
 
-#: ..//GUI2Exe.py:1075
+#: ..//GUI2Exe.py:1156
 msgid "This option is available only for Py2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1845
+#: ..//GUI2Exe.py:1937
 msgid "This project has never been compiled or its executable has been deleted."
 msgstr ""
 
-#: ..//GUI2Exe.py:1050
+#: ..//GUI2Exe.py:1131
 #, python-format
 msgid "This project has not been compiled with %(compiler)s yet."
 msgstr ""
 
-#: ..//GUI2Exe.py:960 ..//GUI2Exe.py:1081
+#: ..//GUI2Exe.py:1041 ..//GUI2Exe.py:1162
 msgid "This project has not been compiled yet."
 msgstr ""
 
@@ -1983,7 +1983,7 @@ msgstr ""
 msgid "Time        "
 msgstr ""
 
-#: ..//Constants.py:139
+#: ..//Constants.py:146
 msgid ""
 "To prevent unicode encoding error, py2exe now by default\n"
 "includes the codecs module and the encodings package.\n"
@@ -1993,8 +1993,12 @@ msgid ""
 "check box in GUI2Exe."
 msgstr ""
 
-#: ..//GUI2Exe.py:1935
+#: ..//GUI2Exe.py:2027
 msgid "Tracebacks in log file"
+msgstr ""
+
+#: ..//GUI2Exe.py:375
+msgid "Translate &GUI2Exe"
 msgstr ""
 
 #: ..//Py2ExePanel.py:123
@@ -2005,11 +2009,11 @@ msgstr ""
 msgid "UPX Compression"
 msgstr ""
 
-#: ..//GUI2Exe.py:1188
+#: ..//GUI2Exe.py:1279
 msgid "Unable to connect to the internet."
 msgstr ""
 
-#: ..//Widgets.py:2519
+#: ..//Widgets.py:2521
 msgid "Unable to open the clipboard."
 msgstr ""
 
@@ -2017,7 +2021,7 @@ msgstr ""
 msgid "Unbuffered STDIO"
 msgstr ""
 
-#: ..//Constants.py:209
+#: ..//Constants.py:216
 msgid "Unbuffered STDIO (same as Python -u)."
 msgstr ""
 
@@ -2025,7 +2029,7 @@ msgstr ""
 msgid "Updating project from file..."
 msgstr ""
 
-#: ..//GUI2Exe.py:259
+#: ..//GUI2Exe.py:339
 msgid "Use &AutoSave"
 msgstr ""
 
@@ -2033,15 +2037,15 @@ msgstr ""
 msgid "Use Site.py"
 msgstr ""
 
-#: ..//Constants.py:224
+#: ..//Constants.py:231
 msgid "Use argv emulation.<note> This is disabled for plugins."
 msgstr ""
 
-#: ..//Widgets.py:3551
+#: ..//Widgets.py:3553
 msgid "Use last UI perspective at start-up"
 msgstr ""
 
-#: ..//Constants.py:210
+#: ..//Constants.py:217
 msgid ""
 "Use site.py.\n"
 "\n"
@@ -2049,11 +2053,11 @@ msgid ""
 "directory to be used."
 msgstr ""
 
-#: ..//Widgets.py:3540
+#: ..//Widgets.py:3542
 msgid "User Interface"
 msgstr ""
 
-#: ..//Widgets.py:3020
+#: ..//Widgets.py:3022
 msgid "Value"
 msgstr ""
 
@@ -2061,7 +2065,7 @@ msgstr ""
 msgid "Verbose Import"
 msgstr ""
 
-#: ..//Constants.py:206
+#: ..//Constants.py:213
 msgid "Verbose imports (same as Python -v)."
 msgstr ""
 
@@ -2077,19 +2081,19 @@ msgstr ""
 msgid "Version file is not a valid file."
 msgstr ""
 
-#: ..//GUI2Exe.py:277
+#: ..//GUI2Exe.py:357
 msgid "View &setup script"
 msgstr ""
 
-#: ..//GUI2Exe.py:277
+#: ..//GUI2Exe.py:357
 msgid "View the auto-generated setup script"
 msgstr ""
 
-#: ..//GUI2Exe.py:280
+#: ..//GUI2Exe.py:360
 msgid "View the full build output for the current compiler"
 msgstr ""
 
-#: ..//GUI2Exe.py:1444 ..//GUI2Exe.py:1449
+#: ..//GUI2Exe.py:1536 ..//GUI2Exe.py:1541
 msgid "Warning"
 msgstr ""
 
@@ -2097,38 +2101,38 @@ msgstr ""
 msgid "Warning Option"
 msgstr ""
 
-#: ..//Constants.py:207
+#: ..//Constants.py:214
 msgid "Warning option (Python 2.1+)."
 msgstr ""
 
-#: ..//GUI2Exe.py:1353
+#: ..//GUI2Exe.py:1445
 msgid ""
 "Warning: the selected page contains unsaved data.\n"
 "\n"
 "Do you wish to save this project?"
 msgstr ""
 
-#: ..//GUI2Exe.py:1662
+#: ..//GUI2Exe.py:1754
 msgid "Welcome to GUI2Exe"
 msgstr ""
 
-#: ..//GUI2Exe.py:283
+#: ..//GUI2Exe.py:363
 msgid "What the compiler says are the binary dependencies (py2exe only)"
 msgstr ""
 
-#: ..//GUI2Exe.py:282
+#: ..//GUI2Exe.py:362
 msgid "What the compiler thinks are the missing modules (py2exe only)"
 msgstr ""
 
-#: ..//Widgets.py:3612
+#: ..//Widgets.py:3614
 msgid "Window Transparency:"
 msgstr ""
 
-#: ..//Constants.py:187
+#: ..//Constants.py:194
 msgid "Windows NT family only. icon='myicon.ico' to use an icon file."
 msgstr ""
 
-#: ..//Constants.py:188
+#: ..//Constants.py:195
 msgid ""
 "Windows NT family only. version='myversion.txt'.<note>Use the PyInstaller Python file 'GrabVersion.py' to steal a\n"
 "version resource from an executable, and then edit the output to create\n"
@@ -2144,15 +2148,15 @@ msgstr ""
 msgid "XC Data Models Names"
 msgstr ""
 
-#: ..//Widgets.py:2929
+#: ..//Widgets.py:2931
 msgid "You can edit the properties below or add new ones:"
 msgstr ""
 
-#: ..//Widgets.py:3599
+#: ..//Widgets.py:3601
 msgid "Your GUI2Exe preferences can be edited below:"
 msgstr ""
 
-#: ..//Constants.py:152
+#: ..//Constants.py:159
 msgid "Your program version."
 msgstr ""
 
@@ -2170,11 +2174,11 @@ msgstr ""
 msgid "cx_Freeze options for: %(projectName)s (Created: %(creationDate)s)"
 msgstr ""
 
-#: ..//GUI2Exe.py:265
+#: ..//GUI2Exe.py:345
 msgid "show tooltips for the various compiler options"
 msgstr ""
 
-#: ..//Constants.py:235
+#: ..//Constants.py:242
 msgid ""
 "xcdatamodels to be compiled and copied into\n"
 "Resources.\n"
