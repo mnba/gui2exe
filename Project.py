@@ -204,7 +204,7 @@ class Project(odict):
         configuration = self[compiler]
         # The executable name, for py2exe at least, lives in the folder:
         # /MainPythonFileFolder/dist_directory/
-        if compiler == "py2exe":
+        if compiler in ["py2exe", "cx_Freeze"]:
             script, exename = configuration["multipleexe"][0][1:3]
             if exename.strip():
                 script = os.path.normpath(os.path.split(script)[0] + "/" + exename)
@@ -228,19 +228,6 @@ class Project(odict):
                 if not dist_dir.strip():
                     distDir = False
 
-        elif compiler == "cx_Freeze":
-            # Check if the executable has been renamed
-            script = configuration["script"]
-            distChoice = configuration["dist_dir_choice"]
-            targetChoice = configuration["target_name_choice"]
-            # Check if the distribution folder is valid
-            exename = configuration["target_name"]
-            dist_dir = configuration["dist_dir"]
-            dist_dir = ((distChoice and dist_dir.strip()) and [dist_dir.strip()] or ["dist"])[0]
-
-            if exename.strip() and targetChoice:
-                script = os.path.normpath(os.path.split(script)[0] + "/" + exename)
-
         elif compiler == "py2app":
             script = configuration["script"]
             extension = configuration["extension"]
@@ -255,11 +242,17 @@ class Project(odict):
             
         else:
             # Check if the distribution folder is valid
+            script = configuration["multipleexe"][0][1]
+            distChoice = configuration["dist_dir_choice"]
+            dist_dir = configuration["dist_dir"]
+            if not distChoice or not dist_dir.strip():
+                # Invalid or not selected distribution folder
+                distDir = False
+                script = os.path.normpath(os.path.split(script)[0] + "/dist/" + exename)
+                
             distChoice = configuration["dist_dir_choice"]
             dist_dir = configuration["dist_dir"]
             dist_dir = ((distChoice and dist_dir.strip()) and [dist_dir.strip()] or ["dist"])[0]
-
-            script = configuration["script"]
                 
         if distDir:
             # Distribution folder selected and with a valid name
@@ -294,20 +287,16 @@ class Project(odict):
         programName = None
 
         if compiler == "cx_Freeze":
-            if configuration["base"] != "windows":
-                # it's not a windowed application
-                return
-            
-            script, dist_dir, target = configuration["script"], configuration["dist_dir"], \
-                                       configuration["target_name"]
-            dist_choice, target_choice = configuration["dist_dir_choice"], \
-                                         configuration["target_name_choice"]
+
+            script, target = configuration["multipleexe"][0][1:3]
+            dist_dir = configuration["dist_dir"]
+            dist_choice = configuration["dist_dir_choice"]
 
             dirName, fileName = os.path.split(script)
             fileNoExt, ext = os.path.splitext(script)
             singleFileNoExt = os.path.split(fileNoExt)[1]
             
-            if not target.strip() or not target_choice:
+            if not target.strip():
                 # Invalid target name or executable not renamed
                 programName = singleFileNoExt
                 if not dist_dir.strip() or not dist_choice:
@@ -343,7 +332,7 @@ class Project(odict):
                 
         else:
             # bbFreeze compiler
-            script, dist_dir, dist_choice = configuration["script"], configuration["dist_dir"], \
+            script, dist_dir, dist_choice = configuration["multipleexe"][0][1], configuration["dist_dir"], \
                                             configuration["dist_dir_choice"]
             dirName, fileName = os.path.split(script)
             fileNoExt, ext = os.path.splitext(script)

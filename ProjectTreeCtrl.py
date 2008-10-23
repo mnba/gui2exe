@@ -486,12 +486,8 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         node1, node2 = database.LoadProject(key1), database.LoadProject(key2)
 
         # Compare their creation date
-        try:
-            creationDate1 = time.strptime(node1.creationDate, "%d %B %Y @ %H:%M:%S")
-            creationDate2 = time.strptime(node2.creationDate, "%d %B %Y @ %H:%M:%S")
-        except (ValueError, TypeError):
-            # Older projects...
-            return node1.creationDate < node2.creationDate
+        creationDate1 = self.ConvertDate(node1.creationDate)
+        creationDate2 = self.ConvertDate(node2.creationDate)
         
         if creationDate1 < creationDate2:
             return -1
@@ -499,6 +495,26 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             return 0
         else:
             return 1
+
+
+    def ConvertDate(self, date):
+        """
+        Converts a date in the appropriate format to be sorted by the tree.
+        
+        @param date: the date to be converted.
+        """
+
+        if type(date) == time.struct_time:
+            return date
+        if isinstance(date, basestring):
+            # Older projects...
+            try:
+                date = time.strptime(date, "%d %B %Y @ %H:%M:%S")
+            except (ValueError, TypeError):
+                # We may be using another locale...
+                return date
+
+        return date
 
     
     def PopulateTree(self, dbKeys):

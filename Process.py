@@ -173,7 +173,7 @@ class Process(object):
             self.MainFrame.SendMessage(0, _("Setup file succesfully compiled"))
             # Show the elapsed time
             h, m, s = FractSec(int(time.time() - self.startTime))
-            self.MainFrame.SendMessage(0, _("Elapsed time for the process: %02d:%02d:%02d")%(h, m, s))
+            self.MainFrame.SendMessage(0, _("Elapsed time for the process:") + " %02d:%02d:%02d"%(h, m, s))
             # Update visually the project page
             self.MainFrame.UpdatePageBitmap(self.project.GetName(), 1, self.pageNumber)
             # Process the output text from the compilation steps

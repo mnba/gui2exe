@@ -105,6 +105,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         self.itemDataMap = {}
         self.isBeingEdited = False
 
+        # Some defaults for the GUI2ExeDirSelector dialog
+        self.lastDir = ""
+        self.lastSize = wx.DefaultSize
+        
         # Do the hard work        
         self.BuildImageList()
         self.InsertColumns(columnNames)
@@ -401,6 +405,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Update the project, something changed
         self.itemDataMap = {}
         self.UpdateProject()
+        self.Recolor()
+        
         wx.EndBusyCursor()
         
 
@@ -431,7 +437,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.HandleDataFiles()
             elif name == "multipleexe":
                 # Another executable to build
-                self.HandleMutlipleExe()
+                self.HandleMultipleExe(compiler)
             else:
                 # New modules, simply enter one item and start editing
                 self.HandleNewModule()
@@ -442,9 +448,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     def OnItemActivated(self, event):
         """ Handles the wx.EVT_LEFT_DOWN event for the list control. """
 
+        event.Skip()
+
         if self.GetName() != "multipleexe":
             # Wrong list control
-            event.Skip()
             return
 
         # Where did the user click?
@@ -453,7 +460,6 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         if row < 0:
             # It seems that the click was not on an item
-            event.Skip()
             return
 
         # Calculate the columns location (in pixels)            
@@ -491,10 +497,6 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             # Show the import button            
             wx.CallAfter(self.ShowDummyControl, self.dummyButton, rect)
             
-        else:
-            # Some other column, we are not interested
-            event.Skip()
-
             
     def ShowDummyControl(self, control, rect):
         """
@@ -778,10 +780,40 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         self.EnsureVisible(indx)
         
 
+    def GetLastUsedDirectory(self):
+        """ Returns the last selected folder by the user. """
+
+        project = self.MainFrame.GetCurrentProject()
+        compiler = self.GetParent().GetName()
+        configuration = project[compiler]
+
+        # Get the last used directory...        
+        if self.lastDir:
+            # We remember the previous directory
+            lastDir = self.lastDir
+        else:
+            try:
+            # Not used yet
+                if compiler == "py2exe":
+                    script = configuration["multipleexe"][0][1]
+                elif compiler == "PyInstaller":
+                    script = configuration["scripts"][-1]
+                else:
+                    script = configuration["script"]
+
+                lastDir = os.path.split(script)[0]
+            except:
+                # Invalid script at the moment
+                lastDir = os.path.split(sys.executable)[0]
+
+        return lastDir        
+
+
     def HandleDataFiles(self):
         """ Handles the user request to add new data files. """
 
         compiler = self.GetParent().GetName()
+        lastDir = self.GetLastUsedDirectory()
         
         if self.MainFrame.recurseSubDirs:
 
@@ -792,17 +824,21 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             # folder selection at the same time
             dlg = GUI2ExeDirSelector(self.MainFrame,
                                      title=_("Please select one directory..."),
+                                     lastDir=lastDir,
+                                     size=self.lastSize,
                                      showExtensions=True)
 
             if dlg.ShowModal() != wx.ID_OK:
                 dlg.Destroy()
                 return
-        
+
+            self.lastSize = dlg.GetSize()
             folder, extensions = dlg.GetSelectedFolders()
             if not folder:
                 # No folders selected
                 return
 
+            self.lastDir = folder
             if not extensions or (len(extensions) == 1 and extensions[0].strip() == ""):
                 # Empty extensions, use default one (all files)
                 extensions = ["*.*"]
@@ -873,16 +909,31 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         wx.EndBusyCursor()
         
 
-    def HandleMutlipleExe(self):
-        """ Handles the user request to add new executable to build. """
+    def HandleMultipleExe(self, compiler):
+        """
+        Handles the user request to add new executable to build.
+
+        @param compiler: the compiler currently used
+        """
 
         # The first item is always empty text with an informative icon
         indx = self.InsertImageStringItem(sys.maxint, "", 0)
         # Insert the "Windows" option, which is the default...
-        multipleOptions = ["windows", "", "", "0.1", _("No Company"),
-                           _("No Copyrights"),
-                           _("Py2Exe Sample File")]
-        for i in xrange(1, self.GetColumnCount()):            
+        if compiler == "py2exe":
+            multipleOptions = ["windows", "", "", "0.1", _("No Company"),
+                               _("No Copyrights"),
+                               _("Py2Exe Sample File")]
+        elif compiler == "cx_Freeze":
+            # Just different strings, to be fancy...
+            multipleOptions = ["windows", "", "", "0.1", _("No Description"),
+                               _("No Author"),
+                               _("cx_Freeze Sample File")]
+        else:
+            # This is bbFreeze...
+            multipleOptions = ["windows", ""]
+            
+        for i in xrange(1, self.GetColumnCount()):
+            # Add a new dummy line
             self.SetStringItem(indx, i, multipleOptions[i-1])
 
         self.EnsureVisible(indx)
@@ -981,6 +1032,25 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         dlg.Destroy()
 
 
+    def GetExistingItems(self):
+        """ Returns a list of existing items in the list control. """
+
+        # Get the list of existing stuff in the list,
+        # so that we do not add twice files
+        existing = []
+        for item in xrange(self.GetItemCount()):
+            if columns > 2:
+                path = self.GetItem(item, 2).GetText()
+            else:
+                # The Scripts list control has only 2 columns
+                path = self.GetItem(item, 1).GetText()
+
+            # Store the existing files for the moment...                
+            existing.append(path)
+
+        return existing
+    
+
     def AddFiles(self, paths, columns):
         """
         Utility function to handle properly the PyInstaller options.
@@ -989,7 +1059,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         @param columns: the number of items in every path (2 or 3).
         """
 
+        existing = self.GetExistingItems()
+        
         for path in paths:
+            if path in existing:
+                self.MainFrame.SendMessage(1, _("%s is already in the list, not added") % path)
+                continue
             directory, filename = os.path.split(path)
             indx = self.InsertImageStringItem(sys.maxint, "", 0)
             # Initialize the tuple for the column sorter mixin
@@ -1014,14 +1089,19 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         
         # Here we recurse and add all the files in a particular folder
         # and its subfolder
+
+        lastDir = self.GetLastUsedDirectory()
+        
         dlg = wx.DirDialog(self, _("Choose a data files directory:"),
-                           style=wx.DD_DEFAULT_STYLE)
+                           defaultPath=lastDir, style=wx.DD_DEFAULT_STYLE)
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
 
         # Retrieve the selected directory
         path = dlg.GetPath()
+        self.lastDir = path
+        
         fileNames = []
         # Loop ove all the files in that directory
         for root, dirs, files in os.walk(path):
@@ -1038,6 +1118,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # folder selection at the same time
         dlg = GUI2ExeDirSelector(self.MainFrame,
                                  title=_("Browse For Folders..."),
+                                 size=self.lastSize,
                                  showExtensions=False)
 
         if dlg.ShowModal() != wx.ID_OK:
@@ -1045,6 +1126,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             return
         
         folders = dlg.GetSelectedFolders()
+        self.lastSize = dlg.GetSize()
 
         for dirs in folders:
             indx = self.InsertImageStringItem(sys.maxint, "", 0)
@@ -1181,15 +1263,23 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """ Re-color all the rows. """
 
         if isinstance(self.GetContainingSizer(), wx.StaticBoxSizer):
+            # Change the wx.StaticBoxSizer label text
             containingSizer = self.GetContainingSizer().GetStaticBox()
             oldLabelText = containingSizer.GetLabelText()
             if "(" in oldLabelText:
                 oldLabelText = oldLabelText[0:oldLabelText.rindex("(")-1]
-                
-            newLabelText = oldLabelText + " (%d)"%self.GetItemCount()
+
+            if self.GetItemCount() == 0:
+                # Remove the parenthesis when we have 0 items
+                newLabelText = oldLabelText
+            else:
+                newLabelText = oldLabelText + " (%d)"%self.GetItemCount()
+
+            # Set the new label text for the box sizer                
             containingSizer.SetLabel(newLabelText)
         
         for row in xrange(self.GetItemCount()):
+            # Recolor the rows
             if self._defaultb is None:
                 self._defaultb = wx.WHITE
 
@@ -1906,12 +1996,15 @@ class GUI2ExeDirSelector(BaseDialog):
     folders to be selected at once.
     """
 
-    def __init__(self, parent, title, showExtensions=False):
+    def __init__(self, parent, title, lastDir=None,
+                 size=wx.DefaultSize, showExtensions=False):
         """
         Default BaseDialog class constructor.
 
         @param parent: the dialog parent widget;
         @param title: the dialog title;
+        @param lastDir: the last selected directory;
+        @param size: the dialog size (if any);
         @param showExtensions: whether to show a text control to filter extensions.
         """
         
@@ -1928,12 +2021,12 @@ class GUI2ExeDirSelector(BaseDialog):
 
         self.SetProperties(title)           
         # Setup the layout and frame properties        
-        self.SetupDirCtrl()
-        self.LayoutItems()
+        self.SetupDirCtrl(lastDir)
+        self.LayoutItems(size)
         self.BindEvents()
     
 
-    def SetupDirCtrl(self):
+    def SetupDirCtrl(self, lastDir):
         """ Setup the wx.GenericDirCtrl (icons, labels, etc...). """
 
         il = wx.ImageList(16, 16)
@@ -1969,14 +2062,18 @@ class GUI2ExeDirSelector(BaseDialog):
         if not self.showExtensions:
             treeCtrl.SetWindowStyle(treeCtrl.GetWindowStyle() | wx.TR_MULTIPLE)
 
-        # Set the wx.GenericDirCtrl defult path
-        executable = os.path.split(sys.executable)[0]
+        # Set the wx.GenericDirCtrl default path
+        if lastDir:
+            executable = lastDir
+        else:
+            executable = os.path.split(sys.executable)[0]
+            
         self.dirCtrl.ExpandPath(executable)
         self.dirCtrl.SetDefaultPath(executable)
         self.dirCtrl.SetPath(executable)
         
 
-    def LayoutItems(self):
+    def LayoutItems(self, size):
         """ Layout the widgets using sizers. """
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -2007,8 +2104,12 @@ class GUI2ExeDirSelector(BaseDialog):
         # Layout the dialog
         self.SetSizer(mainSizer)
         mainSizer.Layout()
-        mainSizer.Fit(self)
-        mainSizer.SetSizeHints(self)
+        if size == wx.DefaultSize:
+            mainSizer.Fit(self)
+            mainSizer.SetSizeHints(self)
+        else:
+            # We remember the last used size...
+            self.SetSize(size)
 
 
     def GetSelectedFolders(self):

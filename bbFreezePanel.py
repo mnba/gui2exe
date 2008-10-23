@@ -6,7 +6,7 @@ import wx
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
-from Constants import _bbFreeze_imports, _bbFreeze_target, _pywild, ListType
+from Constants import _bbFreeze_imports, _bbFreeze_target, _bbFreeze_class, _pywild, ListType
 from Utilities import setupString
 
 # Get the I18N things
@@ -36,17 +36,16 @@ class bbFreezePanel(BaseBuilderPanel):
         self.includesSizer_staticbox = wx.StaticBox(self, -1, _("Includes"))
         self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
         self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
+        self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Classes"))
 
         transdict = dict(projectName=projectName, creationDate=creationDate)
         # A simple label that holds information about the project
         self.label = wx.StaticText(self, -1, _("bbFreeze options for: %(projectName)s (Created: %(creationDate)s)")%transdict)
 
-        # Target combobox: can be either "windows" or "console"
-        self.targetCombo = MultiComboBox(self, ["windows", "console"],
-                                         wx.CB_DROPDOWN|wx.CB_READONLY, self.GetName(), "gui_only")
-        # The file picker that allows us to pick the script to be compiled by bbFreeze
-        self.scriptPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL,
-                                              wildcard=_pywild, name="script")
+        # A list control for the target classes, scripts
+        self.multipleExe = BaseListCtrl(self, columnNames=[_("Exe Kind"), _("Python Main Script")],
+                                        name="multipleexe")
+        
         # Optimization level for bbFreeze 1 for "python -O", 2 for "python -OO",
         # 0 to disable
         self.optimizeCombo = MultiComboBox(self, ["0", "1", "2"], wx.CB_DROPDOWN|wx.CB_READONLY,
@@ -110,6 +109,7 @@ class bbFreezePanel(BaseBuilderPanel):
         otherOptionsSizer = wx.StaticBoxSizer(self.otherOptionsSizer_staticbox, wx.HORIZONTAL)
         excludesSizer = wx.StaticBoxSizer(self.excludesSizer_staticbox, wx.HORIZONTAL)
         includesSizer = wx.StaticBoxSizer(self.includesSizer_staticbox, wx.HORIZONTAL)
+        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.HORIZONTAL)
         
         plusSizer = wx.BoxSizer(wx.HORIZONTAL)
         minusSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -127,21 +127,14 @@ class bbFreezePanel(BaseBuilderPanel):
         commonSizer_2 = wx.BoxSizer(wx.VERTICAL)
         commonSizer_1 = wx.BoxSizer(wx.VERTICAL)
         
-        pickerSizer_1 = wx.BoxSizer(wx.VERTICAL)
-        pickerSizer_2 = wx.BoxSizer(wx.VERTICAL)
+        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.HORIZONTAL)
         
-        # Add the VersionInfo text controls
+        flag2 = wx.LEFT|wx.BOTTOM|wx.TOP|wx.EXPAND
+        
         mainSizer.Add(self.label, 0, wx.ALL, 10)
-
-        target = wx.StaticText(self, -1, _("Exe Kind"))
-        commonSizer_6.Add(target, 0, wx.RIGHT|wx.BOTTOM, 2)
-        commonSizer_6.Add(self.targetCombo, 0, wx.EXPAND, 0)
-        commonGridSizer.Add(commonSizer_6, (0, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
-            
-        script = wx.StaticText(self, -1, _("Python Main Script"))
-        commonSizer_7.Add(script, 0, wx.RIGHT|wx.BOTTOM, 2)
-        commonSizer_7.Add(self.scriptPicker, 1, wx.EXPAND, 0)
-        commonGridSizer.Add(commonSizer_7, (0, 1), (1, 5), wx.ALL|wx.EXPAND, 5)
+        targetSizer.Add(self.multipleExe, 1, flag2, 5)
+        targetSizer.Add(self.multipleExe.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
+        mainSizer.Add(targetSizer, 0, wx.ALL|wx.EXPAND, 5)
         
         optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
@@ -193,11 +186,18 @@ class bbFreezePanel(BaseBuilderPanel):
     def ValidateOptions(self):
         """ Validates the bbFreeze input options before compiling. """
 
-        # check if the script file exists
-        if not os.path.isfile(self.scriptPicker.GetPath()):
-            msg = "Python main script is not a valid file."
+        # check if the script files exist
+        if self.multipleExe.GetItemCount() == 0:
+            msg = _("No Python scripts have been added.")
             self.MainFrame.RunError(2, msg, True)
             return False
+
+        for indx in xrange(self.multipleExe.GetItemCount()):
+            script = self.multipleExe.GetItem(indx, 2)
+            if not os.path.isfile(script.GetText()):
+                msg = _("Python main script is not a valid file.")
+                self.MainFrame.RunError(2, msg, True)
+                return False
 
         # Everything is ok, let's go compiling...
         return True
@@ -243,19 +243,11 @@ class bbFreezePanel(BaseBuilderPanel):
 
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
-            if key == "script":
-                # That's the main script to be compiled
-                buildDir, scriptFile = os.path.split(item)
-            elif key == "gui_only":
-                if sys.platform == "win32":
-                    setupDict["gui_only"] = True
-                else:
-                    setupDict["gui_only"] = False
-                continue
-            elif isinstance(self.FindWindowByName(key), wx.CheckBox):
+            if isinstance(self.FindWindowByName(key), wx.CheckBox):
                 item = bool(int(item))
 
-            if key == "create_manifest_file":
+            if key in ["create_manifest_file", "multipleexe"]:
+                # Skip these 2 options, we'll take care of them later...
                 continue
 
             if isinstance(item, basestring) and key != "compress":
@@ -273,12 +265,23 @@ class bbFreezePanel(BaseBuilderPanel):
 
             setupDict[key] = item
 
+        targetclass = ""
+        for indx in xrange(self.multipleExe.GetItemCount()):
+            # Add the target classes
+            gui_only = self.multipleExe.GetItem(indx, 1).GetText()
+            scriptFile = self.multipleExe.GetItem(indx, 2).GetText()            
+            gui = (gui_only == "windows" and [True] or [False])[0]
+
+            targetclass += _bbFreeze_class%{"gui_only": gui, "script": 'r"%s"'%scriptFile}
+            buildDir, scriptFile = os.path.split(scriptFile)
+            
         # Add the custom code (if any)
         setupDict["customcode"] = (customCode and [customCode.strip()] or ["# No custom code added"])[0]
 
         # Add the post-compilation code (if any)
         setupDict["postcompilecode"] = (postCompile and [postCompile.strip()] or ["# No post-compilation code added"])[0]
-        
+
+        setupDict["executables"] = targetclass
         # Include the GUI2Exe version in the setup script
         importDict["gui2exever"] = self.MainFrame.GetVersion()
 

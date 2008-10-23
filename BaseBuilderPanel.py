@@ -1,5 +1,6 @@
 # Start the imports
 
+import os
 import wx
 import wx.lib.scrolledpanel as scrolled
 
@@ -297,6 +298,9 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         onedir = ("onedir" in configuration and [configuration["onedir"]] or [None])[0]
         onefile = ("onefile" in configuration and [configuration["onefile"]] or [None])[0]
 
+        # Remove the old keys from cx_Freeze and bbFreeze
+        configuration = self.RemoveOldKeys(configuration)
+
         # Loop over all the keys, values in the dictionary
         for key, value in configuration.items():
             if isinstance(value, list):
@@ -337,6 +341,7 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
 
         # Find the window given its name (that is a key in the project dictionary)        
         window = self.FindWindowByName(key)
+
         if isinstance(window, wx.TextCtrl) or isinstance(window, wx.combo.OwnerDrawnComboBox):
             # That's easy
             window.SetValue(str(value))
@@ -378,3 +383,45 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
                 sibling = self.FindWindowByName("plistRemove")
                 sibling.Enable(int(value))
 
+
+    def RemoveOldKeys(self, configuration):
+        """
+        Removes the old configuration keys from cx_Freeze and bbFreeze.
+        
+        @param configuration: the configuration to be checked.
+        """
+
+        # Check if we are dealing with older project for cx_Freeze or bbFreeze
+        name = self.GetName()
+
+        if name == "cx_Freeze":
+            # Hack the old projects
+            if "version" not in configuration:
+                return configuration
+
+            # We need to remove the old keys in cx_Freeze
+            cxFreeze = []
+            cxFreezeOld = ["base", "script", "target_name", "version", \
+                           "description", "author", "name"]
+
+            target, script = configuration["target_name"], configuration["script"]
+            if not target.strip() and script.strip():
+                # Default the executable name to the Python scripts name
+                configuration["target_name"] = os.path.split(os.path.splitext(script)[0])[1]
+                
+            for items in cxFreezeOld:
+                # The new configuration style is similar to py2exe
+                cxFreeze.append(configuration[items])
+
+            configuration["multipleexe"] = [cxFreeze]
+            for items in cxFreezeOld + ["target_name_choice"]:
+                # Delete the old keys
+                del configuration[items]
+
+        elif name == "bbfreeze":
+            if "gui_only" in configuration:
+                configuration["multipleexe"] = [[configuration["gui_only"], configuration["script"]]]
+                del configuration["gui_only"], configuration["script"]
+
+        return configuration
+    

@@ -418,6 +418,22 @@ from cx_Freeze import setup, Executable
 
 '''
 
+_cx_Freeze_class = '''
+%s = Executable(
+    # what to build
+    script = "%s",
+    initScript = %s,
+    base = %s,
+    targetDir = %s,
+    targetName = "%s",
+    compress = %s,
+    copyDependentFiles = %s,
+    appendScriptToExe = %s,
+    appendScriptToLibrary = %s,
+    icon = %s
+    )
+'''
+
 _cx_Freeze_target = '''
 
 # Process the includes, excludes and packages first
@@ -437,13 +453,7 @@ path = %(path)s
 # The setup for cx_Freeze is different from py2exe. Here I am going to
 # use the Python class Executable from cx_Freeze
 
-exeClass = Executable(script=%(script)s, initScript=%(initScript)s,
-                      base=%(base)s, targetDir=%(dist_dir)s,
-                      targetName=%(target_name)s, compress=%(compress)s,
-                      copyDependentFiles=%(copy_dependent_files)s,
-                      appendScriptToExe=%(append_script_toexe)s,
-                      appendScriptToLibrary=%(append_script_tolibrary)s,
-                      icon=%(icon)s, path=path)
+%(targetclasses)s
 
 # That's serious now: we have all (or almost all) the options cx_Freeze
 # supports. I put them all even if some of them are usually defaulted
@@ -451,19 +461,20 @@ exeClass = Executable(script=%(script)s, initScript=%(initScript)s,
 
 setup(
     
-    name = %(name)s,
     version = %(version)s,
     description = %(description)s,
     author = %(author)s,
+    name = %(name)s,
     
     options = {"build_exe": {"includes": includes,
                              "excludes": excludes,
                              "packages": packages,
+                             "path": path
                              }
                },
                            
-    executables = [exeClass])
-
+    executables = %(executables)s
+    )
 
 # This is a place where any post-compile code may go.
 # You can add as much code as you want, which can be used, for example,
@@ -492,6 +503,9 @@ _bbFreeze_imports = '''
 from bbfreeze import Freezer
 '''
 
+_bbFreeze_class = '''
+bbFreeze_Class.addScript(%(script)s, gui_only=%(gui_only)s)'''
+
 _bbFreeze_target = '''
 
 # Process the includes and excludes first
@@ -510,7 +524,7 @@ excludes = %(excludes)s
 # use the Python class Freezer from bbFreeze
 
 bbFreeze_Class = Freezer(%(dist_dir)s, includes=includes, excludes=excludes)
-bbFreeze_Class.addScript(%(script)s, gui_only=%(gui_only)s)
+%(executables)s
 
 bbFreeze_Class.use_compression = %(compress)s
 bbFreeze_Class.include_py = %(include_py)s

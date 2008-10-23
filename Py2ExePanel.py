@@ -435,6 +435,7 @@ class Py2ExePanel(BaseBuilderPanel):
                 text = item.GetText()
                 if not text.strip():
                     text = os.path.splitext(scriptFile)[0]
+                    self.MainFrame.SendMessage(1, _('Empty targetName option. Using Python script name'))
                 if col == 3:
                     programName = text.strip()
                     

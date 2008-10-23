@@ -139,6 +139,7 @@ from ProjectTreeCtrl import ProjectTreeCtrl
 from MessageWindow import MessageWindow
 from ExecutableProperties import ExecutableProperties
 from AUINotebookPage import AUINotebookPage
+from GenericMessageDialog import GenericMessageDialog
 from DataBase import DataBase
 from Project import Project
 from Process import Process
@@ -1009,8 +1010,13 @@ class GUI2Exe(wx.Frame):
     def OnSetPyInstaller(self, event):
         """ Sets the PyInstaller installation path. """
 
+        if self.pyInstallerPath:
+            defaultPath = self.pyInstallerPath
+        else:
+            defaultPath = os.getcwd()
+            
         dlg = wx.DirDialog(self, _("Choose the PyInstaller location:"),
-                          style=wx.DD_DEFAULT_STYLE|wx.DD_DIR_MUST_EXIST)
+                           defaultPath=defaultPath, style=wx.DD_DEFAULT_STYLE|wx.DD_DIR_MUST_EXIST)
 
         # If the user selects OK, then we process the dialog's data.
         # This is done by getting the path data from the dialog - BEFORE
@@ -1094,6 +1100,11 @@ class GUI2Exe(wx.Frame):
             return
 
         setupScript, buildDir = outputs
+        # Replace the funny EOLs
+        if os.name != "nt":
+            setupScript = setupScript.replace("\r\n", "\n").replace("\n", "\r\n")
+        else:
+            setupScript = setupScript.replace('\r\n', '\n').replace('\r', '\n')
         
         # Try to compile the code
         try:
@@ -1102,8 +1113,8 @@ class GUI2Exe(wx.Frame):
         except:
             # What can be wrong?
             exception_instance = sys.exc_info()[1]
-            msg = _("SyntaxError at line %d, column %d")%(exception_instance.lineno,
-                                                          exception_instance.offset)
+            transdict = dict(line=exception_instance.lineno, column=exception_instance.offset)
+            msg = _("SyntaxError at line %(line)d, column %(column)d")%transdict
             self.RunError(2, msg)
             
 
@@ -1546,7 +1557,8 @@ class GUI2Exe(wx.Frame):
             style = wx.OK | wx.ICON_ERROR
 
         # Create the message dialog
-        dlg = wx.MessageDialog(None, msg, "GUI2Exe %s"%kind, style|wx.STAY_ON_TOP)
+        dlg = GenericMessageDialog(None, msg, "GUI2Exe %s"%kind, style)
+        dlg.SetIcon(self.GetIcon())
         answer = dlg.ShowModal()
         dlg.Destroy()
 

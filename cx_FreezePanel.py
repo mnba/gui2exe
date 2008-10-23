@@ -6,7 +6,7 @@ import wx
 
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
-from Constants import _cx_Freeze_imports, _cx_Freeze_target, _pywild, ListType
+from Constants import _cx_Freeze_imports, _cx_Freeze_target, _cx_Freeze_class, _pywild, ListType
 from Utilities import setupString
 
 # Get the I18N things
@@ -38,24 +38,18 @@ class cx_FreezePanel(BaseBuilderPanel):
         self.packagesSizer_staticbox = wx.StaticBox(self, -1, _("Packages"))
         self.excludesSizer_staticbox = wx.StaticBox(self, -1, _("Excludes"))
         self.otherOptionsSizer_staticbox = wx.StaticBox(self, -1, _("Other Options"))
-        self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Class"))
+        self.targetSizer_staticbox = wx.StaticBox(self, -1, _("Target Classes"))
 
         # A simple label that holds information about the project
         transdict = dict(projectName=projectName, creationDate=creationDate)
         self.label = wx.StaticText(self, -1, _("cx_Freeze options for: %(projectName)s (Created: %(creationDate)s)")%transdict)
 
-        # These text controls hold data used by VersionInfo in cx_Freeze
-        self.versionTextCtrl = wx.TextCtrl(self, -1, "0.1", name="version")
-        self.descriptionTextCtrl = wx.TextCtrl(self, -1, _("No Description"), name="description")
-        self.authorTextCtrl = wx.TextCtrl(self, -1, _("No Author"), name="author")
-        self.nameTextCtrl = wx.TextCtrl(self, -1, _("cx_Freeze Sample File"), name="name")
-
-        # Target combobox: can be either "windows" or "console"
-        self.targetCombo = MultiComboBox(self, ["windows", "console"], wx.CB_DROPDOWN|wx.CB_READONLY,
-                                         self.GetName(), "base")
-        # The file picker that allows us to pick the script to be compiled by cx_Freeze
-        self.scriptPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL,
-                                              wildcard=_pywild, name="script")
+        # A list control for the target classes, scripts
+        self.multipleExe = BaseListCtrl(self, columnNames=[_("Exe Kind"), _("Python Main Script"),
+                                                           _("Executable Name"), _("Version"),
+                                                           _("Description"), _("Author"),
+                                                           _("Program Name")], name="multipleexe")
+        
         # Optimization level for cx_Freeze 1 for "python -O", 2 for "python -OO",
         # 0 to disable
         self.optimizeCombo = MultiComboBox(self, ["0", "1", "2"], wx.CB_DROPDOWN|wx.CB_READONLY,
@@ -63,12 +57,6 @@ class cx_FreezePanel(BaseBuilderPanel):
         # Compression level for the zipfile in cx_Freeze
         self.compressCombo = MultiComboBox(self, ["0", "1"], wx.CB_DROPDOWN|wx.CB_READONLY,
                                            self.GetName(), "compress")
-
-        # A checkbox that enables the user to choose a different name for the
-        # executable file. Default is unchecked, that means target=python file + .exe
-        self.targetChoice = wx.CheckBox(self, -1, _("Executable Name"), name="target_name_choice")
-        # The name of the executable file (if enabled)
-        self.targetTextCtrl = wx.TextCtrl(self, -1, "", name="target_name")
         
         # A checkbox that enables the user to choose a different name for the
         # distribution directory. Default is unchecked, that means dist_dir="dist"
@@ -118,7 +106,6 @@ class cx_FreezePanel(BaseBuilderPanel):
         # with a user customizable default project options file (or wx.Config)
         
         # Defaults (for me), executable name = python script name
-        self.targetTextCtrl.Enable(False)
         self.distTextCtrl.Enable(False)
 
         # Set a bold font for the static texts
@@ -158,7 +145,7 @@ class cx_FreezePanel(BaseBuilderPanel):
         commonSizer_2 = wx.BoxSizer(wx.VERTICAL)
         commonSizer_1 = wx.BoxSizer(wx.VERTICAL)
         
-        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.VERTICAL)
+        targetSizer = wx.StaticBoxSizer(self.targetSizer_staticbox, wx.HORIZONTAL)
         topGridSizer = wx.FlexGridSizer(1, 4, 5, 5)
         topSizer_4 = wx.BoxSizer(wx.VERTICAL)
         topSizer_3 = wx.BoxSizer(wx.VERTICAL)
@@ -168,42 +155,15 @@ class cx_FreezePanel(BaseBuilderPanel):
         pickerSizer_1 = wx.BoxSizer(wx.VERTICAL)
         pickerSizer_2 = wx.BoxSizer(wx.VERTICAL)
 
-        flag = wx.LEFT|wx.EXPAND|wx.TOP|wx.BOTTOM
+        flag = wx.LEFT|wx.RIGHT|wx.EXPAND
+        flag2 = wx.LEFT|wx.BOTTOM|wx.TOP|wx.EXPAND
         
         # Add the VersionInfo text controls
         mainSizer.Add(self.label, 0, wx.ALL, 10)
-        version = wx.StaticText(self, -1, _("Version"))
-        topSizer_1.Add(version, 0, wx.RIGHT|wx.BOTTOM, 2)
-        topSizer_1.Add(self.versionTextCtrl, 0, 0, 0)
-        topGridSizer.Add(topSizer_1, 1, flag, 5)
-        companyName = wx.StaticText(self, -1, _("Description"))
-        topSizer_2.Add(companyName, 0, wx.RIGHT|wx.BOTTOM, 2)
-        topSizer_2.Add(self.descriptionTextCtrl, 1, wx.EXPAND, 0)
-        topGridSizer.Add(topSizer_2, 1, flag, 5)
-        copyright = wx.StaticText(self, -1, _("Author"))
-        topSizer_3.Add(copyright, 0, wx.RIGHT|wx.BOTTOM, 2)
-        topSizer_3.Add(self.authorTextCtrl, 1, wx.EXPAND, 0)
-        topGridSizer.Add(topSizer_3, 1, flag, 5)
-        name = wx.StaticText(self, -1, _("Program Name"))
-        topSizer_4.Add(name, 0, wx.RIGHT|wx.BOTTOM, 2)
-        topSizer_4.Add(self.nameTextCtrl, 0, wx.EXPAND, 1)
-        topGridSizer.Add(topSizer_4, 1, flag, 5)
-        topGridSizer.AddGrowableCol(1)
-        topGridSizer.AddGrowableCol(2)
-        topGridSizer.AddGrowableCol(3)
-        targetSizer.Add(topGridSizer, 0, wx.EXPAND, 0)
+        targetSizer.Add(self.multipleExe, 1, flag2, 5)
+        targetSizer.Add(self.multipleExe.MakeButtons(), 0, wx.EXPAND|wx.LEFT, 3)
         mainSizer.Add(targetSizer, 0, wx.ALL|wx.EXPAND, 5)
-
-        target = wx.StaticText(self, -1, _("Exe Kind"))
-        commonSizer_6.Add(target, 0, wx.RIGHT|wx.BOTTOM, 2)
-        commonSizer_6.Add(self.targetCombo, 0, wx.EXPAND, 0)
-        commonGridSizer.Add(commonSizer_6, (0, 0), (1, 1), wx.ALL|wx.EXPAND, 5)
-            
-        script = wx.StaticText(self, -1, _("Python Main Script"))
-        commonSizer_7.Add(script, 0, wx.RIGHT|wx.BOTTOM, 2)
-        commonSizer_7.Add(self.scriptPicker, 1, wx.EXPAND, 0)
-        commonGridSizer.Add(commonSizer_7, (0, 1), (1, 5), wx.ALL|wx.EXPAND, 5)
-        
+                
         optimize = wx.StaticText(self, -1, _("Optimize"))
         commonSizer_1.Add(optimize, 0, wx.RIGHT|wx.BOTTOM, 2)
         commonSizer_1.Add(self.optimizeCombo, 0, wx.EXPAND, 0)
@@ -215,9 +175,6 @@ class cx_FreezePanel(BaseBuilderPanel):
 
         commonGridSizer.Add((0, 0), (1, 3), (1, 1), wx.EXPAND)
         
-        commonSizer_4.Add(self.targetChoice, 0, wx.BOTTOM, 2)
-        commonSizer_4.Add(self.targetTextCtrl, 1, wx.EXPAND, 0)
-        commonGridSizer.Add(commonSizer_4, (1, 4), (1, 1), wx.ALL|wx.EXPAND, 5)
         commonSizer_5.Add(self.distChoice, 0, wx.BOTTOM, 2)
         commonSizer_5.Add(self.distTextCtrl, 1, wx.EXPAND, 0)
         commonGridSizer.Add(commonSizer_5, (1, 5), (1, 1), wx.ALL|wx.EXPAND, 5)
@@ -292,11 +249,18 @@ class cx_FreezePanel(BaseBuilderPanel):
     def ValidateOptions(self):
         """ Validates the cx_Freeze input options before compiling. """
 
-        # check if the script file exists
-        if not os.path.isfile(self.scriptPicker.GetPath()):
-            msg = _("Python main script is not a valid file.")
+        # check if the script files exist
+        if self.multipleExe.GetItemCount() == 0:
+            msg = _("No Python scripts have been added.")
             self.MainFrame.RunError(2, msg, True)
             return False
+
+        for indx in xrange(self.multipleExe.GetItemCount()):
+            script = self.multipleExe.GetItem(indx, 2)
+            if not os.path.isfile(script.GetText()):
+                msg = _("Python main script is not a valid file.")
+                self.MainFrame.RunError(2, msg, True)
+                return False
 
         # check if the initialization file is not empty and if it exists
         initScript = self.initScriptPicker.GetPath()
@@ -351,12 +315,8 @@ class cx_FreezePanel(BaseBuilderPanel):
         setupDict, importDict = {}, {}
         configuration = dict(configuration)
         # Delete the keys we don't need
-        targetChoice, distChoice = self.targetChoice.GetValue(), self.distChoice.GetValue()
-        del configuration["target_name_choice"], configuration["dist_dir_choice"]
-
-        item = configuration["script"]
-        buildDir, scriptFile = os.path.split(item)
-        programName = os.path.splitext(scriptFile)[0]
+        distChoice = self.distChoice.GetValue()
+        del configuration["dist_dir_choice"]
         
         extension = ""
         if wx.Platform == "__WXMSW__":
@@ -367,54 +327,100 @@ class cx_FreezePanel(BaseBuilderPanel):
             if key == "initScript" and not item:
                 # I don't know how often this option is used
                 item = ""
-            elif key == "base":
-                if sys.platform == "win32":
-                    setupDict["base"] = "'Win32GUI'"
-                else:
-                    setupDict["base"] = None
-                continue
             
             elif isinstance(self.FindWindowByName(key), wx.CheckBox):
                 item = bool(int(item))
 
+            if key in ["create_manifest_file", "multipleexe"]:
+                # Skip these 2 options, we'll take care of them later...
+                continue
+            
             if isinstance(item, basestring) and key != "compress":
                 if key == "dist_dir":
                     if not item.strip() or not distChoice:
                         item = "dist"
                         if distChoice:
                             self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
-                elif key == "target_name":
-                    if not item.strip() or not targetChoice:
-                        item = programName + extension
-                        if targetChoice:
-                            self.MainFrame.SendMessage(1, _('Empty targetName option. Using Python script name'))
                 if not item.strip():
                     item = None
                 else:
-                    item = "r'%s'"%item
+                    item = 'r"%s"'%item
 
             if type(item) == ListType:
                 # Terrible hack to setup correctly the string to be included
                 # in the setup file
                 item = setupString(key, item)
-
-            if key == "create_manifest_file":
-                continue
                 
             setupDict[key] = item
 
+        baseName = "GUI2Exe_Target_%d"
+        targetclass = ""
+        executables = "["
+
+        # Loop over all the Python scripts used        
+        for indx in xrange(self.multipleExe.GetItemCount()):
+            # Add the target class
+            tupleMultiple = (baseName%(indx+1), )
+            scriptFile = self.multipleExe.GetItem(indx, 2).GetText()
+            buildDir, scriptFile = os.path.split(scriptFile)
+            # Add the Python script file
+            tupleMultiple += (scriptFile, )
+            # Add the init script
+            tupleMultiple += (setupDict["initScript"], )
+            consoleOrWindows = self.multipleExe.GetItem(indx, 1).GetText()            
+            # Check if it is a GUI app and if it runs on Windows
+            if consoleOrWindows == "windows" and sys.platform == "win32":
+                tupleMultiple += ("'Win32GUI'", )
+            else:
+                tupleMultiple += (None, )
+            # Add the distribution directory
+            tupleMultiple += (setupDict["dist_dir"], )
+            targetName = self.multipleExe.GetItem(indx, 3).GetText()
+
+            if not targetName.strip():
+                # Missing executable name? Use the Python script file name
+                targetName = os.path.splitext(scriptFile)[0]
+                self.MainFrame.SendMessage(1, _('Empty Executable Name option. Using Python script name'))
+
+            # Add the executable name                    
+            tupleMultiple += (targetName+extension, )
+            # Add the remaining keys
+            tupleMultiple += (bool(setupDict["compress"]), setupDict["copy_dependent_files"],
+                              setupDict["append_script_toexe"],
+                              setupDict["append_script_tolibrary"], setupDict["icon"])
+
+            # Build the target classes
+            targetclass += _cx_Freeze_class%tupleMultiple
+            # Save the executables in a list to be processed by cx_Freeze
+            executables += tupleMultiple[0] + ", "
+
+        keys = setupDict.keys()
+        for key in keys:
+            # Remove the keys we have already used
+            if key not in ["includes", "excludes", "packages", "path"]:
+                setupDict.pop(key)
+  
         # Add the custom code (if any)
         setupDict["customcode"] = (customCode and [customCode.strip()] or ["# No custom code added"])[0]
 
         # Add the post-compilation code (if any)
         setupDict["postcompilecode"] = (postCompile and [postCompile.strip()] or ["# No post-compilation code added"])[0]
+
+        # Add the target classes and the executables list
+        setupDict["targetclasses"] = targetclass
+        setupDict["executables"] = executables.rstrip(", ") + "]"
         
         # Include the GUI2Exe version in the setup script
         importDict["gui2exever"] = self.MainFrame.GetVersion()
-
+        
         # Populate the "import" section
         setupScript = _cx_Freeze_imports % importDict
 
+        globalSetup = ["version", "description", "author", "name"]
+        for col in xrange(4, self.multipleExe.GetColumnCount()):
+            item = self.multipleExe.GetItem(indx, col).GetText()
+            setupDict[globalSetup[col-4]] = '"%s"'%item.strip()
+        
         # Populate the main section of the setup script            
         setupScript += _cx_Freeze_target % setupDict
         
