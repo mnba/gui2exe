@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+BaseBuilderPanel
+================
+
+.. automodule:: BaseBuilderPanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _BaseBuilderPanel.BaseBuilderPanel-class:
+
+BaseBuilderPanel
+----------------
+
+.. autoclass:: BaseBuilderPanel.BaseBuilderPanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: BaseBuilderPanel.BaseBuilderPanel.__init__
+
+

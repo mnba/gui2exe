@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+cx_FreezePanel
+==============
+
+.. automodule:: cx_FreezePanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _cx_FreezePanel.cx_FreezePanel-class:
+
+cx_FreezePanel
+--------------
+
+.. autoclass:: cx_FreezePanel.cx_FreezePanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: cx_FreezePanel.cx_FreezePanel.__init__
+
+

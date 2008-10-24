@@ -82,27 +82,15 @@ __version__ = "0.2"
 __docformat__ = "epytext"
 
 
+# Start the imports
 import sys
 import os
-
-if not hasattr(sys, "frozen"):
-    # A check to ensure the correct wxPython version is there...
-    try:
-
-        import wxversion
-        wxversion.ensureMinimal("2.8")
-
-    except ImportError:
-        # No wxversion?
-        
-        import wx
-        if wx.VERSION < (2, 8, 8, 0):
-            print "wxPython >= 2.8.8.0 is required"
-            import sys
-            sys.exit(1)
-
-# Start the imports
 import wx
+
+if wx.VERSION < (2, 8, 8, 0):
+    print "wxPython >= 2.8.8.0 is required"
+    sys.exit(1)
+
 import time
 
 reload(sys)
@@ -162,6 +150,7 @@ ID_DeleteBuild = ID_CleanDist + 1
 ID_ShowTip = ID_CleanDist + 2
 ID_Recurse = ID_CleanDist + 3
 ID_Missing = ID_CleanDist + 4
+ID_AutoSave = ID_CleanDist + 5
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -206,7 +195,22 @@ class GUI2Exe(wx.Frame):
     
     def __init__(self, parent, id=-1, title="", pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE):
-        """ Default wx.Frame class constructor. """
+        """
+        Default wx.Frame class constructor.
+
+        **Parameters:**
+        
+        * `parent`: The window parent. This may be NULL. If it is non-NULL, the frame will
+          always be displayed on top of the parent window on Windows
+        * `id`: The window identifier. It may take a value of -1 to indicate a default value
+        * `title`: The caption to be displayed on the frame's title bar
+        * `pos`: The window position. A value of (-1, -1) indicates a default position, chosen
+          by either the windowing system or wxWidgets, depending on platform
+        * `size`: The window size. A value of (-1, -1) indicates a default size, chosen by either
+          the windowing system or wxWidgets, depending on platform
+        * `style`: the frame style. See ``wx.Frame`` for possible styles.
+        
+        """
         
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
@@ -218,7 +222,7 @@ class GUI2Exe(wx.Frame):
         # where are we
         self.installDir = wx.GetApp().GetInstallDir()
 
-        self.autoSave = False                # use autoSave? (not implemented yet...)
+        self.autoSave = True                 # use autoSave?
         self.deleteBuild = True              # delete the "build" directory (recommended)
         self.cleanDist = False               # Clean up the "dist" directory
         self.process = None                  # keeps track of the compilation subprocess
@@ -229,8 +233,11 @@ class GUI2Exe(wx.Frame):
         self.pyInstallerPath = None          # Where PyInstaller lives
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
         self.showTips = True                 # Show tooltips for various compiler options
-        
+
+        # To store the wx.aui perspectives        
         self.perspectives = []
+        # To periodically save opened projects
+        self.autosaveTimer = wx.Timer(self, wx.ID_ANY)
 
         # Create the status bar
         self.CreateBar()
@@ -337,7 +344,7 @@ class GUI2Exe(wx.Frame):
                     ("", "", "", "", "", ""),
                     (_("&Quit") + "\tCtrl+Q", _("Exit GUI2Exe"), "exit", wx.ID_EXIT, self.OnClose, "")),
                 (_("&Options"),
-                    (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", -1, self.OnAutoSave, wx.ITEM_CHECK),
+                    (_("Use &AutoSave"), _("AutoSaves your work every minute"), "", ID_AutoSave, self.OnAutoSave, wx.ITEM_CHECK),
                     ("", "", "", "", "", ""),
                     (_('De&lete "build" directory'), _("Delete the build folder at every compilation"), "", ID_DeleteBuild, self.OnDeleteBuild, wx.ITEM_CHECK),
                     (_('Clea&n "dist" directory'), _("Clean the distribution folder at every compilation"), "", ID_CleanDist, self.OnCleanDist, wx.ITEM_CHECK),
@@ -383,7 +390,9 @@ class GUI2Exe(wx.Frame):
         """
         Creates a menu based on input menu data.
 
-        @param menuData: the menu item label, bitmap, longtip etc...        
+        **Parameters:**
+
+        * `menuData`: the menu item label, bitmap, longtip etc...     
         """
         
         menu = wx.Menu()
@@ -524,6 +533,8 @@ class GUI2Exe(wx.Frame):
         # the real compilation using an external process which sends back to
         # us its output and error streams, and we monitor them in this event.
         self.Bind(wx.EVT_TIMER, self.OnProcessTimer, self.processTimer)
+        # Bind the timer event on the auto-save option
+        self.Bind(wx.EVT_TIMER, self.AutoSave, self.autosaveTimer)
 
         # Let's do some fancy checking and painting during the page changing
         # an page closing event for wx.aui.AuiNotebook
@@ -602,6 +613,14 @@ class GUI2Exe(wx.Frame):
             self.cleanDist = eval(val)
             menuBar.Check(ID_CleanDist, self.cleanDist)
 
+        val = options.Read('AutoSave')
+        if val:
+            self.autoSave = eval(val)
+            menuBar.Check(ID_AutoSave, self.autoSave)
+            if self.autoSave:
+                # Start the autosaving timer (1 minute)
+                self.autosaveTimer.Start(60000)
+
         preferences = {}
         val = options.Read('Preferences')
         if val:
@@ -653,7 +672,9 @@ class GUI2Exe(wx.Frame):
         """
         Returns the user preferences for a particular setting.
 
-        @param key: the preferences option name.
+        **Parameters:**
+
+        * `key`: the preferences option name.
         """
 
         return wx.GetApp().GetPreferences(key)
@@ -663,8 +684,10 @@ class GUI2Exe(wx.Frame):
         """
         Sets the user preferences for a particular setting.
 
-        @param key: the preferences option name;
-        @param value: the preferences option value.
+        **Parameters:**
+
+        * `key`: the preferences option name;
+        * `value`: the preferences option value.
         """
 
         app = wx.GetApp()
@@ -677,7 +700,9 @@ class GUI2Exe(wx.Frame):
         """
         Returns the default configuration for a given compiler.
 
-        @param compiler: the compiler we are using now.
+        **Parameters:**
+        
+        `compiler`: the compiler we are using now.
         """
 
         return self.defaultConfig[compiler]
@@ -702,9 +727,48 @@ class GUI2Exe(wx.Frame):
     def OnSwitchDB(self, event):
         """ Switch to another project database. """
 
-        # Not implemented yet...
-        self.RunError(0, _("This option has not been implemented yet."))
-        event.Skip()
+        wildcard = "Database Files (*.db)|*.db"
+        # The default directory for the databases is in the user
+        # application data folder
+        defaultDir = os.path.split(self.CheckForDatabase())[0]
+        dlg = wx.FileDialog(self, message=_("Choose a Database file..."), defaultDir=defaultDir,
+                            defaultFile="", wildcard=wildcard, style=wx.FD_OPEN|wx.FD_CHANGE_DIR)
+
+        dlg.CenterOnParent()
+        if dlg.ShowModal() != wx.ID_OK:
+          # Changed your mind? No database to import...
+            dlg.Destroy()
+            return
+
+        # Get the database file path
+        fileName = dlg.GetPath()
+        dlg.Destroy()
+        wx.SafeYield()
+
+        # Loop over all the opened pages to see if any of them needs saving
+        for pageNumber in xrange(self.mainPanel.GetPageCount()-1, -1, -1):
+            if not self.HandlePageClosing(pageNumber, event):
+                # User pressed cancel
+                return
+
+        # Get the old and new database names
+        oldDB = os.path.split(self.dataBase.dbName)[1]
+        newDB = os.path.split(fileName)[1]
+        # Close the current database session
+        self.dataBase.CloseSession()
+        try:
+            # Try and load the new database (a bit shaky)
+            self.projectTree.DeleteAllProjects()
+            self.dataBase = DataBase(self, fileName)
+            transdict = dict(oldDatabase=oldDB, newDatabase=newDB)
+            self.SendMessage(0, _("Database switched correctly from %(oldDatabase)s to %(newDatabase)s")%transdict)
+        except:
+            # No luck, the database is invalid
+            self.RunError(2, _("Invalid Database selected. The Database format is not recognized."))
+            return
+
+        # Sort the tree children
+        self.projectTree.SortItems()
 
 
     def OnSaveProject(self, event):
@@ -720,7 +784,7 @@ class GUI2Exe(wx.Frame):
 
         
     def OnExportSetup(self, event):
-        """ Exports the Setup.py file. """
+        """ Exports the setup.py file. """
 
         page = self.GetCurrentPage()
         
@@ -813,6 +877,10 @@ class GUI2Exe(wx.Frame):
             # Kill the monitoring timer
             self.exeTimer.Stop()
 
+        if self.autosaveTimer.IsRunning():
+            # Kill the 1 minute auto-save timer
+            self.autosaveTimer.Stop()
+            
         if self.process is not None:
             # Try to kill the process. Doesn't work very well
             self.process.Kill()
@@ -868,6 +936,7 @@ class GUI2Exe(wx.Frame):
         config.Write('Delete_Build', str(self.deleteBuild))
         config.Write('Clean_Dist', str(self.cleanDist))
         config.Write('Preferences', str(preferences))
+        config.Write('AutoSave', str(self.autoSave))
         config.Flush()
 
         # Close down the database...
@@ -878,7 +947,7 @@ class GUI2Exe(wx.Frame):
 
 
     def AccelClosing(self, event):
-        """ Handles the Ctrl+W accelerator key (close a page in the central notebook. """
+        """ Handles the Ctrl+W accelerator key (close a page in the central notebook). """
 
         if self.mainPanel.GetPageCount() == 0:
             # No pages left
@@ -936,28 +1005,37 @@ class GUI2Exe(wx.Frame):
 
 
     def OnAutoSave(self, event):
-        """ Enables/Disables the AutoSave feature. """
+        """ Enables/disables the AutoSave feature. """
 
         # Not implemented yet...
         self.autoSave = event.IsChecked()
+        if not self.autoSave:
+            # User cancelled it
+            if self.autosaveTimer.IsRunning():
+              # Stop the 1 minute timer
+                self.autosaveTimer.Stop()
+                return
 
+        # Start the autosaving timer (1 minute)
+        self.autosaveTimer.Start(60000)
+        
 
     def OnDeleteBuild(self, event):
-        """ Enables/Disables the automatic removal of the "build" folder. """
+        """ Enables/disables the automatic removal of the "build" folder. """
 
         # That's easy, we use it later
         self.deleteBuild = event.IsChecked()
 
 
     def OnCleanDist(self, event):
-        """ Enables/Disables the automatic cleaning of the "dist" folder. """
+        """ Enables/disables the automatic cleaning of the "dist" folder. """
 
         # That's easy, we use it later        
         self.cleanDist = event.IsChecked()
 
 
     def OnShowTip(self, event):
-        """ Enables/Disables the showing of tooltips. """
+        """ Enables/disables the showing of tooltips. """
 
         self.showTips = event.IsChecked()        
             
@@ -1001,7 +1079,7 @@ class GUI2Exe(wx.Frame):
     def OnRecurseSubDir(self, event):
         """
         Switches between directory recursion to simple files adding for the
-        data_files option.
+        `data_files` option.
         """
 
         self.recurseSubDirs = event.IsChecked()
@@ -1054,7 +1132,7 @@ class GUI2Exe(wx.Frame):
         
 
     def OnCustomCode(self, event):
-        """ Allows the user to add custom code to the Setup.py file. """
+        """ Allows the user to add custom code to the setup.py file. """
 
         self.HandleUserCode(post=False)
 
@@ -1074,7 +1152,7 @@ class GUI2Exe(wx.Frame):
         
         
     def OnViewSetup(self, event):
-        """ Allows the user to see the Setup.py file. """
+        """ Allows the user to see the setup.py file. """
 
         wx.BeginBusyCursor()
         # I simply recreate the Setup.py script in memory
@@ -1084,8 +1162,8 @@ class GUI2Exe(wx.Frame):
 
     def OnCheckSyntax(self, event):
         """
-        Checks the Python syntax (for SyntaxError) of the automatically
-        generated Setup.py file.
+        Checks the Python syntax (for ``SyntaxError``) of the automatically
+        generated setup.py file.
         """
 
         page = self.GetCurrentPage()
@@ -1282,7 +1360,9 @@ class GUI2Exe(wx.Frame):
         """
         Called by a worker thread which check my web page on the internet.
 
-        @param text: my web page raw text (if internet connection was successful).
+        **Parameters:**
+        
+        * `text`: the GUI2Exe page raw text (if internet connection was successful).
         """
         
         if text is None:
@@ -1307,7 +1387,7 @@ class GUI2Exe(wx.Frame):
 
 
     def OnContact(self, event):
-        """ Launch the mail program to contact the GUI2Exe author. """
+        """ Launches the mail program to contact the GUI2Exe author. """
 
         wx.BeginBusyCursor()
         webbrowser.open_new("mailto:andrea.gavana@gmail.com?subject=Comments On GUI2Exe&cc=gavana@kpo.kz")
@@ -1385,6 +1465,24 @@ class GUI2Exe(wx.Frame):
             self.timerCount = 0
 
 
+    def AutoSave(self, event):
+        """ Handles the wx.EVT_TIMER event for the auto-saving of projects. """
+
+        for indx in xrange(self.mainPanel.GetPageCount()):
+            # Loop over all the opened pages...
+            page = self.mainPanel.GetPage(indx)
+            # Try to load the project
+            try:
+                project = page.GetProject()
+                projectName = project.GetName()
+                project = self.dataBase.LoadProject(projectName)
+                # Save the project
+                self.SaveProject(project)
+            except:
+                # Something went wrong, the project hasn't been saved yet
+                pass
+            
+
     # ============================== #
     # Auxiliary methods for GUI2Exe  #
     # ============================== #
@@ -1393,7 +1491,9 @@ class GUI2Exe(wx.Frame):
         """
         Handles the custom and post-compilation code the user may add.
 
-        @param post: whether the code will be pre- or post-compilation.
+        **Parameters:**
+        
+        * `post`: whether the code will be pre- or post-compilation.
         """
 
         project = self.GetCurrentProject()
@@ -1420,8 +1520,10 @@ class GUI2Exe(wx.Frame):
         """
         Checks whether a page needs saving before closing.
 
-        @param selection: the current selected tab in the AuiNotebook;
-        @param event: the event that has been triggered.
+        **Parameters:**
+        
+        * `selection`: the current selected tab in the AuiNotebook;
+        * `event`: the event that has been triggered.
         """
 
         isAUI = isinstance(event, wx.aui.AuiNotebookEvent)
@@ -1498,7 +1600,9 @@ class GUI2Exe(wx.Frame):
         """
         Saves the current project.
 
-        @param project: the current project.
+        **Parameters:**
+        
+        * `project`: the current project.
         """
 
         # Send the data to the database        
@@ -1512,9 +1616,11 @@ class GUI2Exe(wx.Frame):
         Updates the wx.aui.AuiNotebook page image and text, to reflect the
         current project state (saved/unsaved).
 
-        @param pageName: the name of the tab in the AuiNotebook;
-        @param pageIcon: the icon index to set to the tab;
-        @param selection: if any, the current selected tab in the AuiNotebook.
+        **Parameters:**
+        
+        * `pageName`: the name of the tab in the AuiNotebook;
+        * `pageIcon`: the icon index to set to the tab;
+        * `selection`: if any, the current selected tab in the AuiNotebook.
         """
 
         if selection is None:
@@ -1535,9 +1641,11 @@ class GUI2Exe(wx.Frame):
         An utility method that shows a message dialog with different functionalities
         depending on the input.
 
-        @param kind: the kind of message (error, warning, question, message);
-        @param msg: the actual message to display;
-        @param sendMessage: Whether to display the message in the bottom log window too.
+        **Parameters:**
+        
+        * `kind`: the kind of message (error, warning, question, message);
+        * `msg`: the actual message to display;
+        * `sendMessage`: Whether to display the message in the bottom log window too.
         """
 
         if sendMessage:
@@ -1571,8 +1679,10 @@ class GUI2Exe(wx.Frame):
         """
         Adds a new project to the current center pane.
 
-        @param treeItem: the item in the left TreeCtrl;
-        @param projectName: the new project name.
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl;
+        * `projectName`: the new project name.
         """
 
         # Freeze all. It speeds up a bit the drawing
@@ -1600,8 +1710,10 @@ class GUI2Exe(wx.Frame):
         """
         Loads a project in the center pane.
 
-        @param treeItem: the item in the left TreeCtrl;
-        @param projectName: the existing project name.
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl;
+        * `projectName`: the existing project name.
         """
 
         # Check if there already is a page with the same name
@@ -1642,9 +1754,11 @@ class GUI2Exe(wx.Frame):
         """
         The user has renamed the project in the project tree control.
 
-        @param treeItem: the item in the left TreeCtrl;
-        @param oldName: the old project name;
-        @param newName: the new project name.
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl;
+        * `oldName`: the old project name;
+        * `newName`: the new project name.
         """
 
         # Rename the project in the database
@@ -1673,9 +1787,11 @@ class GUI2Exe(wx.Frame):
         """
         Auxiliary method used to actually add a page to the center pane.
 
-        @param project: the project we are creating/loading;
-        @param treeItem: the item in the left TreeCtrl;
-        @param isNew: whether the project is a new one or we are loading an existing one.
+        **Parameters:**
+        
+        * `project`: the project we are creating/loading;
+        * `treeItem`: the item in the left TreeCtrl;
+        * `isNew`: whether the project is a new one or we are loading an existing one.
         """
 
         # Get the project name        
@@ -1698,7 +1814,9 @@ class GUI2Exe(wx.Frame):
         """
         Walks over all the opened page in the center pane.
 
-        @param treeItem: the item in the left TreeCtrl.
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl.
         """
 
         # Loop over all the wx.aui.AuiNotebook pages
@@ -1716,7 +1834,9 @@ class GUI2Exe(wx.Frame):
         """
         Looks if a page is already opened.
 
-        @param treeItem: the item in the left TreeCtrl.
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl.
         """
 
         return self.WalkAUIPages(treeItem)
@@ -1727,7 +1847,9 @@ class GUI2Exe(wx.Frame):
         A method used to close a wx.aui.AuiNotebook page when an item in the
         project tree is deleted.
 
-        @param treeItem: the item in the left TreeCtrl.        
+        **Parameters:**
+        
+        * `treeItem`: the item in the left TreeCtrl.     
         """
 
         page = self.WalkAUIPages(treeItem)
@@ -1739,8 +1861,10 @@ class GUI2Exe(wx.Frame):
         """
         Reassigns an item to an opened page after a drag and drop operation.
 
-        @param oldItem: the old item in the left TreeCtrl;
-        @param newItem: the new item in the left TreeCtrl.
+        **Parameters:**
+        
+        * `oldItem`: the old item in the left TreeCtrl;
+        * `newItem`: the new item in the left TreeCtrl.
         """
 
         page = self.WalkAUIPages(oldItem)
@@ -1770,7 +1894,9 @@ class GUI2Exe(wx.Frame):
         """
         Utility function to create bitmap passing a filename.
 
-        @param bmpName: the bitmap name (without extension).
+        **Parameters:**
+        
+        * `bmpName`: the bitmap name (without extension).
         """
 
         return CreateBitmap(bmpName)
@@ -1844,13 +1970,16 @@ class GUI2Exe(wx.Frame):
         """
         Auxiliary method. Depending on the input, it does different things.
 
-        @param view: whether the user wants to view the Setup.py file or run it;
-        @param run: whether the user wants a normal build or a Dry-Run (py2exe only).
+        **Parameters:**
 
-        Possible combinations:        
-        - view=True ==> Get the Setup.py script and displays it (run is discarded);
-        - run=False ==> Start a dry-run (a compilation that does nothing);
-        - run=True  ==> Start the real compilation process.
+        * `view`: whether the user wants to view the Setup.py file or run it;
+        * `run`: whether the user wants a normal build or a Dry-Run (py2exe only).
+
+        **Possible combinations:**
+        
+        * `view` = True ==> Get the setup.py script and displays it (run is discarded);
+        * `run` = False ==> Start a dry-run (a compilation that does nothing);
+        * `run` = True  ==> Start the real compilation process.
         """
     
         page = self.GetCurrentPage()
@@ -1933,9 +2062,11 @@ class GUI2Exe(wx.Frame):
         Assumes that the compilation process was successful and tries to test
         the new exe file.
 
-        @param project: the current project;
-        @param compiler: the compiler used to build the current project;
-        @param ask: whether to ask the user to test the executable or not.        
+        **Parameters:**
+        
+        * `project`: the current project;
+        * `compiler`: the compiler used to build the current project;
+        * `ask`: whether to ask the user to test the executable or not.        
         """
 
         if ask:
@@ -2012,7 +2143,9 @@ class GUI2Exe(wx.Frame):
         """
         Examine a log file, created by an executable that crashed for some reason.
 
-        @param logFile: the log file name created when errors happens (py2exe only).
+        **Parameters:**
+
+        * `logFile`: the log file name created when errors happens (``py2exe`` only).
         """
 
         # Reset few variables, we don't need them anymore
@@ -2046,9 +2179,11 @@ class GUI2Exe(wx.Frame):
         """
         Sends a message to the log window at the bottom.
 
-        @param kind: the kind of message (error, warning, message);
-        @param message: the actual message to display;
-        @param copy: whether to save this message in the log window stack.
+        **Parameters:**
+        
+        * `kind`: the kind of message (error, warning, message);
+        * `message`: the actual message to display;
+        * `copy`: whether to save this message in the log window stack.
         """
 
         self.messageWindow.SendMessage(kind, message, copy)
@@ -2076,8 +2211,10 @@ class GUI2Exe(wx.Frame):
         """
         Create a XP-style manifest file if requested.
 
-        @param project: the current project;
-        @param compiler: the compiler used to build this project.
+        **Parameters:**
+        
+        * `project`: the current project;
+        * `compiler`: the compiler used to build this project.
         """
 
         if wx.Platform != "__WXMSW__":
@@ -2105,8 +2242,10 @@ class GUI2Exe(wx.Frame):
         """
         Updates a project from an external file.
 
-        @param selectedItem: the selected item in the left TreeCtrl;
-        @param project: the current project.
+        **Parameters:**
+        
+        * `selectedItem`: the selected item in the left TreeCtrl;
+        * `project`: the current project.
         """
 
         # Update information on screen (if needed)
@@ -2136,7 +2275,9 @@ class GUI2ExeSplashScreen(AS.AdvancedSplash):
         """
         A fancy splash screen :-D
 
-        @param app: the current wxPython app.
+        **Parameters:**
+
+        * `app`: the current wxPython app.
         """
 
         # Retrieve the bitmap used for the splash screen
@@ -2227,11 +2368,14 @@ class GUI2ExeApp(wx.App):
         return True
         
 
-    def OnExit(self, evt=None, force=False):
+    def OnExit(self, event=None, force=False):
         """
         Handle application exit request
 
-        @param evt: event that called this handler
+        **Parameters:**
+        
+        * `event`: event that called this handler
+        * `force`: unused at present.
         """
 
         self.Exit()
@@ -2290,7 +2434,9 @@ class GUI2ExeApp(wx.App):
         """
         Returns the user preferences as stored in wx.Config.
 
-        @param preferenceKey: the preference to load
+        **Parameters:**
+
+        * `preferenceKey`: the preference to load
         """
 
         preferences = self.LoadConfig()
@@ -2305,7 +2451,13 @@ class GUI2ExeApp(wx.App):
 
 
     def SetPreferences(self, newPreferences):
-        """ Save the user preferences in wx.Config. """
+        """
+        Saves the user preferences in wx.Config.
+
+        **Parameters:**
+
+        * `newPreferences`: the new preferences to save        
+        """
 
         preferences = self.LoadConfig()
         config = self.GetConfig()

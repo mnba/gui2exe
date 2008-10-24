@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+ProjectTreeCtrl
+===============
+
+.. automodule:: ProjectTreeCtrl
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _ProjectTreeCtrl.ProjectTreeCtrl-class:
+
+ProjectTreeCtrl
+---------------
+
+.. autoclass:: ProjectTreeCtrl.ProjectTreeCtrl
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ProjectTreeCtrl.ProjectTreeCtrl.__init__
+
+

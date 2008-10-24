@@ -1,0 +1,78 @@
+.. -*- coding: UTF-8 -*-
+
+ArtManager
+==========
+
+.. automodule:: ArtManager
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _ArtManager.ArtManager-class:
+
+ArtManager
+----------
+
+.. autoclass:: ArtManager.ArtManager
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ArtManager.ArtManager.__init__
+
+
+.. _ArtManager.DCSaver-class:
+
+DCSaver
+-------
+
+.. autoclass:: ArtManager.DCSaver
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ArtManager.DCSaver.__init__
+
+
+.. _ArtManager.RendererBase-class:
+
+RendererBase
+------------
+
+.. autoclass:: ArtManager.RendererBase
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ArtManager.RendererBase.__init__
+
+
+.. _ArtManager.RendererMSOffice2007-class:
+
+RendererMSOffice2007
+--------------------
+
+.. autoclass:: ArtManager.RendererMSOffice2007
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ArtManager.RendererMSOffice2007.__init__
+
+
+.. _ArtManager.RendererXP-class:
+
+RendererXP
+----------
+
+.. autoclass:: ArtManager.RendererXP
+   :members:
+   :undoc-members:
+      
+   .. automethod:: ArtManager.RendererXP.__init__
+
+

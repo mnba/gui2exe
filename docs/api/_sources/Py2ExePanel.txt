@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+Py2ExePanel
+===========
+
+.. automodule:: Py2ExePanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _Py2ExePanel.Py2ExePanel-class:
+
+Py2ExePanel
+-----------
+
+.. autoclass:: Py2ExePanel.Py2ExePanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Py2ExePanel.Py2ExePanel.__init__
+
+

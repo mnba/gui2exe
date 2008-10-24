@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+Py2AppPanel
+===========
+
+.. automodule:: Py2AppPanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _Py2AppPanel.Py2AppPanel-class:
+
+Py2AppPanel
+-----------
+
+.. autoclass:: Py2AppPanel.Py2AppPanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Py2AppPanel.Py2AppPanel.__init__
+
+

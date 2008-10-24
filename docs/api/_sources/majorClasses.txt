@@ -1,0 +1,32 @@
+.. -*- coding: UTF-8 -*-
+
+Major Classes Reference
+=======================
+
+This page contains links to the **GUI2Exe** API documentation.
+
+.. toctree::
+   :maxdepth: 1
+
+   GUI2Exe
+   AdvancedSplash
+   ArtManager
+   AUINotebookPage
+   BaseBuilderPanel
+   bbFreezePanel
+   Constants
+   cx_FreezePanel
+   DataBase
+   ExecutableProperties
+   GenericMessageDialog
+   LabelBook
+   MessageWindow
+   Process
+   Project
+   ProjectTreeCtrl
+   Py2AppPanel
+   Py2ExePanel
+   PyInstallerPanel
+   Resources
+   Utilities
+   Widgets

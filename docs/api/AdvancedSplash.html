@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AdvancedSplash &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="index.html" />
+    <link rel="up" title="Major Classes Reference" href="majorClasses.html" />
+    <link rel="next" title="ArtManager" href="ArtManager.html" />
+    <link rel="prev" title="GUI2Exe" href="GUI2Exe.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="ArtManager.html" title="ArtManager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GUI2Exe.html" title="GUI2Exe"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-AdvancedSplash">
+<h1 id="module-AdvancedSplash">AdvancedSplash<a class="headerlink" href="#module-AdvancedSplash" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> tries to reproduce the behavior of <tt class="docutils literal"><span class="pre">wx.SplashScreen</span></tt>, but with
+some enhancements (in my opinion).</p>
+<p><tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> starts its construction from a simple frame. Then, depending on
+the options passed to <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt>, it sets the frame shape accordingly to
+the image passed as input. <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> behaves somewhat like <tt class="docutils literal"><span class="pre">wx.SplashScreen</span></tt>,
+and almost all the methods available in <tt class="docutils literal"><span class="pre">wx.SplashScreen</span></tt> are available also in
+<tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt>.</p>
+</div>
+<div class="section" id="usage">
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>A sample usage:</p>
+<div class="highlight"><pre><span class="n">SplashScreen</span> <span class="o">=</span> <span class="n">AS</span><span class="o">.</span><span class="n">AdvancedSplash</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span>
+                                 <span class="n">bitmap</span><span class="p">,</span>
+                                 <span class="n">timeout</span><span class="p">,</span>
+                                 <span class="n">extrastyle</span><span class="p">,</span>
+                                 <span class="n">shadowcolour</span>
+                                 <span class="p">)</span>
+</pre></div>
+<p>None of the options are strictly required (a part of the <tt class="docutils literal"><span class="pre">bitmap</span></tt> parameter).
+If you use the defaults you get a very simple <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt>.
+For the full listing of the input parameters, see the <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> <tt class="docutils literal"><span class="pre">__init__</span></tt>
+method.</p>
+</div>
+<div class="section" id="methods-and-settings">
+<h2 id="methods-and-settings">Methods and Settings<a class="headerlink" href="#methods-and-settings" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> is customizable, and in particular you can set:</p>
+<ul class="simple">
+<li>Whether you want to mask a colour or not in your input bitmap;</li>
+<li>Where to center the splash screen (on screen, on parent or nowhere);</li>
+<li>Whether it is a &#8220;timeout&#8221; splashscreen or not;</li>
+<li>The time after which AdvancedSplash is destroyed (if it is a timeout splashscreen);</li>
+<li>The (optional) text you wish to display;</li>
+<li>The font, colour and position of the displayed text (optional).</li>
+</ul>
+<p>For more info on methods and initial styles, please refer to the <tt class="docutils literal"><span class="pre">__init__</span></tt>
+method for <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> or to the specific functions.</p>
+<p><tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> control is freeware and distributed under the wxPython license.</p>
+<p>Latest revision: Andrea Gavana &#64; 15 Oct 2008, 10.00 GMT.</p>
+<p>Version 0.1</p>
+</div>
+<div class="section" id="api-reference">
+<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<span id="advancedsplash-advancedsplash-class"></span><h4 id="id1"><span id="advancedsplash-advancedsplash-class"></span>AdvancedSplash<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="AdvancedSplash.AdvancedSplash">
+<!--[AdvancedSplash.AdvancedSplash]-->class <tt class="descclassname">AdvancedSplash.</tt><tt class="descname">AdvancedSplash</tt><big>(</big><em>parent</em>, <em>id=-1</em>, <em>pos=wx.Point(-1</em>, <em>-1)</em>, <em>size=wx.Size(-1</em>, <em>-1)</em>, <em>style=32786</em>, <em>bitmap=None</em>, <em>timeout=5000</em>, <em>extrastyle=5</em>, <em>shadowcolour=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.__init__">
+<!--[AdvancedSplash.AdvancedSplash.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>id=-1</em>, <em>pos=wx.Point(-1</em>, <em>-1)</em>, <em>size=wx.Size(-1</em>, <em>-1)</em>, <em>style=32786</em>, <em>bitmap=None</em>, <em>timeout=5000</em>, <em>extrastyle=5</em>, <em>shadowcolour=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default class constructor.</p>
+<p>Non standard wxPython parameters are:</p>
+<ul class="simple">
+<li>bitmap: this must be a valid <tt class="docutils literal"><span class="pre">wx.Bitmap</span></tt>, that you may construct using
+whatever image file format supported by wxPython. If the file you load
+already supports mask/transparency (like png), the transparent areas
+will not be drawn on screen, and the AdvancedSplash frame will have
+the shape defined only by <em>non-transparent</em> pixels.
+If you use other file formats that does not supports transparency, you
+can obtain the same effect as above by masking a specific colour in
+your <tt class="docutils literal"><span class="pre">wx.Bitmap</span></tt>. See <tt class="docutils literal"><span class="pre">shadowcolour</span></tt> and <tt class="docutils literal"><span class="pre">extrastyle</span></tt> parameters;</li>
+<li>timeout: if you construct <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> using the style <tt class="docutils literal"><span class="pre">AS_TIMEOUT</span></tt>,
+<tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will be destroyed after &#8220;timeout&#8221; milliseconds;</li>
+<li>extrastyle: this value specifies the <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> styles:<ul>
+<li><tt class="docutils literal"><span class="pre">AS_TIMEOUT</span></tt>: <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will be destroyed after &#8220;timeout&#8221; milliseconds;</li>
+<li><tt class="docutils literal"><span class="pre">AS_NOTIMEOUT</span></tt>: <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> can be destroyed by clicking on it,
+pressing a key or by explicitly call the <tt class="docutils literal"><span class="pre">Close()</span></tt> method;</li>
+<li><tt class="docutils literal"><span class="pre">AS_CENTER_ON_SCREEN</span></tt>: <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will be centered on screen;</li>
+<li><tt class="docutils literal"><span class="pre">AS_CENTER_ON_PARENT</span></tt>: <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will be centered on parent;</li>
+<li><tt class="docutils literal"><span class="pre">AS_NO_CENTER</span></tt>: <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will not be centered;</li>
+<li><tt class="docutils literal"><span class="pre">AS_SHADOW_BITMAP</span></tt>: if the bitmap you pass as input has no transparency,
+you can choose one colour that will be masked in your bitmap. the
+final shape of <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> will be defined only by non-transparent
+(non-masked) pixels.</li>
+</ul>
+</li>
+<li>shadowcolour: if you construct <tt class="docutils literal"><span class="pre">AdvancedSplash</span></tt> using the style
+<tt class="docutils literal"><span class="pre">AS_SHADOW_BITMAP</span></tt>, here you can specify the colour that will be masked on
+your input bitmap. This has to be a valid wxPython colour.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.GetSplashStyle">
+<!--[AdvancedSplash.AdvancedSplash.GetSplashStyle]--><tt class="descname">GetSplashStyle</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.GetSplashStyle" title="Permalink to this definition">¶</a></dt>
+<dd>Returns a list of strings and a list of integers containing the styles.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.GetText">
+<!--[AdvancedSplash.AdvancedSplash.GetText]--><tt class="descname">GetText</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.GetText" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the text displayed on AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.GetTextColour">
+<!--[AdvancedSplash.AdvancedSplash.GetTextColour]--><tt class="descname">GetTextColour</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.GetTextColour" title="Permalink to this definition">¶</a></dt>
+<dd>Gets the colour for the text in AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.GetTextFont">
+<!--[AdvancedSplash.AdvancedSplash.GetTextFont]--><tt class="descname">GetTextFont</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.GetTextFont" title="Permalink to this definition">¶</a></dt>
+<dd>Gets the font for the text in AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.GetTextPosition">
+<!--[AdvancedSplash.AdvancedSplash.GetTextPosition]--><tt class="descname">GetTextPosition</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.GetTextPosition" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the text position inside AdvancedSplash frame.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.OnCharEvents">
+<!--[AdvancedSplash.AdvancedSplash.OnCharEvents]--><tt class="descname">OnCharEvents</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.OnCharEvents" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_CHAR for AdvancedSplash.
+This reproduces the behavior of wx.SplashScreen.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.OnCloseWindow">
+<!--[AdvancedSplash.AdvancedSplash.OnCloseWindow]--><tt class="descname">OnCloseWindow</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.OnCloseWindow" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_CLOSE for AdvancedSplash.
+This reproduces the behavior of wx.SplashScreen.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.OnMouseEvents">
+<!--[AdvancedSplash.AdvancedSplash.OnMouseEvents]--><tt class="descname">OnMouseEvents</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.OnMouseEvents" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_MOUSE_EVENTS for AdvancedSplash.
+This reproduces the behavior of wx.SplashScreen.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.OnNotify">
+<!--[AdvancedSplash.AdvancedSplash.OnNotify]--><tt class="descname">OnNotify</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.OnNotify" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the timer expiration, and calls the close() method.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.OnPaint">
+<!--[AdvancedSplash.AdvancedSplash.OnPaint]--><tt class="descname">OnPaint</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.OnPaint" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_PAINT for AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.SetSplashShape">
+<!--[AdvancedSplash.AdvancedSplash.SetSplashShape]--><tt class="descname">SetSplashShape</tt><big>(</big><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.SetSplashShape" title="Permalink to this definition">¶</a></dt>
+<dd>Sets AdvancedSplash shape using the region created from the bitmap.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.SetText">
+<!--[AdvancedSplash.AdvancedSplash.SetText]--><tt class="descname">SetText</tt><big>(</big><em>text=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.SetText" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the text to be displayed on AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.SetTextColour">
+<!--[AdvancedSplash.AdvancedSplash.SetTextColour]--><tt class="descname">SetTextColour</tt><big>(</big><em>colour=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.SetTextColour" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the colour for the text in AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.SetTextFont">
+<!--[AdvancedSplash.AdvancedSplash.SetTextFont]--><tt class="descname">SetTextFont</tt><big>(</big><em>font=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.SetTextFont" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the font for the text in AdvancedSplash.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.SetTextPosition">
+<!--[AdvancedSplash.AdvancedSplash.SetTextPosition]--><tt class="descname">SetTextPosition</tt><big>(</big><em>position=None</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.SetTextPosition" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the text position inside AdvancedSplash frame.</dd></dl>
+
+<dl class="method">
+<dt id="AdvancedSplash.AdvancedSplash.ShadowBitmap">
+<!--[AdvancedSplash.AdvancedSplash.ShadowBitmap]--><tt class="descname">ShadowBitmap</tt><big>(</big><em>bmp</em>, <em>shadowcolour</em><big>)</big><a class="headerlink" href="#AdvancedSplash.AdvancedSplash.ShadowBitmap" title="Permalink to this definition">¶</a></dt>
+<dd>Applies a mask on the bitmap accordingly to user input.</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">AdvancedSplash</a><ul>
+<li><a class="reference external" href="#description">Description</a></li>
+<li><a class="reference external" href="#usage">Usage</a></li>
+<li><a class="reference external" href="#methods-and-settings">Methods and Settings</a></li>
+<li><a class="reference external" href="#api-reference">API Reference</a><ul>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference external" href="#id1">AdvancedSplash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="GUI2Exe.html" title="previous chapter">GUI2Exe</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="ArtManager.html" title="next chapter">ArtManager</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/AdvancedSplash.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="ArtManager.html" title="ArtManager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GUI2Exe.html" title="GUI2Exe"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

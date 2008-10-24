@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AUINotebookPage &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="index.html" />
+    <link rel="up" title="Major Classes Reference" href="majorClasses.html" />
+    <link rel="next" title="BaseBuilderPanel" href="BaseBuilderPanel.html" />
+    <link rel="prev" title="ArtManager" href="ArtManager.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="BaseBuilderPanel.html" title="BaseBuilderPanel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ArtManager.html" title="ArtManager"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-AUINotebookPage">
+<h1 id="module-AUINotebookPage">AUINotebookPage<a class="headerlink" href="#module-AUINotebookPage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api-reference">
+<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<span id="auinotebookpage-auinotebookpage-class"></span><h4 id="id1"><span id="auinotebookpage-auinotebookpage-class"></span>AUINotebookPage<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="AUINotebookPage.AUINotebookPage">
+<!--[AUINotebookPage.AUINotebookPage]-->class <tt class="descclassname">AUINotebookPage.</tt><tt class="descname">AUINotebookPage</tt><big>(</big><em>parent</em>, <em>project</em>, <em>compilers</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.__init__">
+<!--[AUINotebookPage.AUINotebookPage.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>project</em>, <em>compilers</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default class constructor.</p>
+<p>&#64;param parent: the parent widget;
+&#64;param project: the project associated to this book;
+&#64;param compilers: the available compilers on this machine.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.AddOverlay">
+<!--[AUINotebookPage.AUINotebookPage.AddOverlay]--><tt class="descname">AddOverlay</tt><big>(</big><em>bitmap</em>, <em>index</em>, <em>bmpC</em>, <em>bmpP</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.AddOverlay" title="Permalink to this definition">¶</a></dt>
+<dd>Adds small letters C and P as overlay.</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.BuildImageList">
+<!--[AUINotebookPage.AUINotebookPage.BuildImageList]--><tt class="descname">BuildImageList</tt><big>(</big><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.BuildImageList" title="Permalink to this definition">¶</a></dt>
+<dd>Builds the image list for FlatImageBook.</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.CreateBookPages">
+<!--[AUINotebookPage.AUINotebookPage.CreateBookPages]--><tt class="descname">CreateBookPages</tt><big>(</big><em>project</em>, <em>compilers</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.CreateBookPages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the FlatImageBook pages.</p>
+<p>&#64;param project: the project associated with this L{LabelBook};
+&#64;param compilers: the available compilers in GUI2Exe.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.GetProject">
+<!--[AUINotebookPage.AUINotebookPage.GetProject]--><tt class="descname">GetProject</tt><big>(</big><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.GetProject" title="Permalink to this definition">¶</a></dt>
+<dd>Retrieves the project associated with us.</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.GetTreeItem">
+<!--[AUINotebookPage.AUINotebookPage.GetTreeItem]--><tt class="descname">GetTreeItem</tt><big>(</big><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.GetTreeItem" title="Permalink to this definition">¶</a></dt>
+<dd>Retrieves the tree item associated with us.</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.OnPageChanged">
+<!--[AUINotebookPage.AUINotebookPage.OnPageChanged]--><tt class="descname">OnPageChanged</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.OnPageChanged" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_NOTEBOOK_PAGE_CHANGED for L{Labelbook}.</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.SetProject">
+<!--[AUINotebookPage.AUINotebookPage.SetProject]--><tt class="descname">SetProject</tt><big>(</big><em>project</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.SetProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the project associated with us.</p>
+<p>&#64;param project: the project to be stored.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.SetTreeItem">
+<!--[AUINotebookPage.AUINotebookPage.SetTreeItem]--><tt class="descname">SetTreeItem</tt><big>(</big><em>treeItem</em><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.SetTreeItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores the tree item associated with us.</p>
+<p>&#64;param treeItem: a tree control item.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="AUINotebookPage.AUINotebookPage.UpdatePageImages">
+<!--[AUINotebookPage.AUINotebookPage.UpdatePageImages]--><tt class="descname">UpdatePageImages</tt><big>(</big><big>)</big><a class="headerlink" href="#AUINotebookPage.AUINotebookPage.UpdatePageImages" title="Permalink to this definition">¶</a></dt>
+<dd>Updates the Labelbook images depending on the presence of user custom code
+and/or post-compilation code.</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">AUINotebookPage</a><ul>
+<li><a class="reference external" href="#api-reference">API Reference</a><ul>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference external" href="#id1">AUINotebookPage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="ArtManager.html" title="previous chapter">ArtManager</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="BaseBuilderPanel.html" title="next chapter">BaseBuilderPanel</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/AUINotebookPage.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="BaseBuilderPanel.html" title="BaseBuilderPanel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ArtManager.html" title="ArtManager"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

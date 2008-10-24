@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+AUINotebookPage
+===============
+
+.. automodule:: AUINotebookPage
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _AUINotebookPage.AUINotebookPage-class:
+
+AUINotebookPage
+---------------
+
+.. autoclass:: AUINotebookPage.AUINotebookPage
+   :members:
+   :undoc-members:
+      
+   .. automethod:: AUINotebookPage.AUINotebookPage.__init__
+
+

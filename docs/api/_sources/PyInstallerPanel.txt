@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+PyInstallerPanel
+================
+
+.. automodule:: PyInstallerPanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _PyInstallerPanel.PyInstallerPanel-class:
+
+PyInstallerPanel
+----------------
+
+.. autoclass:: PyInstallerPanel.PyInstallerPanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: PyInstallerPanel.PyInstallerPanel.__init__
+
+

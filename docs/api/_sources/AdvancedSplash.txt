@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+AdvancedSplash
+==============
+
+.. automodule:: AdvancedSplash
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _AdvancedSplash.AdvancedSplash-class:
+
+AdvancedSplash
+--------------
+
+.. autoclass:: AdvancedSplash.AdvancedSplash
+   :members:
+   :undoc-members:
+      
+   .. automethod:: AdvancedSplash.AdvancedSplash.__init__
+
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Project &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="index.html" />
+    <link rel="up" title="Major Classes Reference" href="majorClasses.html" />
+    <link rel="next" title="ProjectTreeCtrl" href="ProjectTreeCtrl.html" />
+    <link rel="prev" title="Process" href="Process.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="ProjectTreeCtrl.html" title="ProjectTreeCtrl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Process.html" title="Process"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-Project">
+<h1 id="module-Project">Project<a class="headerlink" href="#module-Project" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api-reference">
+<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<span id="project-project-class"></span><h4 id="id1"><span id="project-project-class"></span>Project<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="Project.Project">
+<!--[Project.Project]-->class <tt class="descclassname">Project.</tt><tt class="descname">Project</tt><big>(</big><em>configuration=None</em>, <em>name=''</em><big>)</big><a class="headerlink" href="#Project.Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class derived from an ordered dictionary which holds all the information
+about GUI2Exe projects, for all the compilers available.</p>
+<dl class="method">
+<dt id="Project.Project.__init__">
+<!--[Project.Project.__init__]--><tt class="descname">__init__</tt><big>(</big><em>configuration=None</em>, <em>name=''</em><big>)</big><a class="headerlink" href="#Project.Project.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default class constructor.</p>
+<p>&#64;param configuration: the project data;
+&#64;param name: the project name as entered by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.AssignBuildOutput">
+<!--[Project.Project.AssignBuildOutput]--><tt class="descname">AssignBuildOutput</tt><big>(</big><em>compiler</em>, <em>outputText</em><big>)</big><a class="headerlink" href="#Project.Project.AssignBuildOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the full build output text to the project for later viewing.</p>
+<p>&#64;param compiler: the compiler used to build the executable;
+&#64;param outputText: the full build output text from the compiler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetBuildOutput">
+<!--[Project.Project.GetBuildOutput]--><tt class="descname">GetBuildOutput</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetBuildOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the full build output text (if any).</p>
+<p>&#64;param compiler: the compiler used to build the executable;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetCompilationData">
+<!--[Project.Project.GetCompilationData]--><tt class="descname">GetCompilationData</tt><big>(</big><big>)</big><a class="headerlink" href="#Project.Project.GetCompilationData" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the result of the compilation process.</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetConfiguration">
+<!--[Project.Project.GetConfiguration]--><tt class="descname">GetConfiguration</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the configuration for the selected compiler.</p>
+<p>&#64;param compiler: the selected executable-builder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetCreationDate">
+<!--[Project.Project.GetCreationDate]--><tt class="descname">GetCreationDate</tt><big>(</big><big>)</big><a class="headerlink" href="#Project.Project.GetCreationDate" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the project creation date.</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetCustomCode">
+<!--[Project.Project.GetCustomCode]--><tt class="descname">GetCustomCode</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetCustomCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the custom code entered by the user.</p>
+<p>&#64;param compiler: the compiler to which the custom code applies.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetDistDir">
+<!--[Project.Project.GetDistDir]--><tt class="descname">GetDistDir</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetDistDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the distribution directory for the specific compiler.</p>
+<p>&#64;param compiler: the compiler used to build the executable;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetExecutableName">
+<!--[Project.Project.GetExecutableName]--><tt class="descname">GetExecutableName</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetExecutableName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the executable name based on the chosen compiler.</p>
+<p>&#64;param compiler: the compiler for which we want the executable name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetManifestFileName">
+<!--[Project.Project.GetManifestFileName]--><tt class="descname">GetManifestFileName</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetManifestFileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the manifest file name for Windows XP executables.</p>
+<p>&#64;param compiler: the compiler for which we build the manifest file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetName">
+<!--[Project.Project.GetName]--><tt class="descname">GetName</tt><big>(</big><big>)</big><a class="headerlink" href="#Project.Project.GetName" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the project name.</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.GetPostCompileCode">
+<!--[Project.Project.GetPostCompileCode]--><tt class="descname">GetPostCompileCode</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetPostCompileCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the custom post-compilation code to be executed (if any).</p>
+<p>&#64;param compiler: the compiler to which the post-compilation code applies.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.HasBeenCompiled">
+<!--[Project.Project.HasBeenCompiled]--><tt class="descname">HasBeenCompiled</tt><big>(</big><big>)</big><a class="headerlink" href="#Project.Project.HasBeenCompiled" title="Permalink to this definition">¶</a></dt>
+<dd>Checks if a project has been compiled or not.</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.SetCompilationData">
+<!--[Project.Project.SetCompilationData]--><tt class="descname">SetCompilationData</tt><big>(</big><em>missingModules</em>, <em>binaryDependencies</em><big>)</big><a class="headerlink" href="#Project.Project.SetCompilationData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the results of the compilation process, in terms of what the compiler
+says are the binary dependencies (dlls) and the missing modules (Python files).
+This method applies only to py2exe compiled scripts.</p>
+<p>&#64;param missingModules: the modules py2exe thinks are missing;
+&#64;param binaryDependencies: the dlls py2exe suggests you to include in your distribution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.SetConfiguration">
+<!--[Project.Project.SetConfiguration]--><tt class="descname">SetConfiguration</tt><big>(</big><em>compiler</em>, <em>configuration</em><big>)</big><a class="headerlink" href="#Project.Project.SetConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a whole configuration for the selected compiler.</p>
+<p>&#64;param compiler: the selected executable-builder;
+&#64;param configuration: the project configuration to save.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.SetCustomCode">
+<!--[Project.Project.SetCustomCode]--><tt class="descname">SetCustomCode</tt><big>(</big><em>compiler</em>, <em>code</em><big>)</big><a class="headerlink" href="#Project.Project.SetCustomCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the custom code entered by the user.</p>
+<p>&#64;param compiler: the compiler to which the custom code applies;
+&#64;param code: the custom code entered by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.SetName">
+<!--[Project.Project.SetName]--><tt class="descname">SetName</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Project.Project.SetName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the project name.</p>
+<p>&#64;param name: the project name given by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.SetPostCompileCode">
+<!--[Project.Project.SetPostCompileCode]--><tt class="descname">SetPostCompileCode</tt><big>(</big><em>compiler</em>, <em>code</em><big>)</big><a class="headerlink" href="#Project.Project.SetPostCompileCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets some custom post-compilation code to be executed.</p>
+<p>&#64;param compiler: the compiler to which the post-compilation code applies;
+&#64;param code: the post-compilation code entered by the user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Project.Project.Update">
+<!--[Project.Project.Update]--><tt class="descname">Update</tt><big>(</big><em>compiler</em>, <em>keyName</em>, <em>keyValue</em><big>)</big><a class="headerlink" href="#Project.Project.Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the project with data inserted by the user.</p>
+<p>&#64;param compiler: the selected executable-builder;
+&#64;param keyName: the option name for the selecte compiler;
+&#64;param keyValue: the option value for the selecte compiler.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">Project</a><ul>
+<li><a class="reference external" href="#api-reference">API Reference</a><ul>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference external" href="#id1">Project</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="Process.html" title="previous chapter">Process</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="ProjectTreeCtrl.html" title="next chapter">ProjectTreeCtrl</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/Project.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="ProjectTreeCtrl.html" title="ProjectTreeCtrl"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Process.html" title="Process"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

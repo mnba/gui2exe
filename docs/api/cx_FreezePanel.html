@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cx_FreezePanel &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="index.html" />
+    <link rel="up" title="Major Classes Reference" href="majorClasses.html" />
+    <link rel="next" title="DataBase" href="DataBase.html" />
+    <link rel="prev" title="Constants" href="Constants.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="DataBase.html" title="DataBase"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Constants.html" title="Constants"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-cx_FreezePanel">
+<h1 id="module-cx_FreezePanel">cx_FreezePanel<a class="headerlink" href="#module-cx_FreezePanel" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api-reference">
+<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<span id="cx-freezepanel-cx-freezepanel-class"></span><h4 id="id1"><span id="cx-freezepanel-cx-freezepanel-class"></span>cx_FreezePanel<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="cx_FreezePanel.cx_FreezePanel">
+<!--[cx_FreezePanel.cx_FreezePanel]-->class <tt class="descclassname">cx_FreezePanel.</tt><tt class="descname">cx_FreezePanel</tt><big>(</big><em>parent</em>, <em>projectName</em>, <em>creationDate</em><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.__init__">
+<!--[cx_FreezePanel.cx_FreezePanel.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>projectName</em>, <em>creationDate</em><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default class constructor.</p>
+<p>&#64;param projectName: the name of the project we are working on
+&#64;param creationDate: the date and time the project was created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.BuildTargetClass">
+<!--[cx_FreezePanel.cx_FreezePanel.BuildTargetClass]--><tt class="descname">BuildTargetClass</tt><big>(</big><em>configuration</em>, <em>project</em>, <em>customCode</em>, <em>postCompile</em><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.BuildTargetClass" title="Permalink to this definition">¶</a></dt>
+<dd>Builds the cx_Freeze compilation script file, returning it as a string.</dd></dl>
+
+<dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.LayoutItems">
+<!--[cx_FreezePanel.cx_FreezePanel.LayoutItems]--><tt class="descname">LayoutItems</tt><big>(</big><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.LayoutItems" title="Permalink to this definition">¶</a></dt>
+<dd>Layouts the widgets using sizers.</dd></dl>
+
+<dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.PrepareForCompile">
+<!--[cx_FreezePanel.cx_FreezePanel.PrepareForCompile]--><tt class="descname">PrepareForCompile</tt><big>(</big><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.PrepareForCompile" title="Permalink to this definition">¶</a></dt>
+<dd>Retrieves all the data to prepare for compilation.</dd></dl>
+
+<dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.SetProperties">
+<!--[cx_FreezePanel.cx_FreezePanel.SetProperties]--><tt class="descname">SetProperties</tt><big>(</big><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.SetProperties" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the properties fro cx_FreezePanel and its children widgets.</dd></dl>
+
+<dl class="method">
+<dt id="cx_FreezePanel.cx_FreezePanel.ValidateOptions">
+<!--[cx_FreezePanel.cx_FreezePanel.ValidateOptions]--><tt class="descname">ValidateOptions</tt><big>(</big><big>)</big><a class="headerlink" href="#cx_FreezePanel.cx_FreezePanel.ValidateOptions" title="Permalink to this definition">¶</a></dt>
+<dd>Validates the cx_Freeze input options before compiling.</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">cx_FreezePanel</a><ul>
+<li><a class="reference external" href="#api-reference">API Reference</a><ul>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference external" href="#id1">cx_FreezePanel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="Constants.html" title="previous chapter">Constants</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="DataBase.html" title="next chapter">DataBase</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/cx_FreezePanel.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="DataBase.html" title="DataBase"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Constants.html" title="Constants"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

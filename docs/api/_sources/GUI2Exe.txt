@@ -1,0 +1,64 @@
+.. -*- coding: UTF-8 -*-
+
+GUI2Exe
+=======
+
+.. automodule:: GUI2Exe
+   
+=============
+API Reference
+=============
+
+
+Functions
+^^^^^^^^^
+
+
+.. _ImportCompilers-function:
+
+ImportCompilers
+---------------
+
+.. autofunction:: ImportCompilers
+
+Classes
+^^^^^^^
+
+
+
+.. _GUI2Exe.GUI2Exe-class:
+
+GUI2Exe
+-------
+
+.. autoclass:: GUI2Exe.GUI2Exe
+   :members:
+   :undoc-members:
+      
+   .. automethod:: GUI2Exe.GUI2Exe.__init__
+
+
+.. _GUI2Exe.GUI2ExeApp-class:
+
+GUI2ExeApp
+----------
+
+.. autoclass:: GUI2Exe.GUI2ExeApp
+   :members:
+   :undoc-members:
+      
+   .. automethod:: GUI2Exe.GUI2ExeApp.__init__
+
+
+.. _GUI2Exe.GUI2ExeSplashScreen-class:
+
+GUI2ExeSplashScreen
+-------------------
+
+.. autoclass:: GUI2Exe.GUI2ExeSplashScreen
+   :members:
+   :undoc-members:
+      
+   .. automethod:: GUI2Exe.GUI2ExeSplashScreen.__init__
+
+

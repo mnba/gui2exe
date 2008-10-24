@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+MessageWindow
+=============
+
+.. automodule:: MessageWindow
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _MessageWindow.MessageWindow-class:
+
+MessageWindow
+-------------
+
+.. autoclass:: MessageWindow.MessageWindow
+   :members:
+   :undoc-members:
+      
+   .. automethod:: MessageWindow.MessageWindow.__init__
+
+

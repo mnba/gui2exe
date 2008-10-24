@@ -1,0 +1,30 @@
+.. -*- coding: UTF-8 -*-
+
+bbFreezePanel
+=============
+
+.. automodule:: bbFreezePanel
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _bbFreezePanel.bbFreezePanel-class:
+
+bbFreezePanel
+-------------
+
+.. autoclass:: bbFreezePanel.bbFreezePanel
+   :members:
+   :undoc-members:
+      
+   .. automethod:: bbFreezePanel.bbFreezePanel.__init__
+
+

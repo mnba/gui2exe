@@ -1,0 +1,164 @@
+.. -*- coding: UTF-8 -*-
+
+Utilities
+=========
+
+.. automodule:: Utilities
+   
+=============
+API Reference
+=============
+
+
+Functions
+^^^^^^^^^
+
+
+.. _CreateBitmap-function:
+
+CreateBitmap
+------------
+
+.. autofunction:: CreateBitmap
+
+.. _EnvironmentInfo-function:
+
+EnvironmentInfo
+---------------
+
+.. autofunction:: EnvironmentInfo
+
+.. _FormatTrace-function:
+
+FormatTrace
+-----------
+
+.. autofunction:: FormatTrace
+
+.. _FractSec-function:
+
+FractSec
+--------
+
+.. autofunction:: FractSec
+
+.. _GetAvailLocales-function:
+
+GetAvailLocales
+---------------
+
+.. autofunction:: GetAvailLocales
+
+.. _GetExecutableData-function:
+
+GetExecutableData
+-----------------
+
+.. autofunction:: GetExecutableData
+
+.. _GetFolderSize-function:
+
+GetFolderSize
+-------------
+
+.. autofunction:: GetFolderSize
+
+.. _GetLangId-function:
+
+GetLangId
+---------
+
+.. autofunction:: GetLangId
+
+.. _GetLocaleDict-function:
+
+GetLocaleDict
+-------------
+
+.. autofunction:: GetLocaleDict
+
+.. _PrintTree-function:
+
+PrintTree
+---------
+
+.. autofunction:: PrintTree
+
+.. _RecurseSubDirs-function:
+
+RecurseSubDirs
+--------------
+
+.. autofunction:: RecurseSubDirs
+
+.. _flatten-function:
+
+flatten
+-------
+
+.. autofunction:: flatten
+
+.. _now-function:
+
+now
+---
+
+.. autofunction:: now
+
+.. _opj-function:
+
+opj
+---
+
+.. autofunction:: opj
+
+.. _setupString-function:
+
+setupString
+-----------
+
+.. autofunction:: setupString
+
+.. _shortNow-function:
+
+shortNow
+--------
+
+.. autofunction:: shortNow
+
+.. _unique-function:
+
+unique
+------
+
+.. autofunction:: unique
+
+Classes
+^^^^^^^
+
+
+
+.. _Utilities.ConnectionThread-class:
+
+ConnectionThread
+----------------
+
+.. autoclass:: Utilities.ConnectionThread
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Utilities.ConnectionThread.__init__
+
+
+.. _Utilities.odict-class:
+
+odict
+-----
+
+.. autoclass:: Utilities.odict
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Utilities.odict.__init__
+
+

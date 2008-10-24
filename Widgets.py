@@ -1308,8 +1308,7 @@ class CustomCodeViewer(wx.Frame):
         Default class constructor.
 
         @param parent: the parent widget
-        @param readOnly: indicates if the children StyledTextCtrl should be
-                         read only or not
+        @param readOnly: indicates if the children StyledTextCtrl should be read only or not
         @param text: the text to add to the StyledTextCtrl
         @param project: the project as it is stored in the database
         @param page: the page number of our main wx.aui.AuiNotebook
@@ -1773,8 +1772,7 @@ class Py2ExeMissing(wx.Frame):
 
         @param parent: the parent widget;
         @param project: the project as stored in the database;
-        @param dll: indicates whether we are going to show the missing binary
-                    dependencies (dll) or the missing modules (py).
+        @param dll: indicates whether we are going to show the missing binary dependencies (dll) or the missing modules (py).
 
         """
         
@@ -2401,8 +2399,8 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
 
         @param dc: the device context used to draw text, icons etc... ;
         @param rect: the bounding rectangle for the item being drawn
-                     (DC clipping region is set to this rectangle before
-                     calling this function);
+        (DC clipping region is set to this rectangle before
+        calling this function);
         @param item: the index of the item to be drawn;
         @param flags: flags to draw the item.
         """
@@ -2433,8 +2431,8 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
 
         @param dc: the device context used to draw text, icons etc... ;
         @param rect: the bounding rectangle for the item being drawn
-                     (DC clipping region is set to this rectangle before
-                     calling this function);
+        (DC clipping region is set to this rectangle before
+        calling this function);
         @param item: the index of the item to be drawn;
         @param flags: flags to draw the item.
         """
@@ -3839,9 +3837,9 @@ def ExceptionHook(exctype, value, trace):
 class ErrorReporter(object):
     """Crash/Error Reporter Service
     @summary: Stores all errors caught during the current session and
-              is implemented as a singleton so that all errors pushed
-              onto it are kept in one central location no matter where
-              the object is called from.
+    is implemented as a singleton so that all errors pushed
+    onto it are kept in one central location no matter where
+    the object is called from.
     @note: from Editra.dev_tool
 
     """
@@ -3903,7 +3901,8 @@ class ErrorDialog(BaseDialog):
     ABORT = False
     REPORTER_ACTIVE = False
     def __init__(self, message):
-        """Initialize the dialog
+        """
+        Initialize the dialog
         @param message: Error message to display
         """
         ErrorDialog.REPORTER_ACTIVE = True

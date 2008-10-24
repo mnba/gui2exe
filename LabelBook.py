@@ -74,7 +74,7 @@ LabelBook and FlatImageBook have been tested on the following platforms:
   * Linux Ubuntu (Dapper 6.06)
 
 
-License And Version:
+License And Version
 ===================
 
 LabelBook and FlatImageBook are freeware and distributed under the wxPython license. 

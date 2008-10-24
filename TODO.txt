@@ -1,0 +1,5 @@
+- Add an hyperlinkctrl in the upgrade dialog of GUI2Exe;
+- Find a way to distribute GUI2Exe standalone (executable/bundle)
+- Check for Python script and data files when opening a project, change icon if any errors
+- Add a way to look at all projects summaries
+- Allow the user to edit the defaultConfig.txt file

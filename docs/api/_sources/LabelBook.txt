@@ -1,0 +1,114 @@
+.. -*- coding: UTF-8 -*-
+
+LabelBook
+=========
+
+.. automodule:: LabelBook
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _LabelBook.FlatBookBase-class:
+
+FlatBookBase
+------------
+
+.. autoclass:: LabelBook.FlatBookBase
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.FlatBookBase.__init__
+
+
+.. _LabelBook.FlatImageBook-class:
+
+FlatImageBook
+-------------
+
+.. autoclass:: LabelBook.FlatImageBook
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.FlatImageBook.__init__
+
+
+.. _LabelBook.ImageContainer-class:
+
+ImageContainer
+--------------
+
+.. autoclass:: LabelBook.ImageContainer
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.ImageContainer.__init__
+
+
+.. _LabelBook.ImageContainerBase-class:
+
+ImageContainerBase
+------------------
+
+.. autoclass:: LabelBook.ImageContainerBase
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.ImageContainerBase.__init__
+
+
+.. _LabelBook.ImageInfo-class:
+
+ImageInfo
+---------
+
+.. autoclass:: LabelBook.ImageInfo
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.ImageInfo.__init__
+
+
+.. _LabelBook.ImageNotebookEvent-class:
+
+ImageNotebookEvent
+------------------
+
+.. autoclass:: LabelBook.ImageNotebookEvent
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.ImageNotebookEvent.__init__
+
+
+.. _LabelBook.LabelBook-class:
+
+LabelBook
+---------
+
+.. autoclass:: LabelBook.LabelBook
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.LabelBook.__init__
+
+
+.. _LabelBook.LabelContainer-class:
+
+LabelContainer
+--------------
+
+.. autoclass:: LabelBook.LabelContainer
+   :members:
+   :undoc-members:
+      
+   .. automethod:: LabelBook.LabelContainer.__init__
+
+

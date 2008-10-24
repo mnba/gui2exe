@@ -1,0 +1,964 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GUI2Exe &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="index.html" />
+    <link rel="up" title="Major Classes Reference" href="majorClasses.html" />
+    <link rel="next" title="AdvancedSplash" href="AdvancedSplash.html" />
+    <link rel="prev" title="Major Classes Reference" href="majorClasses.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="AdvancedSplash.html" title="AdvancedSplash"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="majorClasses.html" title="Major Classes Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="module-GUI2Exe">
+<h1 id="module-GUI2Exe">GUI2Exe<a class="headerlink" href="#module-GUI2Exe" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>GUI2Exe is a Graphical User Interface frontend to all the &#8220;executable builders&#8221;
+available for the Python programming language. It can be used to build standalone
+Windows executables, Linux applications and Mac OS application bundles and
+plugins starting from Python scripts.</p>
+<p>GUI2Exe is (my) first attempt to unify all the available &#8220;executable builders&#8221;
+for Python in a single and simple to use graphical user interface.
+GUI2Exe supports the following compilers:</p>
+<ul class="simple">
+<li>py2exe (Windows)</li>
+<li>py2app (Mac OS)</li>
+<li>PyInstaller (all platforms)</li>
+<li>cx_Freeze (Windows and Linux)</li>
+<li>bbFreeze (Windows and Linux)</li>
+</ul>
+</div>
+<div class="section" id="features">
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>GUI2Exe has a number of features, namely:</p>
+<ul class="simple">
+<li>Saves and stores your work in a database, displaying all your projects in a
+tree control. To load an existing project, simply double click on it;</li>
+<li>Possibility to export the Setup.py file (menu File =&gt; Export setup file...),
+even though you shouldn&#8217;t ever need anymore to have a Setup.py file.
+Everything is done automagically inside GUI2Exe;</li>
+<li>Ability to change the Python version to use to build the executable (menu
+Options =&gt; Change Python version);</li>
+<li>Allows the user to insert custom Python code in the &#8220;in-memory&#8221; Setup.py
+file, which will be properly included at runtime during the building process
+(menu Options =&gt; Add custom code...);</li>
+<li>Allows the user to add post-processing custom code, which will be executed
+at the end of the building process. Useful for cleaning up (menu Options =&gt;
+Insert post compilation code);</li>
+<li>Possibility to view the full build output coming from the compiler (menu
+Builds =&gt; Show full build output);</li>
+<li>Allows the user to add data_files (for the executable builders that support
+this option) either by selecting a bunch of files all together or using a
+directory-recursive approach, which will include all files and sub-folders
+in the selected folders as data_files (menu Options =&gt; Recurse sub-dirs for
+data_files option);</li>
+<li>&#8220;Super&#8221; tooltips for the users to better understand the various options
+(menu Options =&gt; Show tooltips);</li>
+<li>GUI2Exe projects can be saved also to a file (and not only in the database):
+the exported project may then be checked into version control software like
+CVS or SVN, modified and then reloaded into GUI2Exe (menu File =&gt; Save
+project as...);</li>
+<li>Ability to test the executable: if the executable crashes, GUI2Exe will
+notice it and report to you the traceback for inspection (menu Builds =&gt;
+Test executable);</li>
+<li>[py2exe-only]: After a building process, choosing the menu Builds =&gt; Missing
+modules or Builds =&gt; Binary dependencies, you will be presented respectively
+with a list of modules py2exe thinks are missing or a list of binary
+dependencies (dlls) py2exe has found.</li>
+</ul>
+<p>And much more :-D</p>
+</div>
+<div class="section" id="project-information">
+<h2 id="project-information">Project information<a class="headerlink" href="#project-information" title="Permalink to this headline">¶</a></h2>
+<p>Project home page &amp; downloads:
+<a class="reference external" href="http://code.google.com/p/gui2exe">http://code.google.com/p/gui2exe</a></p>
+<p>Bleeding edge SVN repository:
+svn checkout <a class="reference external" href="http://gui2exe.googlecode.com/svn/trunk/">http://gui2exe.googlecode.com/svn/trunk/</a> gui2exe-read-only</p>
+<p>Project mailing list:
+<a class="reference external" href="http://groups.google.com/group/gui2exe">http://groups.google.com/group/gui2exe</a></p>
+<p>Latest revision: Andrea Gavana, 21 Oct 2008 10.00 GMT
+Version 0.2</p>
+</div>
+<div class="section" id="api-reference">
+<h2 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="functions">
+<h3 id="functions">Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="importcompilers">
+<span id="importcompilers-function"></span><h4 id="importcompilers"><span id="importcompilers-function"></span>ImportCompilers<a class="headerlink" href="#importcompilers" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="GUI2Exe.ImportCompilers">
+<!--[GUI2Exe.ImportCompilers]--><tt class="descclassname">GUI2Exe.</tt><tt class="descname">ImportCompilers</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.ImportCompilers" title="Permalink to this definition">¶</a></dt>
+<dd>Simple function that imports the available compilers (if any).</dd></dl>
+
+</div>
+</div>
+<div class="section" id="classes">
+<h3 id="classes">Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<span id="gui2exe-gui2exe-class"></span><h4 id="id1"><span id="gui2exe-gui2exe-class"></span>GUI2Exe<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="GUI2Exe.GUI2Exe">
+<!--[GUI2Exe.GUI2Exe]-->class <tt class="descclassname">GUI2Exe.</tt><tt class="descname">GUI2Exe</tt><big>(</big><em>parent</em>, <em>id=-1</em>, <em>title=''</em>, <em>pos=wx.Point(-1</em>, <em>-1)</em>, <em>size=wx.Size(-1</em>, <em>-1)</em>, <em>style=541072960</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main wx.Frame class for our application.</p>
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.__init__">
+<!--[GUI2Exe.GUI2Exe.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>id=-1</em>, <em>title=''</em>, <em>pos=wx.Point(-1</em>, <em>-1)</em>, <em>size=wx.Size(-1</em>, <em>-1)</em>, <em>style=541072960</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default wx.Frame class constructor.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>parent</cite>: The window parent. This may be NULL. If it is non-NULL, the frame will
+always be displayed on top of the parent window on Windows</li>
+<li><cite>id</cite>: The window identifier. It may take a value of -1 to indicate a default value</li>
+<li><cite>title</cite>: The caption to be displayed on the frame&#8217;s title bar</li>
+<li><cite>pos</cite>: The window position. A value of (-1, -1) indicates a default position, chosen
+by either the windowing system or wxWidgets, depending on platform</li>
+<li><cite>size</cite>: The window size. A value of (-1, -1) indicates a default size, chosen by either
+the windowing system or wxWidgets, depending on platform</li>
+<li><cite>style</cite>: the frame style. See <tt class="docutils literal"><span class="pre">wx.Frame</span></tt> for possible styles.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.AccelClosing">
+<!--[GUI2Exe.GUI2Exe.AccelClosing]--><tt class="descname">AccelClosing</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.AccelClosing" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the Ctrl+W accelerator key (close a page in the central notebook).</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.AccelRun">
+<!--[GUI2Exe.GUI2Exe.AccelRun]--><tt class="descname">AccelRun</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.AccelRun" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the F5 key to run the compilation process.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.AddNewProject">
+<!--[GUI2Exe.GUI2Exe.AddNewProject]--><tt class="descname">AddNewProject</tt><big>(</big><em>treeItem</em>, <em>projectName</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.AddNewProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new project to the current center pane.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl;</li>
+<li><cite>projectName</cite>: the new project name.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.ApplyPreferences">
+<!--[GUI2Exe.GUI2Exe.ApplyPreferences]--><tt class="descname">ApplyPreferences</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.ApplyPreferences" title="Permalink to this definition">¶</a></dt>
+<dd>Applies user preferences.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.AutoSave">
+<!--[GUI2Exe.GUI2Exe.AutoSave]--><tt class="descname">AutoSave</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.AutoSave" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_TIMER event for the auto-saving of projects.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.BindEvents">
+<!--[GUI2Exe.GUI2Exe.BindEvents]--><tt class="descname">BindEvents</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.BindEvents" title="Permalink to this definition">¶</a></dt>
+<dd>Binds all the events related to GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.BuildNBImageList">
+<!--[GUI2Exe.GUI2Exe.BuildNBImageList]--><tt class="descname">BuildNBImageList</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.BuildNBImageList" title="Permalink to this definition">¶</a></dt>
+<dd>Builds a fake image list for wx.aui.AuiNotebook.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CheckForDatabase">
+<!--[GUI2Exe.GUI2Exe.CheckForDatabase]--><tt class="descname">CheckForDatabase</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CheckForDatabase" title="Permalink to this definition">¶</a></dt>
+<dd>Checks if a database exists. If it doesn&#8217;t, creates one anew.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CheckVersion">
+<!--[GUI2Exe.GUI2Exe.CheckVersion]--><tt class="descname">CheckVersion</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CheckVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by a worker thread which check my web page on the internet.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>text</cite>: the GUI2Exe page raw text (if internet connection was successful).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CleanDistDir">
+<!--[GUI2Exe.GUI2Exe.CleanDistDir]--><tt class="descname">CleanDistDir</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CleanDistDir" title="Permalink to this definition">¶</a></dt>
+<dd>Cleans up the distribution folder.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CloseAssociatedPage">
+<!--[GUI2Exe.GUI2Exe.CloseAssociatedPage]--><tt class="descname">CloseAssociatedPage</tt><big>(</big><em>treeItem</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CloseAssociatedPage" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method used to close a wx.aui.AuiNotebook page when an item in the
+project tree is deleted.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CopyLastMessage">
+<!--[GUI2Exe.GUI2Exe.CopyLastMessage]--><tt class="descname">CopyLastMessage</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CopyLastMessage" title="Permalink to this definition">¶</a></dt>
+<dd>Re-sends the previous message to the log window (for long processes).</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CreateBar">
+<!--[GUI2Exe.GUI2Exe.CreateBar]--><tt class="descname">CreateBar</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CreateBar" title="Permalink to this definition">¶</a></dt>
+<dd>Creates the GUI2Exe status bar.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CreateBitmap">
+<!--[GUI2Exe.GUI2Exe.CreateBitmap]--><tt class="descname">CreateBitmap</tt><big>(</big><em>bmpName</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CreateBitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to create bitmap passing a filename.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>bmpName</cite>: the bitmap name (without extension).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CreateManifestFile">
+<!--[GUI2Exe.GUI2Exe.CreateManifestFile]--><tt class="descname">CreateManifestFile</tt><big>(</big><em>project</em>, <em>compiler</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CreateManifestFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a XP-style manifest file if requested.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>project</cite>: the current project;</li>
+<li><cite>compiler</cite>: the compiler used to build this project.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CreateMenu">
+<!--[GUI2Exe.GUI2Exe.CreateMenu]--><tt class="descname">CreateMenu</tt><big>(</big><em>menuData</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CreateMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a menu based on input menu data.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>menuData</cite>: the menu item label, bitmap, longtip etc...</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.CreateMenuBar">
+<!--[GUI2Exe.GUI2Exe.CreateMenuBar]--><tt class="descname">CreateMenuBar</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.CreateMenuBar" title="Permalink to this definition">¶</a></dt>
+<dd>Creates the main frame menu bar.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.ExamineLogFile">
+<!--[GUI2Exe.GUI2Exe.ExamineLogFile]--><tt class="descname">ExamineLogFile</tt><big>(</big><em>logFile</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.ExamineLogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Examine a log file, created by an executable that crashed for some reason.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>logFile</cite>: the log file name created when errors happens (<tt class="docutils literal"><span class="pre">py2exe</span></tt> only).</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.FillStatusBar">
+<!--[GUI2Exe.GUI2Exe.FillStatusBar]--><tt class="descname">FillStatusBar</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.FillStatusBar" title="Permalink to this definition">¶</a></dt>
+<dd>Fills the statusbar fields with different information.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetCurrentBook">
+<!--[GUI2Exe.GUI2Exe.GetCurrentBook]--><tt class="descname">GetCurrentBook</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetCurrentBook" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the current wx.aui.AuiNotebook page (a LabelBook).</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetCurrentPage">
+<!--[GUI2Exe.GUI2Exe.GetCurrentPage]--><tt class="descname">GetCurrentPage</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetCurrentPage" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the current LabelBook page.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetCurrentProject">
+<!--[GUI2Exe.GUI2Exe.GetCurrentProject]--><tt class="descname">GetCurrentProject</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetCurrentProject" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the current project associated to a LabelBook.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetDefaultConfiguration">
+<!--[GUI2Exe.GUI2Exe.GetDefaultConfiguration]--><tt class="descname">GetDefaultConfiguration</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetDefaultConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default configuration for a given compiler.</p>
+<p><strong>Parameters:</strong></p>
+<p><cite>compiler</cite>: the compiler we are using now.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetPreferences">
+<!--[GUI2Exe.GUI2Exe.GetPreferences]--><tt class="descname">GetPreferences</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetPreferences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the user preferences for a particular setting.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>key</cite>: the preferences option name.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetPyInstallerPath">
+<!--[GUI2Exe.GUI2Exe.GetPyInstallerPath]--><tt class="descname">GetPyInstallerPath</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetPyInstallerPath" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the path where PyInstaller is installed.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.GetVersion">
+<!--[GUI2Exe.GUI2Exe.GetVersion]--><tt class="descname">GetVersion</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.GetVersion" title="Permalink to this definition">¶</a></dt>
+<dd>Return the current GUI2Exe version.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.HandlePageClosing">
+<!--[GUI2Exe.GUI2Exe.HandlePageClosing]--><tt class="descname">HandlePageClosing</tt><big>(</big><em>selection</em>, <em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.HandlePageClosing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether a page needs saving before closing.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>selection</cite>: the current selected tab in the AuiNotebook;</li>
+<li><cite>event</cite>: the event that has been triggered.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.HandleUserCode">
+<!--[GUI2Exe.GUI2Exe.HandleUserCode]--><tt class="descname">HandleUserCode</tt><big>(</big><em>post</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.HandleUserCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the custom and post-compilation code the user may add.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>post</cite>: whether the code will be pre- or post-compilation.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.IsAlreadyOpened">
+<!--[GUI2Exe.GUI2Exe.IsAlreadyOpened]--><tt class="descname">IsAlreadyOpened</tt><big>(</big><em>treeItem</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.IsAlreadyOpened" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks if a page is already opened.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.KillCompile">
+<!--[GUI2Exe.GUI2Exe.KillCompile]--><tt class="descname">KillCompile</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.KillCompile" title="Permalink to this definition">¶</a></dt>
+<dd>Kills (or tries to) the compilation process.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.LoadProject">
+<!--[GUI2Exe.GUI2Exe.LoadProject]--><tt class="descname">LoadProject</tt><big>(</big><em>treeItem</em>, <em>projectName</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.LoadProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a project in the center pane.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl;</li>
+<li><cite>projectName</cite>: the existing project name.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.MenuData">
+<!--[GUI2Exe.GUI2Exe.MenuData]--><tt class="descname">MenuData</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.MenuData" title="Permalink to this definition">¶</a></dt>
+<dd>Handles all the information used to build the menu bar.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnAPI">
+<!--[GUI2Exe.GUI2Exe.OnAPI]--><tt class="descname">OnAPI</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnAPI" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the GUI2Exe API help file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnAbout">
+<!--[GUI2Exe.GUI2Exe.OnAbout]--><tt class="descname">OnAbout</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnAbout" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the about dialog for GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnAutoSave">
+<!--[GUI2Exe.GUI2Exe.OnAutoSave]--><tt class="descname">OnAutoSave</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnAutoSave" title="Permalink to this definition">¶</a></dt>
+<dd>Enables/disables the AutoSave feature.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnChangePython">
+<!--[GUI2Exe.GUI2Exe.OnChangePython]--><tt class="descname">OnChangePython</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnChangePython" title="Permalink to this definition">¶</a></dt>
+<dd>Changes the Python version.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnCheckSyntax">
+<!--[GUI2Exe.GUI2Exe.OnCheckSyntax]--><tt class="descname">OnCheckSyntax</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnCheckSyntax" title="Permalink to this definition">¶</a></dt>
+<dd>Checks the Python syntax (for <tt class="docutils literal"><span class="pre">SyntaxError</span></tt>) of the automatically
+generated setup.py file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnCheckUpgrade">
+<!--[GUI2Exe.GUI2Exe.OnCheckUpgrade]--><tt class="descname">OnCheckUpgrade</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnCheckUpgrade" title="Permalink to this definition">¶</a></dt>
+<dd>Checks for a possible upgrade of GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnCleanDist">
+<!--[GUI2Exe.GUI2Exe.OnCleanDist]--><tt class="descname">OnCleanDist</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnCleanDist" title="Permalink to this definition">¶</a></dt>
+<dd>Enables/disables the automatic cleaning of the &#8220;dist&#8221; folder.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnClose">
+<!--[GUI2Exe.GUI2Exe.OnClose]--><tt class="descname">OnClose</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnClose" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_CLOSE event for the main frame.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnCompilerSwitches">
+<!--[GUI2Exe.GUI2Exe.OnCompilerSwitches]--><tt class="descname">OnCompilerSwitches</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnCompilerSwitches" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the different compiler switches/options.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnContact">
+<!--[GUI2Exe.GUI2Exe.OnContact]--><tt class="descname">OnContact</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnContact" title="Permalink to this definition">¶</a></dt>
+<dd>Launches the mail program to contact the GUI2Exe author.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnCustomCode">
+<!--[GUI2Exe.GUI2Exe.OnCustomCode]--><tt class="descname">OnCustomCode</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnCustomCode" title="Permalink to this definition">¶</a></dt>
+<dd>Allows the user to add custom code to the setup.py file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnDeleteBuild">
+<!--[GUI2Exe.GUI2Exe.OnDeleteBuild]--><tt class="descname">OnDeleteBuild</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnDeleteBuild" title="Permalink to this definition">¶</a></dt>
+<dd>Enables/disables the automatic removal of the &#8220;build&#8221; folder.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnExeTimer">
+<!--[GUI2Exe.GUI2Exe.OnExeTimer]--><tt class="descname">OnExeTimer</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnExeTimer" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_TIMER event for the main frame.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnExportProject">
+<!--[GUI2Exe.GUI2Exe.OnExportProject]--><tt class="descname">OnExportProject</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnExportProject" title="Permalink to this definition">¶</a></dt>
+<dd>Exports a project to a file. Useful for version control systems (svn or cvs)
+in which the project can be saved and reloaded as a file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnExportSetup">
+<!--[GUI2Exe.GUI2Exe.OnExportSetup]--><tt class="descname">OnExportSetup</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnExportSetup" title="Permalink to this definition">¶</a></dt>
+<dd>Exports the setup.py file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnHelp">
+<!--[GUI2Exe.GUI2Exe.OnHelp]--><tt class="descname">OnHelp</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnHelp" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the GUI2Exe help file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnNewProject">
+<!--[GUI2Exe.GUI2Exe.OnNewProject]--><tt class="descname">OnNewProject</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnNewProject" title="Permalink to this definition">¶</a></dt>
+<dd>A new project is being created.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPageChanged">
+<!--[GUI2Exe.GUI2Exe.OnPageChanged]--><tt class="descname">OnPageChanged</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPageChanged" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGED event.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPageChanging">
+<!--[GUI2Exe.GUI2Exe.OnPageChanging]--><tt class="descname">OnPageChanging</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPageChanging" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING event.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPageClosed">
+<!--[GUI2Exe.GUI2Exe.OnPageClosed]--><tt class="descname">OnPageClosed</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPageClosed" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSED event.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPageClosing">
+<!--[GUI2Exe.GUI2Exe.OnPageClosing]--><tt class="descname">OnPageClosing</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPageClosing" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSE event.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPostCompilationCode">
+<!--[GUI2Exe.GUI2Exe.OnPostCompilationCode]--><tt class="descname">OnPostCompilationCode</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPostCompilationCode" title="Permalink to this definition">¶</a></dt>
+<dd>Allows the user to execute custom code after the building process.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnPreferences">
+<!--[GUI2Exe.GUI2Exe.OnPreferences]--><tt class="descname">OnPreferences</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnPreferences" title="Permalink to this definition">¶</a></dt>
+<dd>Edit/view pereferences and settings for GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnProcessEnded">
+<!--[GUI2Exe.GUI2Exe.OnProcessEnded]--><tt class="descname">OnProcessEnded</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnProcessEnded" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_END_PROCESS for the main frame.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnProcessTimer">
+<!--[GUI2Exe.GUI2Exe.OnProcessTimer]--><tt class="descname">OnProcessTimer</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnProcessTimer" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_TIMER event for the main frame.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnRecurseSubDir">
+<!--[GUI2Exe.GUI2Exe.OnRecurseSubDir]--><tt class="descname">OnRecurseSubDir</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnRecurseSubDir" title="Permalink to this definition">¶</a></dt>
+<dd>Switches between directory recursion to simple files adding for the
+<cite>data_files</cite> option.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnRestorePerspective">
+<!--[GUI2Exe.GUI2Exe.OnRestorePerspective]--><tt class="descname">OnRestorePerspective</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnRestorePerspective" title="Permalink to this definition">¶</a></dt>
+<dd>Restore the selected GUI perspective.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnSaveConfig">
+<!--[GUI2Exe.GUI2Exe.OnSaveConfig]--><tt class="descname">OnSaveConfig</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnSaveConfig" title="Permalink to this definition">¶</a></dt>
+<dd>Saves the current GUI configuration, in terms of panes positions.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnSaveProject">
+<!--[GUI2Exe.GUI2Exe.OnSaveProject]--><tt class="descname">OnSaveProject</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnSaveProject" title="Permalink to this definition">¶</a></dt>
+<dd>Saves the current project.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnSetPyInstaller">
+<!--[GUI2Exe.GUI2Exe.OnSetPyInstaller]--><tt class="descname">OnSetPyInstaller</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnSetPyInstaller" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the PyInstaller installation path.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnShowTip">
+<!--[GUI2Exe.GUI2Exe.OnShowTip]--><tt class="descname">OnShowTip</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnShowTip" title="Permalink to this definition">¶</a></dt>
+<dd>Enables/disables the showing of tooltips.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnSwitchDB">
+<!--[GUI2Exe.GUI2Exe.OnSwitchDB]--><tt class="descname">OnSwitchDB</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnSwitchDB" title="Permalink to this definition">¶</a></dt>
+<dd>Switch to another project database.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnTestExecutable">
+<!--[GUI2Exe.GUI2Exe.OnTestExecutable]--><tt class="descname">OnTestExecutable</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnTestExecutable" title="Permalink to this definition">¶</a></dt>
+<dd>Test the compiled executable.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnTipsAndTricks">
+<!--[GUI2Exe.GUI2Exe.OnTipsAndTricks]--><tt class="descname">OnTipsAndTricks</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnTipsAndTricks" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the compilation tips and tricks.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnTranslate">
+<!--[GUI2Exe.GUI2Exe.OnTranslate]--><tt class="descname">OnTranslate</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnTranslate" title="Permalink to this definition">¶</a></dt>
+<dd>Launches the web browser and go to the GUI2Exe translation page in LaunchPad.
+If you like GUI2Exe, please help translate it in your language!</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnViewFullBuild">
+<!--[GUI2Exe.GUI2Exe.OnViewFullBuild]--><tt class="descname">OnViewFullBuild</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnViewFullBuild" title="Permalink to this definition">¶</a></dt>
+<dd>Allows the user to see the full build process output for the selected
+compiler.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnViewMissing">
+<!--[GUI2Exe.GUI2Exe.OnViewMissing]--><tt class="descname">OnViewMissing</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnViewMissing" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the missing modules and dlls.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.OnViewSetup">
+<!--[GUI2Exe.GUI2Exe.OnViewSetup]--><tt class="descname">OnViewSetup</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.OnViewSetup" title="Permalink to this definition">¶</a></dt>
+<dd>Allows the user to see the setup.py file.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.Project">
+<!--[GUI2Exe.GUI2Exe.Project]--><tt class="descname">Project</tt><big>(</big><em>project</em>, <em>treeItem</em>, <em>isNew</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method used to actually add a page to the center pane.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>project</cite>: the project we are creating/loading;</li>
+<li><cite>treeItem</cite>: the item in the left TreeCtrl;</li>
+<li><cite>isNew</cite>: whether the project is a new one or we are loading an existing one.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.ReadConfigurationFile">
+<!--[GUI2Exe.GUI2Exe.ReadConfigurationFile]--><tt class="descname">ReadConfigurationFile</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.ReadConfigurationFile" title="Permalink to this definition">¶</a></dt>
+<dd>Reads the default configuration file (default project initialization).</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.ReassignPageItem">
+<!--[GUI2Exe.GUI2Exe.ReassignPageItem]--><tt class="descname">ReassignPageItem</tt><big>(</big><em>oldItem</em>, <em>newItem</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.ReassignPageItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reassigns an item to an opened page after a drag and drop operation.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>oldItem</cite>: the old item in the left TreeCtrl;</li>
+<li><cite>newItem</cite>: the new item in the left TreeCtrl.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.RenameProject">
+<!--[GUI2Exe.GUI2Exe.RenameProject]--><tt class="descname">RenameProject</tt><big>(</big><em>treeItem</em>, <em>oldName</em>, <em>newName</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.RenameProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user has renamed the project in the project tree control.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl;</li>
+<li><cite>oldName</cite>: the old project name;</li>
+<li><cite>newName</cite>: the new project name.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.ResetConfigurations">
+<!--[GUI2Exe.GUI2Exe.ResetConfigurations]--><tt class="descname">ResetConfigurations</tt><big>(</big><em>selectedItem</em>, <em>project</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.ResetConfigurations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates a project from an external file.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>selectedItem</cite>: the selected item in the left TreeCtrl;</li>
+<li><cite>project</cite>: the current project.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.RunCompile">
+<!--[GUI2Exe.GUI2Exe.RunCompile]--><tt class="descname">RunCompile</tt><big>(</big><em>view</em>, <em>run</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.RunCompile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Auxiliary method. Depending on the input, it does different things.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>view</cite>: whether the user wants to view the Setup.py file or run it;</li>
+<li><cite>run</cite>: whether the user wants a normal build or a Dry-Run (py2exe only).</li>
+</ul>
+<p><strong>Possible combinations:</strong></p>
+<ul class="simple">
+<li><cite>view</cite> = True ==&gt; Get the setup.py script and displays it (run is discarded);</li>
+<li><cite>run</cite> = False ==&gt; Start a dry-run (a compilation that does nothing);</li>
+<li><cite>run</cite> = True  ==&gt; Start the real compilation process.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.RunError">
+<!--[GUI2Exe.GUI2Exe.RunError]--><tt class="descname">RunError</tt><big>(</big><em>kind</em>, <em>msg</em>, <em>sendMessage=False</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.RunError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An utility method that shows a message dialog with different functionalities
+depending on the input.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>kind</cite>: the kind of message (error, warning, question, message);</li>
+<li><cite>msg</cite>: the actual message to display;</li>
+<li><cite>sendMessage</cite>: Whether to display the message in the bottom log window too.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SaveProject">
+<!--[GUI2Exe.GUI2Exe.SaveProject]--><tt class="descname">SaveProject</tt><big>(</big><em>project</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SaveProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the current project.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>project</cite>: the current project.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SendMessage">
+<!--[GUI2Exe.GUI2Exe.SendMessage]--><tt class="descname">SendMessage</tt><big>(</big><em>kind</em>, <em>message</em>, <em>copy=False</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SendMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a message to the log window at the bottom.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>kind</cite>: the kind of message (error, warning, message);</li>
+<li><cite>message</cite>: the actual message to display;</li>
+<li><cite>copy</cite>: whether to save this message in the log window stack.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SetAllFlags">
+<!--[GUI2Exe.GUI2Exe.SetAllFlags]--><tt class="descname">SetAllFlags</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SetAllFlags" title="Permalink to this definition">¶</a></dt>
+<dd>Sets all the fancy flags for wxAUI and friends.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SetPreferences">
+<!--[GUI2Exe.GUI2Exe.SetPreferences]--><tt class="descname">SetPreferences</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SetPreferences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the user preferences for a particular setting.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>key</cite>: the preferences option name;</li>
+<li><cite>value</cite>: the preferences option value.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SetProperties">
+<!--[GUI2Exe.GUI2Exe.SetProperties]--><tt class="descname">SetProperties</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SetProperties" title="Permalink to this definition">¶</a></dt>
+<dd>Sets the main frame properties (title, icon...).</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.SuccessfulCompilation">
+<!--[GUI2Exe.GUI2Exe.SuccessfulCompilation]--><tt class="descname">SuccessfulCompilation</tt><big>(</big><em>project</em>, <em>compiler</em>, <em>ask=True</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.SuccessfulCompilation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assumes that the compilation process was successful and tries to test
+the new exe file.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>project</cite>: the current project;</li>
+<li><cite>compiler</cite>: the compiler used to build the current project;</li>
+<li><cite>ask</cite>: whether to ask the user to test the executable or not.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.UpdatePageBitmap">
+<!--[GUI2Exe.GUI2Exe.UpdatePageBitmap]--><tt class="descname">UpdatePageBitmap</tt><big>(</big><em>pageName</em>, <em>pageIcon</em>, <em>selection=None</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.UpdatePageBitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the wx.aui.AuiNotebook page image and text, to reflect the
+current project state (saved/unsaved).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>pageName</cite>: the name of the tab in the AuiNotebook;</li>
+<li><cite>pageIcon</cite>: the icon index to set to the tab;</li>
+<li><cite>selection</cite>: if any, the current selected tab in the AuiNotebook.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2Exe.WalkAUIPages">
+<!--[GUI2Exe.GUI2Exe.WalkAUIPages]--><tt class="descname">WalkAUIPages</tt><big>(</big><em>treeItem</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2Exe.WalkAUIPages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Walks over all the opened page in the center pane.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>treeItem</cite>: the item in the left TreeCtrl.</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gui2exeapp">
+<span id="gui2exe-gui2exeapp-class"></span><h4 id="gui2exeapp"><span id="gui2exe-gui2exeapp-class"></span>GUI2ExeApp<a class="headerlink" href="#gui2exeapp" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="GUI2Exe.GUI2ExeApp">
+<!--[GUI2Exe.GUI2ExeApp]-->class <tt class="descclassname">GUI2Exe.</tt><tt class="descname">GUI2ExeApp</tt><big>(</big><em>redirect=True</em>, <em>filename=None</em>, <em>useBestVisual=False</em>, <em>clearSigInt=True</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main application class.</p>
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.__init__">
+<!--[GUI2Exe.GUI2ExeApp.__init__]--><tt class="descname">__init__</tt><big>(</big><em>redirect=True</em>, <em>filename=None</em>, <em>useBestVisual=False</em>, <em>clearSigInt=True</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a <tt class="docutils literal"><span class="pre">wx.App</span></tt> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>redirect</em> &#8211; Should <tt class="docutils literal"><span class="pre">sys.stdout</span></tt> and <tt class="docutils literal"><span class="pre">sys.stderr</span></tt> be
+redirected?  Defaults to True on Windows and Mac, False
+otherwise.  If <cite>filename</cite> is None then output will be
+redirected to a window that pops up as needed.  (You can
+control what kind of window is created for the output by
+resetting the class variable <tt class="docutils literal"><span class="pre">outputWindowClass</span></tt> to a
+class of your choosing.)</li>
+<li><em>filename</em> &#8211; The name of a file to redirect output to, if
+redirect is True.</li>
+<li><em>useBestVisual</em> &#8211; Should the app try to use the best
+available visual provided by the system (only relevant on
+systems that have more than one visual.)  This parameter
+must be used instead of calling <cite>SetUseBestVisual</cite> later
+on because it must be set before the underlying GUI
+toolkit is initialized.</li>
+<li><em>clearSigInt</em> &#8211; Should SIGINT be cleared?  This allows the
+app to terminate upon a Ctrl-C in the console like other
+GUI apps will.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Note:</th><td class="field-body"><p class="first last">You should override OnInit to do applicaition
+initialization to ensure that the system, toolkit and
+wxWidgets are fully initialized.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.GetConfig">
+<!--[GUI2Exe.GUI2ExeApp.GetConfig]--><tt class="descname">GetConfig</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.GetConfig" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the configuration for GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.GetDataDir">
+<!--[GUI2Exe.GUI2ExeApp.GetDataDir]--><tt class="descname">GetDataDir</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.GetDataDir" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the option directory for GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.GetInstallDir">
+<!--[GUI2Exe.GUI2ExeApp.GetInstallDir]--><tt class="descname">GetInstallDir</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.GetInstallDir" title="Permalink to this definition">¶</a></dt>
+<dd>Returns the installation directory for GUI2Exe.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.GetPreferences">
+<!--[GUI2Exe.GUI2ExeApp.GetPreferences]--><tt class="descname">GetPreferences</tt><big>(</big><em>preferenceKey=None</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.GetPreferences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the user preferences as stored in wx.Config.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>preferenceKey</cite>: the preference to load</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.GetVersion">
+<!--[GUI2Exe.GUI2ExeApp.GetVersion]--><tt class="descname">GetVersion</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.GetVersion" title="Permalink to this definition">¶</a></dt>
+<dd>Return the current GUI2Exe version.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.LoadConfig">
+<!--[GUI2Exe.GUI2ExeApp.LoadConfig]--><tt class="descname">LoadConfig</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.LoadConfig" title="Permalink to this definition">¶</a></dt>
+<dd>Checks for the option file in wx.Config.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.OnExit">
+<!--[GUI2Exe.GUI2ExeApp.OnExit]--><tt class="descname">OnExit</tt><big>(</big><em>event=None</em>, <em>force=False</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.OnExit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle application exit request</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>event</cite>: event that called this handler</li>
+<li><cite>force</cite>: unused at present.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.OnInit">
+<!--[GUI2Exe.GUI2ExeApp.OnInit]--><tt class="descname">OnInit</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.OnInit" title="Permalink to this definition">¶</a></dt>
+<dd>Default wx.App initialization.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeApp.SetPreferences">
+<!--[GUI2Exe.GUI2ExeApp.SetPreferences]--><tt class="descname">SetPreferences</tt><big>(</big><em>newPreferences</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeApp.SetPreferences" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the user preferences in wx.Config.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>newPreferences</cite>: the new preferences to save</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="gui2exesplashscreen">
+<span id="gui2exe-gui2exesplashscreen-class"></span><h4 id="gui2exesplashscreen"><span id="gui2exe-gui2exesplashscreen-class"></span>GUI2ExeSplashScreen<a class="headerlink" href="#gui2exesplashscreen" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="GUI2Exe.GUI2ExeSplashScreen">
+<!--[GUI2Exe.GUI2ExeSplashScreen]-->class <tt class="descclassname">GUI2Exe.</tt><tt class="descname">GUI2ExeSplashScreen</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeSplashScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fancy splash screen class, with a shaped frame.</p>
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeSplashScreen.__init__">
+<!--[GUI2Exe.GUI2ExeSplashScreen.__init__]--><tt class="descname">__init__</tt><big>(</big><em>app</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeSplashScreen.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fancy splash screen :-D</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><cite>app</cite>: the current wxPython app.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeSplashScreen.OnClose">
+<!--[GUI2Exe.GUI2ExeSplashScreen.OnClose]--><tt class="descname">OnClose</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeSplashScreen.OnClose" title="Permalink to this definition">¶</a></dt>
+<dd>Handles the wx.EVT_CLOSE event for GUI2ExeSplashScreen.</dd></dl>
+
+<dl class="method">
+<dt id="GUI2Exe.GUI2ExeSplashScreen.ShowMain">
+<!--[GUI2Exe.GUI2ExeSplashScreen.ShowMain]--><tt class="descname">ShowMain</tt><big>(</big><big>)</big><a class="headerlink" href="#GUI2Exe.GUI2ExeSplashScreen.ShowMain" title="Permalink to this definition">¶</a></dt>
+<dd>Shows the main application (GUI2Exe).</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">GUI2Exe</a><ul>
+<li><a class="reference external" href="#description">Description</a></li>
+<li><a class="reference external" href="#features">Features</a></li>
+<li><a class="reference external" href="#project-information">Project information</a></li>
+<li><a class="reference external" href="#api-reference">API Reference</a><ul>
+<li><a class="reference external" href="#functions">Functions</a><ul>
+<li><a class="reference external" href="#importcompilers">ImportCompilers</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#classes">Classes</a><ul>
+<li><a class="reference external" href="#id1">GUI2Exe</a></li>
+<li><a class="reference external" href="#gui2exeapp">GUI2ExeApp</a></li>
+<li><a class="reference external" href="#gui2exesplashscreen">GUI2ExeSplashScreen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="majorClasses.html" title="previous chapter">Major Classes Reference</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="AdvancedSplash.html" title="next chapter">AdvancedSplash</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/GUI2Exe.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="AdvancedSplash.html" title="AdvancedSplash"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="majorClasses.html" title="Major Classes Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+          <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

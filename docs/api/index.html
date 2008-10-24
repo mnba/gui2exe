@@ -1,17 +1,206 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
-          "DTD/xhtml1-frameset.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <title> GUI2Exe </title>
-</head>
-<frameset cols="20%,80%">
-  <frameset rows="30%,70%">
-    <frame src="toc.html" name="moduleListFrame"
-           id="moduleListFrame" />
-    <frame src="toc-everything.html" name="moduleFrame"
-           id="moduleFrame" />
-  </frameset>
-  <frame src="GUI2Exe-module.html" name="mainFrame" id="mainFrame" />
-</frameset>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GUI2Exe &mdash; GUI2Exe v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+          URL_ROOT:    '',
+          VERSION:     '0.2',
+          COLLAPSE_MODINDEX: false,
+          FILE_SUFFIX: ''
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/interface.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/GUI2Exe.ico"/>
+    <link rel="contents" title="Global table of contents" href="contents.html" />
+    <link rel="index" title="Global index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="GUI2Exe v0.2 documentation" href="" />
+    <link rel="next" title="What&#8217;s New?" href="whatsnew.html" />
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="whatsnew.html" title="What&#8217;s New?"
+             accesskey="N">next</a> |</li>
+        <li><a href="">GUI2Exe v0.2 documentation</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  
+  <div class="section" id="gui2exe">
+<h1 id="gui2exe">GUI2Exe<a class="headerlink" href="#gui2exe" title="Permalink to this headline">¶</a></h1>
+<p class="rubric"><strong>GUI2Exe</strong> is a Graphical User Interface frontend to all the &#8220;executable builders&#8221;
+available for the Python programming language.</p>
+<p><strong>GUI2Exe</strong> can be used to build standalone Windows executables, Linux applications and Mac OS
+application bundles and plugins starting from Python scripts.</p>
+<div class="section" id="what-is-gui2exe">
+<h2 id="what-is-gui2exe">What is GUI2Exe<a class="headerlink" href="#what-is-gui2exe" title="Permalink to this headline">¶</a></h2>
+<p>The aim of <strong>GUI2Exe</strong> was (for me) to create a wxPython GUI tool that unifies and simplifies
+various standalone executable builders for Python, such as py2exe, py2app, cx_Freeze, etc...
+At the moment the supported executable builders are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.py2exe.org/">py2exe</a></li>
+<li><a class="reference external" href="http://svn.pythonmac.org/py2app/py2app/trunk/doc/index.html">py2app</a></li>
+<li><a class="reference external" href="http://pyinstaller.python-hosting.com/">PyInstaller</a></li>
+<li><a class="reference external" href="http://cx-freeze.sourceforge.net/">cx_Freeze</a></li>
+<li><a class="reference external" href="http://pypi.python.org/pypi/bbfreeze">bbFreeze</a></li>
+</ul>
+<p>If any executable builder has been left out, please let me know.</p>
+</div>
+<div class="section" id="requirements">
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Running <strong>GUI2Exe</strong> using Python requires:</p>
+<ol class="arabic simple">
+<li>Python 2.3+ ;</li>
+<li>wxPython 2.8.8.0+ ansi/unicode (unicode recommended);</li>
+<li>One (or more) of the Python executable builders.</li>
+</ol>
+</div>
+<div class="section" id="features">
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p><strong>GUI2Exe</strong> has a number of features, namely:</p>
+<ul class="simple">
+<li>Saves and stores your work in a database, displaying all your projects in a tree control;</li>
+<li>Possibility to export the <tt class="docutils literal"><span class="pre">setup.py</span></tt> file, even though you shouldn&#8217;t ever need anymore to have
+a <tt class="docutils literal"><span class="pre">setup.py</span></tt> file, as everything is done automagically inside <strong>GUI2Exe</strong>;</li>
+<li>Ability to change the Python version to use to build the executable;</li>
+<li>Allows the user to insert custom Python code in the &#8220;in-memory&#8221; <tt class="docutils literal"><span class="pre">setup.py</span></tt> file, which will be
+properly included at runtime during the building process;</li>
+<li>Allows the user to add post-processing custom code, which will be executed at the end of the building
+process. Useful for cleaning up;</li>
+<li>Possibility to view the full build output coming from the compiler;</li>
+<li>Allows the user to add <em>data_files</em> (for the executable builders that support this option) either by
+selecting a bunch of files all together or using a directory-recursive approach, which will include
+all files and sub-folders in the selected folders as <em>data_files</em>;</li>
+<li>&#8220;Super&#8221; tooltips for the users to better understand the various options;</li>
+<li>Periodically saves projects if required (AutoSave feature);</li>
+<li><strong>GUI2Exe</strong> projects can be saved also to a file (and not only in the database): the exported project
+may then be checked into version control software like <em>CVS</em> or <em>SVN</em>, modified and then reloaded into
+<strong>GUI2Exe</strong>;</li>
+<li>Ability to test the executable: if the executable crashes, <strong>GUI2Exe</strong> will notice it and report to you
+the traceback for inspection;</li>
+<li><em>[py2exe-only]</em>: After a building process, choosing the menu <tt class="docutils literal"><span class="pre">Builds</span></tt> =&gt; <tt class="docutils literal"><span class="pre">Missing</span> <span class="pre">modules</span></tt> or <tt class="docutils literal"><span class="pre">Builds</span></tt> =&gt;
+<tt class="docutils literal"><span class="pre">Binary</span> <span class="pre">dependencies</span></tt>, you will be presented respectively with a list of modules <tt class="docutils literal"><span class="pre">py2exe</span></tt> thinks are
+missing or a list of binary dependencies (dlls) <tt class="docutils literal"><span class="pre">py2exe</span></tt> has found.</li>
+</ul>
+<p>And much more :-D</p>
+</div>
+<div class="section" id="ok-i-m-interested-what-do-i-do-next">
+<h2 id="ok-i-m-interested-what-do-i-do-next">OK, I&#8217;m interested. What do I do next?<a class="headerlink" href="#ok-i-m-interested-what-do-i-do-next" title="Permalink to this headline">¶</a></h2>
+<p>You can download a <a class="reference external" href="http://code.google.com/p/gui2exe/downloads/list">source package of GUI2Exe</a> which includes
+the source code for <strong>GUI2Exe</strong>.</p>
+<p>At some point, you will want to do something with <strong>GUI2Exe</strong> and it won&#8217;t be
+immediately obvious how to make it happen. After dutifully scouring the <a class="reference external" href="http://code.google.com/p/gui2exe/w/list">Wiki Pages</a> examples section, you
+decide that is is still not obvious. The <a class="reference external" href="http://groups.google.com/group/gui2exe">Forum</a> is the place to find
+all your as-yet-unasked questions.</p>
+<p>It may even be possible that you might find some undocumented features in the code (also
+known as bugs). These &#8220;features&#8221; can be reported to the <a class="reference external" href="http://code.google.com/p/gui2exe/issues/list">project&#8217;s Issue Tracker</a>.</p>
+<p>If you would like to ask me a question or suggest an improvement, you can post a message
+on the <strong>GUI2Exe</strong> mailing list:</p>
+<p><a class="reference external" href="mailto:gui2exe&#37;&#52;&#48;googlegroups&#46;com">gui2exe<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p>
+<p>Or you can always write directly to me at:</p>
+<p><a class="reference external" href="mailto:andrea&#46;gavana&#37;&#52;&#48;gmail&#46;com">andrea<span>&#46;</span>gavana<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+</div>
+<div class="section" id="bleeding-edge-source">
+<h2 id="bleeding-edge-source">Bleeding-edge source<a class="headerlink" href="#bleeding-edge-source" title="Permalink to this headline">¶</a></h2>
+<p>If you are a very keen developer, you can access the SVN repository directly for this
+project. The following SVN commands will fetch the most recent version from the repository:</p>
+<p><em>For developers:</em>
+<tt class="docutils literal"><span class="pre">svn</span> <span class="pre">checkout</span> <span class="pre">https://gui2exe.googlecode.com/svn/trunk/</span> <span class="pre">gui2exe</span> <span class="pre">--username</span> <span class="pre">YOUR_USERNAME</span></tt></p>
+<p>When prompted, enter your generated googlecode.com password.</p>
+<p><em>For anonymous checkout:</em>
+<tt class="docutils literal"><span class="pre">svn</span> <span class="pre">checkout</span> <span class="pre">http://gui2exe.googlecode.com/svn/trunk/</span> <span class="pre">gui2exe-read-only</span></tt></p>
+<p>The Google code subversion repository can be accessed using many different <a class="reference external" href="http://subversion.tigris.org/links.html#clients">client programs</a></p>
+<p>Please remember that code within the SVN is bleeding edge. It has not been well-tested and
+is almost certainly full of bugs. If you are storing important project setups in <strong>GUI2Exe</strong>, it&#8217;s
+better to stay with the official releases, where the bugs are (hopefully) less obvious.</p>
+</div>
+<div class="section" id="site-contents">
+<h2 id="site-contents">Site contents<a class="headerlink" href="#site-contents" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><a class="reference external" href="whatsnew.html">What&#8217;s New?</a></li>
+</ul>
+<ul>
+<li><a class="reference external" href="majorClasses.html">Major Classes Reference</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><img class="logo" src="_static/gui2exe_splash.png" alt="Logo"/></p>
+            <h3>Table Of Contents</h3>
+            <ul>
+<li><a class="reference external" href="">GUI2Exe</a><ul>
+<li><a class="reference external" href="#what-is-gui2exe">What is GUI2Exe</a></li>
+<li><a class="reference external" href="#requirements">Requirements</a></li>
+<li><a class="reference external" href="#features">Features</a></li>
+<li><a class="reference external" href="#ok-i-m-interested-what-do-i-do-next">OK, I&#8217;m interested. What do I do next?</a></li>
+<li><a class="reference external" href="#bleeding-edge-source">Bleeding-edge source</a></li>
+<li><a class="reference external" href="#site-contents">Site contents</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Next topic</h4>
+            <p class="topless"><a href="whatsnew.html" title="next chapter">What&#8217;s New?</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt">Show Source</a></li>
+            </ul>
+            <h3>Quick search</h3>
+            <form class="search" action="search.html" method="get">
+              <input type="text" name="q" size="18" /> <input type="submit" value="Go" />
+              <input type="hidden" name="check_keywords" value="yes" />
+              <input type="hidden" name="area" value="default" />
+            </form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="whatsnew.html" title="What&#8217;s New?"
+             accesskey="N">next</a> |</li>
+        <li><a href="">GUI2Exe v0.2 documentation</a> &raquo;</li>
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2008, Andrea Gavana.
+      Last updated on Oct 24, 2008.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
 </html>

@@ -1,0 +1,42 @@
+.. -*- coding: UTF-8 -*-
+
+GenericMessageDialog
+====================
+
+.. automodule:: GenericMessageDialog
+   
+=============
+API Reference
+=============
+
+
+
+Classes
+^^^^^^^
+
+
+
+.. _GenericMessageDialog.GenericMessageDialog-class:
+
+GenericMessageDialog
+--------------------
+
+.. autoclass:: GenericMessageDialog.GenericMessageDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: GenericMessageDialog.GenericMessageDialog.__init__
+
+
+.. _GenericMessageDialog.StdDialogButtonSizer-class:
+
+StdDialogButtonSizer
+--------------------
+
+.. autoclass:: GenericMessageDialog.StdDialogButtonSizer
+   :members:
+   :undoc-members:
+      
+   .. automethod:: GenericMessageDialog.StdDialogButtonSizer.__init__
+
+

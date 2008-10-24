@@ -202,7 +202,7 @@ def setupString(key, item, isPyInstaller=False, splitter=False):
     @param key: the option name (data_files, includes, etc...);
     @param item: the option value (usually a list);
     @param isPyInstaller: whether we are compiling with PyInstaller or not
-                          (PyInstaller requires a different syntax);
+    (PyInstaller requires a different syntax);
     @param splitter: currently unused.
     """
 

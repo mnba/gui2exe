@@ -172,8 +172,7 @@ class Project(odict):
         This method applies only to py2exe compiled scripts.
         
         @param missingModules: the modules py2exe thinks are missing;
-        @param binaryDependencies: the dlls py2exe suggests you to include in your
-                                   distribution.
+        @param binaryDependencies: the dlls py2exe suggests you to include in your distribution.
         """
 
         self.missingModules = missingModules

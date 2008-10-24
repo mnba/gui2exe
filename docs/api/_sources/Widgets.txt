@@ -1,0 +1,256 @@
+.. -*- coding: UTF-8 -*-
+
+Widgets
+=======
+
+.. automodule:: Widgets
+   
+=============
+API Reference
+=============
+
+
+Functions
+^^^^^^^^^
+
+
+.. _ExceptionHook-function:
+
+ExceptionHook
+-------------
+
+.. autofunction:: ExceptionHook
+
+Classes
+^^^^^^^
+
+
+
+.. _Widgets.BaseDialog-class:
+
+BaseDialog
+----------
+
+.. autoclass:: Widgets.BaseDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.BaseDialog.__init__
+
+
+.. _Widgets.BaseListCtrl-class:
+
+BaseListCtrl
+------------
+
+.. autoclass:: Widgets.BaseListCtrl
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.BaseListCtrl.__init__
+
+
+.. _Widgets.BuildDialog-class:
+
+BuildDialog
+-----------
+
+.. autoclass:: Widgets.BuildDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.BuildDialog.__init__
+
+
+.. _Widgets.CustomCodeViewer-class:
+
+CustomCodeViewer
+----------------
+
+.. autoclass:: Widgets.CustomCodeViewer
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.CustomCodeViewer.__init__
+
+
+.. _Widgets.ErrorDialog-class:
+
+ErrorDialog
+-----------
+
+.. autoclass:: Widgets.ErrorDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.ErrorDialog.__init__
+
+
+.. _Widgets.ErrorReporter-class:
+
+ErrorReporter
+-------------
+
+.. autoclass:: Widgets.ErrorReporter
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.ErrorReporter.__init__
+
+
+.. _Widgets.GUI2ExeDirSelector-class:
+
+GUI2ExeDirSelector
+------------------
+
+.. autoclass:: Widgets.GUI2ExeDirSelector
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.GUI2ExeDirSelector.__init__
+
+
+.. _Widgets.LangListCombo-class:
+
+LangListCombo
+-------------
+
+.. autoclass:: Widgets.LangListCombo
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.LangListCombo.__init__
+
+
+.. _Widgets.MacTransientPopup-class:
+
+MacTransientPopup
+-----------------
+
+.. autoclass:: Widgets.MacTransientPopup
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.MacTransientPopup.__init__
+
+
+.. _Widgets.MultiComboBox-class:
+
+MultiComboBox
+-------------
+
+.. autoclass:: Widgets.MultiComboBox
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.MultiComboBox.__init__
+
+
+.. _Widgets.PListEditor-class:
+
+PListEditor
+-----------
+
+.. autoclass:: Widgets.PListEditor
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PListEditor.__init__
+
+
+.. _Widgets.PListHelperDialog-class:
+
+PListHelperDialog
+-----------------
+
+.. autoclass:: Widgets.PListHelperDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PListHelperDialog.__init__
+
+
+.. _Widgets.PreferencesDialog-class:
+
+PreferencesDialog
+-----------------
+
+.. autoclass:: Widgets.PreferencesDialog
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PreferencesDialog.__init__
+
+
+.. _Widgets.Py2ExeMissing-class:
+
+Py2ExeMissing
+-------------
+
+.. autoclass:: Widgets.Py2ExeMissing
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.Py2ExeMissing.__init__
+
+
+.. _Widgets.PyBusyInfo-class:
+
+PyBusyInfo
+----------
+
+.. autoclass:: Widgets.PyBusyInfo
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PyBusyInfo.__init__
+
+
+.. _Widgets.PyInfoFrame-class:
+
+PyInfoFrame
+-----------
+
+.. autoclass:: Widgets.PyInfoFrame
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PyInfoFrame.__init__
+
+
+.. _Widgets.PythonSTC-class:
+
+PythonSTC
+---------
+
+.. autoclass:: Widgets.PythonSTC
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.PythonSTC.__init__
+
+
+.. _Widgets.TransientBase-class:
+
+TransientBase
+-------------
+
+.. autoclass:: Widgets.TransientBase
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.TransientBase.__init__
+
+
+.. _Widgets.TransientPopup-class:
+
+TransientPopup
+--------------
+
+.. autoclass:: Widgets.TransientPopup
+   :members:
+   :undoc-members:
+      
+   .. automethod:: Widgets.TransientPopup.__init__
+
+

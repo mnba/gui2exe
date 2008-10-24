@@ -1,0 +1,25 @@
+.. -*- coding: UTF-8 -*-
+
+Constants
+=========
+
+.. automodule:: Constants
+   
+=============
+API Reference
+=============
+
+
+Functions
+^^^^^^^^^
+
+
+.. _GetTooltips-function:
+
+GetTooltips
+-----------
+
+.. autofunction:: GetTooltips
+
+
+

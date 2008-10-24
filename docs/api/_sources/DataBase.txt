@@ -1,0 +1,47 @@
+.. -*- coding: UTF-8 -*-
+
+DataBase
+========
+
+.. automodule:: DataBase
+   
+=============
+API Reference
+=============
+
+
+Functions
+^^^^^^^^^
+
+
+.. _deserialize-function:
+
+deserialize
+-----------
+
+.. autofunction:: deserialize
+
+.. _serialize-function:
+
+serialize
+---------
+
+.. autofunction:: serialize
+
+Classes
+^^^^^^^
+
+
+
+.. _DataBase.DataBase-class:
+
+DataBase
+--------
+
+.. autoclass:: DataBase.DataBase
+   :members:
+   :undoc-members:
+      
+   .. automethod:: DataBase.DataBase.__init__
+
+

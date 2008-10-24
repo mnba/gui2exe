@@ -32,6 +32,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         self.popupIds = [wx.NewId() for i in xrange(7)]
         # A flag to monitor if we are in dragging mode or not
         self.isDragging = False
+        self.isDying = False
 
         # Build all the tree control
         self.BuildImageList()
@@ -163,7 +164,7 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
     def OnDeleteItem(self, event):
         """ Handles the wx.EVT_TREE_DELETE_ITEM event for the tree control. """
 
-        if self.isDragging:
+        if self.isDragging or self.isDying:
             # We are in drag 'n' drop mode, don't do anything
             event.Skip()
             return
@@ -723,4 +724,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             
             child, cookie = self.GetNextChild(self.rootItem, cookie)
 
-            
+
+    def DeleteAllProjects(self):
+        """ Deletes all the tree items, but not from the database. """
+
+        self.isDying = True
+        self.DeleteChildren(self.rootItem)
+        self.isDying = False
+
+        
