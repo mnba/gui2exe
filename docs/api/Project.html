@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="Process.html" title="Process"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -68,23 +71,32 @@ about GUI2Exe projects, for all the compilers available.</p>
 <dt id="Project.Project.__init__">
 <!--[Project.Project.__init__]--><tt class="descname">__init__</tt><big>(</big><em>configuration=None</em>, <em>name=''</em><big>)</big><a class="headerlink" href="#Project.Project.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param configuration: the project data;
-&#64;param name: the project name as entered by the user.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>configuration: the project data;</li>
+<li>name: the project name as entered by the user.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.AssignBuildOutput">
 <!--[Project.Project.AssignBuildOutput]--><tt class="descname">AssignBuildOutput</tt><big>(</big><em>compiler</em>, <em>outputText</em><big>)</big><a class="headerlink" href="#Project.Project.AssignBuildOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assigns the full build output text to the project for later viewing.</p>
-<p>&#64;param compiler: the compiler used to build the executable;
-&#64;param outputText: the full build output text from the compiler.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler used to build the executable;</li>
+<li>outputText: the full build output text from the compiler.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.GetBuildOutput">
 <!--[Project.Project.GetBuildOutput]--><tt class="descname">GetBuildOutput</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetBuildOutput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the full build output text (if any).</p>
-<p>&#64;param compiler: the compiler used to build the executable;</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler used to build the executable;</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -96,7 +108,10 @@ about GUI2Exe projects, for all the compilers available.</p>
 <dt id="Project.Project.GetConfiguration">
 <!--[Project.Project.GetConfiguration]--><tt class="descname">GetConfiguration</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetConfiguration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the configuration for the selected compiler.</p>
-<p>&#64;param compiler: the selected executable-builder.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the selected executable-builder.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -108,28 +123,40 @@ about GUI2Exe projects, for all the compilers available.</p>
 <dt id="Project.Project.GetCustomCode">
 <!--[Project.Project.GetCustomCode]--><tt class="descname">GetCustomCode</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetCustomCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the custom code entered by the user.</p>
-<p>&#64;param compiler: the compiler to which the custom code applies.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler to which the custom code applies.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.GetDistDir">
 <!--[Project.Project.GetDistDir]--><tt class="descname">GetDistDir</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetDistDir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieves the distribution directory for the specific compiler.</p>
-<p>&#64;param compiler: the compiler used to build the executable;</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler used to build the executable;</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.GetExecutableName">
 <!--[Project.Project.GetExecutableName]--><tt class="descname">GetExecutableName</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetExecutableName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the executable name based on the chosen compiler.</p>
-<p>&#64;param compiler: the compiler for which we want the executable name.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler for which we want the executable name.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.GetManifestFileName">
 <!--[Project.Project.GetManifestFileName]--><tt class="descname">GetManifestFileName</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetManifestFileName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the manifest file name for Windows XP executables.</p>
-<p>&#64;param compiler: the compiler for which we build the manifest file.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler for which we build the manifest file.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -141,7 +168,10 @@ about GUI2Exe projects, for all the compilers available.</p>
 <dt id="Project.Project.GetPostCompileCode">
 <!--[Project.Project.GetPostCompileCode]--><tt class="descname">GetPostCompileCode</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Project.Project.GetPostCompileCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the custom post-compilation code to be executed (if any).</p>
-<p>&#64;param compiler: the compiler to which the post-compilation code applies.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler to which the post-compilation code applies.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -155,48 +185,66 @@ about GUI2Exe projects, for all the compilers available.</p>
 <dd><p>Sets the results of the compilation process, in terms of what the compiler
 says are the binary dependencies (dlls) and the missing modules (Python files).
 This method applies only to py2exe compiled scripts.</p>
-<p>&#64;param missingModules: the modules py2exe thinks are missing;
-&#64;param binaryDependencies: the dlls py2exe suggests you to include in your distribution.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>missingModules: the modules py2exe thinks are missing;</li>
+<li>binaryDependencies: the dlls py2exe suggests you to include in your distribution.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.SetConfiguration">
 <!--[Project.Project.SetConfiguration]--><tt class="descname">SetConfiguration</tt><big>(</big><em>compiler</em>, <em>configuration</em><big>)</big><a class="headerlink" href="#Project.Project.SetConfiguration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets a whole configuration for the selected compiler.</p>
-<p>&#64;param compiler: the selected executable-builder;
-&#64;param configuration: the project configuration to save.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the selected executable-builder;</li>
+<li>configuration: the project configuration to save.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.SetCustomCode">
 <!--[Project.Project.SetCustomCode]--><tt class="descname">SetCustomCode</tt><big>(</big><em>compiler</em>, <em>code</em><big>)</big><a class="headerlink" href="#Project.Project.SetCustomCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the custom code entered by the user.</p>
-<p>&#64;param compiler: the compiler to which the custom code applies;
-&#64;param code: the custom code entered by the user.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler to which the custom code applies;</li>
+<li>code: the custom code entered by the user.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.SetName">
 <!--[Project.Project.SetName]--><tt class="descname">SetName</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Project.Project.SetName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the project name.</p>
-<p>&#64;param name: the project name given by the user.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>name: the project name given by the user.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.SetPostCompileCode">
 <!--[Project.Project.SetPostCompileCode]--><tt class="descname">SetPostCompileCode</tt><big>(</big><em>compiler</em>, <em>code</em><big>)</big><a class="headerlink" href="#Project.Project.SetPostCompileCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets some custom post-compilation code to be executed.</p>
-<p>&#64;param compiler: the compiler to which the post-compilation code applies;
-&#64;param code: the post-compilation code entered by the user.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler to which the post-compilation code applies;</li>
+<li>code: the post-compilation code entered by the user.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Project.Project.Update">
 <!--[Project.Project.Update]--><tt class="descname">Update</tt><big>(</big><em>compiler</em>, <em>keyName</em>, <em>keyValue</em><big>)</big><a class="headerlink" href="#Project.Project.Update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the project with data inserted by the user.</p>
-<p>&#64;param compiler: the selected executable-builder;
-&#64;param keyName: the option name for the selecte compiler;
-&#64;param keyValue: the option value for the selecte compiler.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the selected executable-builder;</li>
+<li>keyName: the option name for the selecte compiler;</li>
+<li>keyValue: the option value for the selecte compiler.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -260,13 +308,16 @@ This method applies only to py2exe compiled scripts.</p>
         <li class="right" >
           <a href="Process.html" title="Process"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

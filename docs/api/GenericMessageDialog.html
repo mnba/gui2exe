@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="ExecutableProperties.html" title="ExecutableProperties"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -70,7 +73,7 @@ for the standard wx.MessageDialog, with these extra functionalities:</p>
 <div class="section" id="supported-platforms">
 <h2 id="supported-platforms">Supported Platforms<a class="headerlink" href="#supported-platforms" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
-<dt>SuperToolTip has been tested on the following platforms:</dt>
+<dt>GenericMessageDialog has been tested on the following platforms:</dt>
 <dd><ul class="first last simple">
 <li>Windows (Windows XP).</li>
 </ul>
@@ -94,23 +97,30 @@ for the standard wx.MessageDialog.</p>
 <dt id="GenericMessageDialog.GenericMessageDialog.__init__">
 <!--[GenericMessageDialog.GenericMessageDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>message</em>, <em>caption</em>, <em>style</em>, <em>pos=wx.Point(-1</em>, <em>-1)</em>, <em>size=wx.Size(-1</em>, <em>-1)</em><big>)</big><a class="headerlink" href="#GenericMessageDialog.GenericMessageDialog.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the L{GenericMessageDialog} parent (if any);
-&#64;param message: the message in the main body of the dialog;
-&#64;param caption: the dialog title;
-&#64;param style: the dialog style;
-&#64;param pos: the dialog position on screen;
-&#64;param size: the dialog size.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the L{GenericMessageDialog} parent (if any);</li>
+<li>message: the message in the main body of the dialog;</li>
+<li>caption: the dialog title;</li>
+<li>style: the dialog style;</li>
+<li>pos: the dialog position on screen;</li>
+<li>size: the dialog size.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="GenericMessageDialog.GenericMessageDialog.CreateButtonSizer">
 <!--[GenericMessageDialog.GenericMessageDialog.CreateButtonSizer]--><tt class="descname">CreateButtonSizer</tt><big>(</big><em>flags</em><big>)</big><a class="headerlink" href="#GenericMessageDialog.GenericMessageDialog.CreateButtonSizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a sizer with standard buttons.</p>
-<dl class="docutils">
-<dt>&#64;param flags: a bit list of the following flags:</dt>
-<dd>wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.</dd>
-</dl>
-<p>&#64;note: The sizer lays out the buttons in a manner appropriate to the platform.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>flags: a bit list of the following flags:
+wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>The sizer lays out the buttons in a manner appropriate to the platform.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -123,11 +133,15 @@ from the rest of the dialog contents by a horizontal wx.StaticLine.</dd></dl>
 <dt id="GenericMessageDialog.GenericMessageDialog.CreateStdDialogButtonSizer">
 <!--[GenericMessageDialog.GenericMessageDialog.CreateStdDialogButtonSizer]--><tt class="descname">CreateStdDialogButtonSizer</tt><big>(</big><em>flags</em><big>)</big><a class="headerlink" href="#GenericMessageDialog.GenericMessageDialog.CreateStdDialogButtonSizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a StdDialogButtonSizer with standard buttons.</p>
-<dl class="docutils">
-<dt>&#64;param flags: a bit list of the following flags:</dt>
-<dd>wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.</dd>
-</dl>
-<p>&#64;note: The sizer lays out the buttons in a manner appropriate to the platform.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>flags: a bit list of the following flags:
+wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>The sizer lays out the buttons in a manner appropriate to the platform.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -183,7 +197,10 @@ from the rest of the dialog contents by a horizontal wx.StaticLine.</dd></dl>
 <dt id="GenericMessageDialog.StdDialogButtonSizer.AddButton">
 <!--[GenericMessageDialog.StdDialogButtonSizer.AddButton]--><tt class="descname">AddButton</tt><big>(</big><em>mybutton</em><big>)</big><a class="headerlink" href="#GenericMessageDialog.StdDialogButtonSizer.AddButton" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a button to the sizer.</p>
-<p>&#64;param mybutton: the button to add.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>mybutton: the button to add.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -270,13 +287,16 @@ from the rest of the dialog contents by a horizontal wx.StaticLine.</dd></dl>
         <li class="right" >
           <a href="ExecutableProperties.html" title="ExecutableProperties"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

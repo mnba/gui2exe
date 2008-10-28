@@ -19,9 +19,12 @@ class AUINotebookPage(LB.FlatImageBook):
         """
         Default class constructor.
 
-        @param parent: the parent widget;
-        @param project: the project associated to this book;
-        @param compilers: the available compilers on this machine.
+        
+        **Parameters:**
+
+        * parent: the parent widget;
+        * project: the project associated to this book;
+        * compilers: the available compilers on this machine.
         """        
 
         # Initialize the custom FlatImageBook
@@ -86,8 +89,11 @@ class AUINotebookPage(LB.FlatImageBook):
         """
         Creates the FlatImageBook pages.
 
-        @param project: the project associated with this L{LabelBook};
-        @param compilers: the available compilers in GUI2Exe.
+        
+        **Parameters:**
+
+        * project: the project associated with this L{LabelBook};
+        * compilers: the available compilers in GUI2Exe.
         """
 
         # Loop over all the icons we have (5 at the moment)
@@ -122,7 +128,10 @@ class AUINotebookPage(LB.FlatImageBook):
         """
         Stores the tree item associated with us.
 
-        @param treeItem: a tree control item.
+        
+        **Parameters:**
+
+        * treeItem: a tree control item.
         """
 
         self.treeItem = treeItem
@@ -138,7 +147,10 @@ class AUINotebookPage(LB.FlatImageBook):
         """
         Stores the project associated with us.
 
-        @param project: the project to be stored.
+        
+        **Parameters:**
+
+        * project: the project to be stored.
         """
 
         self.project = project

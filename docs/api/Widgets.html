@@ -37,7 +37,10 @@
         <li class="right" >
           <a href="Utilities.html" title="Utilities"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -59,10 +62,16 @@
 <dt id="Widgets.ExceptionHook">
 <!--[Widgets.ExceptionHook]--><tt class="descclassname">Widgets.</tt><tt class="descname">ExceptionHook</tt><big>(</big><em>exctype</em>, <em>value</em>, <em>trace</em><big>)</big><a class="headerlink" href="#Widgets.ExceptionHook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handler for all unhandled exceptions.</p>
-<p>&#64;param exctype: Exception Type
-&#64;param value: Error Value
-&#64;param trace: Trace back info
-&#64;note: from Editra.dev_tool</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>exctype: Exception Type</li>
+<li>value: Error Value</li>
+<li>trace: Trace back info</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -79,7 +88,10 @@
 <dt id="Widgets.BaseDialog.__init__">
 <!--[Widgets.BaseDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em><big>)</big><a class="headerlink" href="#Widgets.BaseDialog.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the dialog parent;</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the dialog parent;</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -130,10 +142,13 @@
 <dt id="Widgets.BaseListCtrl.__init__">
 <!--[Widgets.BaseListCtrl.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>columnNames</em>, <em>name=''</em>, <em>mainFrame=None</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the parent widget
-&#64;param columnNames: the list control column names
-&#64;param name: the list control name
-&#64;param mainFrame: the application main frame (GUI2Exe)</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the parent widget</li>
+<li>columnNames: the list control column names</li>
+<li>name: the list control name</li>
+<li>mainFrame: the application main frame (GUI2Exe)</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -150,8 +165,11 @@
 <dt id="Widgets.BaseListCtrl.AddFiles">
 <!--[Widgets.BaseListCtrl.AddFiles]--><tt class="descname">AddFiles</tt><big>(</big><em>paths</em>, <em>columns</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.AddFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utility function to handle properly the PyInstaller options.</p>
-<p>&#64;param paths: the file name paths;
-&#64;param columns: the number of items in every path (2 or 3).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>paths: the file name paths;</li>
+<li>columns: the number of items in every path (2 or 3).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -159,7 +177,10 @@
 <!--[Widgets.BaseListCtrl.AddFilesWithPath]--><tt class="descname">AddFilesWithPath</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.AddFilesWithPath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processes all the list controls option for PyInstaller except the Path
 and Hooks extensions.</p>
-<p>&#64;param name: the list control name.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>name: the list control name.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -204,7 +225,10 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.GetSelectedIndices">
 <!--[Widgets.BaseListCtrl.GetSelectedIndices]--><tt class="descname">GetSelectedIndices</tt><big>(</big><em>state=4</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.GetSelectedIndices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the indices of the selected items in the list control.</p>
-<p>&#64;param state: the list control item state.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>state: the list control item state.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -222,14 +246,20 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.HandleMacImports">
 <!--[Widgets.BaseListCtrl.HandleMacImports]--><tt class="descname">HandleMacImports</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.HandleMacImports" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the Dylib/Frameworks/XCDataModels options for Mac.</p>
-<p>&#64;param name: the option name (dylib, frameworks, xcdatamodels).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>name: the option name (dylib, frameworks, xcdatamodels).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.BaseListCtrl.HandleMultipleExe">
 <!--[Widgets.BaseListCtrl.HandleMultipleExe]--><tt class="descname">HandleMultipleExe</tt><big>(</big><em>compiler</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.HandleMultipleExe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user request to add new executable to build.</p>
-<p>&#64;param compiler: the compiler currently used</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>compiler: the compiler currently used</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -241,7 +271,10 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.HandleNewResource">
 <!--[Widgets.BaseListCtrl.HandleNewResource]--><tt class="descname">HandleNewResource</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.HandleNewResource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the user request to add new resources.</p>
-<p>&#64;param name: the resource name (bitmap, icon).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>name: the resource name (bitmap, icon).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -265,7 +298,10 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.InsertColumns">
 <!--[Widgets.BaseListCtrl.InsertColumns]--><tt class="descname">InsertColumns</tt><big>(</big><em>columnNames</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.InsertColumns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inserts the columns in the list control.</p>
-<p>&#64;param columnNames: the list control column names.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>columnNames: the list control column names.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -338,7 +374,10 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.PopulateList">
 <!--[Widgets.BaseListCtrl.PopulateList]--><tt class="descname">PopulateList</tt><big>(</big><em>configuration</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.PopulateList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates the list control based on the input configuration.</p>
-<p>&#64;param configuration: the project configuration.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>configuration: the project configuration.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -350,8 +389,11 @@ Not used by the &#8220;message&#8221; list.</dd></dl>
 <dt id="Widgets.BaseListCtrl.ShowDummyControl">
 <!--[Widgets.BaseListCtrl.ShowDummyControl]--><tt class="descname">ShowDummyControl</tt><big>(</big><em>control</em>, <em>rect</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.ShowDummyControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shows a hidden widgets in the list control (py2exe only, top list control).</p>
-<p>&#64;param control: which control to show (a button or a combobox);
-&#64;param rect: the wx.Rect rectangle where to place the widget to be shown.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>control: which control to show (a button or a combobox);</li>
+<li>rect: the wx.Rect rectangle where to place the widget to be shown.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -364,7 +406,10 @@ by the model stored in the database.</dd></dl>
 <dt id="Widgets.BaseListCtrl.UpdateProject">
 <!--[Widgets.BaseListCtrl.UpdateProject]--><tt class="descname">UpdateProject</tt><big>(</big><em>changeIcon=True</em><big>)</big><a class="headerlink" href="#Widgets.BaseListCtrl.UpdateProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the project in the database, as something changed.</p>
-<p>&#64;param changeIcon: whether to change the icon in the AuiNotebook tab.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>changeIcon: whether to change the icon in the AuiNotebook tab.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -382,10 +427,13 @@ the clipboard.</p>
 <dt id="Widgets.BuildDialog.__init__">
 <!--[Widgets.BuildDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>projectName</em>, <em>compiler</em>, <em>outputText</em><big>)</big><a class="headerlink" href="#Widgets.BuildDialog.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the dialog&#8217;s parent;
-&#64;param projectName: the current project name;
-&#64;param compiler: the compiler used to build the executable;
-&#64;param outputText: the full build output text.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the dialog&#8217;s parent;</li>
+<li>projectName: the current project name;</li>
+<li>compiler: the compiler used to build the executable;</li>
+<li>outputText: the full build output text.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -397,9 +445,12 @@ the clipboard.</p>
 <dt id="Widgets.BuildDialog.DoLayout">
 <!--[Widgets.BuildDialog.DoLayout]--><tt class="descname">DoLayout</tt><big>(</big><em>header</em>, <em>projectName</em>, <em>compiler</em><big>)</big><a class="headerlink" href="#Widgets.BuildDialog.DoLayout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layouts the widgets with sizers.</p>
-<p>&#64;param header: the header text (containing compiler information;
-&#64;param projectName: the name of the project the build output refers to;
-&#64;param compiler: the compiler used to build the project.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>header: the header text (containing compiler information;</li>
+<li>projectName: the name of the project the build output refers to;</li>
+<li>compiler: the compiler used to build the project.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -430,27 +481,36 @@ the clipboard.</p>
 <dt id="Widgets.CustomCodeViewer.__init__">
 <!--[Widgets.CustomCodeViewer.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>readOnly=False</em>, <em>text=''</em>, <em>project=None</em>, <em>page=None</em>, <em>compiler=None</em>, <em>postBuild=False</em><big>)</big><a class="headerlink" href="#Widgets.CustomCodeViewer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the parent widget
-&#64;param readOnly: indicates if the children StyledTextCtrl should be read only or not
-&#64;param text: the text to add to the StyledTextCtrl
-&#64;param project: the project as it is stored in the database
-&#64;param page: the page number of our main wx.aui.AuiNotebook
-&#64;param compiler: the compiler to which the custom code refers
-&#64;param postBuild: whether it is a post-compilation code or not</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the parent widget</li>
+<li>readOnly: indicates if the children StyledTextCtrl should be read only or not</li>
+<li>text: the text to add to the StyledTextCtrl</li>
+<li>project: the project as it is stored in the database</li>
+<li>page: the page number of our main wx.aui.AuiNotebook</li>
+<li>compiler: the compiler to which the custom code refers</li>
+<li>postBuild: whether it is a post-compilation code or not</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.CustomCodeViewer.BindEvents">
 <!--[Widgets.CustomCodeViewer.BindEvents]--><tt class="descname">BindEvents</tt><big>(</big><em>readOnly</em><big>)</big><a class="headerlink" href="#Widgets.CustomCodeViewer.BindEvents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Binds the events for our CustomCodeViewer.</p>
-<p>&#64;param readOnly: whether the StyledTextCtrl will be read-only or not</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>readOnly: whether the StyledTextCtrl will be read-only or not</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.CustomCodeViewer.LayoutItems">
 <!--[Widgets.CustomCodeViewer.LayoutItems]--><tt class="descname">LayoutItems</tt><big>(</big><em>readOnly</em><big>)</big><a class="headerlink" href="#Widgets.CustomCodeViewer.LayoutItems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layout the widgets with sizers.</p>
-<p>&#64;param readOnly: whether the StyledTextCtrl will be read-only or not</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>readOnly: whether the StyledTextCtrl will be read-only or not</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -477,8 +537,11 @@ the clipboard.</p>
 <dt id="Widgets.CustomCodeViewer.SetProperties">
 <!--[Widgets.CustomCodeViewer.SetProperties]--><tt class="descname">SetProperties</tt><big>(</big><em>readOnly</em>, <em>text</em><big>)</big><a class="headerlink" href="#Widgets.CustomCodeViewer.SetProperties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets few properties for the frame and the StyledTextCtrl.</p>
-<p>&#64;param readOnly: whether the StyledTextCtrl will be read-only or not
-&#64;param text: the text displayed in the StyledTextCtrl</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>readOnly: whether the StyledTextCtrl will be read-only or not</li>
+<li>text: the text displayed in the StyledTextCtrl</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -490,34 +553,55 @@ the clipboard.</p>
 <dt id="Widgets.ErrorDialog">
 <!--[Widgets.ErrorDialog]-->class <tt class="descclassname">Widgets.</tt><tt class="descname">ErrorDialog</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#Widgets.ErrorDialog" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dialog for showing errors and and notifying gui2exe-users should the
-user choose so.
-&#64;note: partially from Editra.dev_tool</p>
+user choose so.</p>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>partially from Editra.dev_tool</li>
+</ul>
 <dl class="method">
 <dt id="Widgets.ErrorDialog.__init__">
 <!--[Widgets.ErrorDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#Widgets.ErrorDialog.__init__" title="Permalink to this definition">¶</a></dt>
-<dd>Initialize the dialog
-&#64;param message: Error message to display</dd></dl>
+<dd><p>Initialize the dialog</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>message: Error message to display</li>
+</ul>
+</dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorDialog.DoLayout">
 <!--[Widgets.ErrorDialog.DoLayout]--><tt class="descname">DoLayout</tt><big>(</big><big>)</big><a class="headerlink" href="#Widgets.ErrorDialog.DoLayout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layout the dialog and prepare it to be shown</p>
-<p>&#64;note: Do not call this method in your code</p>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>Do not call this method in your code</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorDialog.OnButton">
 <!--[Widgets.ErrorDialog.OnButton]--><tt class="descname">OnButton</tt><big>(</big><em>evt</em><big>)</big><a class="headerlink" href="#Widgets.ErrorDialog.OnButton" title="Permalink to this definition">¶</a></dt>
-<dd>Handles button events
-&#64;param evt: event that called this handler
-&#64;postcondition: Dialog is closed
-&#64;postcondition: If Report Event then email program is opened</dd></dl>
+<dd><p>Handles button events</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>evt: event that called this handler</li>
+</ul>
+<p><strong>Post-Conditions:</strong></p>
+<ul class="simple">
+<li>Dialog is closed</li>
+<li>If Report Event then email program is opened</li>
+</ul>
+</dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorDialog.OnClose">
 <!--[Widgets.ErrorDialog.OnClose]--><tt class="descname">OnClose</tt><big>(</big><em>evt</em><big>)</big><a class="headerlink" href="#Widgets.ErrorDialog.OnClose" title="Permalink to this definition">¶</a></dt>
-<dd>Cleans up the dialog when it is closed
-&#64;param evt: Event that called this handler</dd></dl>
+<dd><p>Cleans up the dialog when it is closed</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>evt: Event that called this handler</li>
+</ul>
+</dd></dl>
 
 </dd></dl>
 
@@ -531,31 +615,50 @@ user choose so.
 &#64;summary: Stores all errors caught during the current session and
 is implemented as a singleton so that all errors pushed
 onto it are kept in one central location no matter where
-the object is called from.
-&#64;note: from Editra.dev_tool</p>
+the object is called from.</p>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 <dl class="method">
 <dt id="Widgets.ErrorReporter.__init__">
 <!--[Widgets.ErrorReporter.__init__]--><tt class="descname">__init__</tt><big>(</big><big>)</big><a class="headerlink" href="#Widgets.ErrorReporter.__init__" title="Permalink to this definition">¶</a></dt>
-<dd>Initialize the reporter
-&#64;note: The ErrorReporter is a singleton.</dd></dl>
+<dd><p>Initialize the reporter</p>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>The ErrorReporter is a singleton.</li>
+</ul>
+</dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorReporter.AddMessage">
 <!--[Widgets.ErrorReporter.AddMessage]--><tt class="descname">AddMessage</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#Widgets.ErrorReporter.AddMessage" title="Permalink to this definition">¶</a></dt>
-<dd>Adds a message to the reporters list of session errors
-&#64;param msg: The Error Message to save</dd></dl>
+<dd><p>Adds a message to the reporters list of session errors</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>msg: The Error Message to save</li>
+</ul>
+</dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorReporter.GetErrorStack">
 <!--[Widgets.ErrorReporter.GetErrorStack]--><tt class="descname">GetErrorStack</tt><big>(</big><big>)</big><a class="headerlink" href="#Widgets.ErrorReporter.GetErrorStack" title="Permalink to this definition">¶</a></dt>
-<dd>Returns all the errors caught during this session
-&#64;return: formatted log message of errors</dd></dl>
+<dd><p>Returns all the errors caught during this session</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>formatted log message of errors</li>
+</ul>
+</dd></dl>
 
 <dl class="method">
 <dt id="Widgets.ErrorReporter.GetLastError">
 <!--[Widgets.ErrorReporter.GetLastError]--><tt class="descname">GetLastError</tt><big>(</big><big>)</big><a class="headerlink" href="#Widgets.ErrorReporter.GetLastError" title="Permalink to this definition">¶</a></dt>
-<dd>Gets the last error from the current session
-&#64;return: Error Message String</dd></dl>
+<dd><p>Gets the last error from the current session</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>Error Message String</li>
+</ul>
+</dd></dl>
 
 </dd></dl>
 
@@ -571,11 +674,14 @@ folders to be selected at once.</p>
 <dt id="Widgets.GUI2ExeDirSelector.__init__">
 <!--[Widgets.GUI2ExeDirSelector.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>title</em>, <em>lastDir=None</em>, <em>size=wx.Size(-1</em>, <em>-1)</em>, <em>showExtensions=False</em><big>)</big><a class="headerlink" href="#Widgets.GUI2ExeDirSelector.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default BaseDialog class constructor.</p>
-<p>&#64;param parent: the dialog parent widget;
-&#64;param title: the dialog title;
-&#64;param lastDir: the last selected directory;
-&#64;param size: the dialog size (if any);
-&#64;param showExtensions: whether to show a text control to filter extensions.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the dialog parent widget;</li>
+<li>title: the dialog title;</li>
+<li>lastDir: the last selected directory;</li>
+<li>size: the dialog size (if any);</li>
+<li>showExtensions: whether to show a text control to filter extensions.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -597,9 +703,12 @@ folders to be selected at once.</p>
 <dt id="Widgets.GUI2ExeDirSelector.RecurseTopDir">
 <!--[Widgets.GUI2ExeDirSelector.RecurseTopDir]--><tt class="descname">RecurseTopDir</tt><big>(</big><em>treeCtrl</em>, <em>item</em>, <em>itemText</em><big>)</big><a class="headerlink" href="#Widgets.GUI2ExeDirSelector.RecurseTopDir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recurse a directory tree to include all the sub-folders.</p>
-<p>&#64;param treeCtrl: the tree control associated with wx.GenericDirCtrl;
-&#64;param item: the selected tree control item;
-&#64;param itemText: the selected tree control item text.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>treeCtrl: the tree control associated with wx.GenericDirCtrl;</li>
+<li>item: the selected tree control item;</li>
+<li>itemText: the selected tree control item text.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -615,15 +724,21 @@ folders to be selected at once.</p>
 <dl class="class">
 <dt id="Widgets.LangListCombo">
 <!--[Widgets.LangListCombo]-->class <tt class="descclassname">Widgets.</tt><tt class="descname">LangListCombo</tt><big>(</big><em>parent</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#Widgets.LangListCombo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines a langlist and a BitmapComboBox.
-&#64;note: from Editra.dev_tool</p>
+<dd><p>Combines a langlist and a BitmapComboBox.</p>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 <dl class="method">
 <dt id="Widgets.LangListCombo.__init__">
 <!--[Widgets.LangListCombo.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#Widgets.LangListCombo.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a combobox with a list of all translations for GUI2Exe
 as well as displaying the countries flag next to the item
 in the list.</p>
-<p>&#64;param default: The default item to show in the combo box</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>default: The default item to show in the combo box</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -639,11 +754,14 @@ in the list.</p>
 <dt id="Widgets.MacTransientPopup.__init__">
 <!--[Widgets.MacTransientPopup.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>compiler</em>, <em>option</em>, <em>tip</em>, <em>note=None</em><big>)</big><a class="headerlink" href="#Widgets.MacTransientPopup.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the TransientPopup parent;
-&#64;param compiler: the compiler currently selected;
-&#64;param option: the option currently hovered by the mouse;
-&#64;param tip: the help tip;
-&#64;param note: a note on the current option.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the TransientPopup parent;</li>
+<li>compiler: the compiler currently selected;</li>
+<li>option: the option currently hovered by the mouse;</li>
+<li>tip: the help tip;</li>
+<li>note: a note on the current option.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -659,11 +777,14 @@ in the list.</p>
 <dt id="Widgets.MultiComboBox.__init__">
 <!--[Widgets.MultiComboBox.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>choices</em>, <em>style</em>, <em>compiler</em>, <em>name</em><big>)</big><a class="headerlink" href="#Widgets.MultiComboBox.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the combobox parent;
-&#64;param choices: a list of strings which represents the combobox choices;
-&#64;param style: the combobox style;
-&#64;param compiler: the compiler to which the combobox&#8217;s parent belongs;
-&#64;param name: the option name associated to this combobox.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the combobox parent;</li>
+<li>choices: a list of strings which represents the combobox choices;</li>
+<li>style: the combobox style;</li>
+<li>compiler: the compiler to which the combobox&#8217;s parent belongs;</li>
+<li>name: the option name associated to this combobox.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -675,24 +796,30 @@ in the list.</p>
 <dt id="Widgets.MultiComboBox.OnDrawBackground">
 <!--[Widgets.MultiComboBox.OnDrawBackground]--><tt class="descname">OnDrawBackground</tt><big>(</big><em>dc</em>, <em>rect</em>, <em>item</em>, <em>flags</em><big>)</big><a class="headerlink" href="#Widgets.MultiComboBox.OnDrawBackground" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overridden from OwnerDrawnComboBox, called for drawing the background area of each item.</p>
-<p>&#64;param dc: the device context used to draw text, icons etc... ;
-&#64;param rect: the bounding rectangle for the item being drawn
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>dc: the device context used to draw text, icons etc... ;</li>
+<li>rect: the bounding rectangle for the item being drawn
 (DC clipping region is set to this rectangle before
-calling this function);
-&#64;param item: the index of the item to be drawn;
-&#64;param flags: flags to draw the item.</p>
+calling this function);</li>
+<li>item: the index of the item to be drawn;</li>
+<li>flags: flags to draw the item.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.MultiComboBox.OnDrawItem">
 <!--[Widgets.MultiComboBox.OnDrawItem]--><tt class="descname">OnDrawItem</tt><big>(</big><em>dc</em>, <em>rect</em>, <em>item</em>, <em>flags</em><big>)</big><a class="headerlink" href="#Widgets.MultiComboBox.OnDrawItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overridden from OwnerDrawnComboBox, called to draw each item in the list.</p>
-<p>&#64;param dc: the device context used to draw text, icons etc... ;
-&#64;param rect: the bounding rectangle for the item being drawn
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>dc: the device context used to draw text, icons etc... ;</li>
+<li>rect: the bounding rectangle for the item being drawn
 (DC clipping region is set to this rectangle before
-calling this function);
-&#64;param item: the index of the item to be drawn;
-&#64;param flags: flags to draw the item.</p>
+calling this function);</li>
+<li>item: the index of the item to be drawn;</li>
+<li>flags: flags to draw the item.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -700,7 +827,10 @@ calling this function);
 <!--[Widgets.MultiComboBox.OnMeasureItem]--><tt class="descname">OnMeasureItem</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#Widgets.MultiComboBox.OnMeasureItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overridden from OwnerDrawnComboBox, should return the height needed to display
 an item in the popup, or -1 for default.</p>
-<p>&#64;param item: the index of the item to be drawn.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>item: the index of the item to be drawn.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -708,7 +838,10 @@ an item in the popup, or -1 for default.</p>
 <!--[Widgets.MultiComboBox.OnMeasureItemWidth]--><tt class="descname">OnMeasureItemWidth</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#Widgets.MultiComboBox.OnMeasureItemWidth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overridden from OwnerDrawnComboBox.  Callback for item width, or -1
 for default/undetermined.</p>
-<p>&#64;param item: the index of the item to be drawn.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>item: the index of the item to be drawn.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -724,19 +857,28 @@ for default/undetermined.</p>
 <dt id="Widgets.PListEditor.__init__">
 <!--[Widgets.PListEditor.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>CFBundleExecutable</em>, <em>pListFile=None</em>, <em>pListCode={}</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the dialog parent;
-&#64;param CFBundleExecutable: the program name;
-&#64;param pListFile: a PList file, if any, to be merged with pListCode;
-&#64;param pListCode: the existing PList code (if any).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the dialog parent;</li>
+</ul>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>CFBundleExecutable: the program name;</li>
+<li>pListFile: a PList file, if any, to be merged with pListCode;</li>
+<li>pListCode: the existing PList code (if any).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.PListEditor.AutoAddChildren">
 <!--[Widgets.PListEditor.AutoAddChildren]--><tt class="descname">AutoAddChildren</tt><big>(</big><em>itemParent</em>, <em>PTemplate</em>, <em>level</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.AutoAddChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively adds children to a tree item.</p>
-<p>&#64;param itemParent: the item to which we will add children (if any);
-&#64;param PTemplate: a PList dictionary or a list/string;
-&#64;param level: the hierarchy level (root=0)</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>itemParent: the item to which we will add children (if any);</li>
+<li>PTemplate: a PList dictionary or a list/string;</li>
+<li>level: the hierarchy level (root=0)</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -753,9 +895,12 @@ for default/undetermined.</p>
 <dt id="Widgets.PListEditor.CalculateColumnWidth">
 <!--[Widgets.PListEditor.CalculateColumnWidth]--><tt class="descname">CalculateColumnWidth</tt><big>(</big><em>item</em>, <em>colWidth</em>, <em>level=1</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.CalculateColumnWidth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the correct column widths for the tree list control columns.</p>
-<p>&#64;param item: the item to be measured;
-&#64;param colWidth: the maximum column width up to now;
-&#64;param level: the hierarchy level (root=0).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>item: the item to be measured;</li>
+<li>colWidth: the maximum column width up to now;</li>
+<li>level: the hierarchy level (root=0).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -768,7 +913,10 @@ for default/undetermined.</p>
 <!--[Widgets.PListEditor.EnableCode]--><tt class="descname">EnableCode</tt><big>(</big><em>enable</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.EnableCode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables/disables the top portion of the dialog, the one which contains
 the Python code editor.</p>
-<p>&#64;param enable: whether to enable or disable the top portion of the dialog.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>enable: whether to enable or disable the top portion of the dialog.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -820,15 +968,21 @@ the Python code editor.</p>
 <dt id="Widgets.PListEditor.PopulateTree">
 <!--[Widgets.PListEditor.PopulateTree]--><tt class="descname">PopulateTree</tt><big>(</big><em>PTemplate</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.PopulateTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates the tree list control using the PList dictionary.</p>
-<p>&#64;param PTemplate: a PList dictionary.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>PTemplate: a PList dictionary.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="Widgets.PListEditor.Recolor">
 <!--[Widgets.PListEditor.Recolor]--><tt class="descname">Recolor</tt><big>(</big><em>item=None</em>, <em>itemCounter=0</em><big>)</big><a class="headerlink" href="#Widgets.PListEditor.Recolor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses alternate colours for the tree list rows and sets the font.</p>
-<p>&#64;param item: the item to be checked;
-&#64;param itemCounter: the number of items already checked.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>item: the item to be checked;</li>
+<li>itemCounter: the number of items already checked.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -854,7 +1008,10 @@ the Python code editor.</p>
 <dt id="Widgets.PListHelperDialog.__init__">
 <!--[Widgets.PListHelperDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em><big>)</big><a class="headerlink" href="#Widgets.PListHelperDialog.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the widget parent.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the widget parent.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -876,7 +1033,10 @@ the Python code editor.</p>
 <dt id="Widgets.PListHelperDialog.SetProperties">
 <!--[Widgets.PListHelperDialog.SetProperties]--><tt class="descname">SetProperties</tt><big>(</big><em>title</em><big>)</big><a class="headerlink" href="#Widgets.PListHelperDialog.SetProperties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets few properties for the dialog.</p>
-<p>&#64;param title: the dialog title.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>title: the dialog title.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -892,7 +1052,10 @@ the Python code editor.</p>
 <dt id="Widgets.PreferencesDialog.__init__">
 <!--[Widgets.PreferencesDialog.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em><big>)</big><a class="headerlink" href="#Widgets.PreferencesDialog.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the dialog parent.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the dialog parent.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -944,9 +1107,12 @@ or the dlls your executable relies on.</p>
 <dt id="Widgets.Py2ExeMissing.__init__">
 <!--[Widgets.Py2ExeMissing.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>project</em>, <em>dll=False</em><big>)</big><a class="headerlink" href="#Widgets.Py2ExeMissing.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the parent widget;
-&#64;param project: the project as stored in the database;
-&#64;param dll: indicates whether we are going to show the missing binary dependencies (dll) or the missing modules (py).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the parent widget;</li>
+<li>project: the project as stored in the database;</li>
+<li>dll: indicates whether we are going to show the missing binary dependencies (dll) or the missing modules (py).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -958,7 +1124,10 @@ or the dlls your executable relies on.</p>
 <dt id="Widgets.Py2ExeMissing.LayoutItems">
 <!--[Widgets.Py2ExeMissing.LayoutItems]--><tt class="descname">LayoutItems</tt><big>(</big><em>dll</em><big>)</big><a class="headerlink" href="#Widgets.Py2ExeMissing.LayoutItems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layouts the widgets with sizers.</p>
-<p>&#64;param dll: whether this frame is showing dlls or missing modules.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>dll: whether this frame is showing dlls or missing modules.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -975,7 +1144,10 @@ or the dlls your executable relies on.</p>
 <dt id="Widgets.Py2ExeMissing.SetProperties">
 <!--[Widgets.Py2ExeMissing.SetProperties]--><tt class="descname">SetProperties</tt><big>(</big><em>dll</em><big>)</big><a class="headerlink" href="#Widgets.Py2ExeMissing.SetProperties" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets few properties for the Py2ExeMissing frame.</p>
-<p>&#64;param dll: whether this frame is showing dlls or missing modules.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>dll: whether this frame is showing dlls or missing modules.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -992,9 +1164,12 @@ NB: If parent is not None you must ensure that it is not closed while the busy i
 <dt id="Widgets.PyBusyInfo.__init__">
 <!--[Widgets.PyBusyInfo.__init__]--><tt class="descname">__init__</tt><big>(</big><em>message</em>, <em>parent=None</em>, <em>useCustom=True</em><big>)</big><a class="headerlink" href="#Widgets.PyBusyInfo.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param message: the message to display;
-&#64;param parent: the PyBusyInfo parent (can be None);
-&#64;parent useCustom: if True, custom drawing/shading can be implemented.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>message: the message to display;</li>
+<li>parent: the PyBusyInfo parent (can be None);</li>
+<li>useCustom: if True, custom drawing/shading can be implemented.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -1010,9 +1185,12 @@ NB: If parent is not None you must ensure that it is not closed while the busy i
 <dt id="Widgets.PyInfoFrame.__init__">
 <!--[Widgets.PyInfoFrame.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>message</em>, <em>useCustom</em><big>)</big><a class="headerlink" href="#Widgets.PyInfoFrame.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the frame parent;
-&#64;param message: the message to display in the PyBusyInfo;
-&#64;param useCustom: if True, it will custom-draw the content in an OnPaint handler.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the frame parent;</li>
+<li>message: the message to display in the PyBusyInfo;</li>
+<li>useCustom: if True, it will custom-draw the content in an OnPaint handler.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1044,8 +1222,11 @@ custom drawing.</dd></dl>
 <dt id="Widgets.PythonSTC.__init__">
 <!--[Widgets.PythonSTC.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>readOnly</em><big>)</big><a class="headerlink" href="#Widgets.PythonSTC.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the StyledTextCtrl parent;
-&#64;param readOnly: indicates if the StyledTextCtrl should be in read-only mode.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the StyledTextCtrl parent;</li>
+<li>readOnly: indicates if the StyledTextCtrl should be in read-only mode.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1082,11 +1263,14 @@ Allows our custom tooltip to work on all platforms.</p>
 <dt id="Widgets.TransientBase.__init__">
 <!--[Widgets.TransientBase.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>compiler</em>, <em>option</em>, <em>tip</em>, <em>note=None</em><big>)</big><a class="headerlink" href="#Widgets.TransientBase.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the TransientPopup parent;
-&#64;param compiler: the compiler currently selected;
-&#64;param option: the option currently hovered by the mouse;
-&#64;param tip: the help tip;
-&#64;param note: a note on the current option.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the TransientPopup parent;</li>
+<li>compiler: the compiler currently selected;</li>
+<li>option: the option currently hovered by the mouse;</li>
+<li>tip: the help tip;</li>
+<li>note: a note on the current option.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1094,7 +1278,10 @@ Allows our custom tooltip to work on all platforms.</p>
 <!--[Widgets.TransientBase.AdjustPosition]--><tt class="descname">AdjustPosition</tt><big>(</big><em>size</em><big>)</big><a class="headerlink" href="#Widgets.TransientBase.AdjustPosition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adjust the position of TransientPopup accordingly to the TransientPopup
 size, mouse position and screen geometry.</p>
-<p>&#64;param size: our size.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>size: our size.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -1131,11 +1318,14 @@ Not available on Mac as wx.PopupWindow is not implemented.</p>
 <dt id="Widgets.TransientPopup.__init__">
 <!--[Widgets.TransientPopup.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>compiler</em>, <em>option</em>, <em>tip</em>, <em>note=None</em><big>)</big><a class="headerlink" href="#Widgets.TransientPopup.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the TransientPopup parent;
-&#64;param compiler: the compiler currently selected;
-&#64;param option: the option currently hovered by the mouse;
-&#64;param tip: the help tip;
-&#64;param note: a note on the current option.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the TransientPopup parent;</li>
+<li>compiler: the compiler currently selected;</li>
+<li>option: the option currently hovered by the mouse;</li>
+<li>tip: the help tip;</li>
+<li>note: a note on the current option.</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -1216,13 +1406,16 @@ Not available on Mac as wx.PopupWindow is not implemented.</p>
         <li class="right" >
           <a href="Utilities.html" title="Utilities"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

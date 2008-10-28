@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="AUINotebookPage.html" title="AUINotebookPage"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -67,10 +70,13 @@
 <dt id="BaseBuilderPanel.BaseBuilderPanel.__init__">
 <!--[BaseBuilderPanel.BaseBuilderPanel.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>projectName</em>, <em>creationDate</em>, <em>name</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the widget parent;
-&#64;param projectName: the name of the project we are working on;
-&#64;param creationDate: the date and time the project was created;
-&#64;param name: the widget (compiler) name.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the widget parent;</li>
+<li>projectName: the name of the project we are working on;</li>
+<li>creationDate: the date and time the project was created;</li>
+<li>name: the widget (compiler) name.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -89,25 +95,34 @@ the widgets in our panel.</dd></dl>
 <!--[BaseBuilderPanel.BaseBuilderPanel.EnableAssociatedText]--><tt class="descname">EnableAssociatedText</tt><big>(</big><em>windowName</em>, <em>value</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.EnableAssociatedText" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enables/disables the text controls associated with the zipfile checkbox
 or the dist checkbox.</p>
-<p>&#64;param windowName: the widget name;
-&#64;param value: the new widget value.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>windowName: the widget name;</li>
+<li>value: the new widget value.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="BaseBuilderPanel.BaseBuilderPanel.GetWindowValues">
 <!--[BaseBuilderPanel.BaseBuilderPanel.GetWindowValues]--><tt class="descname">GetWindowValues</tt><big>(</big><em>windowName</em>, <em>window=None</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.GetWindowValues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the current value(s) displayed in a widget.</p>
-<p>&#64;param windowName: the widget name;
-&#64;param window: the widget itsefl (if any).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>windowName: the widget name;</li>
+<li>window: the widget itsefl (if any).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="BaseBuilderPanel.BaseBuilderPanel.GiveScreenFeedback">
 <!--[BaseBuilderPanel.BaseBuilderPanel.GiveScreenFeedback]--><tt class="descname">GiveScreenFeedback</tt><big>(</big><em>windowName</em>, <em>value</em>, <em>changeIcon=True</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.GiveScreenFeedback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gives visual feedback to the user that the model has changed.</p>
-<p>&#64;param windowName: the widget name;
-&#64;param value: the new widget value;
-&#64;param changeIcon: whether to change the tab icon in the AuiNotebook.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>windowName: the widget name;</li>
+<li>value: the new widget value;</li>
+<li>changeIcon: whether to change the tab icon in the AuiNotebook.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -139,31 +154,43 @@ or the dist checkbox.</p>
 <dt id="BaseBuilderPanel.BaseBuilderPanel.RemoveOldKeys">
 <!--[BaseBuilderPanel.BaseBuilderPanel.RemoveOldKeys]--><tt class="descname">RemoveOldKeys</tt><big>(</big><em>configuration</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.RemoveOldKeys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes the old configuration keys from cx_Freeze and bbFreeze.</p>
-<p>&#64;param configuration: the configuration to be checked.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>configuration: the configuration to be checked.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="BaseBuilderPanel.BaseBuilderPanel.SetConfiguration">
 <!--[BaseBuilderPanel.BaseBuilderPanel.SetConfiguration]--><tt class="descname">SetConfiguration</tt><big>(</big><em>configuration</em>, <em>delete=False</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.SetConfiguration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates all the widgets with the values coming from the project.</p>
-<p>&#64;param configuration: the project configuration coming from the database;
-&#64;param delete: whether to delete the current configuration or not.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>configuration: the project configuration coming from the database;</li>
+<li>delete: whether to delete the current configuration or not.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="BaseBuilderPanel.BaseBuilderPanel.SetProjectOptions">
 <!--[BaseBuilderPanel.BaseBuilderPanel.SetProjectOptions]--><tt class="descname">SetProjectOptions</tt><big>(</big><em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.SetProjectOptions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates all the widgets (except list controls).</p>
-<p>&#64;param key: the configuration option name (which is also a window name);
-&#64;param value: the configuration option value.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>key: the configuration option name (which is also a window name);</li>
+<li>value: the configuration option value.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="BaseBuilderPanel.BaseBuilderPanel.UpdateLabel">
 <!--[BaseBuilderPanel.BaseBuilderPanel.UpdateLabel]--><tt class="descname">UpdateLabel</tt><big>(</big><em>projectName</em>, <em>creationDate</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.UpdateLabel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the project name and creation date when the user rename a project.</p>
-<p>&#64;param projectName: the name of the current project;
-&#64;param creationDate: the creation data of the project (as it is in the database).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>projectName: the name of the current project;</li>
+<li>creationDate: the creation data of the project (as it is in the database).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -171,8 +198,11 @@ or the dist checkbox.</p>
 <!--[BaseBuilderPanel.BaseBuilderPanel.UpdateResourceList]--><tt class="descname">UpdateResourceList</tt><big>(</big><em>windowName</em>, <em>value</em><big>)</big><a class="headerlink" href="#BaseBuilderPanel.BaseBuilderPanel.UpdateResourceList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the &#8220;other_resources&#8221; list when the user checks/unchecks the
 xp manifest checkbox.</p>
-<p>&#64;param windowName: the widget name;
-&#64;param value: the new widget value;</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>windowName: the widget name;</li>
+<li>value: the new widget value;</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
@@ -236,13 +266,16 @@ xp manifest checkbox.</p>
         <li class="right" >
           <a href="AUINotebookPage.html" title="AUINotebookPage"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

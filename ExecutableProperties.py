@@ -18,7 +18,10 @@ class ExecutableListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         """
         Default class constructor.
 
-        @param parent: the list control parent widget.
+        
+        **Parameters:**
+
+        * parent: the list control parent widget.
         """
 
         wx.ListCtrl.__init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.SUNKEN_BORDER)
@@ -37,7 +40,10 @@ class ExecutableProperties(wx.Panel):
         """
         Default class constructor.
 
-        @param parent: the parent widget.
+        
+        **Parameters:**
+
+        * parent: the parent widget.
 
         """
         
@@ -98,8 +104,11 @@ class ExecutableProperties(wx.Panel):
         """
         Adds executable information to the listCtrl.
 
-        @param blank: whether to clear the list control or not;
-        @param project: the project from where to get all the data.
+        
+        **Parameters:**
+
+        * blank: whether to clear the list control or not;
+        * project: the project from where to get all the data.
         """
 
         numFiles, fileSizes = [""]*5, [""]*5

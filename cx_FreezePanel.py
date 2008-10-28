@@ -19,8 +19,11 @@ class cx_FreezePanel(BaseBuilderPanel):
         """
         Default class constructor.
 
-        @param projectName: the name of the project we are working on
-        @param creationDate: the date and time the project was created
+        
+        **Parameters:**
+
+        * projectName: the name of the project we are working on
+        * creationDate: the date and time the project was created
 
         """
         

@@ -25,14 +25,17 @@ class Process(object):
         """
         Default class constructor.
 
-        @param: parent: the parent widget (GUI2Exe);
-        @param buildDir: the directory in which we build the executable;
-        @param setupScript: the setup file passed as a string;
-        @param run: if False, only a "dry-run" is performed (py2exe only);
-        @param compiler: the compiler used;
-        @param project: the project we are compiling;
-        @param pageNumber: the main wx.aui.AuiNotebook page number we belong to;
-        @param pythonVersion: the Python executable used to call the exe builder.
+        
+        **Parameters:**
+
+        *  parent: the parent widget (GUI2Exe);
+        * buildDir: the directory in which we build the executable;
+        * setupScript: the setup file passed as a string;
+        * run: if False, only a "dry-run" is performed (py2exe only);
+        * compiler: the compiler used;
+        * project: the project we are compiling;
+        * pageNumber: the main wx.aui.AuiNotebook page number we belong to;
+        * pythonVersion: the Python executable used to call the exe builder.
         """        
 
         # Store the input data passed in __init__
@@ -158,7 +161,10 @@ class Process(object):
         """
         Handles all the messages that come from input and error streams.
 
-        @param processEnded: whether the process has just ended.
+        
+        **Parameters:**
+
+        * processEnded: whether the process has just ended.
         """
 
         # Get the input stream
@@ -193,9 +199,12 @@ class Process(object):
         """
         Reads the input/error streams (if any).
 
-        @param stream: the stdout/stderr stream;
-        @param isError: whether the building process generated an error or not;
-        @param processEnded: whether the process has just ended.
+        
+        **Parameters:**
+
+        * stream: the stdout/stderr stream;
+        * isError: whether the building process generated an error or not;
+        * processEnded: whether the process has just ended.
         """
 
         written, copy = False, True

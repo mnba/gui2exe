@@ -200,8 +200,11 @@ class ImageInfo:
         Default Class Constructor.
 
         Parameters:
-        @param strCaption: the tab caption;
-        @param imageIndex: the tab image index based on the assigned (set) wx.ImageList (if any).
+        
+        **Parameters:**
+
+        * strCaption: the tab caption;
+        * imageIndex: the tab image index based on the assigned (set) wx.ImageList (if any).
         """
         
         self._pos = wx.Point()
@@ -285,11 +288,14 @@ class ImageContainerBase(wx.Panel):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
 
         self._nIndex = -1
@@ -680,11 +686,14 @@ class ImageContainer(ImageContainerBase):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
 
         ImageContainerBase.__init__(self, parent, id, pos, size, style, name)
@@ -1033,11 +1042,14 @@ class LabelContainer(ImageContainerBase):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
 
         ImageContainerBase.__init__(self, parent, id, pos, size, style, name)
@@ -1608,11 +1620,14 @@ class FlatBookBase(wx.Panel):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
         
         self._pages = None
@@ -1891,11 +1906,14 @@ class FlatImageBook(FlatBookBase):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
         
         FlatBookBase.__init__(self, parent, id, pos, size, style, name)
@@ -1940,11 +1958,14 @@ class LabelBook(FlatBookBase):
         Default class constructor.
 
         Parameters:
-        @param parent - parent window
-        @param id - Window id
-        @param pos - Window position
-        @param size - Window size
-        @param style - possible style INB_XXX
+        
+        **Parameters:**
+
+        * parent - parent window
+        * id - Window id
+        * pos - Window position
+        * size - Window size
+        * style - possible style INB_XXX
         """
         
         FlatBookBase.__init__(self, parent, id, pos, size, style, name)

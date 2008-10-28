@@ -1,718 +1,438 @@
-/**************************************************************
-   AUTHOR:  Pat Heard (fullahead.org)
-   DATE:    2006.03.19
-   PURPOSE: Controls the layout of the site and styles
-            the menus
- **************************************************************/
-
-
-
-/**************************************************************
-   #content: Sets the width of the site.  Make changes here
-             to convert to a fixed width site.
- **************************************************************/
-
-#content {  
-  height: 100%;
-  min-height: 100%;
-
-  text-align: left;
-}
-
-#content,
-#width {
-  /* max-width hack for IE since it doesn't understand the valid css property */
-  width: expression(document.body.clientWidth > 1000 ? "1000px" : "94%");  
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-#content[id],
-#width[id] {
-  width: 94%;
-  height: auto;
-}
-
-
-
-
-/**************************************************************
-   #header: Holds the site title and header images
- **************************************************************/
-
-#header {
-  position: relative;
-  height: 193px;
-}
-
-/* Holds the site title and subtitle */
-#header #title {
-  position: absolute;
-  z-index: 3;
-  top: 10px;
-  left: 130px;
-
-  padding: 5px;
-  text-align: right;
-}
-
-#header h1 {
-  margin: 0;
-  padding: 0;
-
-  font: 700 4em "trebuchet ms", serif;
-  letter-spacing: -3px;
-  text-transform: lowercase;
-  color: #FFF;
-}
-
-#header h2 {
-  position: absolute;
-  top: 10px;
-  right: 5px;
-
-  margin: 0;
-  padding: 0;
-
-  font: 700 1em "trebuchet ms", serif;
-  text-transform: lowercase;
-  color: #00F0EC;
-}
-
-
-/* Sets where the header images will go */
-#header img.left {
-  position: absolute;
-  z-index: 1;
-
-  top: 0;
-  left: 0;
-}
-
-#header img.right {
-  position: absolute;
-  z-index: 0;
-
-  top: 0;
-  right: 0;
-}
-
-#header img.balloons {
-  position: absolute;
-  z-index: 2;
-
-  top: 70px;
-  right: 400px;
-}
-
-
-
-/**************************************************************
-   #mainMenu: The top level site menu
- **************************************************************/
-
-#mainMenu { 
-  float: left;
-  width: 100%;
-  clear: both;  
-}
-
-#mainMenu ul {
-  margin: 0;
-  padding: 0;
-}
-
-#mainMenu li {
-  display: inline;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#mainMenu li a {
-  float: left;
-  margin: 0 2px;
-  padding: 5px 0.5em;
-
-  font: 400 1.6em "trebuchet ms", serif;
-  text-decoration: none;
-  text-transform: lowercase;
-  color: #FFF;
-}
-
-#mainMenu li a:hover,
-#mainMenu li a.here {
-  color: #65EBFF;
-  border-top: 5px solid #000;
-}
-
-#mainMenu li a.last {
-  margin-right: 0;
-}
-
-
-
-
-/**************************************************************
-   .sideMenu: The side bar menu
- **************************************************************/
-
-ul.sideMenu {
-  margin: 0;
-  padding: 0;
-}
-
-.sideMenu li {
-  display: inline;
-  
-  /* Needed since IE fails when you give it list-style: none; */  
-  list-style-image: url(foo.gif);
-  font: 400 1.3em "trebuchet ms", serif;
-}
-
-.sideMenu li a {
-  display: block;
-  margin: 0.2em 0;
-  padding: 3px 5px;    
-  
-  text-decoration: none;
-  color: #FFF;
-} 
-
-.sideMenu li a:hover {
-  color: #65EBFF;
-  background: #5F5F5F;
-}
-
-/* Active menu item */
-.sideMenu li.here {
-  display: block;  
-  padding: 5px;
-  color: #65EBFF;
-  background: #555;
-}
-
-/* Submenu of active menu item */
-.sideMenu li.here ul {
-  margin: 0;
-  padding: 0;
-}
-
-.sideMenu li.here ul li a {
-  padding-left: 35px;
-  font: 400 0.55em verdana, arial, sans-serif; 
-  color: #FFF;  
-  background: url(../images/bg/bullet.gif) no-repeat 10px 0px;
-}
-
-.sideMenu li.here ul li a:hover {
-  color: #9FF3FF;
-  background: #5F5F5F url(../images/bg/bullet.gif) no-repeat 10px 0px;
-}
-
-
-
-/**************************************************************
-   #page: Holds the main page content.
- **************************************************************/
-
-#page {
-  float: left;
-  width: 100%;
-  clear: both;
-  
-  padding-bottom: 4em;
-}
-
-
-
-
-/**************************************************************
-   #footer: The page footer - will stick to the bottom if not
-            enough content.
- **************************************************************/
-
-#footer {
-  float: left;
-  width: 100%;
-  clear: both;
-  
-  margin-top: -3.8em;
-  background: #000 url(../images/bg/footer.jpg) repeat-x top left;
-}
-
-/* Sets the width of the footer content */
-#footer #width {
-  position: relative;
-  z-index: 3;
-  font-size: 0.85em;
-  padding-top: 27px;
-}
-
-
-
-/**************************************************************
-   Width classes used by the site columns
- **************************************************************/
-
-.width100 {
-  width: 100%;
-}
-
-.width75 {
-  width: 74%;
-}
-
-.width50 {
-  width: 49.7%;
-}
-
-.width33 {
-  width: 32.7%;
-}
-
-.width25 {
-  width: 24.7%;
-}
-
-
-
-/**************************************************************
-   Alignment classes
- **************************************************************/
-
-.floatLeft {
-  float: left;
-}
-
-.floatRight {
-  float: right;
-}
-
-.alignLeft {
-  text-align: left;
-}
-
-.alignRight {
-  text-align: right;
-}
-
-
-
-/**************************************************************
-   Generic display classes
- **************************************************************/
-
-.clear {
-  clear: both;
-}
-
-.block {
-  display: block;
-}
-
-.small {
-  font-size: 0.8em;
-}
-
-.green {
-  color: #A1FF45;
-}
-
-.red {
-  color: #EA1B00;
-}
-
-.grey {
-  color: #666;
-}
-
-.grey a {
-  color: #999;
-}
-
-.grey a:hover {
-  color: #EEE;
-}
-
-.gradient {
-  margin-bottom: 2em;
-  background: #555 url(../images/bg/gradient.jpg) repeat-x bottom left; 
-}
-
-
-div.sphinxsidebarwrapper {
-    padding: 10px 5px 0 10px;
-}
-
-div.sphinxsidebar {
-    float: left;
-    width: 230px;
-    margin-left: -100%;
-    font-size: 90%;
-}
-
-/* ::: TOC :::: */
-div.sphinxsidebar h3 {
-    font-family: 'Trebuchet MS', sans-serif;
-    color: white;
-    font-size: 1.4em;
-    font-weight: normal;
-    margin: 0;
+/**
+ * Alternate Sphinx design
+ * Originally created by Armin Ronacher for Werkzeug, adapted by Georg Brandl.
+ */
+
+body {
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    line-height: 150%;
+    text-align: center;
+    /*background-color: #AFC1C4; */
+    background-color: #BFD1D4;
+    color: black;
     padding: 0;
+    border: 1px solid #aaa;
+
+    margin: 0px 80px 0px 80px;
+    min-width: 740px;
 }
 
-div.sphinxsidebar h4 {
-    font-family: 'Trebuchet MS', sans-serif;
-    color: white;
-    font-size: 1.3em;
-    font-weight: normal;
-    margin: 5px 0 0 0;
-    padding: 0;
+a {
+    color: #CA7900;
+    text-decoration: none;
 }
 
-div.sphinxsidebar p {
-    color: white;
+a:hover {
+    color: #2491CF;
 }
 
-div.sphinxsidebar p.topless {
-    margin: 5px 10px 10px 10px;
+pre {
+    font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    font-size: 0.95em;
+    letter-spacing: 0.015em;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
 }
 
-div.sphinxsidebar ul {
-    margin: 10px;
-    padding: 0;
-    list-style: none;
-    color: white;
+td.linenos pre {
+    padding: 0.5em 0;
+    border: 0;
+    background-color: transparent;
+    color: #aaa;
 }
 
-div.sphinxsidebar ul ul,
-div.sphinxsidebar ul.want-points {
-    margin-left: 20px;
-    list-style: square;
+table.highlighttable {
+    margin-left: 0.5em;
 }
 
-div.sphinxsidebar ul ul {
-    margin-top: 0;
-    margin-bottom: 0;
+table.highlighttable td {
+    padding: 0 0.5em 0 0.5em;
 }
 
-div.sphinxsidebar a {
-    color: #98dbcc;
+cite, code, tt {
+    font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+    font-size: 0.95em;
+    letter-spacing: 0.01em;
 }
 
-div.sphinxsidebar form {
-    margin-top: 10px;
+hr {
+    border: 1px solid #abc;
+    margin: 2em;
 }
 
-div.sphinxsidebar input {
-    border: 1px solid #98dbcc;
-    font-family: sans-serif;
-    font-size: 1em;
-}
-
-/* :::: MODULE CLOUD :::: */
-div.modulecloud {
-    margin: -5px 10px 5px 10px;
-    padding: 10px;
-    line-height: 160%;
-    border: 1px solid #cbe7e5;
-    background-color: #f2fbfd;
-}
-
-div.modulecloud a {
-    padding: 0 5px 0 5px;
-}
-
-/* :::: SEARCH :::: */
-ul.search {
-    margin: 10px 0 0 20px;
-    padding: 0;
-}
-
-ul.search li {
-    padding: 5px 0 5px 20px;
-    background-image: url(file.png);
-    background-repeat: no-repeat;
-    background-position: 0 7px;
-}
-
-ul.search li a {
-    font-weight: bold;
-}
-
-ul.search li div.context {
-    color: #888;
-    margin: 2px 0 0 30px;
-    text-align: left;
-}
-
-ul.keywordmatches li.goodmatch a {
-    font-weight: bold;
-}
-
-/* :::: COMMON FORM STYLES :::: */
-
-div.actions {
-    padding: 5px 10px 5px 10px;
-    border-top: 1px solid #cbe7e5;
-    border-bottom: 1px solid #cbe7e5;
-    background-color: #e0f6f4;
-}
-
-form dl {
+tt {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
     color: #333;
 }
 
-form dt {
+tt.descname {
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1.2em;
+    border: 0;
+}
+
+tt.descclassname {
+    background-color: transparent;
+    border: 0;
+}
+
+tt.xref {
+    background-color: transparent;
+    font-weight: bold;
+    border: 0;
+}
+
+a tt {
+    background-color: transparent;
+    font-weight: bold;
+    border: 0;
+    color: #CA7900;
+}
+
+a tt:hover {
+    color: #2491CF;
+}
+
+.field-list ul {
+    margin: 0;
+    padding-left: 1em;
+}
+
+.field-list p {
+    margin: 0;
+}
+
+dl {
+    margin-bottom: 15px;
+}
+
+dd p {
+    margin-top: 0px;
+}
+
+dd ul, dd table {
+    margin-bottom: 10px;
+}
+
+dd {
+    margin-top: 3px;
+    margin-bottom: 10px;
+    margin-left: 30px;
+}
+
+.refcount {
+    color: #060;
+}
+
+dt:target,
+.highlight {
+    background-color: #fbe54e;
+}
+
+dl.glossary dt {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+pre {
+    line-height: 120%;
+}
+
+pre a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.first {
+    margin-top: 0 !important;
+}
+
+div.document {
+    background-color: white;
+    text-align: left;
+    background-image: url(contents.png);
+    background-repeat: repeat-x;
+}
+
+/*
+div.documentwrapper {
+    width: 100%;
+}
+*/
+
+div.clearer {
     clear: both;
-    float: left;
-    min-width: 110px;
-    margin-right: 10px;
-    padding-top: 2px;
 }
 
-input#homepage {
+div.related h3 {
     display: none;
 }
 
-div.error {
-    margin: 5px 20px 0 0;
-    padding: 5px;
-    border: 1px solid #d00;
-    font-weight: bold;
+div.related ul {
+    background-image: url(navigation.png);
+    height: 2em;
+    list-style: none;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+    padding-left: 10px;
 }
 
-/* :::: INLINE COMMENTS :::: */
-
-div.inlinecomments {
-    position: absolute;
-    right: 20px;
-}
-
-div.inlinecomments a.bubble {
-    display: block;
-    float: right;
-    background-image: url(style/comment.png);
-    background-repeat: no-repeat;
-    width: 25px;
-    height: 25px;
-    text-align: center;
-    padding-top: 3px;
-    font-size: 0.9em;
-    line-height: 14px;
-    font-weight: bold;
-    color: black;
-}
-
-div.inlinecomments a.bubble span {
-    display: none;
-}
-
-div.inlinecomments a.emptybubble {
-    background-image: url(style/nocomment.png);
-}
-
-div.inlinecomments a.bubble:hover {
-    background-image: url(style/hovercomment.png);
-    text-decoration: none;
-    color: #3ca0a4;
-}
-
-div.inlinecomments div.comments {
-    float: right;
-    margin: 25px 5px 0 0;
-    max-width: 50em;
-    min-width: 30em;
-    border: 1px solid #2eabb0;
-    background-color: #f2fbfd;
-    z-index: 150;
-}
-
-div#comments {
-    border: 1px solid #2eabb0;
-    margin-top: 20px;
-}
-
-div#comments div.nocomments {
-    padding: 10px;
-    font-weight: bold;
-}
-
-div.inlinecomments div.comments h3,
-div#comments h3 {
+div.related ul li {
     margin: 0;
     padding: 0;
-    background-color: #2eabb0;
-    color: white;
-    border: none;
-    padding: 3px;
+    height: 2em;
+    float: left;
 }
 
-div.inlinecomments div.comments div.actions {
-    padding: 4px;
+div.related ul li.right {
+    float: right;
+    margin-right: 5px;
+}
+
+div.related ul li a {
     margin: 0;
-    border-top: none;
+    padding: 0 5px 0 5px;
+    line-height: 1.75em;
+    color: #EE9816;
 }
 
-div#comments div.comment {
-    margin: 10px;
-    border: 1px solid #2eabb0;
+div.related ul li a:hover {
+    color: #3CA8E7;
 }
 
-div.inlinecomments div.comment h4,
-div.commentwindow div.comment h4,
-div#comments div.comment h4 {
-    margin: 10px 0 0 0;
-    background-color: #2eabb0;
-    color: white;
-    border: none;
-    padding: 1px 4px 1px 4px;
-}
-
-div#comments div.comment h4 {
+div.body {
     margin: 0;
+    padding: 0.5em 20px 20px 20px;
 }
 
-div#comments div.comment h4 a {
-    color: #d5f4f4;
+div.bodywrapper {
+    margin: 0 240px 0 0;
+    border-right: 1px solid #ccc;
 }
 
-div.inlinecomments div.comment div.text,
-div.commentwindow div.comment div.text,
-div#comments div.comment div.text {
-    margin: -5px 0 -5px 0;
-    padding: 0 10px 0 10px;
+div.body a {
+    text-decoration: underline;
 }
 
-div.inlinecomments div.comment div.meta,
-div.commentwindow div.comment div.meta,
-div#comments div.comment div.meta {
-    text-align: right;
-    padding: 2px 10px 2px 0;
-    font-size: 95%;
-    color: #538893;
-    border-top: 1px solid #cbe7e5;
-    background-color: #e0f6f4;
-}
-
-div.commentwindow {
-    position: absolute;
-    width: 500px;
-    border: 1px solid #cbe7e5;
-    background-color: #f2fbfd;
-    display: none;
-    z-index: 130;
-}
-
-div.commentwindow h3 {
+div.sphinxsidebar {
     margin: 0;
-    background-color: #2eabb0;
+    padding: 0.5em 15px 15px 0;
+    width: 210px;
+    float: right;
+    text-align: left;
+/*    margin-left: -100%; */
+}
+
+div.sphinxsidebar h4, div.sphinxsidebar h3 {
+    margin: 1em 0 0.5em 0;
+    font-size: 0.9em;
+    padding: 0.1em 0 0.1em 0.5em;
     color: white;
-    border: none;
-    padding: 5px;
+    border: 1px solid #86989B;
+    background-color: #AFC1C4;
+}
+
+div.sphinxsidebar h3 a {
+    color: white;
+}
+
+div.sphinxsidebar ul {
+    padding-left: 1.5em;
+    margin-top: 7px;
+    list-style: none;
+    padding: 0;
+    line-height: 130%;
+}
+
+div.sphinxsidebar ul ul {
+    list-style: square;
+    margin-left: 20px;
+}
+
+p {
+    margin: 0.8em 0 0.5em 0;
+}
+
+p.rubric {
+    font-weight: bold;
+}
+
+h1 {
+    margin: 0;
+    padding: 0.7em 0 0.3em 0;
     font-size: 1.5em;
-    cursor: pointer;
+    color: #11557C;
 }
 
-div.commentwindow div.actions {
-    margin: 10px -10px 0 -10px;
-    padding: 4px 10px 4px 10px;
-    color: #538893;
+h2 {
+    margin: 1.3em 0 0.2em 0;
+    font-size: 1.35em;
+    padding: 0;
 }
 
-div.commentwindow div.actions input {
-    border: 1px solid #2eabb0;
-    background-color: white;
-    color: #135355;
-    cursor: pointer;
-}
-
-div.commentwindow div.form {
-    padding: 0 10px 0 10px;
-}
-
-div.commentwindow div.form input,
-div.commentwindow div.form textarea {
-    border: 1px solid #3c9ea2;
-    background-color: white;
-    color: black;
-}
-
-div.commentwindow div.error {
-    margin: 10px 5px 10px 5px;
-    background-color: #fbe5dc;
-    display: none;
-}
-
-div.commentwindow div.form textarea {
-    width: 99%;
-}
-
-div.commentwindow div.preview {
-    margin: 10px 0 10px 0;
-    background-color: #70d0d4;
-    padding: 0 1px 1px 25px;
-}
-
-div.commentwindow div.preview h4 {
-    margin: 0 0 -5px -20px;
-    padding: 4px 0 0 4px;
-    color: white;
-    font-size: 1.3em;
-}
-
-div.commentwindow div.preview div.comment {
-    background-color: #f2fbfd;
-}
-
-div.commentwindow div.preview div.comment h4 {
-    margin: 10px 0 0 0!important;
-    padding: 1px 4px 1px 4px!important;
+h3 {
+    margin: 1em 0 -0.3em 0;
     font-size: 1.2em;
 }
 
-/* :::: SUGGEST CHANGES :::: */
-div#suggest-changes-box input, div#suggest-changes-box textarea {
+div.body h1 a, div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, div.body h6 a {
+    color: black!important;
+}
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.anchor {
+    display: none;
+    margin: 0 0 0 0.3em;
+    padding: 0 0.2em 0 0.2em;
+    color: #aaa!important;
+}
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor,
+h5:hover a.anchor, h6:hover a.anchor {
+    display: inline;
+}
+
+h1 a.anchor:hover, h2 a.anchor:hover, h3 a.anchor:hover, h4 a.anchor:hover,
+h5 a.anchor:hover, h6 a.anchor:hover {
+    color: #777;
+    background-color: #eee;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 0 -0.5em 0 -0.5em;
+}
+
+table td, table th {
+    padding: 0.2em 0.5em 0.2em 0.5em;
+}
+
+div.footer {
+    background-color: #E3EFF1;
+    color: #86989B;
+    padding: 3px 8px 3px 0;
+    clear: both;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+div.footer a {
+    color: #86989B;
+    text-decoration: underline;
+}
+
+div.pagination {
+    margin-top: 2em;
+    padding-top: 0.5em;
+    border-top: 1px solid black;
+    text-align: center;
+}
+
+div.sphinxsidebar ul.toc {
+    margin: 1em 0 1em 0;
+    padding: 0 0 0 0.5em;
+    list-style: none;
+}
+
+div.sphinxsidebar ul.toc li {
+    margin: 0.5em 0 0.5em 0;
+    font-size: 0.9em;
+    line-height: 130%;
+}
+
+div.sphinxsidebar ul.toc li p {
+    margin: 0;
+    padding: 0;
+}
+
+div.sphinxsidebar ul.toc ul {
+    margin: 0.2em 0 0.2em 0;
+    padding: 0 0 0 1.8em;
+}
+
+div.sphinxsidebar ul.toc ul li {
+    padding: 0;
+}
+
+div.admonition, div.warning {
+    font-size: 0.9em;
+    margin: 1em 0 0 0;
+    border: 1px solid #86989B;
+    background-color: #f7f7f7;
+}
+
+div.admonition p, div.warning p {
+    margin: 0.5em 1em 0.5em 1em;
+    padding: 0;
+}
+
+div.admonition pre, div.warning pre {
+    margin: 0.4em 1em 0.4em 1em;
+}
+
+div.admonition p.admonition-title,
+div.warning p.admonition-title {
+    margin: 0;
+    padding: 0.1em 0 0.1em 0.5em;
+    color: white;
+    border-bottom: 1px solid #86989B;
+    font-weight: bold;
+    background-color: #AFC1C4;
+}
+
+div.warning {
+    border: 1px solid #940000;
+}
+
+div.warning p.admonition-title {
+    background-color: #CF0000;
+    border-bottom-color: #940000;
+}
+
+div.admonition ul, div.admonition ol,
+div.warning ul, div.warning ol {
+    margin: 0.1em 0.5em 0.5em 3em;
+    padding: 0;
+}
+
+div.versioninfo {
+    margin: 1em 0 0 0;
     border: 1px solid #ccc;
-    background-color: white;
-    color: black;
-}
-
-div#suggest-changes-box textarea {
-    width: 99%;
-    height: 400px;
-}
-
-/* :::: PREVIEW :::: */
-div.preview {
-    background-image: url(style/preview.png);
-    padding: 0 20px 20px 20px;
-    margin-bottom: 30px;
+    background-color: #DDEAF0;
+    padding: 8px;
+    line-height: 1.3em;
+    font-size: 0.9em;
 }
 
 
-/* :::: INDEX PAGE :::: */
-
-table.contentstable {
-    width: 90%;
+a.headerlink {
+    color: #c60f0f!important;
+    font-size: 1em;
+    margin-left: 6px;
+    padding: 0 4px 0 4px;
+    text-decoration: none!important;
+    visibility: hidden;
 }
 
-table.contentstable p.biglink {
-    line-height: 150%;
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink,
+dt:hover > a.headerlink {
+    visibility: visible;
 }
 
-a.biglink {
-    font-size: 1.3em;
+a.headerlink:hover {
+    background-color: #ccc;
+    color: white!important;
 }
-
-span.linkdescr {
-    font-style: italic;
-    padding-top: 5px;
-    font-size: 90%;
-}
-
-/* :::: INDEX STYLES :::: */
 
 table.indextable td {
     text-align: left;
@@ -743,11 +463,58 @@ form.pfform {
     margin: 10px 0 20px 0;
 }
 
-/* :::: GLOBAL STYLES :::: */
+table.contentstable {
+    width: 90%;
+}
 
-.docwarning {
-    background-color: #ffe4e4;
-    padding: 10px;
-    margin: 0 -20px 0 -20px;
-    border-bottom: 1px solid #f66;
+table.contentstable p.biglink {
+    line-height: 150%;
+}
+
+a.biglink {
+    font-size: 1.3em;
+}
+
+span.linkdescr {
+    font-style: italic;
+    padding-top: 5px;
+    font-size: 90%;
+}
+
+ul.search {
+    margin: 10px 0 0 20px;
+    padding: 0;
+}
+
+ul.search li {
+    padding: 5px 0 5px 20px;
+    background-image: url(file.png);
+    background-repeat: no-repeat;
+    background-position: 0 7px;
+}
+
+ul.search li a {
+    font-weight: bold;
+}
+
+ul.search li div.context {
+    color: #888;
+    margin: 2px 0 0 30px;
+    text-align: left;
+}
+
+ul.keywordmatches li.goodmatch a {
+    font-weight: bold;
+}
+
+div.math {
+    text-align: center;
+}
+
+span.eqno {
+    float: right;
+}
+
+img.logo {
+    border: 0;
 }

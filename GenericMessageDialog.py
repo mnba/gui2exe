@@ -42,7 +42,7 @@ And a lot more. Check the demo for an almost complete review of the functionalit
 Supported Platforms
 ===================
 
-SuperToolTip has been tested on the following platforms:
+GenericMessageDialog has been tested on the following platforms:
   * Windows (Windows XP).
 
 
@@ -347,7 +347,10 @@ class StdDialogButtonSizer(wx.BoxSizer):
         """
         Add a button to the sizer.
 
-        @param mybutton: the button to add.
+        
+        **Parameters:**
+
+        * mybutton: the button to add.
         """
 
         buttonId = mybutton.GetId()
@@ -503,12 +506,14 @@ class GenericMessageDialog(wx.Dialog):
         """
         Default class constructor.
 
-        @param parent: the L{GenericMessageDialog} parent (if any);
-        @param message: the message in the main body of the dialog;
-        @param caption: the dialog title;
-        @param style: the dialog style;
-        @param pos: the dialog position on screen;
-        @param size: the dialog size.
+        **Parameters:**
+
+        * parent: the L{GenericMessageDialog} parent (if any);
+        * message: the message in the main body of the dialog;
+        * caption: the dialog title;
+        * style: the dialog style;
+        * pos: the dialog position on screen;
+        * size: the dialog size.
         """
 
         wx.Dialog.__init__(self, parent, wx.ID_ANY, caption, pos,
@@ -670,10 +675,15 @@ class GenericMessageDialog(wx.Dialog):
         """
         Creates a sizer with standard buttons.
 
-        @param flags: a bit list of the following flags:
-                      wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.
+        **Parameters:**
 
-        @note: The sizer lays out the buttons in a manner appropriate to the platform.
+        * flags: a bit list of the following flags:
+          wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.
+
+        
+        **Note:**
+
+        * The sizer lays out the buttons in a manner appropriate to the platform.
         """
 
         sizer = self.CreateStdDialogButtonSizer(flags)
@@ -704,10 +714,14 @@ class GenericMessageDialog(wx.Dialog):
         """
         Creates a StdDialogButtonSizer with standard buttons.
 
-        @param flags: a bit list of the following flags:
-                      wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.
+        **Parameters:**
 
-        @note: The sizer lays out the buttons in a manner appropriate to the platform.
+        * flags: a bit list of the following flags:
+          wx.OK, wx.CANCEL, wx.YES, wx.NO, wx.HELP, wx.NO_DEFAULT.
+        
+        **Note:**
+
+        * The sizer lays out the buttons in a manner appropriate to the platform.
         """
         
         sizer = StdDialogButtonSizer()

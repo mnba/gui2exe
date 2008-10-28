@@ -23,10 +23,13 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Default class constructor.
         
-        @param parent: the widget parent;
-        @param projectName: the name of the project we are working on;
-        @param creationDate: the date and time the project was created;
-        @param name: the widget (compiler) name.
+        
+        **Parameters:**
+
+        * parent: the widget parent;
+        * projectName: the name of the project we are working on;
+        * creationDate: the date and time the project was created;
+        * name: the widget (compiler) name.
 
         """
         
@@ -201,8 +204,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Retrieve the current value(s) displayed in a widget.
 
-        @param windowName: the widget name;
-        @param window: the widget itsefl (if any).
+        
+        **Parameters:**
+
+        * windowName: the widget name;
+        * window: the widget itsefl (if any).
         """
 
         if window is None:
@@ -228,9 +234,12 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Gives visual feedback to the user that the model has changed.
 
-        @param windowName: the widget name;
-        @param value: the new widget value;
-        @param changeIcon: whether to change the tab icon in the AuiNotebook.
+        
+        **Parameters:**
+
+        * windowName: the widget name;
+        * value: the new widget value;
+        * changeIcon: whether to change the tab icon in the AuiNotebook.
         """
 
         # Retrieve the project stored in the parent (LabelBook) properties
@@ -248,8 +257,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         Updates the "other_resources" list when the user checks/unchecks the
         xp manifest checkbox.
 
-        @param windowName: the widget name;
-        @param value: the new widget value;
+        
+        **Parameters:**
+
+        * windowName: the widget name;
+        * value: the new widget value;
         """
 
         if windowName != "manifest_file":
@@ -277,8 +289,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Updates the project name and creation date when the user rename a project.
 
-        @param projectName: the name of the current project;
-        @param creationDate: the creation data of the project (as it is in the database).
+        
+        **Parameters:**
+
+        * projectName: the name of the current project;
+        * creationDate: the creation data of the project (as it is in the database).
         """
 
         transdict = dict(compiler=self.GetName(), projectName=projectName,
@@ -291,8 +306,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Populates all the widgets with the values coming from the project.
 
-        @param configuration: the project configuration coming from the database;
-        @param delete: whether to delete the current configuration or not.
+        
+        **Parameters:**
+
+        * configuration: the project configuration coming from the database;
+        * delete: whether to delete the current configuration or not.
         """
 
         onedir = ("onedir" in configuration and [configuration["onedir"]] or [None])[0]
@@ -335,8 +353,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Populates all the widgets (except list controls).
 
-        @param key: the configuration option name (which is also a window name);
-        @param value: the configuration option value.
+        
+        **Parameters:**
+
+        * key: the configuration option name (which is also a window name);
+        * value: the configuration option value.
         """
 
         # Find the window given its name (that is a key in the project dictionary)        
@@ -364,8 +385,11 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         Enables/disables the text controls associated with the zipfile checkbox
         or the dist checkbox.
         
-        @param windowName: the widget name;
-        @param value: the new widget value.
+        
+        **Parameters:**
+
+        * windowName: the widget name;
+        * value: the new widget value.
         """
 
         if windowName.find("_choice") < 0:
@@ -388,7 +412,10 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
         """
         Removes the old configuration keys from cx_Freeze and bbFreeze.
         
-        @param configuration: the configuration to be checked.
+        
+        **Parameters:**
+
+        * configuration: the configuration to be checked.
         """
 
         # Check if we are dealing with older project for cx_Freeze or bbFreeze

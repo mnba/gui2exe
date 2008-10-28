@@ -61,10 +61,13 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Default class constructor.
 
-        @param parent: the parent widget
-        @param columnNames: the list control column names
-        @param name: the list control name
-        @param mainFrame: the application main frame (GUI2Exe)
+        
+        **Parameters:**
+
+        * parent: the parent widget
+        * columnNames: the list control column names
+        * name: the list control name
+        * mainFrame: the application main frame (GUI2Exe)
         """
 
         wx.ListCtrl.__init__(self, parent, style=wx.LC_REPORT|wx.LC_HRULES|wx.LC_VRULES|wx.SUNKEN_BORDER,
@@ -128,7 +131,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Inserts the columns in the list control.
 
-        @param columnNames: the list control column names.        
+        
+        **Parameters:**
+
+        * columnNames: the list control column names.        
         """
 
         # The first column is always empty text, as I use it to display
@@ -502,8 +508,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Shows a hidden widgets in the list control (py2exe only, top list control).
 
-        @param control: which control to show (a button or a combobox);
-        @param rect: the wx.Rect rectangle where to place the widget to be shown.
+        
+        **Parameters:**
+
+        * control: which control to show (a button or a combobox);
+        * rect: the wx.Rect rectangle where to place the widget to be shown.
         """
         
         control.SetRect(rect)
@@ -566,7 +575,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Populates the list control based on the input configuration.
 
-        @param configuration: the project configuration.
+        
+        **Parameters:**
+
+        * configuration: the project configuration.
         """
 
         if not configuration or not configuration[0]:
@@ -713,7 +725,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Handles the user request to add new resources.
 
-        @param name: the resource name (bitmap, icon).
+        
+        **Parameters:**
+
+        * name: the resource name (bitmap, icon).
         """
 
         if name.find("bitmap") >= 0:   # bitmap resources
@@ -913,7 +928,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Handles the user request to add new executable to build.
 
-        @param compiler: the compiler currently used
+        
+        **Parameters:**
+
+        * compiler: the compiler currently used
         """
 
         # The first item is always empty text with an informative icon
@@ -957,7 +975,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Handles the Dylib/Frameworks/XCDataModels options for Mac.
 
-        @param name: the option name (dylib, frameworks, xcdatamodels).
+        
+        **Parameters:**
+
+        * name: the option name (dylib, frameworks, xcdatamodels).
         """
 
         if name.find("dylib") >= 0 or name.find("frameworks") >= 0:
@@ -987,7 +1008,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         Processes all the list controls option for PyInstaller except the Path
         and Hooks extensions.
 
-        @param name: the list control name.        
+        
+        **Parameters:**
+
+        * name: the list control name.        
         """
 
         # A bunch of if switches to handle all the possibility offered
@@ -1055,8 +1079,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Utility function to handle properly the PyInstaller options.
 
-        @param paths: the file name paths;
-        @param columns: the number of items in every path (2 or 3).
+        
+        **Parameters:**
+
+        * paths: the file name paths;
+        * columns: the number of items in every path (2 or 3).
         """
 
         existing = self.GetExistingItems()
@@ -1144,7 +1171,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Returns the indices of the selected items in the list control.
 
-        @param state: the list control item state.
+        
+        **Parameters:**
+
+        * state: the list control item state.
         """
 
         indices = []
@@ -1249,7 +1279,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
         Updates the project in the database, as something changed.
 
-        @param changeIcon: whether to change the icon in the AuiNotebook tab.
+        
+        **Parameters:**
+
+        * changeIcon: whether to change the icon in the AuiNotebook tab.
         """
 
         # Translate the list control values to something understandable
@@ -1307,13 +1340,16 @@ class CustomCodeViewer(wx.Frame):
         """
         Default class constructor.
 
-        @param parent: the parent widget
-        @param readOnly: indicates if the children StyledTextCtrl should be read only or not
-        @param text: the text to add to the StyledTextCtrl
-        @param project: the project as it is stored in the database
-        @param page: the page number of our main wx.aui.AuiNotebook
-        @param compiler: the compiler to which the custom code refers
-        @param postBuild: whether it is a post-compilation code or not
+        
+        **Parameters:**
+
+        * parent: the parent widget
+        * readOnly: indicates if the children StyledTextCtrl should be read only or not
+        * text: the text to add to the StyledTextCtrl
+        * project: the project as it is stored in the database
+        * page: the page number of our main wx.aui.AuiNotebook
+        * compiler: the compiler to which the custom code refers
+        * postBuild: whether it is a post-compilation code or not
 
         """        
 
@@ -1361,8 +1397,11 @@ class CustomCodeViewer(wx.Frame):
         """
         Sets few properties for the frame and the StyledTextCtrl.
 
-        @param readOnly: whether the StyledTextCtrl will be read-only or not
-        @param text: the text displayed in the StyledTextCtrl
+        
+        **Parameters:**
+
+        * readOnly: whether the StyledTextCtrl will be read-only or not
+        * text: the text displayed in the StyledTextCtrl
         """
 
         self.SetIcon(self.MainFrame.GetIcon())
@@ -1387,7 +1426,10 @@ class CustomCodeViewer(wx.Frame):
         """
         Layout the widgets with sizers.
 
-        @param readOnly: whether the StyledTextCtrl will be read-only or not
+        
+        **Parameters:**
+
+        * readOnly: whether the StyledTextCtrl will be read-only or not
         """
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1431,7 +1473,10 @@ class CustomCodeViewer(wx.Frame):
         """
         Binds the events for our CustomCodeViewer.
 
-        @param readOnly: whether the StyledTextCtrl will be read-only or not
+        
+        **Parameters:**
+
+        * readOnly: whether the StyledTextCtrl will be read-only or not
         """
 
         if not readOnly:
@@ -1520,8 +1565,11 @@ class PythonSTC(stc.StyledTextCtrl):
         """
         Default class constructor.
 
-        @param parent: the StyledTextCtrl parent;
-        @param readOnly: indicates if the StyledTextCtrl should be in read-only mode.
+        
+        **Parameters:**
+
+        * parent: the StyledTextCtrl parent;
+        * readOnly: indicates if the StyledTextCtrl should be in read-only mode.
 
         """        
 
@@ -1770,9 +1818,12 @@ class Py2ExeMissing(wx.Frame):
         """
         Default class constructor.
 
-        @param parent: the parent widget;
-        @param project: the project as stored in the database;
-        @param dll: indicates whether we are going to show the missing binary dependencies (dll) or the missing modules (py).
+        
+        **Parameters:**
+
+        * parent: the parent widget;
+        * project: the project as stored in the database;
+        * dll: indicates whether we are going to show the missing binary dependencies (dll) or the missing modules (py).
 
         """
         
@@ -1823,7 +1874,10 @@ class Py2ExeMissing(wx.Frame):
         """
         Sets few properties for the Py2ExeMissing frame.
 
-        @param dll: whether this frame is showing dlls or missing modules.
+        
+        **Parameters:**
+
+        * dll: whether this frame is showing dlls or missing modules.
         """
 
         if dll:
@@ -1846,7 +1900,10 @@ class Py2ExeMissing(wx.Frame):
         """
         Layouts the widgets with sizers.
 
-        @param dll: whether this frame is showing dlls or missing modules.
+        
+        **Parameters:**
+
+        * dll: whether this frame is showing dlls or missing modules.
         """
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -1920,7 +1977,10 @@ class BaseDialog(wx.Dialog):
         """
         Default class constructor.
 
-        @param parent: the dialog parent;
+        
+        **Parameters:**
+
+        * parent: the dialog parent;
         """
             
         wx.Dialog.__init__(self, parent, style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
@@ -1999,11 +2059,14 @@ class GUI2ExeDirSelector(BaseDialog):
         """
         Default BaseDialog class constructor.
 
-        @param parent: the dialog parent widget;
-        @param title: the dialog title;
-        @param lastDir: the last selected directory;
-        @param size: the dialog size (if any);
-        @param showExtensions: whether to show a text control to filter extensions.
+        
+        **Parameters:**
+
+        * parent: the dialog parent widget;
+        * title: the dialog title;
+        * lastDir: the last selected directory;
+        * size: the dialog size (if any);
+        * showExtensions: whether to show a text control to filter extensions.
         """
         
         BaseDialog.__init__(self, parent)
@@ -2138,9 +2201,12 @@ class GUI2ExeDirSelector(BaseDialog):
         """
         Recurse a directory tree to include all the sub-folders.
 
-        @param treeCtrl: the tree control associated with wx.GenericDirCtrl;
-        @param item: the selected tree control item;
-        @param itemText: the selected tree control item text.
+        
+        **Parameters:**
+
+        * treeCtrl: the tree control associated with wx.GenericDirCtrl;
+        * item: the selected tree control item;
+        * itemText: the selected tree control item text.
         """
 
         # Get the item parent        
@@ -2167,9 +2233,12 @@ class PyInfoFrame(wx.Frame):
     def __init__(self, parent, message, useCustom):
         """ Default class constructor.
 
-        @param parent: the frame parent;
-        @param message: the message to display in the PyBusyInfo;
-        @param useCustom: if True, it will custom-draw the content in an OnPaint handler.
+        
+        **Parameters:**
+
+        * parent: the frame parent;
+        * message: the message to display in the PyBusyInfo;
+        * useCustom: if True, it will custom-draw the content in an OnPaint handler.
         """
         
         wx.Frame.__init__(self, parent, wx.ID_ANY, _("Busy"), wx.DefaultPosition,
@@ -2304,8 +2373,10 @@ if wx.Platform == "__WXMAC__":
             """
             Default class constructor.
 
-            @param message: the message to display in wx.BusyInfo;
-            @param parent: the wx.BusyInfo parent (if any).
+            **Parameters:**
+            
+            * message: the message to display in wx.BusyInfo;
+            * parent: the wx.BusyInfo parent (if any).
             """
 
             wx.BusyInfo.__init__(self, message, parent)
@@ -2321,10 +2392,12 @@ else:
         def __init__(self, message, parent=None, useCustom=True):
             """
             Default class constructor.
+    
+            **Parameters:**
 
-            @param message: the message to display;
-            @param parent: the PyBusyInfo parent (can be None);
-            @parent useCustom: if True, custom drawing/shading can be implemented.
+            * message: the message to display;
+            * parent: the PyBusyInfo parent (can be None);
+            * useCustom: if True, custom drawing/shading can be implemented.
             """
 
             self._infoFrame = PyInfoFrame(parent, message, useCustom)
@@ -2351,12 +2424,14 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     def __init__(self, parent, choices, style, compiler, name):
         """
         Default class constructor.
+        
+        **Parameters:**
 
-        @param parent: the combobox parent;
-        @param choices: a list of strings which represents the combobox choices;
-        @param style: the combobox style;
-        @param compiler: the compiler to which the combobox's parent belongs;
-        @param name: the option name associated to this combobox.
+        * parent: the combobox parent;
+        * choices: a list of strings which represents the combobox choices;
+        * style: the combobox style;
+        * compiler: the compiler to which the combobox's parent belongs;
+        * name: the option name associated to this combobox.
         """
 
         wx.combo.OwnerDrawnComboBox.__init__(self, parent, choices=choices,
@@ -2396,13 +2471,15 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     def OnDrawItem(self, dc, rect, item, flags):
         """
         Overridden from OwnerDrawnComboBox, called to draw each item in the list.
+    
+        **Parameters:**
 
-        @param dc: the device context used to draw text, icons etc... ;
-        @param rect: the bounding rectangle for the item being drawn
-        (DC clipping region is set to this rectangle before
-        calling this function);
-        @param item: the index of the item to be drawn;
-        @param flags: flags to draw the item.
+        * dc: the device context used to draw text, icons etc... ;
+        * rect: the bounding rectangle for the item being drawn
+          (DC clipping region is set to this rectangle before
+          calling this function);
+        * item: the index of the item to be drawn;
+        * flags: flags to draw the item.
         """
         
         if item == wx.NOT_FOUND:
@@ -2429,12 +2506,15 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         """
         Overridden from OwnerDrawnComboBox, called for drawing the background area of each item.
 
-        @param dc: the device context used to draw text, icons etc... ;
-        @param rect: the bounding rectangle for the item being drawn
-        (DC clipping region is set to this rectangle before
-        calling this function);
-        @param item: the index of the item to be drawn;
-        @param flags: flags to draw the item.
+        
+        **Parameters:**
+
+        * dc: the device context used to draw text, icons etc... ;
+        * rect: the bounding rectangle for the item being drawn
+          (DC clipping region is set to this rectangle before
+          calling this function);
+        * item: the index of the item to be drawn;
+        * flags: flags to draw the item.
         """
         
         # If the item is selected, or we are painting the
@@ -2457,7 +2537,10 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         Overridden from OwnerDrawnComboBox, should return the height needed to display
         an item in the popup, or -1 for default.
 
-        @param item: the index of the item to be drawn.
+        
+        **Parameters:**
+
+        * item: the index of the item to be drawn.
         """
 
         # Return a sensible value for item height on all platforms
@@ -2469,7 +2552,9 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         Overridden from OwnerDrawnComboBox.  Callback for item width, or -1
         for default/undetermined.
 
-        @param item: the index of the item to be drawn.
+        **Parameters:**
+
+        * item: the index of the item to be drawn.
         """
 
         dc = wx.ClientDC(self)
@@ -2490,11 +2575,13 @@ class BuildDialog(BaseDialog):
 
         """
         Default class constructor.
+        
+        **Parameters:**
 
-        @param parent: the dialog's parent;
-        @param projectName: the current project name;
-        @param compiler: the compiler used to build the executable;
-        @param outputText: the full build output text.
+        * parent: the dialog's parent;
+        * projectName: the current project name;
+        * compiler: the compiler used to build the executable;
+        * outputText: the full build output text.
         """
 
         BaseDialog.__init__(self, parent)
@@ -2536,9 +2623,12 @@ class BuildDialog(BaseDialog):
         """
         Layouts the widgets with sizers.
 
-        @param header: the header text (containing compiler information;
-        @param projectName: the name of the project the build output refers to;
-        @param compiler: the compiler used to build the project.
+        
+        **Parameters:**
+
+        * header: the header text (containing compiler information;
+        * projectName: the name of the project the build output refers to;
+        * compiler: the compiler used to build the project.
         """
 
         # Create the sizer structure        
@@ -2632,11 +2722,14 @@ class TransientBase(object):
         """
         Default class constructor.
 
-        @param parent: the TransientPopup parent;
-        @param compiler: the compiler currently selected;
-        @param option: the option currently hovered by the mouse;
-        @param tip: the help tip;
-        @param note: a note on the current option.
+        
+        **Parameters:**
+
+        * parent: the TransientPopup parent;
+        * compiler: the compiler currently selected;
+        * option: the option currently hovered by the mouse;
+        * tip: the help tip;
+        * note: a note on the current option.
         """
         
         self.panel = wx.Panel(self, -1)
@@ -2763,7 +2856,10 @@ class TransientBase(object):
         Adjust the position of TransientPopup accordingly to the TransientPopup
         size, mouse position and screen geometry.
 
-        @param size: our size.        
+        
+        **Parameters:**
+
+        * size: our size.        
         """
 
         # Retrieve mouse position and screen geometry
@@ -2848,11 +2944,14 @@ class MacTransientPopup(wx.Frame, TransientBase):
         """
         Default class constructor.
 
-        @param parent: the TransientPopup parent;
-        @param compiler: the compiler currently selected;
-        @param option: the option currently hovered by the mouse;
-        @param tip: the help tip;
-        @param note: a note on the current option.
+        
+        **Parameters:**
+
+        * parent: the TransientPopup parent;
+        * compiler: the compiler currently selected;
+        * option: the option currently hovered by the mouse;
+        * tip: the help tip;
+        * note: a note on the current option.
         """
         
         wx.Frame.__init__(self, parent, style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT|wx.FRAME_NO_TASKBAR|wx.POPUP_WINDOW)
@@ -2870,11 +2969,14 @@ class TransientPopup(TransientBase, wx.PopupWindow):
         """
         Default class constructor.
 
-        @param parent: the TransientPopup parent;
-        @param compiler: the compiler currently selected;
-        @param option: the option currently hovered by the mouse;
-        @param tip: the help tip;
-        @param note: a note on the current option.
+        
+        **Parameters:**
+
+        * parent: the TransientPopup parent;
+        * compiler: the compiler currently selected;
+        * option: the option currently hovered by the mouse;
+        * tip: the help tip;
+        * note: a note on the current option.
         """
 
         wx.PopupWindow.__init__(self, parent)
@@ -2889,10 +2991,16 @@ class PListEditor(BaseDialog):
         """
         Default class constructor.
 
-        @param parent: the dialog parent;
-        @param CFBundleExecutable: the program name;
-        @param pListFile: a PList file, if any, to be merged with pListCode;
-        @param pListCode: the existing PList code (if any).
+        
+        **Parameters:**
+
+        * parent: the dialog parent;
+        
+        **Parameters:**
+
+        * CFBundleExecutable: the program name;
+        * pListFile: a PList file, if any, to be merged with pListCode;
+        * pListCode: the existing PList code (if any).
         """
 
         BaseDialog.__init__(self, parent)
@@ -3099,7 +3207,10 @@ class PListEditor(BaseDialog):
         Enables/disables the top portion of the dialog, the one which contains
         the Python code editor.
 
-        @param enable: whether to enable or disable the top portion of the dialog.
+        
+        **Parameters:**
+
+        * enable: whether to enable or disable the top portion of the dialog.
         """
 
         for item in self.enablingItems:
@@ -3112,7 +3223,10 @@ class PListEditor(BaseDialog):
         """
         Populates the tree list control using the PList dictionary.
 
-        @param PTemplate: a PList dictionary.
+        
+        **Parameters:**
+
+        * PTemplate: a PList dictionary.
         """
 
         # Add three columns for property name, class and value
@@ -3152,9 +3266,12 @@ class PListEditor(BaseDialog):
         """
         Recursively adds children to a tree item.
 
-        @param itemParent: the item to which we will add children (if any);
-        @param PTemplate: a PList dictionary or a list/string;
-        @param level: the hierarchy level (root=0)
+        
+        **Parameters:**
+
+        * itemParent: the item to which we will add children (if any);
+        * PTemplate: a PList dictionary or a list/string;
+        * level: the hierarchy level (root=0)
         """
 
         treeList = self.treeList
@@ -3214,9 +3331,12 @@ class PListEditor(BaseDialog):
         """
         Calculates the correct column widths for the tree list control columns.
 
-        @param item: the item to be measured;
-        @param colWidth: the maximum column width up to now;
-        @param level: the hierarchy level (root=0).
+        
+        **Parameters:**
+
+        * item: the item to be measured;
+        * colWidth: the maximum column width up to now;
+        * level: the hierarchy level (root=0).
         """
 
         treeList = self.treeList
@@ -3453,8 +3573,11 @@ class PListEditor(BaseDialog):
         """
         Uses alternate colours for the tree list rows and sets the font.
 
-        @param item: the item to be checked;
-        @param itemCounter: the number of items already checked.
+        
+        **Parameters:**
+
+        * item: the item to be checked;
+        * itemCounter: the number of items already checked.
         """
 
         if item is None:
@@ -3540,7 +3663,10 @@ class PListHelperDialog(BaseDialog):
         """
         Default class constructor.
 
-        @param parent: the widget parent.
+        
+        **Parameters:**
+
+        * parent: the widget parent.
         """        
 
         BaseDialog.__init__(self, parent.MainFrame)
@@ -3560,7 +3686,10 @@ class PListHelperDialog(BaseDialog):
         """
         Sets few properties for the dialog.
 
-        @param title: the dialog title.
+        
+        **Parameters:**
+
+        * title: the dialog title.
         """
 
         BaseDialog.SetProperties(self, title)
@@ -3632,7 +3761,10 @@ class PreferencesDialog(BaseDialog):
         """
         Default class constructor.
 
-        @param parent: the dialog parent.
+        
+        **Parameters:**
+
+        * parent: the dialog parent.
         """
 
         BaseDialog.__init__(self, parent)
@@ -3788,7 +3920,10 @@ class PreferencesDialog(BaseDialog):
 class LangListCombo(wx.combo.BitmapComboBox):
     """
     Combines a langlist and a BitmapComboBox.
-    @note: from Editra.dev_tool
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
     
     def __init__(self, parent, default=None):
@@ -3797,7 +3932,10 @@ class LangListCombo(wx.combo.BitmapComboBox):
         as well as displaying the countries flag next to the item
         in the list.
 
-        @param default: The default item to show in the combo box
+        
+        **Parameters:**
+
+        * default: The default item to show in the combo box
         """
 
         self.MainFrame = parent.MainFrame
@@ -3820,10 +3958,16 @@ def ExceptionHook(exctype, value, trace):
     """
     Handler for all unhandled exceptions.
 
-    @param exctype: Exception Type
-    @param value: Error Value
-    @param trace: Trace back info
-    @note: from Editra.dev_tool
+    
+    **Parameters:**
+
+    * exctype: Exception Type
+    * value: Error Value
+    * trace: Trace back info
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
     ftrace = FormatTrace(exctype, value, trace)
 
@@ -3840,14 +3984,20 @@ class ErrorReporter(object):
     is implemented as a singleton so that all errors pushed
     onto it are kept in one central location no matter where
     the object is called from.
-    @note: from Editra.dev_tool
+    
+    **Note:**
+
+    * from Editra.dev_tool
 
     """
     instance = None
     _first = True
     def __init__(self):
         """Initialize the reporter
-        @note: The ErrorReporter is a singleton.
+        
+        **Note:**
+
+        * The ErrorReporter is a singleton.
 
         """
         # Ensure init only happens once
@@ -3860,7 +4010,10 @@ class ErrorReporter(object):
 
     def __new__(cls, *args, **kargs):
         """Maintain only a single instance of this object
-        @return: instance of this class
+        
+        **Returns:**
+
+        * instance of this class
 
         """
         if not cls.instance:
@@ -3869,7 +4022,10 @@ class ErrorReporter(object):
 
     def AddMessage(self, msg):
         """Adds a message to the reporters list of session errors
-        @param msg: The Error Message to save
+        
+        **Parameters:**
+
+        * msg: The Error Message to save
 
         """
         if msg not in self._sessionerr:
@@ -3877,14 +4033,20 @@ class ErrorReporter(object):
 
     def GetErrorStack(self):
         """Returns all the errors caught during this session
-        @return: formatted log message of errors
+        
+        **Returns:**
+
+        * formatted log message of errors
 
         """
         return "\n\n".join(self._sessionerr)
 
     def GetLastError(self):
         """Gets the last error from the current session
-        @return: Error Message String
+        
+        **Returns:**
+
+        * Error Message String
 
         """
         if len(self._sessionerr):
@@ -3896,14 +4058,20 @@ class ErrorDialog(BaseDialog):
     """
     Dialog for showing errors and and notifying gui2exe-users should the
     user choose so.
-    @note: partially from Editra.dev_tool
+    
+    **Note:**
+
+    * partially from Editra.dev_tool
     """
     ABORT = False
     REPORTER_ACTIVE = False
     def __init__(self, message):
         """
         Initialize the dialog
-        @param message: Error message to display
+        
+        **Parameters:**
+
+        * message: Error message to display
         """
         ErrorDialog.REPORTER_ACTIVE = True
 
@@ -3957,7 +4125,10 @@ class ErrorDialog(BaseDialog):
         """
         Layout the dialog and prepare it to be shown
         
-        @note: Do not call this method in your code
+        
+        **Note:**
+
+        *  Do not call this method in your code
         """
 
         # Objects
@@ -3995,9 +4166,15 @@ class ErrorDialog(BaseDialog):
 
     def OnButton(self, evt):
         """Handles button events
-        @param evt: event that called this handler
-        @postcondition: Dialog is closed
-        @postcondition: If Report Event then email program is opened
+        
+        **Parameters:**
+
+        * evt: event that called this handler
+
+        **Post-Conditions:**
+        
+        * Dialog is closed
+        * If Report Event then email program is opened
 
         """
         e_id = evt.GetId()
@@ -4022,7 +4199,10 @@ class ErrorDialog(BaseDialog):
 
     def OnClose(self, evt):
         """Cleans up the dialog when it is closed
-        @param evt: Event that called this handler
+        
+        **Parameters:**
+
+        * evt: Event that called this handler
 
         """
         ErrorDialog.REPORTER_ACTIVE = False

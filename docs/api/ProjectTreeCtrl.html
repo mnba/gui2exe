@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="Project.html" title="Project"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -68,7 +71,10 @@ way, ordered by creation time.</p>
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.__init__">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param parent: the tree control parent widget.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the tree control parent widget.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -85,15 +91,21 @@ way, ordered by creation time.</p>
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.CheckProjectName">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.CheckProjectName]--><tt class="descname">CheckProjectName</tt><big>(</big><em>projectName</em>, <em>usePyData=False</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.CheckProjectName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a project is valid and it doesn&#8217;t already exists in the tree control.</p>
-<p>&#64;param projectName: the project name;
-&#64;param usePyData: whether to use the data store in the tree item.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>projectName: the project name;</li>
+<li>usePyData: whether to use the data store in the tree item.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.ConvertDate">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.ConvertDate]--><tt class="descname">ConvertDate</tt><big>(</big><em>date</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.ConvertDate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a date in the appropriate format to be sorted by the tree.</p>
-<p>&#64;param date: the date to be converted.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>date: the date to be converted.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -111,7 +123,10 @@ settings into a new project.</dd></dl>
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.DeleteProject">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.DeleteProject]--><tt class="descname">DeleteProject</tt><big>(</big><em>treeItems</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.DeleteProject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Auxiliary called by external modules.</p>
-<p>&#64;param treeItems: the selected tree items to be deleted.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>treeItems: the selected tree items to be deleted.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -123,16 +138,22 @@ settings into a new project.</dd></dl>
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.HighlightItem">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.HighlightItem]--><tt class="descname">HighlightItem</tt><big>(</big><em>treeItem</em>, <em>highlight</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.HighlightItem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Highlight/Un-highlight a tree item.</p>
-<p>&#64;param treeItem: the tree item to highlight/un-highlight;
-&#64;param highlight: whether the tree item will be highlighted or not.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>treeItem: the tree item to highlight/un-highlight;</li>
+<li>highlight: whether the tree item will be highlighted or not.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.IsProjectExisting">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.IsProjectExisting]--><tt class="descname">IsProjectExisting</tt><big>(</big><em>projectName</em>, <em>usePyData=False</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.IsProjectExisting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a project with the given name already exists.</p>
-<p>&#64;param projectName: the project name;
-&#64;param usePyData: whether to use the data store in the tree item.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>projectName: the project name;</li>
+<li>usePyData: whether to use the data store in the tree item.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -211,26 +232,37 @@ settings into a new project.</dd></dl>
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.PopulateTree">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.PopulateTree]--><tt class="descname">PopulateTree</tt><big>(</big><em>dbKeys</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.PopulateTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates the tree with the keys coming from the database.</p>
-<dl class="docutils">
-<dt>&#64;param dbKeys: the database project names which will be used to name the</dt>
-<dd>items in the tree.</dd>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt>dbKeys: the database project names which will be used to name the</dt>
+<dd><p class="first last">items in the tree.</p>
+</dd>
 </dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.RepositionItems">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.RepositionItems]--><tt class="descname">RepositionItems</tt><big>(</big><em>appendToRoot</em>, <em>droppedItem</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.RepositionItems" title="Permalink to this definition">¶</a></dt>
 <dd><p>Repositions the items after a drag and drop operation.</p>
-<p>&#64;param appendToRoot: whether to append the dropped item to the root item or not;
-&#64;param droppedItem: the item subjected to the drag and drop operation.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>appendToRoot: whether to append the dropped item to the root item or not;</li>
+<li>droppedItem: the item subjected to the drag and drop operation.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
 <dt id="ProjectTreeCtrl.ProjectTreeCtrl.SetItemEditing">
 <!--[ProjectTreeCtrl.ProjectTreeCtrl.SetItemEditing]--><tt class="descname">SetItemEditing</tt><big>(</big><em>treeItem</em>, <em>editState</em><big>)</big><a class="headerlink" href="#ProjectTreeCtrl.ProjectTreeCtrl.SetItemEditing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the state of a particular item as &#8220;in editing&#8221; or not.</p>
-<p>&#64;param treeItem: the tree item;
-&#64;param editState: whether the item is being edited or not.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>treeItem: the tree item;</li>
+<li>editState: whether the item is being edited or not.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -304,13 +336,16 @@ settings into a new project.</dd></dl>
         <li class="right" >
           <a href="Project.html" title="Project"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

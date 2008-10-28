@@ -26,7 +26,10 @@ class MessageWindow(wx.Panel):
         """
         Default class constructor.
 
-        @param parent: the widget parent.
+        
+        **Parameters:**
+
+        * parent: the widget parent.
         """
 
         wx.Panel.__init__(self, parent)
@@ -180,7 +183,10 @@ class MessageWindow(wx.Panel):
         """
         Shows/hides the throbber.
 
-        @param show: whether to show or hide the throbber.
+        
+        **Parameters:**
+
+        * show: whether to show or hide the throbber.
         """
         
         # Show/hide the throb
@@ -215,7 +221,10 @@ class MessageWindow(wx.Panel):
         """
         Insert some fancy line when an error happens.
 
-        @param currentTime: the actual formatted time.
+        
+        **Parameters:**
+
+        * currentTime: the actual formatted time.
         """
 
         indx = self.list.InsertImageStringItem(sys.maxint, "", 2)
@@ -233,9 +242,12 @@ class MessageWindow(wx.Panel):
         """
         Prints an user-friendly message on the list control.
 
-        @param kind: the message kind (error, warning, message);
-        @param message: the actual message to display in the list control;
-        @param copy: whether to save a reference to this message or not.
+        
+        **Parameters:**
+
+        * kind: the message kind (error, warning, message);
+        * message: the actual message to display in the list control;
+        * copy: whether to save a reference to this message or not.
         """
 
         # Get the current time slightly dirrently formatted
@@ -303,7 +315,10 @@ class MessageWindow(wx.Panel):
         Enables/disables the run buttons depending on the external
         process status.
 
-        @param enable: whether to enable or disable the buttons.
+        
+        **Parameters:**
+
+        * enable: whether to enable or disable the buttons.
         """
 
         # dry run and compile buttons are enabled when the kill button is
@@ -318,7 +333,10 @@ class MessageWindow(wx.Panel):
         Enables/Disables the dry-run button depending on the selected compiler
         (dry-run is available only for py2exe).
 
-        @param book: the L[LabelBook] associated to our project.        
+        
+        **Parameters:**
+
+        * book: the L[LabelBook] associated to our project.        
         """
 
         # We enable the dry run option only if the selected compiler
@@ -331,7 +349,10 @@ class MessageWindow(wx.Panel):
         """
         Enables/disables all the buttons depending on the number of projects opened.
 
-        @param enable: whether to enable or disable the buttons.
+        
+        **Parameters:**
+
+        * enable: whether to enable or disable the buttons.
         """
 
         self.dryrun.Enable(enable)

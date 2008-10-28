@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="Resources.html" title="Resources"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -71,8 +74,14 @@
 <dt id="Utilities.EnvironmentInfo">
 <!--[Utilities.EnvironmentInfo]--><tt class="descclassname">Utilities.</tt><tt class="descname">EnvironmentInfo</tt><big>(</big><em>version</em><big>)</big><a class="headerlink" href="#Utilities.EnvironmentInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string of the systems information.</p>
-<p>&#64;return: System information string
-&#64;note: from Editra.dev_tool</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>System information string</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -81,9 +90,16 @@
 <dl class="function">
 <dt id="Utilities.FormatTrace">
 <!--[Utilities.FormatTrace]--><tt class="descclassname">Utilities.</tt><tt class="descname">FormatTrace</tt><big>(</big><em>etype</em>, <em>value</em>, <em>trace</em><big>)</big><a class="headerlink" href="#Utilities.FormatTrace" title="Permalink to this definition">¶</a></dt>
-<dd>Formats the given traceback
-&#64;return: Formatted string of traceback with attached timestamp
-&#64;note: from Editra.dev_tool</dd></dl>
+<dd><p>Formats the given traceback</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>Formatted string of traceback with attached timestamp</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
+</dd></dl>
 
 </div>
 <div class="section" id="fractsec">
@@ -92,7 +108,10 @@
 <dt id="Utilities.FractSec">
 <!--[Utilities.FractSec]--><tt class="descclassname">Utilities.</tt><tt class="descname">FractSec</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#Utilities.FractSec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Formats time as hh:mm:ss.</p>
-<p>&#64;param s: the number of seconds.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>s: the number of seconds.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -104,8 +123,14 @@
 <dd><p>Gets a list of the available locales that have been installed.
 Returning a list of strings that represent the
 canonical names of each language.</p>
-<p>&#64;return: list of all available local/languages available
-&#64;note: from Editra.dev_tool</p>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>list of all available local/languages available</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -115,8 +140,11 @@ canonical names of each language.</p>
 <dt id="Utilities.GetExecutableData">
 <!--[Utilities.GetExecutableData]--><tt class="descclassname">Utilities.</tt><tt class="descname">GetExecutableData</tt><big>(</big><em>project</em>, <em>compiler</em><big>)</big><a class="headerlink" href="#Utilities.GetExecutableData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns information about the executable file.</p>
-<p>&#64;param project: the project being compiled;
-&#64;param compiler: the compiler used to build the project.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>project: the project being compiled;</li>
+<li>compiler: the compiler used to build the project.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -126,7 +154,10 @@ canonical names of each language.</p>
 <dt id="Utilities.GetFolderSize">
 <!--[Utilities.GetFolderSize]--><tt class="descclassname">Utilities.</tt><tt class="descname">GetFolderSize</tt><big>(</big><em>exePath</em><big>)</big><a class="headerlink" href="#Utilities.GetFolderSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the size of the executable distribution folder.</p>
-<p>&#64;param exePath: the path of the distribution folder.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>exePath: the path of the distribution folder.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -137,9 +168,18 @@ canonical names of each language.</p>
 <!--[Utilities.GetLangId]--><tt class="descclassname">Utilities.</tt><tt class="descname">GetLangId</tt><big>(</big><em>installDir</em>, <em>lang_n</em><big>)</big><a class="headerlink" href="#Utilities.GetLangId" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the ID of a language from the description string. If the
 language cannot be found the function simply returns the default language</p>
-<p>&#64;param lang_n: Canonical name of a language
-&#64;return: wx.LANGUAGE_*** id of language
-&#64;note: from Editra.dev_tool</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>lang_n: Canonical name of a language</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>wx.LANGUAGE_*** id of language</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -152,10 +192,22 @@ language cannot be found the function simply returns the default language</p>
 dictionary of available language values using the canonical name as
 the key. Supplying the Option OPT_DESCRIPT will return a dictionary
 of language id&#8217;s with languages description as the key.</p>
-<p>&#64;param loc_list: list of locals
-&#64;keyword opt: option for configuring return data
-&#64;return: dict of locales mapped to wx.LANGUAGE_*** values
-&#64;note: from Editra.dev_tool</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>loc_list: list of locals</li>
+</ul>
+<p><strong>Keywords:</strong></p>
+<ul class="simple">
+<li>opt: option for configuring return data</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul class="simple">
+<li>dict of locales mapped to wx.LANGUAGE_*** values</li>
+</ul>
+<p><strong>Note:</strong></p>
+<ul class="simple">
+<li>from Editra.dev_tool</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -165,9 +217,12 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.PrintTree">
 <!--[Utilities.PrintTree]--><tt class="descclassname">Utilities.</tt><tt class="descname">PrintTree</tt><big>(</big><em>strs</em>, <em>tree</em>, <em>depth=0</em>, <em>written=False</em><big>)</big><a class="headerlink" href="#Utilities.PrintTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints a tree-dict structure into a string.</p>
-<p>&#64;param strs: the string to which to print the tree,
-&#64;param depth: the nesting level we reached in the dictionary;
-&#64;param written: whether the dict key has been written or not.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>strs: the string to which to print the tree,</li>
+<li>depth: the nesting level we reached in the dictionary;</li>
+<li>written: whether the dict key has been written or not.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -177,9 +232,12 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.RecurseSubDirs">
 <!--[Utilities.RecurseSubDirs]--><tt class="descclassname">Utilities.</tt><tt class="descname">RecurseSubDirs</tt><big>(</big><em>directory</em>, <em>userDir</em>, <em>extensions</em><big>)</big><a class="headerlink" href="#Utilities.RecurseSubDirs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recurse one directory to include all the files and sub-folders in it.</p>
-<p>&#64;param directory: the folder on which to recurse;
-&#64;param userDir: the directory chosen by the user;
-&#64;param extensions: the file extensions to be filtered.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>directory: the folder on which to recurse;</li>
+<li>userDir: the directory chosen by the user;</li>
+<li>extensions: the file extensions to be filtered.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -189,7 +247,10 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.flatten">
 <!--[Utilities.flatten]--><tt class="descclassname">Utilities.</tt><tt class="descname">flatten</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#Utilities.flatten" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal function that flattens a N-D list.</p>
-<p>&#64;param list: the N-D list that needs to be flattened.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>list: the N-D list that needs to be flattened.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -207,7 +268,10 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.opj">
 <!--[Utilities.opj]--><tt class="descclassname">Utilities.</tt><tt class="descname">opj</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#Utilities.opj" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts paths to the platform-specific separator.</p>
-<p>&#64;param path: the path to be normalized.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>path: the path to be normalized.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -217,11 +281,14 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.setupString">
 <!--[Utilities.setupString]--><tt class="descclassname">Utilities.</tt><tt class="descname">setupString</tt><big>(</big><em>key</em>, <em>item</em>, <em>isPyInstaller=False</em>, <em>splitter=False</em><big>)</big><a class="headerlink" href="#Utilities.setupString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets up the strings for py2exe and other compilers.</p>
-<p>&#64;param key: the option name (data_files, includes, etc...);
-&#64;param item: the option value (usually a list);
-&#64;param isPyInstaller: whether we are compiling with PyInstaller or not
-(PyInstaller requires a different syntax);
-&#64;param splitter: currently unused.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>key: the option name (data_files, includes, etc...);</li>
+<li>item: the option value (usually a list);</li>
+<li>isPyInstaller: whether we are compiling with PyInstaller or not
+(PyInstaller requires a different syntax);</li>
+<li>splitter: currently unused.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -239,7 +306,10 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.unique">
 <!--[Utilities.unique]--><tt class="descclassname">Utilities.</tt><tt class="descname">unique</tt><big>(</big><em>list</em><big>)</big><a class="headerlink" href="#Utilities.unique" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal function, returning the unique elements in a list.</p>
-<p>&#64;param list: the list for which we want the unique elements.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>list: the list for which we want the unique elements.</li>
+</ul>
 </dd></dl>
 
 </div>
@@ -256,10 +326,15 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.ConnectionThread.__init__">
 <!--[Utilities.ConnectionThread.__init__]--><tt class="descname">__init__</tt><big>(</big><em>notifyWindow</em><big>)</big><a class="headerlink" href="#Utilities.ConnectionThread.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the worker thread.</p>
-<dl class="docutils">
-<dt>&#64;param notifyWindow: the window which will receive the notification when</dt>
-<dd>this thread finishes the work.</dd>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt>notifyWindow: the window which will receive the notification when</dt>
+<dd><p class="first last">this thread finishes the work.</p>
+</dd>
 </dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -280,7 +355,10 @@ of language id&#8217;s with languages description as the key.</p>
 <dt id="Utilities.odict.__init__">
 <!--[Utilities.odict.__init__]--><tt class="descname">__init__</tt><big>(</big><em>dict=None</em><big>)</big><a class="headerlink" href="#Utilities.odict.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param dict: a dictionary from where to get the new dict keys (optional).</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>dict: a dictionary from where to get the new dict keys (optional).</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -405,13 +483,16 @@ of language id&#8217;s with languages description as the key.</p>
         <li class="right" >
           <a href="Resources.html" title="Resources"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>

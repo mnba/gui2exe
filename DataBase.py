@@ -37,8 +37,11 @@ class DataBase(object):
         """
         Default class constructor.
 
-        @param mainFrame: the GUI2Exe main frame;
-        @param dbName: the database file name.
+        
+        **Parameters:**
+
+        * mainFrame: the GUI2Exe main frame;
+        * dbName: the database file name.
         """
 
         # Create a fresh database, or open an  existing one
@@ -126,7 +129,10 @@ class DataBase(object):
         """
         Saves the data into the database.
 
-        @param project: the project to be saved.
+        
+        **Parameters:**
+
+        * project: the project to be saved.
         """
 
         # Get the project name
@@ -139,7 +145,10 @@ class DataBase(object):
         """
         Loads the project from the database.
 
-        @param projectName: the project name
+        
+        **Parameters:**
+
+        * projectName: the project name
         """
 
         return deserialize(self.db[projectName.encode()])
@@ -149,7 +158,10 @@ class DataBase(object):
         """
         Deletes the project from the database.
 
-        @param project: the project to be deleted.
+        
+        **Parameters:**
+
+        * project: the project to be deleted.
         """
 
         if not isinstance(project, basestring):
@@ -166,8 +178,11 @@ class DataBase(object):
         """
         Renames the project after a user has edited the project tree control.
 
-        @param oldName: the old project name;
-        @param newName: the new project name.
+        
+        **Parameters:**
+
+        * oldName: the old project name;
+        * newName: the new project name.
         """
 
         if not self.db.has_key(oldName.encode()):
@@ -191,8 +206,11 @@ class DataBase(object):
         """
         Copies an existing project configuration into a new project.
 
-        @param existingProject: the existing project to be copied;
-        @param newName: the new project name.
+        
+        **Parameters:**
+
+        * existingProject: the existing project to be copied;
+        * newName: the new project name.
         """
 
         # Store the existing project configuration into the new project
@@ -205,7 +223,10 @@ class DataBase(object):
         """
         Checks if a project exists in the database.
 
-        @param project: the project to be checked for existance.
+        
+        **Parameters:**
+
+        * project: the project to be checked for existance.
         """
 
         return self.db.has_key(project.GetName().encode())

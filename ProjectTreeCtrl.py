@@ -21,7 +21,10 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Default class constructor.
 
-        @param parent: the tree control parent widget.
+        
+        **Parameters:**
+
+        * parent: the tree control parent widget.
         """
 
         CT.CustomTreeCtrl.__init__(self, parent, style=wx.TR_FULL_ROW_HIGHLIGHT|wx.TR_EDIT_LABELS
@@ -386,7 +389,10 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Auxiliary called by external modules.
 
-        @param treeItems: the selected tree items to be deleted.
+        
+        **Parameters:**
+
+        * treeItems: the selected tree items to be deleted.
         """
 
         # Freeze the main frame... it helps with flicker
@@ -417,8 +423,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Checks if a project is valid and it doesn't already exists in the tree control.
 
-        @param projectName: the project name;
-        @param usePyData: whether to use the data store in the tree item.
+        
+        **Parameters:**
+
+        * projectName: the project name;
+        * usePyData: whether to use the data store in the tree item.
         """
 
         if not projectName.strip():
@@ -455,8 +464,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Checks if a project with the given name already exists.
 
-        @param projectName: the project name;
-        @param usePyData: whether to use the data store in the tree item.
+        
+        **Parameters:**
+
+        * projectName: the project name;
+        * usePyData: whether to use the data store in the tree item.
         """
         
         child, cookie = self.GetFirstChild(self.rootItem)
@@ -502,7 +514,10 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Converts a date in the appropriate format to be sorted by the tree.
         
-        @param date: the date to be converted.
+        
+        **Parameters:**
+
+        * date: the date to be converted.
         """
 
         if type(date) == time.struct_time:
@@ -522,7 +537,10 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Populates the tree with the keys coming from the database.
 
-        @param dbKeys: the database project names which will be used to name the
+        
+        **Parameters:**
+
+        * dbKeys: the database project names which will be used to name the
                        items in the tree.
         """
 
@@ -544,8 +562,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Sets the state of a particular item as "in editing" or not.
 
-        @param treeItem: the tree item;
-        @param editState: whether the item is being edited or not.
+        
+        **Parameters:**
+
+        * treeItem: the tree item;
+        * editState: whether the item is being edited or not.
         """
 
         # Change item image depending on the state
@@ -560,8 +581,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Highlight/Un-highlight a tree item.
 
-        @param treeItem: the tree item to highlight/un-highlight;
-        @param highlight: whether the tree item will be highlighted or not.
+        
+        **Parameters:**
+
+        * treeItem: the tree item to highlight/un-highlight;
+        * highlight: whether the tree item will be highlighted or not.
         """
 
         # Change item font depending on the highlight
@@ -574,8 +598,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
         Repositions the items after a drag and drop operation.
 
-        @param appendToRoot: whether to append the dropped item to the root item or not;
-        @param droppedItem: the item subjected to the drag and drop operation.
+        
+        **Parameters:**
+
+        * appendToRoot: whether to append the dropped item to the root item or not;
+        * droppedItem: the item subjected to the drag and drop operation.
         """
 
         # I need this flag to avoid the call to OnDeleteItem

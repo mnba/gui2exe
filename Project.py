@@ -17,8 +17,11 @@ class Project(odict):
         """
         Default class constructor.
 
-        @param configuration: the project data;
-        @param name: the project name as entered by the user.
+        
+        **Parameters:**
+
+        * configuration: the project data;
+        * name: the project name as entered by the user.
         """        
 
         # Initialize the ordered dictionary
@@ -43,9 +46,12 @@ class Project(odict):
         """
         Updates the project with data inserted by the user.
 
-        @param compiler: the selected executable-builder;
-        @param keyName: the option name for the selecte compiler;
-        @param keyValue: the option value for the selecte compiler.
+        
+        **Parameters:**
+
+        * compiler: the selected executable-builder;
+        * keyName: the option name for the selecte compiler;
+        * keyValue: the option value for the selecte compiler.
         """
 
         self[compiler][keyName] = keyValue
@@ -55,8 +61,11 @@ class Project(odict):
         """
         Sets a whole configuration for the selected compiler.
 
-        @param compiler: the selected executable-builder;
-        @param configuration: the project configuration to save.
+        
+        **Parameters:**
+
+        * compiler: the selected executable-builder;
+        * configuration: the project configuration to save.
         """
 
         self[compiler] = configuration
@@ -66,7 +75,10 @@ class Project(odict):
         """
         Returns the configuration for the selected compiler.
 
-        @param compiler: the selected executable-builder.
+        
+        **Parameters:**
+
+        * compiler: the selected executable-builder.
         """
 
         return self[compiler]
@@ -76,7 +88,10 @@ class Project(odict):
         """
         Sets the project name.
 
-        @param name: the project name given by the user.
+        
+        **Parameters:**
+
+        * name: the project name given by the user.
         """
 
         self.name = name
@@ -101,8 +116,11 @@ class Project(odict):
         """
         Sets the custom code entered by the user.
 
-        @param compiler: the compiler to which the custom code applies;
-        @param code: the custom code entered by the user.
+        
+        **Parameters:**
+
+        * compiler: the compiler to which the custom code applies;
+        * code: the custom code entered by the user.
         """
 
         if isinstance(self.customCode, basestring):
@@ -116,7 +134,10 @@ class Project(odict):
         """
         Returns the custom code entered by the user.
 
-        @param compiler: the compiler to which the custom code applies.
+        
+        **Parameters:**
+
+        * compiler: the compiler to which the custom code applies.
         """
 
         if isinstance(self.customCode, basestring):
@@ -136,8 +157,11 @@ class Project(odict):
         """
         Sets some custom post-compilation code to be executed.
 
-        @param compiler: the compiler to which the post-compilation code applies;
-        @param code: the post-compilation code entered by the user.
+        
+        **Parameters:**
+
+        * compiler: the compiler to which the post-compilation code applies;
+        * code: the post-compilation code entered by the user.
         """
 
         if not hasattr(self, "postCompile"):
@@ -151,7 +175,10 @@ class Project(odict):
         """
         Returns the custom post-compilation code to be executed (if any).
 
-        @param compiler: the compiler to which the post-compilation code applies.
+        
+        **Parameters:**
+
+        * compiler: the compiler to which the post-compilation code applies.
         """
 
         if not hasattr(self, "postCompile"):
@@ -171,8 +198,11 @@ class Project(odict):
         says are the binary dependencies (dlls) and the missing modules (Python files).
         This method applies only to py2exe compiled scripts.
         
-        @param missingModules: the modules py2exe thinks are missing;
-        @param binaryDependencies: the dlls py2exe suggests you to include in your distribution.
+        
+        **Parameters:**
+
+        * missingModules: the modules py2exe thinks are missing;
+        * binaryDependencies: the dlls py2exe suggests you to include in your distribution.
         """
 
         self.missingModules = missingModules
@@ -195,7 +225,10 @@ class Project(odict):
         """
         Returns the executable name based on the chosen compiler.
 
-        @param compiler: the compiler for which we want the executable name.
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want the executable name.
         """
 
         distDir = True
@@ -269,7 +302,10 @@ class Project(odict):
         """
         Returns the manifest file name for Windows XP executables.
 
-        @param compiler: the compiler for which we build the manifest file.
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we build the manifest file.
         """
 
         configuration = self[compiler]
@@ -351,8 +387,11 @@ class Project(odict):
         """
         Assigns the full build output text to the project for later viewing.
 
-        @param compiler: the compiler used to build the executable;
-        @param outputText: the full build output text from the compiler.
+        
+        **Parameters:**
+
+        * compiler: the compiler used to build the executable;
+        * outputText: the full build output text from the compiler.
         """
 
         if not hasattr(self, "buildOutputs"):
@@ -368,7 +407,10 @@ class Project(odict):
         """
         Retrieves the full build output text (if any).
 
-        @param compiler: the compiler used to build the executable;
+        
+        **Parameters:**
+
+        * compiler: the compiler used to build the executable;
         """
         
         if not hasattr(self, "buildOutputs"):
@@ -387,7 +429,10 @@ class Project(odict):
         """
         Retrieves the distribution directory for the specific compiler.
 
-        @param compiler: the compiler used to build the executable;
+        
+        **Parameters:**
+
+        * compiler: the compiler used to build the executable;
         """
 
         exeName = self.GetExecutableName(compiler)

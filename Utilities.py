@@ -27,7 +27,10 @@ class odict(UserDict):
         """
         Default class constructor.
 
-        @param dict: a dictionary from where to get the new dict keys (optional).
+        
+        **Parameters:**
+
+        * dict: a dictionary from where to get the new dict keys (optional).
         """
 
         self._keys = []
@@ -106,7 +109,10 @@ class ConnectionThread(Thread):
         """
         Initialize the worker thread.
 
-        @param notifyWindow: the window which will receive the notification when
+        
+        **Parameters:**
+
+        * notifyWindow: the window which will receive the notification when
                              this thread finishes the work.
         """
         
@@ -147,7 +153,10 @@ def opj(path):
     """
     Converts paths to the platform-specific separator.
 
-    @param path: the path to be normalized.
+    
+    **Parameters:**
+
+    * path: the path to be normalized.
     """
 
     str = apply(os.path.join, tuple(path.split('/')))
@@ -161,7 +170,10 @@ def flatten(list):
     """
     Internal function that flattens a N-D list.
 
-    @param list: the N-D list that needs to be flattened.
+    
+    **Parameters:**
+
+    * list: the N-D list that needs to be flattened.
     """
 
     res = []
@@ -177,7 +189,10 @@ def unique(list):
     """
     Internal function, returning the unique elements in a list.
 
-    @param list: the list for which we want the unique elements.
+    
+    **Parameters:**
+
+    * list: the list for which we want the unique elements.
     """
 
     # Create a fake dictionary
@@ -198,12 +213,14 @@ def unique(list):
 def setupString(key, item, isPyInstaller=False, splitter=False):
     """
     Sets up the strings for py2exe and other compilers.
+  
+    **Parameters:**
 
-    @param key: the option name (data_files, includes, etc...);
-    @param item: the option value (usually a list);
-    @param isPyInstaller: whether we are compiling with PyInstaller or not
-    (PyInstaller requires a different syntax);
-    @param splitter: currently unused.
+    * key: the option name (data_files, includes, etc...);
+    * item: the option value (usually a list);
+    * isPyInstaller: whether we are compiling with PyInstaller or not
+      (PyInstaller requires a different syntax);
+    * splitter: currently unused.
     """
 
     # This is an incredible and horrible hack, and it may not always work     
@@ -261,7 +278,10 @@ def FractSec(s):
     """
     Formats time as hh:mm:ss.
 
-    @param s: the number of seconds.
+    
+    **Parameters:**
+
+    * s: the number of seconds.
     """
     
     min, s = divmod(s, 60)
@@ -273,8 +293,11 @@ def GetExecutableData(project, compiler):
     """
     Returns information about the executable file.
 
-    @param project: the project being compiled;
-    @param compiler: the compiler used to build the project.
+    
+    **Parameters:**
+
+    * project: the project being compiled;
+    * compiler: the compiler used to build the project.
     """
 
     if not project.GetBuildOutput(compiler):
@@ -294,7 +317,10 @@ def GetFolderSize(exePath):
     """
     Returns the size of the executable distribution folder.
 
-    @param exePath: the path of the distribution folder.
+    
+    **Parameters:**
+
+    * exePath: the path of the distribution folder.
     """
     
     folderSize = numFiles = 0
@@ -321,9 +347,12 @@ def RecurseSubDirs(directory, userDir, extensions):
     """
     Recurse one directory to include all the files and sub-folders in it.
 
-    @param directory: the folder on which to recurse;
-    @param userDir: the directory chosen by the user;
-    @param extensions: the file extensions to be filtered.
+    
+    **Parameters:**
+
+    * directory: the folder on which to recurse;
+    * userDir: the directory chosen by the user;
+    * extensions: the file extensions to be filtered.
     """
 
     config = []
@@ -356,9 +385,12 @@ def PrintTree(strs, tree, depth=0, written=False):
     """
     Prints a tree-dict structure into a string.
 
-    @param strs: the string to which to print the tree,
-    @param depth: the nesting level we reached in the dictionary;
-    @param written: whether the dict key has been written or not.
+    
+    **Parameters:**
+
+    * strs: the string to which to print the tree,
+    * depth: the nesting level we reached in the dictionary;
+    * written: whether the dict key has been written or not.
     """
     
     if type(tree) == ListType:
@@ -397,8 +429,14 @@ def GetAvailLocales(installDir):
     Returning a list of strings that represent the
     canonical names of each language.
     
-    @return: list of all available local/languages available
-    @note: from Editra.dev_tool
+    
+    **Returns:**
+
+    *  list of all available local/languages available
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
 
     avail_loc = []
@@ -418,10 +456,22 @@ def GetLocaleDict(loc_list, opt=0):
     the key. Supplying the Option OPT_DESCRIPT will return a dictionary
     of language id's with languages description as the key.
     
-    @param loc_list: list of locals
-    @keyword opt: option for configuring return data
-    @return: dict of locales mapped to wx.LANGUAGE_*** values
-    @note: from Editra.dev_tool
+    
+    **Parameters:**
+
+    * loc_list: list of locals
+    
+    **Keywords:**
+
+    * opt: option for configuring return data
+    
+    **Returns:**
+
+    *  dict of locales mapped to wx.LANGUAGE_*** values
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
     lang_dict = dict()
     for lang in [x for x in dir(wx) if x.startswith("LANGUAGE")]:
@@ -441,9 +491,18 @@ def GetLangId(installDir, lang_n):
     Gets the ID of a language from the description string. If the
     language cannot be found the function simply returns the default language
 
-    @param lang_n: Canonical name of a language
-    @return: wx.LANGUAGE_*** id of language
-    @note: from Editra.dev_tool
+    
+    **Parameters:**
+
+    * lang_n: Canonical name of a language
+    
+    **Returns:**
+
+    *  wx.LANGUAGE_*** id of language
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
     
     lang_desc = GetLocaleDict(GetAvailLocales(installDir), 1)
@@ -452,8 +511,14 @@ def GetLangId(installDir, lang_n):
 
 def FormatTrace(etype, value, trace):
     """Formats the given traceback
-    @return: Formatted string of traceback with attached timestamp
-    @note: from Editra.dev_tool
+    
+    **Returns:**
+
+    *  Formatted string of traceback with attached timestamp
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
     
     exc = traceback.format_exception(etype, value, trace)
@@ -465,8 +530,14 @@ def EnvironmentInfo(version):
     """
     Returns a string of the systems information.
     
-    @return: System information string
-    @note: from Editra.dev_tool
+    
+    **Returns:**
+
+    *  System information string
+    
+    **Note:**
+
+    *  from Editra.dev_tool
     """
 
     info = list()

@@ -41,7 +41,10 @@
         <li class="right" >
           <a href="MessageWindow.html" title="MessageWindow"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
@@ -68,14 +71,17 @@ into an executable.</p>
 <dt id="Process.Process.__init__">
 <!--[Process.Process.__init__]--><tt class="descname">__init__</tt><big>(</big><em>parent</em>, <em>buildDir</em>, <em>setupScript</em>, <em>run</em>, <em>compiler</em>, <em>project</em>, <em>pageNumber</em>, <em>pythonVersion</em><big>)</big><a class="headerlink" href="#Process.Process.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default class constructor.</p>
-<p>&#64;param: parent: the parent widget (GUI2Exe);
-&#64;param buildDir: the directory in which we build the executable;
-&#64;param setupScript: the setup file passed as a string;
-&#64;param run: if False, only a &#8220;dry-run&#8221; is performed (py2exe only);
-&#64;param compiler: the compiler used;
-&#64;param project: the project we are compiling;
-&#64;param pageNumber: the main wx.aui.AuiNotebook page number we belong to;
-&#64;param pythonVersion: the Python executable used to call the exe builder.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>parent: the parent widget (GUI2Exe);</li>
+<li>buildDir: the directory in which we build the executable;</li>
+<li>setupScript: the setup file passed as a string;</li>
+<li>run: if False, only a &#8220;dry-run&#8221; is performed (py2exe only);</li>
+<li>compiler: the compiler used;</li>
+<li>project: the project we are compiling;</li>
+<li>pageNumber: the main wx.aui.AuiNotebook page number we belong to;</li>
+<li>pythonVersion: the Python executable used to call the exe builder.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -87,7 +93,10 @@ into an executable.</p>
 <dt id="Process.Process.HandleProcessMessages">
 <!--[Process.Process.HandleProcessMessages]--><tt class="descname">HandleProcessMessages</tt><big>(</big><em>processEnded=False</em><big>)</big><a class="headerlink" href="#Process.Process.HandleProcessMessages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles all the messages that come from input and error streams.</p>
-<p>&#64;param processEnded: whether the process has just ended.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>processEnded: whether the process has just ended.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -104,9 +113,12 @@ into an executable.</p>
 <dt id="Process.Process.ReadStream">
 <!--[Process.Process.ReadStream]--><tt class="descname">ReadStream</tt><big>(</big><em>stream</em>, <em>isError</em>, <em>processEnded</em><big>)</big><a class="headerlink" href="#Process.Process.ReadStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the input/error streams (if any).</p>
-<p>&#64;param stream: the stdout/stderr stream;
-&#64;param isError: whether the building process generated an error or not;
-&#64;param processEnded: whether the process has just ended.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li>stream: the stdout/stderr stream;</li>
+<li>isError: whether the building process generated an error or not;</li>
+<li>processEnded: whether the process has just ended.</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -175,13 +187,16 @@ into an executable.</p>
         <li class="right" >
           <a href="MessageWindow.html" title="MessageWindow"
              accesskey="P">previous</a> |</li>
+<li><img src="_static/gui2exe_small.png" alt="" style="vertical-align: middle; margin-top: -1px"/></li>
+
         <li><a href="index.html">GUI2Exe v0.2 documentation</a> &raquo;</li>
+
           <li><a href="majorClasses.html" accesskey="U">Major Classes Reference</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2008, Andrea Gavana.
-      Last updated on Oct 24, 2008.
+      Last updated on Oct 26, 2008.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>
