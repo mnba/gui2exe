@@ -450,5 +450,29 @@ class BaseBuilderPanel(scrolled.ScrolledPanel):
                 configuration["multipleexe"] = [[configuration["gui_only"], configuration["script"]]]
                 del configuration["gui_only"], configuration["script"]
 
+        elif name == "py2exe":
+            if "version" not in configuration:
+                return configuration
+
+            py2exe = [""]*7
+            py2exeOld = ["kind", "script", "version", \
+                         "company", "copyright", "name"]
+
+            script = configuration["script"]
+            counter = 0
+            for item in py2exeOld:
+                py2exe[counter] = configuration[item]
+                if item == "script":
+                    counter += 1
+                    if script.strip():
+                        py2exe[counter] = os.path.split(os.path.splitext(script)[0])[1]
+                        
+                counter += 1
+                
+            configuration["multipleexe"] = [py2exe]
+            for items in py2exeOld:
+                # Delete the old keys
+                del configuration[items]
+                        
         return configuration
     
