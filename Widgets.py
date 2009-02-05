@@ -2912,6 +2912,10 @@ class TransientBase(object):
             # This works only on Windows XP
             return
 
+        if not hasattr(win32gui, "CreateRoundRectRgn"):
+            # Older pywin32 builds fail here
+            return
+        
         hwnd = self.GetHandle()
 
         # Create a rounded rectangle region
