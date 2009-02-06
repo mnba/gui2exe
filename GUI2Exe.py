@@ -78,7 +78,7 @@ Version 0.2
 
 __author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <gavana@kpo.kz>"
 __date__    = "01 Apr 2007, 13:15 GMT"
-__version__ = "0.2"
+__version__ = "0.3"
 __docformat__ = "epytext"
 
 
