@@ -221,10 +221,13 @@ class AdvancedSplash(wx.Frame):
         self.Show()
 
 
-    def SetSplashShape(self):
+    def SetSplashShape(self, event=None):
         """ Sets AdvancedSplash shape using the region created from the bitmap."""
 
         self.SetShape(self.reg)
+        
+        if event is not None:
+            event.Skip()
 
 
     def ShadowBitmap(self, bmp, shadowcolour):
