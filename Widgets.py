@@ -2080,7 +2080,9 @@ class GUI2ExeDirSelector(BaseDialog):
             # Create a text control to filter extensions
             self.extensionText = wx.TextCtrl(self, -1, "*.*")
 
-        self.SetProperties(title)           
+        self.SetProperties(title)
+        self.dirCtrl.ShowHidden(True)
+        
         # Setup the layout and frame properties        
         self.SetupDirCtrl(lastDir)
         self.LayoutItems(size)
