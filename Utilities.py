@@ -409,9 +409,9 @@ def PrintTree(strs, tree, depth=0, written=False):
         keys = tree.keys()
         keys.sort()
         for key in keys:
-            for i in range(depth):
+            for i in xrange(depth):
                 strs += "\t\t\t\t"
-            if depth == 0:
+            if depth == 0 or isinstance(tree[key], dict):
                 strs += "\t\t" + ("'%s'"%key).ljust(13) + " : {\n"
                 written = True
             else:
