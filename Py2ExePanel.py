@@ -387,9 +387,12 @@ class Py2ExePanel(BaseBuilderPanel):
 
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
-            if key == "custom_boot_script" and not item:
+            if key == "custom_boot_script":
                 # I don't know how often this option is used
-                item = "''"
+                if not item:
+                    item = "''"
+                else:
+                    item = "r'%s'"%item
             elif isinstance(self.FindWindowByName(key), wx.CheckBox):
                 item = bool(int(item))
 
