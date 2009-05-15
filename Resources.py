@@ -1,3 +1,11 @@
+########### GUI2Exe SVN repository information ###################
+# $Date: $
+# $Author: $
+# $Revision: $
+# $URL: $
+# $Id: $
+########### GUI2Exe SVN repository information ###################
+
 # Overall menu styles
 StyleXP = 0
 Style2007 = 1

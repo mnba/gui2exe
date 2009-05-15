@@ -1,3 +1,11 @@
+########### GUI2Exe SVN repository information ###################
+# $Date: $
+# $Author: $
+# $Revision: $
+# $URL: $
+# $Id: $
+########### GUI2Exe SVN repository information ###################
+
 # Start the imports
 import os
 import sys
@@ -213,11 +221,16 @@ class Process(object):
             # There is some data, process it
             text = stream.read()
             if isError and text.strip():
-                # Ah, is the error stream, something went wrong
-                self.MainFrame.SendMessage(2, text)
-                self.failed = True
-                self.fullText = ""
+                if "warning" in text.lower():
+                    self.MainFrame.SendMessage(1, text)
+                else:
+                    # Ah, is the error stream, something went wrong
+                    self.MainFrame.SendMessage(2, text)
+                    self.failed = True
+                    self.fullText = ""
+                    
                 self.outputText += text
+                
             else:
                 # That's the input stream
                 if text.find("byte-compiling") >= 0:    # py2exe/py2app is compiling

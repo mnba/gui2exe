@@ -1,3 +1,11 @@
+########### GUI2Exe SVN repository information ###################
+# $Date: $
+# $Author: $
+# $Revision: $
+# $URL: $
+# $Id: $
+########### GUI2Exe SVN repository information ###################
+
 """
 
 Description
@@ -71,8 +79,8 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 21 Oct 2008 10.00 GMT
-Version 0.2
+Latest revision: Andrea Gavana, 15 May 2009 10.00 GMT
+Version 0.3
   
 """
 

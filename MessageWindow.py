@@ -1,3 +1,11 @@
+########### GUI2Exe SVN repository information ###################
+# $Date: $
+# $Author: $
+# $Revision: $
+# $URL: $
+# $Id: $
+########### GUI2Exe SVN repository information ###################
+
 # Start the imports
 
 import os
@@ -268,6 +276,11 @@ class MessageWindow(wx.Panel):
             message = []
             for msg in messages:
                 message.extend(textwrap.wrap(msg, width))
+        elif kind == 1 and "\n" in message:
+            messages = message.splitlines()
+            message = []
+            for msg in messages:
+                message.extend(textwrap.wrap(msg.strip(), width))
         else:
             message = [message]
 

@@ -1,3 +1,11 @@
+########### GUI2Exe SVN repository information ###################
+# $Date: $
+# $Author: $
+# $Revision: $
+# $URL: $
+# $Id: $
+########### GUI2Exe SVN repository information ###################
+
 import wx
 from Resources import *
 
