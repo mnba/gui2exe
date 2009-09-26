@@ -1070,6 +1070,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Get the list of existing stuff in the list,
         # so that we do not add twice files
         existing = []
+        columns = self.GetColumnCount()
+        
         for item in xrange(self.GetItemCount()):
             if columns > 2:
                 path = self.GetItem(item, 2).GetText()
