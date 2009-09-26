@@ -1097,6 +1097,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
 
         existing = self.GetExistingItems()
+        columns = self.GetColumnCount()
         
         for path in paths:
             if path in existing:
