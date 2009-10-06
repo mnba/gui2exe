@@ -787,16 +787,19 @@ class GUI2Exe(wx.Frame):
 
         preferences = {}
         val = options.Read('Preferences')
+
+        preferences["Transparency"] = 255
+        preferences["Reload_Projects"] = [0, []]
+        preferences["Remember_Compiler"] = [0, {}]
+        preferences["Window_Size"] = [0, (-1, -1)]
+        preferences["Window_Position"] = [0, (-1, -1)]
+        preferences["Language"] = "Default"
+        preferences["Perspective"] = [0, ""]
+
         if val:
-            preferences = eval(val)
-        else:
-            preferences["Transparency"] = 255
-            preferences["Reload_Projects"] = [0, []]
-            preferences["Remember_Compiler"] = [0, {}]
-            preferences["Window_Size"] = [0, (-1, -1)]
-            preferences["Window_Position"] = [0, (-1, -1)]
-            preferences["Language"] = "Default"
-            preferences["Perspective"] = [0, ""]
+            prefs = eval(val)
+            for key, item in prefs.items():
+                preferences[key] = item
 
         self.preferences = preferences
         wx.GetApp().SetPreferences(preferences)
