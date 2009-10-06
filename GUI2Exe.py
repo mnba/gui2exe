@@ -63,9 +63,22 @@ GUI2Exe has a number of features, namely:
 * [py2exe-only]: After a building process, choosing the menu Builds => Missing
   modules or Builds => Binary dependencies, you will be presented respectively
   with a list of modules py2exe thinks are missing or a list of binary
-  dependencies (dlls) py2exe has found.
-
+  dependencies (dlls) py2exe has found;
+* [py2exe-only]: Possibility to use UPX compression on dlls/exes while compiling;
+* [py2exe-only]: Automatic generation of simple Inno Setup scripts;
+* [py2exe-only]: Support for more keywords in the Target class (i.e., all distutils
+  keywords are now supported);
+* [py2exe-only]: Easy access to the most recent error log file via the menu
+  Builds => Examine error log file;
+* Easy access to the distribution folder via the menu Builds => Open distribution
+  folder;
+* [py2exe-only]: A new distribution folder "Explorer" dialog allows to check which
+  PYDs and DLLs are included, and to quickly exclude them and then rebuild the script,
+  with "undo" capabilities.
+  
+  
 And much more :-D
+
 
 Project information
 ===================
@@ -79,14 +92,14 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 15 May 2009 10.00 GMT
-Version 0.3
+Latest revision: Andrea Gavana, 06 Oct 2009 12.00 GMT
+Version 0.4.0
   
 """
 
 __author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <gavana@kpo.kz>"
 __date__    = "01 Apr 2007, 13:15 GMT"
-__version__ = "0.3"
+__version__ = "0.4.0"
 __docformat__ = "epytext"
 
 
@@ -110,16 +123,18 @@ if sys.version[0:3] >= "(2,4)":
     # subprocess is new in 2.4
     import subprocess
 
-import wx.aui
 import wx.lib.dialogs
 
 # This is somehow needed by distutils, otherwise it bombs on Windows
 # when you have py2App installed (!)
 if wx.Platform == "__WXMAC__":
+    import wx.aui as aui
     try:
         import setuptools
     except ImportError:
         pass
+else:
+    import extern.aui as aui
 
 # I need webbrowser for the help and tips and tricks
 import webbrowser
@@ -140,11 +155,10 @@ from DataBase import DataBase
 from Project import Project
 from Process import Process
 from Widgets import CustomCodeViewer, Py2ExeMissing, PyBusyInfo, BuildDialog, PreferencesDialog
-from Widgets import ExceptionHook
+from Widgets import ExceptionHook, ExplorerDialog
 from Utilities import GetLangId, GetAvailLocales, now, CreateBitmap
 from Utilities import opj, odict, PrintTree, ConnectionThread
 from Constants import _auiImageList, _pywildspec, _defaultCompilers, _manifest_template
-from Constants import _standaloneString
 from AllIcons import catalog
 
 # And import the fancy AdvancedSplash
@@ -159,6 +173,24 @@ ID_ShowTip = ID_CleanDist + 2
 ID_Recurse = ID_CleanDist + 3
 ID_Missing = ID_CleanDist + 4
 ID_AutoSave = ID_CleanDist + 5
+ID_UPX = ID_CleanDist + 6
+ID_Inno = ID_CleanDist + 7
+ID_Modern = ID_CleanDist + 8
+ID_Classic = ID_CleanDist + 9
+ID_Top = ID_CleanDist + 10
+ID_Bottom = ID_CleanDist + 11
+ID_NB_Default = ID_CleanDist + 12
+ID_NB_FF2 = ID_CleanDist + 13
+ID_NB_VC71 = ID_CleanDist + 14
+ID_NB_VC8 = ID_CleanDist + 15
+ID_NB_Chrome = ID_CleanDist + 16
+ID_Explorer = ID_CleanDist + 17
+
+# Some ids for the popup menu on tabs (GTK and MSW only)
+ID_CloseTab = ID_CleanDist + 18
+ID_CloseAllTabs = ID_CleanDist + 19
+ID_SaveProject = ID_CleanDist + 20
+ID_SaveAllProjects = ID_CleanDist + 21
 
 # Define a translation string
 _ = wx.GetTranslation
@@ -223,7 +255,7 @@ class GUI2Exe(wx.Frame):
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
         # Yes, I know, I am obsessively addicted to wxAUI
-        self._mgr = wx.aui.AuiManager()
+        self._mgr = aui.AuiManager()
         self._mgr.SetManagedWindow(self)
 
         # Some default starting values for our class
@@ -241,8 +273,9 @@ class GUI2Exe(wx.Frame):
         self.pyInstallerPath = None          # Where PyInstaller lives
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
         self.showTips = True                 # Show tooltips for various compiler options
+        self.currentTab = None
 
-        # To store the wx.aui perspectives        
+        # To store the aui perspectives        
         self.perspectives = []
         # To periodically save opened projects
         self.autosaveTimer = wx.Timer(self, wx.ID_ANY)
@@ -254,7 +287,7 @@ class GUI2Exe(wx.Frame):
         # Create the menu bar (lots of code, mostly always the same)
         self.CreateMenuBar()
 
-        # Build the wx.aui.AuiNotebook image list
+        # Build the aui.AuiNotebook image list
         # But why in the world is so different from wx.Notebook???
         self.BuildNBImageList()
 
@@ -264,8 +297,15 @@ class GUI2Exe(wx.Frame):
         # This is the left CustomTreeCtrl that holds all our projects
         self.projectTree = ProjectTreeCtrl(self)
         # This is the main window, the central pane
-        self.mainPanel = wx.aui.AuiNotebook(self, -1, style=wx.aui.AUI_NB_DEFAULT_STYLE|
-                                            wx.aui.AUI_NB_WINDOWLIST_BUTTON)
+
+        nbStyle = aui.AUI_NB_DEFAULT_STYLE|aui.AUI_NB_WINDOWLIST_BUTTON
+        if wx.Platform != "__WXMAC__":
+            nbStyle += aui.AUI_NB_TAB_FLOAT + aui.AUI_NB_DRAW_DND_TAB
+
+        nbStyle = wx.GetApp().GetPreferences("Notebook_Style", default=nbStyle)
+        self.notebook_style = nbStyle
+            
+        self.mainPanel = aui.AuiNotebook(self, -1, style=nbStyle)
         # Let's be fancy and add a special logging window
         self.messageWindow = MessageWindow(self)
         # Add a small panel to show the executable properties
@@ -284,21 +324,21 @@ class GUI2Exe(wx.Frame):
 
         # Add the panes to the wxAUI manager
         # Very nice the bug introduced in wxPython 2.8.3 about wxAUI Maximize buttons...
-        self._mgr.AddPane(self.projectTree, wx.aui.AuiPaneInfo().Left().
+        self._mgr.AddPane(self.projectTree, aui.AuiPaneInfo().Left().
                           Caption(_("GUI2Exe Projects")).MinSize(wx.Size(250, -1)).
                           FloatingSize(wx.Size(200, 300)).Layer(1).MaximizeButton().
-                          Name("GUI2ExeProjects"))
-        self._mgr.AddPane(self.executablePanel, wx.aui.AuiPaneInfo().Left().
+                          Name("GUI2ExeProjects").MinimizeButton())
+        self._mgr.AddPane(self.executablePanel, aui.AuiPaneInfo().Left().
                           Caption(_("Executable Properties")).MinSize(wx.Size(200, 100)).
                           BestSize(wx.Size(200, size[1]/6)).MaxSize(wx.Size(200, 100)).
                           FloatingSize(wx.Size(200, 200)).Layer(1).Position(1).MaximizeButton().
-                          Name("ExecutableProperties"))
+                          Name("ExecutableProperties").MinimizeButton())
         self._mgr.GetPane(self.executablePanel).dock_proportion = 100000/4
-        self._mgr.AddPane(self.mainPanel, wx.aui.AuiPaneInfo().CenterPane().Name("MainPanel"))
-        self._mgr.AddPane(self.messageWindow, wx.aui.AuiPaneInfo().Bottom().
+        self._mgr.AddPane(self.mainPanel, aui.AuiPaneInfo().CenterPane().Name("MainPanel"))
+        self._mgr.AddPane(self.messageWindow, aui.AuiPaneInfo().Bottom().
                           Caption(_("Messages And Actions")).MinSize(wx.Size(200, 100)).
                           FloatingSize(wx.Size(500, 300)).BestSize(wx.Size(200, size[1]/6)).
-                          MaximizeButton().Name("MessagesAction"))
+                          MaximizeButton().Name("MessagesAction").MinimizeButton())
         
         # Set all the flags for wxAUI
         self.SetAllFlags()
@@ -366,6 +406,9 @@ class GUI2Exe(wx.Frame):
                     (_("Add &custom code...")+"\tCtrl+U", _("Add custom code to the setup script"), "custom_code", -1, self.OnCustomCode, ""),
                     (_("&Insert post compilation code...")+"\tCtrl+I", _("Add custom code to be executed after the building process"), "post_compile", -1, self.OnPostCompilationCode, ""),
                     ("", "", "", "", "", ""),
+                    (_('Use &UPX compression'), _("Uses UPX compression on dlls when available (Py2exe only)"), "", ID_UPX, self.OnUseUPX, wx.ITEM_CHECK),
+                    (_('Create Inno &Setup Script'), _("Creates and compiles a simple Inno Setup script (Py2exe only)"), "", ID_Inno, self.OnInno, wx.ITEM_CHECK),
+                    ("", "", "", "", "", ""),
                     (_("Preferences..."), _("Edit preferences/settings"), "preferences", wx.ID_PREFERENCES, self.OnPreferences, "")),
                 (_("&Builds"),
                     (_("&Test executable") + "\tCtrl+R", _("Test the compiled file (if it exists)"), "runexe", -1, self.OnTestExecutable, ""),
@@ -375,6 +418,11 @@ class GUI2Exe(wx.Frame):
                     ("", "", "", "", "", ""),
                     (_("Show &full build output")+"\tCtrl+F", _("View the full build output for the current compiler"), "full_build", -1, self.OnViewFullBuild, ""),
                     ("", "", "", "", "", ""),
+                    (_("&Examine error log file")+"\tCtrl+L", _("Shows the most recent error log file for the executable"), "log_file", -1, self.OnShowLog, ""),
+                    (_("&Open distribution folder")+"\tCtrl+Shift+O", _("Opens the distribution folder"), "dist_folder", -1, self.OnOpenDist, ""),
+                    ("", "", "", "", "", ""),
+                    (_("&Explorer")+"\tCtrl+Shift+E", _("Distribution folder explorer to check DLLs and PYDs"), "explorer", ID_Explorer, self.OnExplorer, ""),
+                    ("", "", "", "", "", ""),                 
                     (_("&Missing modules") + "\tCtrl+M", _("What the compiler thinks are the missing modules (py2exe only)"), "missingmodules", ID_Missing, self.OnViewMissing, ""),
                     (_("&Binary dependencies") + "\tCtrl+B", _("What the compiler says are the binary dependencies (py2exe only)"), "binarydependencies", -1, self.OnViewMissing, "")),
                 (_("&View"),
@@ -441,6 +489,65 @@ class GUI2Exe(wx.Frame):
         return menu
 
 
+    def CreateAUIMenu(self):
+        """ Creates an addition menus under 'View' to personalize the AUI settings (GTK and MSW only). """
+
+        dockingMenu = wx.Menu()
+        notebookMenu = wx.Menu()
+
+        # Add sub-menu to main menu        
+        bmp = self.CreateBitmap("docking")
+        item = wx.MenuItem(self.configMenu, wx.ID_ANY, _("&Docking style"), _("Changes the docking style"), wx.ITEM_NORMAL, dockingMenu)
+        item.SetBitmap(bmp)
+        self.configMenu.InsertItem(0, item)
+
+        item = wx.MenuItem(dockingMenu, ID_Modern, _("&Modern style"), _("Modern docking style"), wx.ITEM_RADIO)
+        dockingMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDocking, id=ID_Modern)
+
+        item = wx.MenuItem(dockingMenu, ID_Classic, _("&Classic style"), _("Classic docking style"), wx.ITEM_RADIO)
+        dockingMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDocking, id=ID_Classic)
+        
+        # Add sub-menu to main menu
+        bmp = self.CreateBitmap("notebook")
+        item = wx.MenuItem(self.configMenu, wx.ID_ANY, _("&Notebook style"), _("Changes the notebook style"), wx.ITEM_NORMAL, notebookMenu)
+        item.SetBitmap(bmp)
+        self.configMenu.InsertItem(1, item)
+
+        item = wx.MenuItem(notebookMenu, ID_Top, _("Tabs at &top"), _("Notebook tabs are shown at the top"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_Top)
+
+        item = wx.MenuItem(notebookMenu, ID_Bottom, _("Tabs at &bottom"), _("Notebook tabs are shown at the bottom"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_Bottom)
+
+        notebookMenu.AppendSeparator()
+        
+        item = wx.MenuItem(notebookMenu, ID_NB_Default, _("&Default tab style"), _("Default style for notebook tabs"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_NB_Default)
+        
+        item = wx.MenuItem(notebookMenu, ID_NB_FF2, _("&Firefox 2 tab style"), _("Firefox 2 style for notebook tabs"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_NB_FF2)
+
+        item = wx.MenuItem(notebookMenu, ID_NB_VC71, _("&VC71 tab style"), _("Visual Studio 2003 style for notebook tabs"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_NB_VC71)
+
+        item = wx.MenuItem(notebookMenu, ID_NB_VC8, _("VC8 Tab tab &style"), _("Visual Studio 2005 style for notebook tabs"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_NB_VC8)
+
+        item = wx.MenuItem(notebookMenu, ID_NB_Chrome, _("&Chrome tab style"), _("Google Chrome style for notebook tabs"), wx.ITEM_RADIO)
+        notebookMenu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnNotebook, id=ID_NB_Chrome)
+
+        self.configMenu.InsertSeparator(2)
+        
+
     def CreateMenuBar(self):
         """ Creates the main frame menu bar. """
 
@@ -461,7 +568,9 @@ class GUI2Exe(wx.Frame):
         # menus have been created.
         if wx.Platform == '__WXMAC__':
             wx.GetApp().SetMacHelpMenuTitleName(_("&Help"))
-
+        else:
+            self.CreateAUIMenu()
+            
         # We're done with the menubar
         self.SetMenuBar(menuBar)
 
@@ -476,7 +585,7 @@ class GUI2Exe(wx.Frame):
         
 
     def BuildNBImageList(self):
-        """ Builds a fake image list for wx.aui.AuiNotebook. """
+        """ Builds a fake image list for aui.AuiNotebook. """
 
         # One day someone will explain why it doesn't handle wx.ImageList
         # like every other Book.
@@ -496,18 +605,47 @@ class GUI2Exe(wx.Frame):
     def SetAllFlags(self):
         """ Sets all the fancy flags for wxAUI and friends. """
 
-        # Allow to have active panes and transparent dragging
-        self._mgr.SetFlags(self._mgr.GetFlags() ^ wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
-        self._mgr.SetFlags(self._mgr.GetFlags() ^ wx.aui.AUI_MGR_TRANSPARENT_DRAG)
+        self.dock_art = wx.GetApp().GetPreferences("Docking_Style", default=0)
+        if wx.Platform == "__WXMSW__" and self.dock_art:
+            self._mgr.SetArtProvider(aui.ModernDockArt(self))
+        else:
+            # Try to give a decent look to the gradients
+            self._mgr.GetArtProvider().SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR,
+                                                wx.Colour(128, 128, 128))
+            self._mgr.GetArtProvider().SetColor(aui.AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR,
+                                                wx.WHITE)
 
-        # Try to give a decent look to the gradients
-        self._mgr.GetArtProvider().SetColor(wx.aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR,
-                                            wx.Colour(128, 128, 128))
-        self._mgr.GetArtProvider().SetColor(wx.aui.AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR,
-                                            wx.WHITE)
+        # Allow to have active panes and transparent dragging
+        self._mgr.SetFlags(self._mgr.GetFlags() ^ aui.AUI_MGR_ALLOW_ACTIVE_PANE)
+        self._mgr.SetFlags(self._mgr.GetFlags() ^ aui.AUI_MGR_TRANSPARENT_DRAG)
 
         # Very useful method
         self.mainPanel.SetUniformBitmapSize((16, 16))
+
+        if wx.Platform != "__WXMAC__":
+            # Apply the AUI notebook style and art provider
+            notebook_art = app.GetPreferences("Notebook_Art", default=0)
+            if notebook_art == 0:
+                self.mainPanel.SetArtProvider(aui.AuiDefaultTabArt())
+
+            elif notebook_art == 1:
+                self.mainPanel.SetArtProvider(aui.FF2TabArt())
+        
+            elif notebook_art == 2:
+                self.mainPanel.SetArtProvider(aui.VC71TabArt())
+
+            elif notebook_art == 3:
+                self.mainPanel.SetArtProvider(aui.VC8TabArt())
+
+            elif notebook_art == 4:
+                self.mainPanel.SetArtProvider(aui.ChromeTabArt())
+
+            self.notebook_art = notebook_art
+        
+            all_panes = self._mgr.GetAllPanes()
+            for pane in all_panes:
+                pane.MinimizeMode(aui.AUI_MINIMIZE_POS_SMART | (pane.GetMinimizeMode() & aui.AUI_MINIMIZE_CAPT_MASK))
+                pane.MinimizeMode(aui.AUI_MINIMIZE_CAPT_SMART | (pane.GetMinimizeMode() & aui.AUI_MINIMIZE_POS_MASK))
 
 
     def CheckForDatabase(self):
@@ -545,11 +683,29 @@ class GUI2Exe(wx.Frame):
         self.Bind(wx.EVT_TIMER, self.AutoSave, self.autosaveTimer)
 
         # Let's do some fancy checking and painting during the page changing
-        # an page closing event for wx.aui.AuiNotebook
-        self.mainPanel.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnPageClosing)
-        self.mainPanel.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSED, self.OnPageClosed)
-        self.mainPanel.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnPageChanging)
-        self.mainPanel.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        # an page closing event for aui.AuiNotebook
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnPageClosing, self.mainPanel)
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSED, self.OnPageClosed, self.mainPanel)
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.OnPageChanging, self.mainPanel)
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged, self.mainPanel)
+
+        if wx.Platform != "__WXMAC__":
+            self.Bind(aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP, self.OnTabsRight, self.mainPanel)
+            # This is related to AuiNotebook and docking style customization when
+            # using AUI - but not on the Mac
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Modern)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Classic)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Top)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Bottom)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NB_Default)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NB_FF2)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NB_VC71)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NB_VC8)
+            self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_NB_Chrome)
+
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_UPX)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Inno)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Explorer)
 
 
     def ReadConfigurationFile(self):
@@ -822,7 +978,7 @@ class GUI2Exe(wx.Frame):
             # Normally, at this point you would save your data using the file and path
             # data that the user provided to you.
             fp = file(path, 'w') # Create file anew
-            text = setupScript + _standaloneString
+            text = setupScript
             if os.name != "nt":
                 text = text.replace("\r\n", "\n").replace("\n", "\r\n")
             else:
@@ -898,7 +1054,7 @@ class GUI2Exe(wx.Frame):
 
         reload_projects = preferences["Reload_Projects"][0]
         toReload = []
-        # Loop over all the opened wx.aui.AuiNotebook pages to see if
+        # Loop over all the opened aui.AuiNotebook pages to see if
         # there are unsaved projects
         for pageNumber in xrange(self.mainPanel.GetPageCount()-1, -1, -1):
             toReload.append(self.mainPanel.GetPageText(pageNumber))
@@ -935,6 +1091,11 @@ class GUI2Exe(wx.Frame):
             # The user wants to remember the AUI perspective
             preferences["Perspective"] =  [1, self._mgr.SavePerspective()]
 
+        if wx.Platform != "__WXMAC__":
+            preferences["Notebook_Style"] = self.notebook_style
+            preferences["Notebook_Art"] = self.notebook_art
+            preferences["Docking_Style"] = self.dock_art
+            
         # Save back the configuration items
         config = wx.GetApp().GetConfig()
         config.Write('PythonVersion', str(self.pythonVersion))
@@ -965,41 +1126,38 @@ class GUI2Exe(wx.Frame):
         
 
     def OnPageClosing(self, event):
-        """ Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSE event. """
+        """ Handles the aui.EVT_AUINOTEBOOK_PAGE_CLOSE event. """
 
         # Get the selected page
         selection = event.GetSelection()
         # Use the auxiliary method to handle this (is needed also in OnClose)
-        self.HandlePageClosing(selection, event)
+        return self.HandlePageClosing(selection, event)
         
 
     def OnPageClosed(self, event):
-        """ Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CLOSED event. """
+        """ Handles the aui.EVT_AUINOTEBOOK_PAGE_CLOSED event. """
 
         if self.mainPanel.GetPageCount() == 0:
             # Clear the ExecutableProperties list at the bottom left
             self.executablePanel.PopulateList(True, None)
             # Disable the Run and Dry-Run buttons
             self.messageWindow.NoPagesLeft(False)
+            self.projectTree.HighlightItem(None, True)
 
 
     def OnPageChanging(self, event):
-        """ Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING event. """
+        """ Handles the aui.EVT_AUINOTEBOOK_PAGE_CHANGING event. """
 
         # Highlight the new item with a bold font
-        newBook = self.mainPanel.GetPage(event.GetSelection())
+        sel = event.GetSelection()
+        newBook = self.mainPanel.GetPage(sel)
         self.projectTree.HighlightItem(newBook.GetTreeItem(), True)
-        
-        if event.GetOldSelection() >= 0:
-            # Restore the original font for the old item
-            oldBook = self.mainPanel.GetPage(event.GetOldSelection())
-            self.projectTree.HighlightItem(oldBook.GetTreeItem(), False)
 
         event.Skip()
         
 
     def OnPageChanged(self, event):
-        """ Handles the wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGED event. """
+        """ Handles the aui.EVT_AUINOTEBOOK_PAGE_CHANGED event. """
 
         newBook = self.mainPanel.GetPage(event.GetSelection())
         newProject = newBook.GetProject()
@@ -1012,6 +1170,106 @@ class GUI2Exe(wx.Frame):
         self.messageWindow.EnableDryRun(book)
 
 
+    def OnTabsRight(self, event):
+        """ Handles the aui.EVT_AUINOTEBOOK_TAB_RIGHT_UP event. """
+
+        popupMenu = self.CreatePopupMenu(self.currentTab is None)
+        self.currentTab = event.GetSelection()
+        
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        self.PopupMenu(popupMenu)
+        popupMenu.Destroy()
+
+
+    def CreatePopupMenu(self, bindEvents=False):
+        """
+        Creates a popup menu if the user right-clicks on a tab (GTK and MSW only).
+
+        **Parameters:**
+
+        * `bindEvents`: whether to bind the menu events or not.
+        """
+
+        popupMenu = wx.Menu()
+
+        # Create the menu items
+        bmp = self.CreateBitmap("closetab")
+        menuItem = wx.MenuItem(popupMenu, ID_CloseTab, _("Close tab"), "", wx.ITEM_NORMAL)
+        menuItem.SetBitmap(bmp)
+        popupMenu.AppendItem(menuItem)
+
+        bmp = self.CreateBitmap("closealltabs")
+        menuItem = wx.MenuItem(popupMenu, ID_CloseAllTabs, _("Close all open tabs"), "", wx.ITEM_NORMAL)
+        menuItem.SetBitmap(bmp)
+        popupMenu.AppendItem(menuItem)
+        
+        popupMenu.AppendSeparator()
+
+        bmp = self.CreateBitmap("savetab")
+        menuItem = wx.MenuItem(popupMenu, ID_SaveProject, _("Save project"), "", wx.ITEM_NORMAL)
+        menuItem.SetBitmap(bmp)
+        popupMenu.AppendItem(menuItem)
+        
+        bmp = self.CreateBitmap("savealltabs")
+        menuItem = wx.MenuItem(popupMenu, ID_SaveAllProjects, _("Save all open projects"), "", wx.ITEM_NORMAL)
+        menuItem.SetBitmap(bmp)
+        popupMenu.AppendItem(menuItem)
+
+        if bindEvents:
+            self.Bind(wx.EVT_MENU, self.OnCloseTab, id=ID_CloseTab)
+            self.Bind(wx.EVT_MENU, self.OnCloseAllTabs, id=ID_CloseAllTabs)
+            self.Bind(wx.EVT_MENU, self.OnSaveProject, id=ID_SaveProject)
+            self.Bind(wx.EVT_MENU, self.OnSaveAllProjects, id=ID_SaveAllProjects)
+
+        return popupMenu            
+
+
+    def OnCloseTab(self, event):
+        """ Handles the tab closing by the popup menu. """
+
+        e = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, self.mainPanel.GetId())
+        e.SetSelection(self.currentTab)
+        e.SetOldSelection(self.currentTab)
+        e._fromPopup = True
+        e.SetEventObject(self.mainPanel)
+        self.GetEventHandler().ProcessEvent(e)
+
+
+    def OnCloseAllTabs(self, event):
+        """ Handles the closing of all tabs by the popup menu. """
+
+        wx.BeginBusyCursor()
+        self.Freeze()
+        
+        for indx in xrange(self.mainPanel.GetPageCount()-1, -1, -1):
+            e = aui.AuiNotebookEvent(aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, self.mainPanel.GetId())
+            e.SetSelection(indx)
+            e.SetOldSelection(indx)
+            e.SetEventObject(self.mainPanel)
+            e._fromPopup = True
+            if not self.HandlePageClosing(indx, event):
+                self.Thaw()
+                wx.EndBusyCursor()
+                return
+
+        self.projectTree.HighlightItem(None, True)
+        self.Thaw()
+        wx.EndBusyCursor()
+
+
+    def OnSaveAllProjects(self, event):
+        """ Handles the saving of all projects by the popup menu. """
+
+        for indx in xrange(self.mainPanel.GetPageCount()):            
+            book = self.mainPanel.GetPage(indx)
+            project = book.GetProject()
+            # Send the data to the database        
+            self.dataBase.SaveProject(project)
+            # Visually indicates that the project has been saved
+            self.UpdatePageBitmap(project.GetName(), 0, indx)
+
+            
     def OnAutoSave(self, event):
         """ Enables/disables the AutoSave feature. """
 
@@ -1151,6 +1409,36 @@ class GUI2Exe(wx.Frame):
         self.HandleUserCode(post=True)        
 
 
+    def OnUseUPX(self, event):
+        """ Set/unset the use of UPX compression on dlls/exes (Py2exe only). """
+
+        project = self.GetCurrentProject()
+        if not project:
+            # No page opened, you can't fool me
+            return
+
+        # Get the current LabelBook and compiler name
+        compiler = self.GetCurrentPage().GetName()
+        project.SetUseUPX(compiler, event.IsChecked())        
+        # Update the icon and the project name on the wx.aui.AuiNotebook tab
+        self.UpdatePageBitmap(project.GetName() + "*", 1)
+
+
+    def OnInno(self, event):
+        """ Set/unset the building of a simple Inno Setup script (Py2exe only). """
+
+        project = self.GetCurrentProject()
+        if not project:
+            # No page opened, you can't fool me
+            return
+
+        # Get the current LabelBook and compiler name
+        compiler = self.GetCurrentPage().GetName()
+        project.SetBuildInno(compiler, event.IsChecked())        
+        # Update the icon and the project name on the wx.aui.AuiNotebook tab
+        self.UpdatePageBitmap(project.GetName() + "*", 1)
+        
+
     def OnPreferences(self, event):
         """ Edit/view pereferences and settings for GUI2Exe. """
 
@@ -1237,6 +1525,119 @@ class GUI2Exe(wx.Frame):
 
         dlg.Destroy()
         wx.SafeYield()
+
+
+    def OnShowLog(self, event):
+        """ Shows the most recent error log file for the executable. """
+
+        project = self.GetCurrentProject()
+        if not project:
+            # No page opened, you can't fool me
+            return
+
+        if not project.HasBeenCompiled():
+            # The project hasn't been compiled yet
+            msg = _("This project has not been compiled yet.")
+            self.RunError(2, msg)
+            return
+
+        compiler = self.GetCurrentPage().GetName()
+
+        msg = _("This project has never been compiled or its executable has been deleted.")
+        # Get the executable name from the Project class
+        try:
+            exeName = project.GetExecutableName(compiler)
+        except:
+            self.RunError(2, msg)
+            return
+
+        logFile = exeName + ".log"
+        if not os.path.isfile(logFile):
+            msg = _("No error log file is available for the current project/compiler combination.")
+            self.RunError(2, msg)
+            return
+
+        self.ReadLogFile(logFile)
+
+        
+    def OnOpenDist(self, event):
+        """ Opens the distribution folder, in which the executable file is contained. """
+        
+        project = self.GetCurrentProject()
+        if not project:
+            # No page opened, you can't fool me
+            return
+
+        if not project.HasBeenCompiled():
+            # The project hasn't been compiled yet
+            msg = _("This project has not been compiled yet.")
+            self.RunError(2, msg)
+            return
+
+        compiler = self.GetCurrentPage().GetName()
+
+        msg = _("This project has never been compiled or its executable has been deleted.")
+        # Get the executable name from the Project class
+        try:
+            exeName = project.GetExecutableName(compiler)
+        except:
+            self.RunError(2, msg)
+            return
+
+        folder = os.path.split(exeName)[0]
+
+        if not os.path.isdir(folder):
+            msg = _("The distribution folder could not be found in the system.")
+            self.RunError(2, msg)
+            return
+        
+        busy = PyBusyInfo(_("Opening distribution folder..."))
+        wx.SafeYield()
+        
+        if sys.platform == "win32":
+            os.startfile(folder)
+        else:
+            webbrowser.open_new("file://%s"%folder)
+
+        del busy            
+        
+
+    def OnExplorer(self, event):
+        """ Opens the distribution folder explorer, for easy check of DLLS and PYDs. """
+        
+        project = self.GetCurrentProject()
+        if not project:
+            # No page opened, you can't fool me
+            return
+
+        if not project.HasBeenCompiled():
+            # The project hasn't been compiled yet
+            msg = _("This project has not been compiled yet.")
+            self.RunError(2, msg)
+            return
+
+        compiler = self.GetCurrentPage().GetName()
+
+        msg = _("This project has never been compiled or its executable has been deleted.")
+        # Get the executable name from the Project class
+        try:
+            exeName = project.GetExecutableName(compiler)
+        except:
+            self.RunError(2, msg)
+            return
+
+        folder = os.path.split(exeName)[0]
+
+        if not os.path.isdir(folder):
+            msg = _("The distribution folder could not be found in the system.")
+            self.RunError(2, msg)
+            return
+
+        # Launch the explorer dialog        
+        dlg = ExplorerDialog(self.GetCurrentPage(), project, compiler, exeName)
+        dlg.ShowModal()
+        dlg.Destroy()
+        wx.SafeYield()
         
 
     def OnViewMissing(self, event):
@@ -1280,6 +1681,114 @@ class GUI2Exe(wx.Frame):
         """ Shows the compilation tips and tricks. """
 
         webbrowser.open_new("http://www.py2exe.org/index.cgi/WorkingWithVariousPackagesAndModules")
+
+
+    def OnDocking(self, event):
+        """ Handles different docking style in AUI (MSW and GTK only). """
+
+        evId = event.GetId()
+        if evId == ID_Classic:
+            self._mgr.SetArtProvider(aui.AuiDefaultDockArt())
+            self.dock_art = 0
+        elif evId == ID_Modern:
+            self._mgr.SetArtProvider(aui.ModernDockArt(self))
+            self.dock_art = 1
+
+        self._mgr.Update()
+        self.Refresh()
+
+
+    def OnNotebook(self, event):
+        """ Handles different notebook style in AUI (MSW and GTK only). """
+
+        evId = event.GetId()
+        nb = self.mainPanel
+        style = nb.GetWindowStyleFlag()
+        
+        if evId == ID_NB_Default:
+            nb.SetArtProvider(aui.AuiDefaultTabArt())
+            self.notebook_art = 0
+        
+        elif evId == ID_NB_FF2:
+            nb.SetArtProvider(aui.FF2TabArt())
+            self.notebook_art = 1
+
+        elif evId == ID_NB_VC71:
+            nb.SetArtProvider(aui.VC71TabArt())
+            self.notebook_art = 2
+
+        elif evId == ID_NB_VC8:
+            nb.SetArtProvider(aui.VC8TabArt())
+            self.notebook_art = 3
+
+        elif evId == ID_NB_Chrome:
+            nb.SetArtProvider(aui.ChromeTabArt())
+            self.notebook_art = 4
+
+        elif evId == ID_Top:
+            style &= ~aui.AUI_NB_BOTTOM
+            style ^= aui.AUI_NB_TOP
+
+            self.notebook_style = style
+            nb.SetWindowStyleFlag(self.notebook_style)
+
+        elif evId == ID_Bottom:
+            style &= ~aui.AUI_NB_TOP
+            style ^= aui.AUI_NB_BOTTOM
+
+            self.notebook_style = style
+            nb.SetWindowStyleFlag(self.notebook_style)
+
+        nb.Refresh()
+        nb.Update()
+
+
+    def OnUpdateUI(self, event):
+        """ Handles the wx.EVT_UPDATE_UI event for GUI2Exe menus. """
+    
+        evId = event.GetId()
+        project = self.GetCurrentProject(fire=False)
+        page = self.GetCurrentPage(fire=False)
+        
+        if evId == ID_Modern:
+            event.Check(self.dock_art == 1)
+        elif evId == ID_Classic:
+            event.Check(self.dock_art == 0)
+        elif evId == ID_Top:
+            event.Check(self.notebook_style & aui.AUI_NB_TOP)
+        elif evId == ID_Bottom:
+            event.Check(self.notebook_style & aui.AUI_NB_BOTTOM)
+        elif evId == ID_NB_Default:
+            event.Check(self.notebook_art == 0)
+        elif evId == ID_NB_FF2:
+            event.Check(self.notebook_art == 1)
+        elif evId == ID_NB_VC71:
+            event.Check(self.notebook_art == 2)
+        elif evId == ID_NB_VC8:
+            event.Check(self.notebook_art == 3)
+        elif evId == ID_NB_Chrome:
+            event.Check(self.notebook_art == 4)
+        elif evId == ID_UPX:
+            if not project or page.GetName() != "py2exe":
+                event.Check(False)
+                event.Enable(False)
+            else:
+                event.Enable(True)
+                event.Check(project.GetUseUPX("py2exe"))
+                    
+        elif evId == ID_Inno:
+            if not project or page.GetName() != "py2exe":
+                event.Check(False)
+                event.Enable(False)
+            else:
+                event.Enable(True)
+                event.Check(project.GetBuildInno("py2exe"))
+
+        elif evId == ID_Explorer:
+            if not project or page.GetName() != "py2exe":
+                event.Enable(False)
+            else:
+                event.Enable(True)
 
         
     def OnSaveConfig(self, event):
@@ -1534,7 +2043,7 @@ class GUI2Exe(wx.Frame):
         * `event`: the event that has been triggered.
         """
 
-        isAUI = isinstance(event, wx.aui.AuiNotebookEvent)
+        isAUI = isinstance(event, aui.AuiNotebookEvent)
         # Let's see if the project has been saved or not
         unSaved = self.mainPanel.GetPageBitmap(selection) == self.nbImageList[1]
 
@@ -1543,7 +2052,7 @@ class GUI2Exe(wx.Frame):
         project = page.GetProject()
         projectName = project.GetName()
         treeItem = page.GetTreeItem()
-        # Check if it is a close event or a wx.aui.AuiNotebookEvent
+        # Check if it is a close event or a aui.AuiNotebookEvent
         isCloseEvent = (event.GetId() == wx.ID_EXIT)
 
         # Get the preferences for the compiler
@@ -1557,8 +2066,9 @@ class GUI2Exe(wx.Frame):
             self.SetPreferences("Remember_Compiler", remember_compiler)
             if not isCloseEvent:
                 event.Skip()
-                if not isAUI:
+                if not isAUI or hasattr(event, "_fromPopup"):
                     self.mainPanel.DeletePage(selection)
+                    
             return True
 
         # Not saved. If it wasn't ever saved before, not saving will delete
@@ -1577,9 +2087,9 @@ class GUI2Exe(wx.Frame):
             remember_compiler[1].update({projectName: page.GetSelection()})
             self.SetPreferences("Remember_Compiler", remember_compiler)
             if not isCloseEvent:
-                # We are handling wx.aui.AuiNotebook close event
+                # We are handling aui.AuiNotebook close event
                 event.Skip()
-                if not isAUI:
+                if not isAUI or hasattr(event, "_fromPopup"):
                     self.mainPanel.DeletePage(selection)
         else:
             # Don't save changes ID_NO
@@ -1591,7 +2101,7 @@ class GUI2Exe(wx.Frame):
 
             if not isCloseEvent:
                 event.Skip()
-                if not isAUI:
+                if not isAUI or hasattr(event, "_fromPopup"):
                     self.mainPanel.DeletePage(selection)
 
             if not projectExists:
@@ -1621,7 +2131,7 @@ class GUI2Exe(wx.Frame):
 
     def UpdatePageBitmap(self, pageName, pageIcon, selection=None):
         """
-        Updates the wx.aui.AuiNotebook page image and text, to reflect the
+        Updates the aui.AuiNotebook page image and text, to reflect the
         current project state (saved/unsaved).
 
         **Parameters:**
@@ -1777,7 +2287,7 @@ class GUI2Exe(wx.Frame):
             # This page is not opened, go back
             return
 
-        # Set the new name in the wx.aui.AuiNotebook tab
+        # Set the new name in the aui.AuiNotebook tab
         self.mainPanel.SetPageText(page, newName)
         book = self.mainPanel.GetPage(page)
         if project is None:
@@ -1804,7 +2314,7 @@ class GUI2Exe(wx.Frame):
 
         # Get the project name        
         projectName = project.GetName()
-        # Add a page to the wx.aui.AuiNotebook
+        # Add a page to the aui.AuiNotebook
         page = AUINotebookPage(self.mainPanel, project, _compilers)
         # Check project name and bitmap depending on the isNew state
         pageName = (isNew and [projectName+"*"] or [projectName])[0]
@@ -1814,7 +2324,7 @@ class GUI2Exe(wx.Frame):
         page.SetProject(project)
         page.SetTreeItem(treeItem)
 
-        # Add the page to the wx.aui.AuiNotebook        
+        # Add the page to the aui.AuiNotebook        
         self.mainPanel.AddPage(page, pageName, True, bitmap=self.nbImageList[bmp])
                 
 
@@ -1827,7 +2337,7 @@ class GUI2Exe(wx.Frame):
         * `treeItem`: the item in the left TreeCtrl.
         """
 
-        # Loop over all the wx.aui.AuiNotebook pages
+        # Loop over all the aui.AuiNotebook pages
         for indx in xrange(self.mainPanel.GetPageCount()):
             page = self.mainPanel.GetPage(indx)
             if page.GetTreeItem() == treeItem:
@@ -1852,7 +2362,7 @@ class GUI2Exe(wx.Frame):
     
     def CloseAssociatedPage(self, treeItem):
         """
-        A method used to close a wx.aui.AuiNotebook page when an item in the
+        A method used to close a aui.AuiNotebook page when an item in the
         project tree is deleted.
 
         **Parameters:**
@@ -1910,10 +2420,10 @@ class GUI2Exe(wx.Frame):
         return CreateBitmap(bmpName)
     
 
-    def GetCurrentPage(self):
+    def GetCurrentPage(self, fire=True):
         """ Returns the current LabelBook page. """
 
-        book = self.GetCurrentBook()
+        book = self.GetCurrentBook(fire)
         if not book:
             # No page opened, you can't fool me
             return
@@ -1921,13 +2431,14 @@ class GUI2Exe(wx.Frame):
         return book.GetPage(book.GetSelection())
 
 
-    def GetCurrentBook(self):
-        """ Returns the current wx.aui.AuiNotebook page (a LabelBook). """
+    def GetCurrentBook(self, fire=True):
+        """ Returns the current aui.AuiNotebook page (a LabelBook). """
 
         if self.mainPanel.GetPageCount() == 0:
-            # No page opened, fire an error
-            msg = "No project has been loaded."
-            self.RunError(2, msg, True)
+            if fire:
+                # No page opened, fire an error
+                msg = "No project has been loaded."
+                self.RunError(2, msg, True)
             return None
 
         # Return the current page (is a LabelBook)
@@ -1935,10 +2446,10 @@ class GUI2Exe(wx.Frame):
         return self.mainPanel.GetPage(selection)
         
 
-    def GetCurrentProject(self):
+    def GetCurrentProject(self, fire=True):
         """ Returns the current project associated to a LabelBook. """
 
-        book = self.GetCurrentBook()
+        book = self.GetCurrentBook(fire)
         if not book:
             # No page opened, you can't fool me
             return
@@ -2009,7 +2520,7 @@ class GUI2Exe(wx.Frame):
         setupScript, buildDir = outputs
     
         if view:    # we just want to view the code
-            frame = CustomCodeViewer(self, readOnly=True, text=setupScript+_standaloneString)
+            frame = CustomCodeViewer(self, readOnly=True, text=setupScript)
             return
 
         # Show the throbber
@@ -2170,14 +2681,27 @@ class GUI2Exe(wx.Frame):
         if answer != wx.ID_YES:
             return
 
+        self.ReadLogFile(logFile)
+
+
+    def ReadLogFile(self, logFile):
+        """
+        Shows a log file, created by an executable that crashed for some reason.
+
+        **Parameters:**
+
+        * `logFile`: the log file name created when errors happens (``py2exe`` only).
+        """
+        
         wx.BeginBusyCursor()
 
-        # Read the log file        
+        # Read the log file   
         fid = open(logFile, "rt")
         msg = fid.read()
         fid.close()
         # And displays it in a scrolled message dialog
         dlg = wx.lib.dialogs.ScrolledMessageDialog(self, msg, _("Tracebacks in log file"))
+        dlg.SetIcon(self.GetIcon())
         wx.EndBusyCursor()
         dlg.ShowModal()
         dlg.Destroy()
@@ -2438,13 +2962,14 @@ class GUI2ExeApp(wx.App):
         return preferences
     
 
-    def GetPreferences(self, preferenceKey=None):
+    def GetPreferences(self, preferenceKey=None, default=None):
         """
         Returns the user preferences as stored in wx.Config.
 
         **Parameters:**
 
         * `preferenceKey`: the preference to load
+        * `default`: a possible default value for the preference
         """
 
         preferences = self.LoadConfig()
@@ -2454,6 +2979,11 @@ class GUI2ExeApp(wx.App):
         optionVal = None        
         if preferenceKey in preferences:            
             optionVal = preferences[preferenceKey]
+        else:
+            if default is not None:
+                preferences[preferenceKey] = default
+                self.SetPreferences(preferences)
+                return default
 
         return optionVal        
 

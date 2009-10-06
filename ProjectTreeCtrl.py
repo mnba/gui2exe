@@ -597,9 +597,12 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
 
         # Change item font depending on the highlight
-        font = (highlight and [self.boldFont] or [self.GetFont()])[0]
-        # Assign the font to the item
-        self.SetItemFont(treeItem, font)
+        boldFont, normalFont = self.boldFont, self.GetFont()
+
+        for item in self.rootItem.GetChildren():
+            font = (item == treeItem and [boldFont] or [normalFont])[0]
+            # Assign the font to the item
+            self.SetItemFont(item, font)
 
 
     def RepositionItems(self, appendToRoot, droppedItem):

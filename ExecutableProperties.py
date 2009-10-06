@@ -125,7 +125,7 @@ class ExecutableProperties(wx.Panel):
             # Get information about the executable file
             for indx, compiler in enumerate(_defaultCompilers):
                 if compiler in project:
-                    numFiles[indx], fileSizes[indx]= GetExecutableData(project, compiler)
+                    numFiles[indx], fileSizes[indx] = GetExecutableData(project, compiler)
 
         # Clear all the items in the list control                
         self.listCtrl.DeleteAllItems()

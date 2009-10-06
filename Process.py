@@ -223,6 +223,8 @@ class Process(object):
             if isError and text.strip():
                 if "warning" in text.lower():
                     self.MainFrame.SendMessage(1, text)
+                elif "NotPackedException" in text:
+                    self.MainFrame.SendMessage(1, text)
                 else:
                     # Ah, is the error stream, something went wrong
                     self.MainFrame.SendMessage(2, text)
@@ -235,6 +237,8 @@ class Process(object):
                 # That's the input stream
                 if text.find("byte-compiling") >= 0:    # py2exe/py2app is compiling
                     self.MainFrame.SendMessage(4, _("Byte-compiling Python files..."), True)
+                elif text.find("UPX ") >= 0:            # UPX compression messages
+                    self.MainFrame.SendMessage(8, _("Copying Files/compressing with UPX..."), True)
                 elif text.find("copying") >= 0:         # py2exe is copying files
                     self.MainFrame.SendMessage(5, _("Copying files..."), True)
                 elif text.find("searching") >= 0:       # py2exe is searching for modules

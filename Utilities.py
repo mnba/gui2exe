@@ -349,7 +349,7 @@ def GetFolderSize(exePath):
     numFiles = "%d"%numFiles
 
     return numFiles, folderSize
-    
+
 
 def RecurseSubDirs(directory, userDir, extensions):
     """

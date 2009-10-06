@@ -14,7 +14,7 @@ import wx
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _py2exe_target, _py2exe_imports, _manifest_template, ListType
-from Constants import _py2exe_class
+from Constants import _py2exe_class, _upx_inno
 from Utilities import setupString
 
 # Get the I18N things
@@ -452,8 +452,13 @@ class Py2ExePanel(BaseBuilderPanel):
                     self.MainFrame.SendMessage(1, _('Empty targetName option. Using Python script name'))
                 if col == 3:
                     programName = text.strip()
+                elif col == 4:
+                    versionNumber = text.strip()
                     
                 tupleMultiple += (text, )
+
+            extraKeywords = self.multipleExe.GetExtraKeywords(indx)
+            tupleMultiple += (extraKeywords, )
 
             targetclass += _py2exe_class%tupleMultiple                
 
@@ -482,6 +487,16 @@ class Py2ExePanel(BaseBuilderPanel):
         setupDict["console"] = console.rstrip(", ") + "]"
         setupDict["windows"] = windows.rstrip(", ") + "]"
 
+        upx, inno = project.GetUseUPX("py2exe"), project.GetBuildInno("py2exe")
+
+        if upx or inno:
+            upxinno = _upx_inno%(upx, inno, programName, versionNumber)
+            setupDict["upx_inno"] = upxinno
+            setupDict["use_upx_inno"] = 'cmdclass = {"py2exe": Py2exe},'
+        else:
+            setupDict["upx_inno"] = "# No custom class for UPX compression or Inno Setup script"
+            setupDict["use_upx_inno"] = "# No UPX or Inno Setup"
+        
         # Populate the main section of the setup script            
         setupScript += _py2exe_target % setupDict
         
