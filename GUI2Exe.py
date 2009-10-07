@@ -92,7 +92,7 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 06 Oct 2009 12.00 GMT
+Latest revision: Andrea Gavana, 07 Oct 2009 12.00 GMT
 Version 0.4.0
   
 """
@@ -606,9 +606,12 @@ class GUI2Exe(wx.Frame):
         """ Sets all the fancy flags for wxAUI and friends. """
 
         self.dock_art = wx.GetApp().GetPreferences("Docking_Style", default=0)
-        if wx.Platform == "__WXMSW__" and self.dock_art:
+        canUse = self._mgr.CanUseModernDockArt()
+        
+        if wx.Platform == "__WXMSW__" and self.dock_art and canUse:
             self._mgr.SetArtProvider(aui.ModernDockArt(self))
         else:
+            self.dock_art = 0
             # Try to give a decent look to the gradients
             self._mgr.GetArtProvider().SetColor(aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR,
                                                 wx.Colour(128, 128, 128))
@@ -1694,8 +1697,11 @@ class GUI2Exe(wx.Frame):
             self._mgr.SetArtProvider(aui.AuiDefaultDockArt())
             self.dock_art = 0
         elif evId == ID_Modern:
-            self._mgr.SetArtProvider(aui.ModernDockArt(self))
-            self.dock_art = 1
+            if self._mgr.CanUseModernDockArt():
+                self._mgr.SetArtProvider(aui.ModernDockArt(self))
+                self.dock_art = 1
+            else:
+                return
 
         self._mgr.Update()
         self.Refresh()
@@ -1754,7 +1760,12 @@ class GUI2Exe(wx.Frame):
         page = self.GetCurrentPage(fire=False)
         
         if evId == ID_Modern:
-            event.Check(self.dock_art == 1)
+            canUse = self._mgr.CanUseModernDockArt()
+            event.Enable(canUse)
+            if not canUse:
+                event.Check(False)
+            else:
+                event.Check(self.dock_art == 1)
         elif evId == ID_Classic:
             event.Check(self.dock_art == 0)
         elif evId == ID_Top:
