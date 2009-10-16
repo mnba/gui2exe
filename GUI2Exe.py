@@ -2684,7 +2684,10 @@ class GUI2Exe(wx.Frame):
         elif evId == ID_UseNormalMenu:
             event.Check(self.menu_choice == 0)
         elif evId == ID_UseRibbonBar:
-            event.Check(self.menu_choice == 2)
+            if not self.HasRibbon():
+                event.Enable(False)
+            else:
+                event.Check(self.menu_choice == 2)
         elif evId == ID_ShowTip:
             event.Check(self.showTips)
         elif evId == ID_Recurse:
