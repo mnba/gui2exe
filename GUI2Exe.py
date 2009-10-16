@@ -1188,14 +1188,17 @@ class GUI2Exe(wx.Frame):
             pane = self._mgr.GetPane(self._fmb)
             pane.Hide()
             self.SetMenuBar(self._mb)
-            ribbon = self._mgr.GetPane(self._ribbon)
-            ribbon.Hide()
+            if self.HasRibbon():
+                ribbon = self._mgr.GetPane(self._ribbon)
+                ribbon.Hide()
 
         elif useCustom == 1:
             # Flatmenu bar
             self.SetMenuBar(None)
-            ribbon = self._mgr.GetPane(self._ribbon)
-            ribbon.Hide()
+
+            if self.HasRibbon():
+                ribbon = self._mgr.GetPane(self._ribbon)
+                ribbon.Hide()
             
             theme, colour = fmStyle
             theme = (theme and [FM.Style2007] or [FM.StyleXP])[0]
@@ -1207,6 +1210,9 @@ class GUI2Exe(wx.Frame):
             pane.Show()
             
         elif useCustom == 2:
+            if not self.HasRibbon():
+                return
+            
             # RibbonBar
             pane = self._mgr.GetPane(self._fmb)
             pane.Hide()
