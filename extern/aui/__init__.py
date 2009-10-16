@@ -158,7 +158,13 @@ Plus the following features:
   (o) The functions [Get]MinimizeMode() in `AuiPaneInfo` which allow to set/get the flags described above;
   (p) Events like ``EVT_AUI_PANE_DOCKING``, ``EVT_AUI_PANE_DOCKED``, ``EVT_AUI_PANE_FLOATING`` and ``EVT_AUI_PANE_FLOATED`` are
       available for all panes *except* toolbar panes;
-  (q) Implementation of the RequestUserAttention method for panes.
+  (q) Implementation of the RequestUserAttention method for panes;
+  (r) Ability to show the caption bar of docked panes on the left instead of on the top (with caption
+      text rotated by 90 degrees then). This is similar to what `wxDockIt` did. To enable this feature on any
+      given pane, simply call `CaptionVisible(True, left=True)`;
+  (s) New Aero-style docking guides: you can enable them by using the `AuiManager` style ``AUI_MGR_AERO_DOCKING_GUIDES``;
+  (t) A slide-in/slide-out preview of minimized panes can be seen by enabling the `AuiManager` style
+      ``AUI_MGR_PREVIEW_MINIMIZED_PANES`` and by hovering with the mouse on the minimized pane toolbar tool.
 
 - AuiNotebook:
   (a) Implementation of the style ``AUI_NB_HIDE_ON_SINGLE_TAB``, a la `wx.lib.agw.flatnotebook`;
@@ -184,7 +190,12 @@ Plus the following features:
   (k) Implementation of the style ``AUI_NB_DRAW_DND_TAB`` (on by default), which draws an image
       representation of a tab while dragging;
   (l) Implementation of the style ``AUI_NB_SASH_DCLICK_UNSPLIT``, which unsplit a splitted AuiNotebook
-      when double-clicking on a sash.
+      when double-clicking on a sash;
+  (m) Possibility to hide all the tabs by calling `HideAllTAbs`;
+  (n) wxPython controls can now be added inside page tabs by calling `AddControlToPage`, and they can be
+      removed by calling `RemoveControlFromPage`;
+  (o) Possibility to preview all the pages in a `AuiNotebook` (as thumbnails) by using the `NotebookPreview`
+      method of `AuiNotebook`.
   
 - AuiToolBar:
   (a) ``AUI_TB_PLAIN_BACKGROUND`` style that allows to easy setup a plain background to the AUI toolbar,
@@ -199,7 +210,8 @@ Plus the following features:
   (f) `AuiToolBar` idle update only when visible: http://trac.wxwidgets.org/ticket/10075;
   (g) Ability of creating `AuiToolBar` tools with [counter]clockwise rotation. This allows to propose a
       variant of the minimizing functionality with a rotated button which keeps the caption of the pane
-      as label.
+      as label;
+  (h) Allow setting the alignment of all tools in a toolbar that is expanded.
 
 
 TODOs
@@ -209,11 +221,13 @@ TODOs
 - Fix `tabmdi.AuiMDIParentFrame` and friends, they do not work correctly at present;
 - Allow specification of `CaptionLeft()` to `AuiPaneInfo` to show the caption bar of docked panes
   on the left instead of on the top (with caption text rotated by 90 degrees then). This is
-  similar to what `wxDockIt` did;
+  similar to what `wxDockIt` did - DONE;
 - Make developer-created `AuiNotebooks` and automatic (framemanager-created) `AuiNotebooks` behave
   the same way (undocking of tabs) - DONE, to some extent;
 - Find a way to dock panes in already floating panes (`AuiFloatingFrames`), as they already have
   their own `AuiManager`;
+- Add more gripper styles (see, i.e., PlusDock 4.0);
+- Add an "AutoHide" feature to docked panes, similar to fly-out floating panes (see, i.e., PlusDock 4.0);
 - Add events for panes when they are about to float or to be docked (something like
   ``EVT_AUI_PANE_FLOATING/ED`` and ``EVT_AUI_PANE_DOCKING/ED``) - DONE, to some extent;
 - Implement the 4-ways splitter behaviour for horizontal and vertical sashes if they intersect;
@@ -235,7 +249,7 @@ License And Version
 
 AUI library is freeware and distributed under the wxPython license. 
 
-Latest revision: Andrea Gavana @ 04 Oct 2009, 10.00 GMT
+Latest revision: Andrea Gavana @ 15 Oct 2009, 12.00 GMT
 Version 1.0. 
 
 """

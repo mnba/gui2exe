@@ -22,6 +22,8 @@ import framemanager
 import tabart as TA
 
 from aui_utilities import LightColour, MakeDisabledBitmap, TabDragImage
+from aui_utilities import TakeScreenShot, RescaleScreenShot
+
 from aui_constants import *
 
 # AuiNotebook events
@@ -102,6 +104,7 @@ class AuiNotebookPage(object):
         self.enabled = True             # True if the page is currently enabled
         self.hasCloseButton = True      # True if the page has a close button using the style
                                         # AUI_NB_CLOSE_ON_ALL_TABS
+        self.control = None             # A control can now be inside a tab
         self.text_colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
 
 
@@ -1005,17 +1008,17 @@ class AuiTabContainer(object):
         
         for i in xrange(page_count):
             page = self._pages[i]
-
+                
             # determine if a close button is on this tab
             close_button = False
             if (self._flags & AUI_NB_CLOSE_ON_ALL_TABS and page.hasCloseButton) or \
                (self._flags & AUI_NB_CLOSE_ON_ACTIVE_TAB and page.active and page.hasCloseButton):
             
                 close_button = True
-            
+
             size, x_extent = self._art.GetTabSize(dc, wnd, page.caption, page.bitmap, page.active,
                                                   (close_button and [AUI_BUTTON_STATE_NORMAL] or \
-                                                   [AUI_BUTTON_STATE_HIDDEN])[0])
+                                                   [AUI_BUTTON_STATE_HIDDEN])[0], page.control)
 
             if i+1 < page_count:
                 total_width += x_extent
@@ -1126,7 +1129,10 @@ class AuiTabContainer(object):
         # buttons before the tab offset must be set to hidden
         for i in xrange(self._tab_offset):
             self._tab_close_buttons[i].cur_state = AUI_BUTTON_STATE_HIDDEN
-        
+            if self._pages[i].control:
+                if self._pages[i].control.IsShown():
+                    self._pages[i].control.Hide()
+
         # draw the tabs
         active = 999
         active_offset = 0
@@ -1168,10 +1174,15 @@ class AuiTabContainer(object):
                 active_rect = wx.Rect(*rect)
 
             offset += x_extent
-        
+
+        lenPages = len(self._pages)        
         # make sure to deactivate buttons which are off the screen to the right
         for j in xrange(i+1, len(self._tab_close_buttons)):
             self._tab_close_buttons[j].cur_state = AUI_BUTTON_STATE_HIDDEN
+            if j > 0 and j <= lenPages:
+                if self._pages[j-1].control:
+                    if self._pages[j-1].control.IsShown():
+                        self._pages[j-1].control.Hide()
         
         # draw the active tab again so it stands in the foreground
         if active >= self._tab_offset and active < len(self._pages):
@@ -1281,7 +1292,7 @@ class AuiTabContainer(object):
             if rect.width <= 0:
                 return False # haven't found the tab, and we've run out of space, so return False
 
-            size, x_extent = self._art.GetTabSize(dc, wnd, page.caption, page.bitmap, page.active, tab_button.cur_state)
+            size, x_extent = self._art.GetTabSize(dc, wnd, page.caption, page.bitmap, page.active, tab_button.cur_state, page.control)
             offset += x_extent
 
             if i == tabPage:
@@ -1416,7 +1427,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         self._hover_button = None
         self._pressed_button = None
         self._drag_image = None
-
+        
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -1748,6 +1759,8 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         if not event.LeftIsDown() or self._click_pt == wx.Point(-1, -1):
             return
 
+        wnd = self.TabHitTest(pos.x, pos.y)
+
         if not self._is_dragging:
 
             drag_x_threshold = wx.SystemSettings.GetMetric(wx.SYS_DRAG_X)
@@ -1755,6 +1768,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
             if abs(pos.x - self._click_pt.x) > drag_x_threshold or \
                abs(pos.y - self._click_pt.y) > drag_y_threshold:
+
                 self._is_dragging = True
 
                 if self._drag_image:
@@ -1764,7 +1778,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
 
                 if self._flags & AUI_NB_DRAW_DND_TAB:
                     # Create the custom draw image from the icons and the text of the item
-                    wnd = self.TabHitTest(pos.x, pos.y)
                     mouse_tab = self.GetIdxFromWindow(wnd)
                     page = self._pages[mouse_tab]
                     tab_button = self._tab_close_buttons[mouse_tab]
@@ -1778,7 +1791,6 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
                     self._drag_image.Show()
                     self._drag_image.Move(pos)
 
-        wnd = self.TabHitTest(pos.x, pos.y)
         if not wnd:
             evt2 = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, self.GetId())
             evt2.SetSelection(self.GetIdxFromWindow(self._click_tab))
@@ -1987,7 +1999,7 @@ class TabFrame(wx.PyWindow):
     it's managed page windows.
     """
 
-    def __init__(self):
+    def __init__(self, parent):
         """
         Default class constructor. Used internally, do not call it in your code!
         """
@@ -1998,6 +2010,7 @@ class TabFrame(wx.PyWindow):
         self._rect = wx.Rect(0, 0, 200, 200)
         self._tab_ctrl_height = 20
         self._tab_rect = wx.Rect()        
+        self._parent = parent
         
         self.PostCreate(pre)
         
@@ -2078,9 +2091,10 @@ class TabFrame(wx.PyWindow):
         if not self._tabs:
             return
 
-        hideOnSingle = self._tabs.GetFlags() & AUI_NB_HIDE_ON_SINGLE_TAB
+        hideOnSingle = ((self._tabs.GetFlags() & AUI_NB_HIDE_ON_SINGLE_TAB) and \
+                       self._tabs.GetPageCount() <= 1)
         
-        if not hideOnSingle or (hideOnSingle and self._tabs.GetPageCount() > 1):
+        if not hideOnSingle and not self._parent._hide_tabs:
             tab_height = self._tab_ctrl_height
             
             self._tab_rect = wx.Rect(self._rect.x, self._rect.y, self._rect.width, self._tab_ctrl_height)
@@ -2222,6 +2236,7 @@ class AuiNotebook(wx.PyControl):
         self._curpage = -1
         self._tab_id_counter = AuiBaseTabCtrlId
         self._dummy_wnd = None
+        self._hide_tabs = False
         self._tab_ctrl_height = 20
         self._requested_bmp_size = wx.Size(-1, -1)
         self._requested_tabctrl_height = -1
@@ -2396,7 +2411,7 @@ class AuiNotebook(wx.PyControl):
             pane_name = tab_part[0:tab_part.index("=")]
 
             # create a new tab frame
-            new_tabs = TabFrame()
+            new_tabs = TabFrame(self)
             self._tab_id_counter += 1
             new_tabs._tabs = AuiTabCtrl(self, self._tab_id_counter)
             new_tabs._tabs.SetArtProvider(self._tabs.GetArtProvider().Clone())
@@ -2634,7 +2649,7 @@ class AuiNotebook(wx.PyControl):
                 tabctrl.Update()
 
 
-    def AddPage(self, page, caption, select=False, bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap):
+    def AddPage(self, page, caption, select=False, bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap, control=None):
         """
         Adds a page. If the `select` parameter is True, calling this will generate a
         page change event.
@@ -2643,13 +2658,15 @@ class AuiNotebook(wx.PyControl):
         :param `caption`: specifies the text for the new page;
         :param `select`: specifies whether the page should be selected;
         :param `bitmap`: the wx.Bitmap to display in the enabled tab;
-        :param `disabled_bitmap`: the wx.Bitmap to display in the disabled tab.
+        :param `disabled_bitmap`: the wx.Bitmap to display in the disabled tab;
+        :param `control`: a wx.Window instance inside a tab (or ``None``).
         """
 
-        return self.InsertPage(self.GetPageCount(), page, caption, select, bitmap, disabled_bitmap)
+        return self.InsertPage(self.GetPageCount(), page, caption, select, bitmap, disabled_bitmap, control)
 
 
-    def InsertPage(self, page_idx, page, caption, select=False, bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap):
+    def InsertPage(self, page_idx, page, caption, select=False, bitmap=wx.NullBitmap, disabled_bitmap=wx.NullBitmap,
+                   control=None):
         """
         This is similar to L{AddPage}, but allows the ability to specify the insert location.
 
@@ -2658,12 +2675,12 @@ class AuiNotebook(wx.PyControl):
         :param `caption`: specifies the text for the new page;
         :param `select`: specifies whether the page should be selected;
         :param `bitmap`: the wx.Bitmap to display in the enabled tab;
-        :param `disabled_bitmap`: the wx.Bitmap to display in the disabled tab.
+        :param `disabled_bitmap`: the wx.Bitmap to display in the disabled tab;
+        :param `control`: a wx.Window instance inside a tab (or ``None``).
         """
         
         if not page:
             return False
-
 
         page.Reparent(self)
         info = AuiNotebookPage()
@@ -2671,6 +2688,7 @@ class AuiNotebook(wx.PyControl):
         info.caption = caption
         info.bitmap = bitmap
         info.active = False
+        info.control = control
 
         originalPaneMgr = framemanager.GetManager(page)
         if originalPaneMgr:
@@ -2702,7 +2720,13 @@ class AuiNotebook(wx.PyControl):
         else:
             active_tabctrl.InsertPage(page, info, page_idx)
 
-        self.UpdateTabCtrlHeight()
+        force = False
+        if control:
+            force = True
+            control.Reparent(active_tabctrl)
+            control.Show()
+            
+        self.UpdateTabCtrlHeight(force=force)
         self.DoSizing()
         active_tabctrl.DoShowHide()
 
@@ -2712,7 +2736,7 @@ class AuiNotebook(wx.PyControl):
 
         if select:
             self.SetSelectionToWindow(page)
-        
+
         return True
 
 
@@ -2733,6 +2757,8 @@ class AuiNotebook(wx.PyControl):
         # hide the window in advance, as this will
         # prevent flicker
         wnd.Show(False)
+
+        self.RemoveControlFromPage(page_idx)
 
         if not self.RemovePage(page_idx):
             return False
@@ -2769,9 +2795,10 @@ class AuiNotebook(wx.PyControl):
         if not ctrl:
             return False
 
+        currentPage = ctrl.GetPage(ctrl_idx)
         is_curpage = (self._curpage == page_idx)
-        is_active_in_split = ctrl.GetPage(ctrl_idx).active
-
+        is_active_in_split = currentPage.active
+        
         # remove the tab from main catalog
         if not self._tabs.RemovePage(wnd):
             return False
@@ -2808,7 +2835,7 @@ class AuiNotebook(wx.PyControl):
             # so select the next page from the main tab
             # catalogue
 
-            if page_idx < self._tabs.GetPageCount():
+            if 0 <= page_idx < self._tabs.GetPageCount():
                 new_active = self._tabs.GetPage(page_idx).window
             
             if not new_active and self._tabs.GetPageCount() > 0:
@@ -2826,6 +2853,16 @@ class AuiNotebook(wx.PyControl):
             self._tabs.SetNoneActive()
 
         return True
+
+
+    def HideAllTabs(self, hidden=True):
+        """
+        Hides all tabs on the AuiNotebook control.
+        
+        :param `hidden`: ``True`` hides all tabs.
+        """
+
+        self._hide_tabs = hidden
 
 
     def GetPageIndex(self, page_wnd):
@@ -3048,6 +3085,72 @@ class AuiNotebook(wx.PyControl):
         return page_info.text_colour
 
 
+    def AddControlToPage(self, page_idx, control):
+        """
+        Adds a control inside a tab (not in the tab area).
+
+        :param `page_idx`: the page index;
+        :param `control`: an instance of wx.Window.
+        """
+
+        if page_idx >= self._tabs.GetPageCount():
+            return False
+
+        # update our own tab catalog
+        page_info = self._tabs.GetPage(page_idx)
+        page_info.control = control
+
+        # tab height might have changed
+        self.UpdateTabCtrlHeight(force=True)
+
+        # update what's on screen
+        ctrl, ctrl_idx = self.FindTab(page_info.window)
+        if not ctrl:
+            return False
+
+        control.Reparent(ctrl)
+        
+        info = ctrl.GetPage(ctrl_idx)
+        info.control = control
+        ctrl.Refresh()
+        ctrl.Update()
+        
+        return True
+        
+
+    def RemoveControlFromPage(self, page_idx):
+        """
+        Removes a control from a tab (not from the tab area).
+
+        :param `page_idx`: the page index.
+        """
+
+        if page_idx >= self._tabs.GetPageCount():
+            return False
+
+        page_info = self._tabs.GetPage(page_idx)
+        if page_info.control is None:
+            return False
+
+        page_info.control.Destroy()        
+        page_info.control = None
+
+        # tab height might have changed
+        self.UpdateTabCtrlHeight(force=True)
+
+        # update what's on screen
+        ctrl, ctrl_idx = self.FindTab(page_info.window)
+        if not ctrl:
+            return False
+        
+        info = ctrl.GetPage(ctrl_idx)
+        info.control = None
+        ctrl.Refresh()
+        ctrl.Update()
+        
+        return True
+        
+
     def SetCloseButton(self, page_idx, hasCloseButton):
         """
         Sets whether a tab should display a close button or not.
@@ -3253,6 +3356,19 @@ class AuiNotebook(wx.PyControl):
         return self._tabs.GetWindowFromIdx(page_idx)
 
 
+    def GetPageInfo(self, page_idx):
+        """
+        Returns the L{AuiNotebookPage} info structure specified by the given index.
+
+        :param `page_idx`: the page index.
+        """
+
+        if page_idx >= self._tabs.GetPageCount():
+            raise Exception("invalid notebook page")
+
+        return self._tabs.GetPage(page_idx)
+        
+
     def GetEnabled(self, page_idx):
         """
         Returns whether the page specified by the index `page_idx` is enabled.
@@ -3316,7 +3432,7 @@ class AuiNotebook(wx.PyControl):
             return tabframe._tabs
         
         # If there is no tabframe at all, create one
-        tabframe = TabFrame()
+        tabframe = TabFrame(self)
         tabframe.SetTabCtrlHeight(self._tab_ctrl_height)
         self._tab_id_counter += 1
         tabframe._tabs = AuiTabCtrl(self, self._tab_id_counter)
@@ -3394,9 +3510,9 @@ class AuiNotebook(wx.PyControl):
             split_size = self.GetClientSize()
             split_size.x /= 2
             split_size.y /= 2
-        
+
         # create a new tab frame
-        new_tabs = TabFrame()
+        new_tabs = TabFrame(self)
         new_tabs._rect = wx.RectPS(wx.Point(0, 0), split_size)
         new_tabs.SetTabCtrlHeight(self._tab_ctrl_height)
         self._tab_id_counter += 1
@@ -3406,6 +3522,8 @@ class AuiNotebook(wx.PyControl):
         new_tabs._tabs.SetFlags(self._flags)
         dest_tabs = new_tabs._tabs
 
+        self.ReparentControl(src_tabs, dest_tabs)
+        
         # create a pane info structure with the information
         # about where the pane should be added
         pane_info = framemanager.AuiPaneInfo().Bottom().CaptionVisible(False)
@@ -3436,6 +3554,7 @@ class AuiNotebook(wx.PyControl):
         # remove the page from the source tabs
         page_info = src_tabs.GetPage(src_idx)
         page_info.active = False
+        
         src_tabs.RemovePage(page_info.window)
         
         if src_tabs.GetPageCount() > 0:
@@ -3489,6 +3608,21 @@ class AuiNotebook(wx.PyControl):
         self.Thaw()
 
 
+    def ReparentControl(self, src_tabs, dest_tabs):
+        """
+        Reparents a control added inside a tab.
+        
+        :param `src_tabs`: the source L{AuiTabCtrl};
+        :param `dest_tabs`: the destination L{AuiTabCtrl}.
+        """
+        
+        children = src_tabs.GetChildren()
+        control = (children and [children[0]] or [None])[0]
+        if control:
+            control.Hide()
+            control.Reparent(dest_tabs)
+        
+
     def UnsplitDClick(self, part, sash_size, pos):
         """
         Unsplit the L{AuiNotebook} on sash double-click.
@@ -3539,6 +3673,8 @@ class AuiNotebook(wx.PyControl):
         else:
             src_tabs = tab_ctrl_1
             dest_tabs = tab_ctrl_2
+
+        self.ReparentControl(src_tabs, dest_tabs)
 
         selection = -1
         page_count = dest_tabs.GetPageCount()
@@ -3854,7 +3990,10 @@ class AuiNotebook(wx.PyControl):
                     # reparent the page
                     src_page.Reparent(nb)
 
-                    # found out the insert idx
+                    # Reparent the control in a tab (if any)
+                    self.ReparentControl(src_tabs, tab_ctrl)
+
+                    # find out the insert idx
                     dest_tabs = tab_ctrl
                     pt = dest_tabs.ScreenToClient(mouse_screen_pt)
 
@@ -3927,7 +4066,7 @@ class AuiNotebook(wx.PyControl):
                     return
                 
                 # If there is no tabframe at all, create one
-                new_tabs = TabFrame()
+                new_tabs = TabFrame(self)
                 new_tabs._rect = wx.RectPS(wx.Point(0, 0), self.CalculateNewSplitSize())
                 new_tabs.SetTabCtrlHeight(self._tab_ctrl_height)
                 self._tab_id_counter += 1
@@ -3938,7 +4077,9 @@ class AuiNotebook(wx.PyControl):
                 self._mgr.AddPane(new_tabs, framemanager.AuiPaneInfo().Bottom().CaptionVisible(False), mouse_client_pt)
                 self._mgr.Update()
                 dest_tabs = new_tabs._tabs
-            
+
+            self.ReparentControl(src_tabs, dest_tabs)
+                
             # remove the page from the source tabs
             page_info = src_tabs.GetPage(event.GetSelection())
             page_info.active = False
@@ -3952,7 +4093,7 @@ class AuiNotebook(wx.PyControl):
             # add the page to the destination tabs
             if insert_idx == -1:
                 insert_idx = dest_tabs.GetPageCount()
-                
+
             dest_tabs.InsertPage(page_info.window, page_info, insert_idx)
             
             if src_tabs.GetPageCount() == 0:
@@ -4019,15 +4160,13 @@ class AuiNotebook(wx.PyControl):
         page_contents = self.GetPage(page_index)
         page_bitmap = self.GetPageBitmap(page_index)
         text_colour = self.GetPageTextColour(page_index)
-        
-        self.RemovePage(page_index)
-        self.RemoveEmptyTabFrames()
-        
+        info = self.GetPageInfo(page_index)
+                
         if root_manager and root_manager != self._mgr:
             root_manager = framemanager.GetManager(self)
 
             if hasattr(page_contents, "__floating_size__"):
-                floating_size = page_contents.__floating_size__
+                floating_size = wx.Size(*page_contents.__floating_size__)
             else:
                 floating_size = page_contents.GetBestSize()
                 if floating_size == wx.DefaultSize:
@@ -4036,9 +4175,18 @@ class AuiNotebook(wx.PyControl):
             page_contents.__page_index__ = page_index
             page_contents.__aui_notebook__ = self
             page_contents.__text_colour__ = text_colour
-            
+            page_contents.__control__ = info.control
+
+            if info.control:
+                info.control.Reparent(page_contents)
+                info.control.Hide()
+                info.control = None
+
+            self.RemovePage(page_index)
+            self.RemoveEmptyTabFrames()
+                            
             pane_info = framemanager.AuiPaneInfo().Float().FloatingPosition(wx.GetMousePosition()). \
-                        FloatingSize(floating_size).Name("__floating__%s"%page_title). \
+                        FloatingSize(floating_size).BestSize(floating_size).Name("__floating__%s"%page_title). \
                         Caption(page_title).Icon(page_bitmap)
             root_manager.AddPane(page_contents, pane_info)
             root_manager.Bind(framemanager.EVT_AUI_PANE_CLOSE, self.OnCloseFloatingPage)
@@ -4051,13 +4199,21 @@ class AuiNotebook(wx.PyControl):
                              style=wx.DEFAULT_FRAME_STYLE|wx.FRAME_TOOL_WINDOW|
                                    wx.FRAME_FLOAT_ON_PARENT | wx.FRAME_NO_TASKBAR) 
 
+            if control:
+                control.Reparent(frame)
+                control.Hide()
+                
             frame.bitmap = page_bitmap            
             frame.page_index = page_index
             frame.text_colour = text_colour
+            frame.control = control
             page_contents.Reparent(frame) 
             frame.Bind(wx.EVT_CLOSE, self.OnCloseFloatingPage) 
             frame.Move(wx.GetMousePosition()) 
             frame.Show()
+            self.RemovePage(page_index)
+
+            self.RemoveEmptyTabFrames()
 
 
     def OnCloseFloatingPage(self, event):
@@ -4079,9 +4235,16 @@ class AuiNotebook(wx.PyControl):
             event.Skip()
             frame = event.GetEventObject() 
             page_title = frame.GetTitle() 
-            page_contents = frame.GetChildren()[0] 
-            page_contents.Reparent(self) 
-            self.InsertPage(frame.page_index, page_contents, page_title, select=True, bitmap=frame.bitmap)
+            page_contents = frame.GetChildren()[-1] 
+            page_contents.Reparent(self)
+            self.InsertPage(frame.page_index, page_contents, page_title, select=True, bitmap=frame.bitmap, control=control)
+
+            if frame.control:
+                src_tabs, idx = self.FindTab(page_contents)
+                frame.control.Reparent(src_tabs)
+                frame.control.Hide()
+                frame.control = None
+
             self.SetPageTextColour(frame.page_index, frame.text_colour)
 
 
@@ -4094,17 +4257,20 @@ class AuiNotebook(wx.PyControl):
 
         root_manager = framemanager.GetManager(self)        
 
-        pane.window.__floating_size__ = pane.floating_size
+        pane.window.__floating_size__ = wx.Size(*pane.floating_size)
         page_index = pane.window.__page_index__
         text_colour = pane.window.__text_colour__
+        control = pane.window.__control__
         
         root_manager.DetachPane(pane.window)
+        self.InsertPage(page_index, pane.window, pane.caption, True, pane.icon, control=control)
 
-        self.InsertPage(page_index, pane.window, pane.caption, True, pane.icon)
         self.SetPageTextColour(page_index, text_colour)
-        
         self.GetActiveTabCtrl().DoShowHide()
         self.DoSizing()
+        if control:
+            self.UpdateTabCtrlHeight(force=True)
+            
         self._mgr.Update()
         root_manager.Update()
         
@@ -4364,6 +4530,37 @@ class AuiNotebook(wx.PyControl):
             
                 close_wnd = tabs.GetWindowFromIdx(selection)
 
+                if close_wnd.GetName() == "__fake__page__":
+                    # This is a notebook preview
+                    previous_active, page_status = close_wnd.__previousStatus
+                    for page, status in zip(tabs.GetPages(), page_status):
+                        page.enabled = status
+                    
+                    main_idx = self._tabs.GetIdxFromWindow(close_wnd)
+                    self.DeletePage(main_idx)
+
+                    if previous_active >= 0:
+                        tabs.SetActivePage(previous_active)
+                        page_count = tabs.GetPageCount()
+                        selection = -1
+                        
+                        for page in xrange(page_count):
+                            # remove the page from the source tabs
+                            page_info = tabs.GetPage(page)
+                            if page_info.active:
+                                selection = page
+                                break
+        
+                        tabs.DoShowHide()
+                        self.DoSizing()
+                        tabs.Refresh()
+                        
+                        if selection >= 0:
+                            wx.CallAfter(tabs.MakeTabVisible, selection, self)
+                                                
+                    # Don't fire the event
+                    return                        
+
                 # ask owner if it's ok to close the tab
                 e = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, self.GetId())
                 idx = self._tabs.GetIdxFromWindow(close_wnd)
@@ -4561,7 +4758,7 @@ class AuiNotebook(wx.PyControl):
         return tabCtrlHeight + pageHeight + decorHeight
 
 
-    def AdvanceSelection(self, forward=True):
+    def AdvanceSelection(self, forward=True, wrap=True):
         """
         Cycles through the tabs.
         The call to this function generates the page changing events.
@@ -4576,11 +4773,18 @@ class AuiNotebook(wx.PyControl):
         activePage = tabCtrl.GetActivePage()
         lenPages = len(tabCtrl.GetPages())
         
+        if lenPages == 1:
+            return False
+        
         if forward:
             if lenPages > 1:
             
                 if activePage == -1 or activePage == lenPages - 1:
+                    if not wrap:
+                        return False
+
                     newPage = 0
+                    
                 elif activePage < lenPages - 1:
                     newPage = activePage + 1
             
@@ -4588,6 +4792,9 @@ class AuiNotebook(wx.PyControl):
         
             if lenPages > 1:
                 if activePage == -1 or activePage == 0:
+                    if not wrap:
+                        return False
+
                     newPage = lenPages - 1
                 
                 elif activePage > 0:
@@ -4596,7 +4803,7 @@ class AuiNotebook(wx.PyControl):
         
         if newPage != -1:
             if not self.GetEnabled(newPage):
-                return
+                return False
 
             e = AuiNotebookEvent(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, tabCtrl.GetId())
             e.SetSelection(newPage)
@@ -4606,6 +4813,8 @@ class AuiNotebook(wx.PyControl):
         
         if focusWin:
             focusWin.SetFocus()
+
+        return True
 
 
     def ShowWindowMenu(self):
@@ -4680,3 +4889,54 @@ class AuiNotebook(wx.PyControl):
 
         return wx.BORDER_NONE
 
+
+    def NotebookPreview(self, thumbnail_size=200):
+        """
+        Generates a preview of all the pages in the notebook (MSW and GTK only).
+
+        :param `thumbnail_size`: the maximum size of every page thumbnail.
+        """
+
+        if wx.Platform == "__WXMAC__":
+            return False
+
+        tabCtrl = self.GetActiveTabCtrl()
+        activePage = tabCtrl.GetActivePage()
+        pages = tabCtrl.GetPages()
+
+        pageStatus, pageText = [], []
+
+        for indx, page in enumerate(pages):
+
+            pageStatus.append(page.enabled)
+
+            if not page.enabled:
+                continue
+            
+            self.SetSelectionToPage(page)            
+            pageText.append(page.caption)
+
+            rect = page.window.GetScreenRect()
+            bmp = RescaleScreenShot(TakeScreenShot(rect), thumbnail_size)
+
+            page.enabled = False
+            if indx == 0:
+                il = wx.ImageList(bmp.GetWidth(), bmp.GetHeight(), True)
+
+            il.Add(bmp)  
+
+        # create the list control
+        listCtrl = wx.ListCtrl(self, style=wx.LC_ICON|wx.LC_AUTOARRANGE|wx.LC_HRULES|wx.LC_VRULES,
+                               name="__fake__page__")
+
+        # assign the image list to it
+        listCtrl.AssignImageList(il, wx.IMAGE_LIST_NORMAL)
+        listCtrl.__previousStatus = [activePage, pageStatus]
+
+        # create some items for the list
+        for indx, text in enumerate(pageText):
+            listCtrl.InsertImageStringItem(10000, text, indx)
+        
+        self.AddPage(listCtrl, "AuiNotebook Preview", True, bitmap=auinotebook_preview.GetBitmap(), disabled_bitmap=wx.NullBitmap)
+
+        

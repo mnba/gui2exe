@@ -462,15 +462,17 @@ class AuiDefaultDockArt(object):
                 drect.Deflate(1, 1)
             
 
-    def DrawCaptionBackground(self, dc, rect, active):
+    def DrawCaptionBackground(self, dc, rect, pane):
         """
         Draws the text caption background in the pane.
 
         :param `dc`: a wx.DC device context;
         :param `rect`: the text caption rectangle;
-        :param `active`: whether the pane is active or not.
+        :param `pane`: the pane for which the text background is drawn.
         """        
 
+        active = pane.state & optionActive
+ 
         if self._gradient_type == AUI_GRADIENT_NONE:
             if active:
                 dc.SetBrush(wx.Brush(self._active_caption_colour))
@@ -478,25 +480,33 @@ class AuiDefaultDockArt(object):
                 dc.SetBrush(wx.Brush(self._inactive_caption_colour))
 
             dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)        
+
         else:
+
+            switch_gradient = pane.HasCaptionLeft()
+            gradient_type = self._gradient_type
+            if switch_gradient:
+                gradient_type = (self._gradient_type == AUI_GRADIENT_HORIZONTAL and [AUI_GRADIENT_VERTICAL] or \
+                                 [AUI_GRADIENT_HORIZONTAL])[0]
+            
             if active:
                 if wx.Platform == "__WXMAC__":
                     DrawGradientRectangle(dc, rect, self._active_caption_colour,
                                           self._active_caption_gradient_colour,
-                                          self._gradient_type)                    
+                                          gradient_type)                    
                 else:
                     DrawGradientRectangle(dc, rect, self._active_caption_gradient_colour,
                                           self._active_caption_colour,
-                                          self._gradient_type)
+                                          gradient_type)
             else:
                 if wx.Platform == "__WXMAC__":
                     DrawGradientRectangle(dc, rect, self._inactive_caption_gradient_colour,
                                           self._inactive_caption_colour,
-                                          self._gradient_type)
+                                          gradient_type)
                 else:
                     DrawGradientRectangle(dc, rect, self._inactive_caption_colour,
                                           self._inactive_caption_gradient_colour,
-                                          self._gradient_type)
+                                          gradient_type)
 
 
     def DrawIcon(self, dc, rect, pane):
@@ -510,7 +520,11 @@ class AuiDefaultDockArt(object):
         
         # Draw the icon centered vertically 
         if pane.icon.Ok():
-           dc.DrawBitmap(pane.icon, rect.x+2, rect.y+(rect.height-pane.icon.GetHeight())/2, True)
+            if pane.HasCaptionLeft():
+                bmp = wx.ImageFromBitmap(pane.icon).Rotate90(clockwise=False)
+                dc.DrawBitmap(bmp.ConvertToBitmap(), rect.x+(rect.width-pane.icon.GetWidth())/2, rect.y+rect.height-2-pane.icon.GetHeight(), True)
+            else:
+                dc.DrawBitmap(pane.icon, rect.x+2, rect.y+(rect.height-pane.icon.GetHeight())/2, True)
 
 
     def DrawCaption(self, dc, window, text, rect, pane):
@@ -527,8 +541,7 @@ class AuiDefaultDockArt(object):
         dc.SetPen(wx.TRANSPARENT_PEN)
         dc.SetFont(self._caption_font)
         
-        self.DrawCaptionBackground(dc, rect, ((pane.state & optionActive) and \
-                                              [True] or [False])[0])
+        self.DrawCaptionBackground(dc, rect, pane)
 
         if pane.state & optionActive:
             dc.SetTextForeground(self._active_caption_text_colour)
@@ -538,23 +551,31 @@ class AuiDefaultDockArt(object):
         w, h = dc.GetTextExtent("ABCDEFHXfgkj")
 
         clip_rect = wx.Rect(*rect)
-        clip_rect.width -= 3      # text offset
-        clip_rect.width -= 2      # button padding
+        btns = pane.CountButtons()
+
+        captionLeft = pane.HasCaptionLeft()
+        variable = (captionLeft and [rect.height] or [rect.width])[0]
+
+        variable -= 3      # text offset
+        variable -= 2      # button padding
 
         caption_offset = 0
         if pane.icon:
-            caption_offset += pane.icon.GetWidth() + 3
+            if captionLeft:
+                caption_offset += pane.icon.GetHeight() + 3
+            else:
+                caption_offset += pane.icon.GetWidth() + 3
+                
             self.DrawIcon(dc, rect, pane)
 
-        clip_rect.x += caption_offset        
-        btns = pane.CountButtons()
+        variable -= caption_offset
+        variable -= btns*(self._button_size + self._border_size)
+        draw_text = ChopText(dc, text, variable)
 
-        clip_rect.width -= btns*(self._button_size + self._border_size)
-        draw_text = ChopText(dc, text, clip_rect.width-caption_offset)
-        
-        dc.SetClippingRect(clip_rect)
-        dc.DrawText(draw_text, rect.x+3+caption_offset, rect.y+(rect.height/2)-(h/2)-1)
-        dc.DestroyClippingRegion()
+        if captionLeft:
+            dc.DrawRotatedText(draw_text, rect.x+(rect.width/2)-(h/2)-1, rect.y+rect.height-3-caption_offset, 90)
+        else:
+            dc.DrawText(draw_text, rect.x+3+caption_offset, rect.y+(rect.height/2)-(h/2)-1)
 
 
     def RequestUserAttention(self, dc, window, text, rect, pane):
@@ -578,7 +599,7 @@ class AuiDefaultDockArt(object):
             else:
                 pane.state &= ~optionActive
                 
-            self.DrawCaptionBackground(dc, rect, active)
+            self.DrawCaptionBackground(dc, rect, pane)
             self.DrawCaption(dc, window, text, rect, pane)
             wx.SafeYield()
             wx.MilliSleep(350)
@@ -677,12 +698,19 @@ class AuiDefaultDockArt(object):
                 bmp = self._active_minimize_bitmap
             else:
                 bmp = self._inactive_minimize_bitmap
-    
+
+        isVertical = pane.HasCaptionLeft()
+        
         rect = wx.Rect(*_rect)
 
-        old_y = rect.y
-        rect.y = rect.y + (rect.height/2) - (bmp.GetHeight()/2)
-        rect.height = old_y + rect.height - rect.y - 1
+        if isVertical:
+            old_x = rect.x
+            rect.x = rect.x + (rect.width/2) - (bmp.GetWidth()/2)
+            rect.width = old_x + rect.width - rect.x - 1
+        else:
+            old_y = rect.y
+            rect.y = rect.y + (rect.height/2) - (bmp.GetHeight()/2)
+            rect.height = old_y + rect.height - rect.y - 1
 
         if button_state == AUI_BUTTON_STATE_PRESSED:
             rect.x += 1
@@ -707,6 +735,9 @@ class AuiDefaultDockArt(object):
                 # Darker the bitmap a bit
                 bmp = DarkenBitmap(bmp, self._active_caption_colour, StepColour(self._active_caption_colour, 110))
 
+        if isVertical:
+            bmp = wx.ImageFromBitmap(bmp).Rotate90(clockwise=False).ConvertToBitmap()
+            
         # draw the button itself
         dc.DrawBitmap(bmp, rect.x, rect.y, True)
 
@@ -923,11 +954,13 @@ class ModernDockArt(AuiDefaultDockArt):
         """        
 
         dc.SetPen(wx.TRANSPARENT_PEN)
+        self.DrawCaptionBackground(dc, rect, pane)
+
         active = ((pane.state & optionActive) and [True] or [False])[0]
-        self.DrawCaptionBackground(dc, rect, active)
 
         self._caption_font.SetWeight(wx.FONTWEIGHT_BOLD)
-        dc.SetFont(self._caption_font)        
+        dc.SetFont(self._caption_font)
+        
         if active:
             dc.SetTextForeground(self._active_caption_text_colour)
         else:
@@ -935,40 +968,51 @@ class ModernDockArt(AuiDefaultDockArt):
 
         w, h = dc.GetTextExtent("ABCDEFHXfgkj")
 
-        caption_offset = 0
+        clip_rect = wx.Rect(*rect)
+        btns = pane.CountButtons()
 
+        captionLeft = pane.HasCaptionLeft()
+        variable = (captionLeft and [rect.height] or [rect.width])[0]
+
+        variable -= 3      # text offset
+        variable -= 2      # button padding
+
+        caption_offset = 0
         if pane.icon:
-            caption_offset += pane.icon.GetWidth() + 3
+            if captionLeft:
+                caption_offset += pane.icon.GetHeight() + 3
+            else:
+                caption_offset += pane.icon.GetWidth() + 3
+                
             self.DrawIcon(dc, rect, pane)
 
         diff = -2
         if self.usingTheme:
             diff = -1
-            
-        clip_rect = wx.Rect(*rect)
-        clip_rect.width -= caption_offset
-        btns = pane.CountButtons()
-            
-        clip_rect.width -= btns*(self._button_size + self._button_border_size)
 
-        draw_text = ChopText(dc, text, clip_rect.width)
-        dc.SetClippingRect(clip_rect)
+        variable -= caption_offset
+        variable -= btns*(self._button_size + self._button_border_size)
+        draw_text = ChopText(dc, text, variable)
 
-        dc.DrawText(draw_text, rect.x+3+caption_offset, rect.y+(rect.height/2)-(h/2)+diff)
-        dc.DestroyClippingRegion()
-        
+        if captionLeft:
+            dc.DrawRotatedText(draw_text, rect.x+(rect.width/2)-(h/2)-diff, rect.y+rect.height-3-caption_offset, 90)
+        else:
+            dc.DrawText(draw_text, rect.x+3+caption_offset, rect.y+(rect.height/2)-(h/2)-diff)
 
-    def DrawCaptionBackground(self, dc, rect, active):
+
+    def DrawCaptionBackground(self, dc, rect, pane):
         """
         Draws the text caption background in the pane.
 
         :param `dc`: a wx.DC device context;
         :param `rect`: the text caption rectangle;
-        :param `active`: whether the pane is active or not.
+        :param `pane`: the pane for which we are drawing the caption background.
         """        
 
         dc.SetBrush(self._background_brush)
         dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
+
+        active = ((pane.state & optionActive) and [True] or [False])[0]
 
         if self.usingTheme:
             
@@ -988,7 +1032,7 @@ class ModernDockArt(AuiDefaultDockArt):
             
         else:
 
-            AuiDefaultDockArt.DrawCaptionBackground(self, dc, rect, active)
+            AuiDefaultDockArt.DrawCaptionBackground(self, dc, rect, pane)
 
 
     def RequestUserAttention(self, dc, window, text, rect, pane):
@@ -1012,7 +1056,7 @@ class ModernDockArt(AuiDefaultDockArt):
             else:
                 pane.state &= ~optionActive
                 
-            self.DrawCaptionBackground(dc, rect, active)
+            self.DrawCaptionBackground(dc, rect, pane)
             self.DrawCaption(dc, window, text, rect, pane)
             wx.SafeYield()
             wx.MilliSleep(350)
@@ -1041,10 +1085,16 @@ class ModernDockArt(AuiDefaultDockArt):
             
             # Draw the themed close button
             rc = RECT(0, 0, 0, 0)
-            rc.top = rect.x - self._button_border_size
-            rc.left = int(rect.y + 1.5*self._button_border_size)
-            rc.right = rect.x + self._button_size- self._button_border_size
-            rc.bottom = int(rect.y + self._button_size + 1.5*self._button_border_size)
+            if pane.HasCaptionLeft():
+                rc.top = rect.x + self._button_border_size
+                rc.left = int(rect.y + 1.5*self._button_border_size)
+                rc.right = rect.x + self._button_size + self._button_border_size
+                rc.bottom = int(rect.y + self._button_size + 1.5*self._button_border_size)
+            else:
+                rc.top = rect.x - self._button_border_size
+                rc.left = int(rect.y + 1.5*self._button_border_size)
+                rc.right = rect.x + self._button_size- self._button_border_size
+                rc.bottom = int(rect.y + self._button_size + 1.5*self._button_border_size)
 
             if button == AUI_BUTTON_CLOSE:
                 btntype = 19

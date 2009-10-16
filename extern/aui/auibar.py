@@ -1554,6 +1554,7 @@ class AuiToolBar(wx.PyControl):
         self._tool_border_padding = 3
         self._tool_text_orientation = AUI_TBTOOL_TEXT_BOTTOM
         self._tool_orientation = AUI_TBTOOL_HORIZONTAL
+        self._tool_alignment = wx.EXPAND
         self._gripper_sizer_item = None
         self._overflow_sizer_item = None
         self._dragging = False
@@ -2729,6 +2730,19 @@ class AuiToolBar(wx.PyControl):
         return tool.long_help
 
 
+    def SetToolAlignment(self, alignment=wx.EXPAND):
+        """
+        This sets the alignment for all of the tools within the
+        toolbar. (Only has an effect when the toolbar is expanded.)
+
+        :param `alignment`: wx.Sizer alignment value
+                            (wx.ALIGN_CENTER_HORIZONTAL or wx.ALIGN_CENTER_VERTICAL)
+        """
+
+        self._tool_alignment = alignment
+
+
+
     def SetToolLongHelp(self, tool_id, help_string):
         """
         Sets the long help for the given tool.
@@ -3009,7 +3023,7 @@ class AuiToolBar(wx.PyControl):
                 outside_sizer.Add((self._top_padding, 1))
         
         # add the sizer that contains all of the toolbar elements
-        outside_sizer.Add(sizer, 1, wx.EXPAND)
+        outside_sizer.Add(sizer, 1, self._tool_alignment)
 
         # add "bottom" padding
         if self._bottom_padding > 0:
@@ -3372,6 +3386,7 @@ class AuiToolBar(wx.PyControl):
         """
         
         cli_rect = wx.RectPS(wx.Point(0, 0), self.GetClientSize())
+        self.StopPreviewTimer()
 
         if self._gripper_sizer_item:
         
@@ -3718,14 +3733,17 @@ class AuiToolBar(wx.PyControl):
                 self._tip_item = packing_hit_item
 
                 if packing_hit_item.short_help != "":
+                    self.StartPreviewTimer()
                     self.SetToolTipString(packing_hit_item.short_help)
                 else:
                     self.SetToolTipString("")
+                    self.StopPreviewTimer()
             
         else:
         
             self.SetToolTipString("")
             self._tip_item = None
+            self.StopPreviewTimer()
         
         # if we've pressed down an item and we're hovering
         # over it, make sure it's state is set to pressed
@@ -3752,6 +3770,7 @@ class AuiToolBar(wx.PyControl):
         self.SetPressedItem(None)
 
         self._tip_item = None
+        self.StopPreviewTimer()
 
 
     def OnSetCursor(self, event):
@@ -3784,4 +3803,42 @@ class AuiToolBar(wx.PyControl):
         
         pass
 
+
+    def IsPaneMinimized(self):
+        """ Returns whether this L{AuiToolBar} contains a minimized pane tool. """
+        
+        manager = self.GetAuiManager()
+        if manager.GetFlags() & AUI_MGR_PREVIEW_MINIMIZED_PANES == 0:
+            # No previews here
+            return False
+
+        self_name = manager.GetPane(self).name
+        
+        if not self_name.endswith("_min"):
+            # Wrong tool name
+            return False
+
+        return self_name[0:-4]
     
+        
+    def StartPreviewTimer(self):
+        """ Starts a timer in `AuiManager` to slide-in/slide-out the minimized pane. """
+
+        self_name = self.IsPaneMinimized()
+        if not self_name:
+            return
+
+        manager = self.GetAuiManager()        
+        manager.StartPreviewTimer(self)
+
+
+    def StopPreviewTimer(self):
+        """ Stops a timer in `AuiManager` to slide-in/slide-out the minimized pane. """
+
+        self_name = self.IsPaneMinimized()
+        if not self_name:
+            return
+
+        manager = self.GetAuiManager()        
+        manager.StopPreviewTimer()
+            

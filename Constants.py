@@ -12,7 +12,7 @@ from Resources import *
 # Get the translation thing
 _ = wx.GetTranslation
 
-_defaultCompilers = ["py2exe", "py2app", "cx_Freeze", "PyInstaller", "bbfreeze"]
+_defaultCompilers = ["py2exe", "py2app", "cx_Freeze", "PyInstaller", "bbfreeze", "vendorid"]
 
 ListType = type([])
 
@@ -31,7 +31,8 @@ _iconFromName = {"includes": ["modules"],
                  "other_resources": ["resource"],
                  "messages": ["message_info", "message_warning", "message_error",
                               "message_find", "message_compile", "message_copy",
-                              "message_skip", "message_filter", "message_compress"],
+                              "message_skip", "message_filter", "message_compress",
+                              "message_ccode", "message_link"],
                  "missingmodules": ["missingmodules"],
                  "binarydependencies": ["binarydependencies"],
                  "multipleexe": ["python"],
@@ -50,11 +51,25 @@ _iconFromName = {"includes": ["modules"],
                  }
 
 _unWantedLists = ["messages", "missingmodules", "binarydependencies", "explorerdll", "explorerpyd"]
-_bookIcons = ["py2exe", "py2app", "cx_Freeze", "PyInstaller", "bbFreeze"]
+_bookIcons = ["py2exe", "py2app", "cx_Freeze", "PyInstaller", "bbFreeze", "VendorID"]
 _iconMapper = {"Message": 0, "Warning": 1, "Error": 2, "Find": 3, "Compile": 4,
                "Copy": 5, "Skip": 6, "Filter": 7, "Compress": 8}
 _sizeIcons = ["py2exe_small", "py2app_small", "cx_Freeze_small", "PyInstaller_small",
-              "bbFreeze_small", "file_size", "numfiles"]
+              "bbFreeze_small", "VendorID_small", "file_size", "numfiles"]
+
+_distutilsKeys = {"description": "", "long_description": "", "author": "", "author_email": "",
+                  "maintainer": "", "maintainer_email": "", "url": "", "download_url": "",
+                  "license": ""}
+
+_distutilsTips = {"description": "A single line describing the package",
+                  "long_description": "Longer description of the package",
+                  "author": "The name of the package author",
+                  "author_email": "The email address of the package author",
+                  "maintainer": "The name of the current maintainer, if different from the author",
+                  "maintainer_email": "The email address of the current maintainer, if different from the author",
+                  "url": "A URL for the package (homepage)",
+                  "download_url": "A URL to download the package",
+                  "license": "The license for the package"}
 
 _stcKeywords = ["includes", "excludes", "ignores", "packages", "dll_excludes", "data_files",
                 "icon_resources", "bitmap_resources", "other_resources", "dest_base",
@@ -65,7 +80,9 @@ _stcKeywords = ["includes", "excludes", "ignores", "packages", "dll_excludes", "
                 "executables", "description", "author", "dylib_excludes", "frameworks",
                 "datamodels", "resources", "iconfile", "plist", "extension", "graph",
                 "no_chdir", "no_strip", "semi_standalone", "argv_emulation", "use_pythonpath",
-                "site_packages", "prefer_ppc", "debug_modulegraph", "debug_skip_macholib"]
+                "site_packages", "prefer_ppc", "debug_modulegraph", "debug_skip_macholib", "zipfile",
+                "windows", "com_server", "service", "ctypes_com_server", "company_name", "copyright",
+                "create_exe", "create_dll"] + _distutilsKeys.keys()
 
 _pywild = "Python source (*.py)|*.py"
 _pywildspec = "Python source (*.py)|*.py|" \
@@ -105,29 +122,14 @@ _comboImages = {"py2exe": {"bundle_files": ["bundle"]*3,
                 "bbfreeze": {"gui_only": ["windows", "console"],
                              "compress": ["compress"]*2,
                              "optimize": ["optimize"]*3
-                             }
+                             },
+                "vendorid": {"optimize": ["optimize"]*3}
                 }
                            
 _bpPngs = [[_("New Child"), "new_child", _("Append a new tree item to the selected item")],
            [_("New Sibling"), "new_sibling", _("Add a new tree item below the selected item")],
            [_("Duplicate"), "duplicate", _("Duplicates the selected tree item")],
            [_("Delete"), "delete", _("Deletes the selected tree item (and everything below)")]]
-
-
-_distutilsKeys = {"description": "", "long_description": "", "author": "", "author_email": "",
-                  "maintainer": "", "maintainer_email": "", "url": "", "download_url": "",
-                  "license": ""}
-
-_distutilsTips = {"description": "A single line describing the package",
-                  "long_description": "Longer description of the package",
-                  "author": "The name of the package author",
-                  "author_email": "The email address of the package author",
-                  "maintainer": "The name of the current maintainer, if different from the author",
-                  "maintainer_email": "The email address of the current maintainer, if different from the author",
-                  "url": "A URL for the package (homepage)",
-                  "download_url": "A URL to download the package",
-                  "license": "The license for the package"}
-
 
 if wx.Platform == '__WXMSW__':
     _faces = { 'times': 'Times New Roman',
@@ -167,7 +169,7 @@ def GetTooltips():
                         "xref": _("This command line switch instructs py2exe to create a Python\nmodule cross reference and display it in the webbrowser.\nThis allows to answer question why a certain module\nhas been included, or if you can exlude a certain module\nand its dependencies."),
                         "ascii": _("To prevent unicode encoding error, py2exe now by default\nincludes the codecs module and the encodings package.\nIf you are sure your program never implicitely or explicitely\nhas to convert between unicode and ascii strings this can be\nprevented by switching on this option in its associated\ncheck box in GUI2Exe."),
                         "custom_boot_script": _("By selecting a file for this option, your custom\nPython file can do things like installing a customized\nstdout blackhole. The custom boot script is executed\nduring startup of the executable immediately after\nboot_common.py is executed."),
-                        "multipleexe": _("Add a new list item by hitting Ctrl+A and click on the\nthird list control column to select your Python Main\nScript. You can change the executable kind (windows or\nconsole) by clicking on the second list control column,\nand modify other property of your target class as well.<note>The other options currently available in py2exe, namely\nservice, com_server and ctypes_com_server are currently\nnot implemented in GUI2Exe."),
+                        "multipleexe": _("Add a new list item by hitting Ctrl+A and click on the\nthird list control column to select your Python Main\nScript.\n\nYou can change the executable kind (windows,\nconsole, com_server, service or ctypes_com_server)\nby clicking on the second list control column,\nand modify other property of your target class as well."),
                         "includes": _("Comma-separated list of Python modules to include.\n\nHit Ctrl+A to add a new item in the list and edit it.<note>The Includes option is stronger than the Excludes one.\nSo, if a module is present in both Includes and Excludes,\nit will be included in your final distribution."),
                         "excludes": _("Comma-separated list of Python modules to exclude.\n\nHit Ctrl+A to add a new item in the list and edit it.<note>The Includes option is stronger than the Excludes one.\nSo, if a module is present in both Includes and Excludes,\nit will be included in your final distribution."),
                         "packages": _("Comma-separated list of Python packages to include.\n\nHit Ctrl+A to add a new item in the list and edit it."),
@@ -176,7 +178,9 @@ def GetTooltips():
                         "data_files": _("Py2exe allows you to include one (or more) series of files\nthat you are going to need to run your executable\n\nDepending on the choice in the menu 'Options' ==>\n'Recurse sub-dirs for DATA files option' there are\n2 possibilities:\n\n- Choose multiple files at once;\n- Choose one or more directories: every file in them\n  will be added recursively.\n\nHit Ctrl+A to add data files to the list."),
                         "icon_resources": _("Add a custom icon to your application.\nThe icon will be shown in Windows Explorer.\n\nHit Ctrl+A to add an item to the list and edit it."),
                         "bitmap_resources": _("Add one or more bitmaps as Windows resources,\nso that they get packaged in the executable.\n\nHit Ctrl+A to add an item to the list and edit it."),
-                        "other_resources": _("Insert a custom named resource into the executable.\n\nHit Ctrl+A to add an item to the list and edit it.")
+                        "other_resources": _("Insert a custom named resource into the executable.\n\nHit Ctrl+A to add an item to the list and edit it."),
+                        "create_exe": _("Force py2exe to create an executable file.<note>This option is only valid for services,\ncom_servers and ctypes_com_servers."),
+                        "create_dll": _("Force py2exe to create a dll file.<note>This option is only valid for services,\ncom_servers and ctypes_com_servers."),                            
                         },
              "cx_Freeze": {"version": _("Your program version."),
                            "description": _("A short description of your application."),
@@ -197,7 +201,8 @@ def GetTooltips():
                            "includes": _("List of names of modules to include.\n\nHit Ctrl+A to add an item to the list and edit it."),
                            "excludes": _("List of names of modules to exclude.\n\nHit Ctrl+A to add an item to the list and edit it."),
                            "packages": _("List of names of packages to include, including all\nof the package's submodules.\n\nHit Ctrl+A to add an item to the list and edit it."),
-                           "path": _("List of paths to search for modules.\n\nHit Ctrl+A to select one or more directories.")
+                           "path": _("List of paths to search for modules.\n\nHit Ctrl+A to select one or more directories."),
+                           "multipleexe": _("Add a new list item by hitting Ctrl+A and click on the\nthird list control column to select your Python Main\nScript.\n\nYou can change the executable kind (windows or\nconsole) by clicking on the second list control column,\nand modify other property of your target class as well.")
                            },
              "bbfreeze": {"script": _("The Python main script you want to convert\nto an executable."),
                           "optimize": _("Optimization level for the compiled bytecode.\n\n0: No optimization on the compiled bytecode;\n1 (Python -O): Optimize the generated bytecode;\n2 (Python -OO): remove doc-strings in addition to the -O optimizations."),
@@ -207,7 +212,8 @@ def GetTooltips():
                           "include_py": _("Flag whether to create the included python interpreter."),
                           "create_manifest_file": _("On Windows, it creates a manifest file that instructs\nWindows on how to correctly render the widgets in your\nuser interface."),
                           "includes": _("List of names of modules to include.\n\nHit Ctrl+A to add an item to the list and edit it."),
-                          "excludes": _("List of names of modules to exclude.\n\nHit Ctrl+A to add an item to the list and edit it.")
+                          "excludes": _("List of names of modules to exclude.\n\nHit Ctrl+A to add an item to the list and edit it."),
+                          "multipleexe": _("Add a new list item by hitting Ctrl+A and click on the\nthird list control column to select your Python Main\nScript.\n\nYou can change the executable kind (windows or\nconsole) by clicking on the second list control column,\nand modify other property of your target class as well.")
                           },
              "PyInstaller": {"debug": _("Setting to 1 gives you progress messages from the executable\n(for a console=0, these will be annoying MessageBoxes)."),
                              "console": _("Always 1 on Linux/unix. On Windows, governs whether to use\nthe console executable, or the Windows subsystem executable."),
@@ -266,9 +272,24 @@ def GetTooltips():
                         "plistCode_choice": _("If activated, it allows you to add/edit PList\ndictionary key/value pairs, or to remove it altogether."),
                         "plistCode": _("Add Plist dictionary key/value pairs or edit\nan existing PList configuration."),
                         "plistRemove": _("Remove existing PList code.")
+                        },
+           "vendorid": {"script": _("The Python main script you want to convert\nto an executable."),
+                        "build_dir": _("Directory to put final built distributions in\n(default is 'build_' + the base name of the python\nmain script without extension)."),
+                        "optimize": _("Optimization level for the compiled bytecode.\n\n0: No optimization on the compiled bytecode;\n1 (Python -O): Optimize the generated bytecode;\n2 (Python -OO): remove doc-strings in addition to the -O optimizations."),
+                        "exename": _("The filename for the executable."),
+                        "build_dir_choice": _("If you activate this switch, you will be able to\nspecify the name the directory to put final built\ndistributions in (the default is 'build_' + the base name\nof the python main script without extension)."),
+                        "includes": _("Comma-separated list of Python modules to include.\n\nHit Ctrl+A to add a new item in the list and edit it."),
+                        "packages": _("Comma-separated list of Python packages to include.\n\nHit Ctrl+A to add a new item in the list and edit it."),
+                        "install_dir_choice": _("If you activate this switch, you will be able to\nspecify the name the directory to install the\nexecutable (using 'make install') in\n(the default is where Python lives)."),
+                        "install_dir": _("Directory where to install the executable in\n(default is where Python lives, sys.exec_prefix)."),
+                        "console": _("creates an executable for a console program\n(i.e., no graphical interface stuff involved).<note>This feature is Windows only."),
+                        "iconfile": _("Windows NT family only. icon='myicon.ico' to use an icon file."),
+                        "signed": _("Default is to create a signed interpreter\n(linked with the vendorid static library)"),
+                        "verbose": _("Activates Python's verbose flag (same as Python -v)."),
+                        "prefix": _("Use prefix as path prefix for compiled python code.\nDefault is the absolute path of the python source file.<note>This is normally not the path where the executable\nis installed on the target machines. You should use\nsomething like -p '' or -p 'application-name:'.\nSee the Python documentation of the filename argument\nof the builtin compile method for the meaning of prefix.")
                         }
-             }
-
+    }
+    
     _toolTips["py2exe"]["zipfile"] = _toolTips["py2exe"]["zipfile_choice"]
     _toolTips["py2exe"]["dist_dir"] = _toolTips["py2exe"]["dist_dir_choice"]
     _toolTips["py2app"]["dist_dir_choice"] = _toolTips["py2app"]["dist_dir"]
@@ -590,7 +611,10 @@ setup(
 
     zipfile = %(zipfile)s,
     %(console)s,
-    %(windows)s
+    %(windows)s,
+    %(service)s,
+    %(com_server)s,
+    %(ctypes_com_server)s
     )
 
 # This is a place where any post-compile code may go.

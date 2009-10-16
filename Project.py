@@ -428,6 +428,20 @@ class Project(odict):
             if not distChoice or not dist_dir.strip():
                 # Invalid or not selected distribution folder
                 distDir = False
+
+        elif compiler == "vendorid":
+            script = configuration["script"]
+            exename = configuration["exename"]
+            distDir = True
+            if "build_dir_choice" in configuration:
+                distChoice = configuration["build_dir_choice"]
+            else:
+                distChoice = False
+            dist_dir = configuration["build_dir"]
+            if not distChoice or not dist_dir.strip():
+                # Invalid or not selected distribution folder
+                buildDir, name = os.path.split(script)
+                dist_dir = "/build_%s"%os.path.splitext(name)[0]
             
         else:
             # Check if the distribution folder is valid

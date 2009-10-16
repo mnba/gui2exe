@@ -13,7 +13,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 23 Dec 2005
-# Latest Revision: 04 Oct 2009, 10.00 GMT
+# Latest Revision: 15 Oct 2009, 12.00 GMT
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
 # Write To Me At:
@@ -103,9 +103,12 @@ import auibook
 import tabmdi
 import dockart
 
-from aui_utilities import Clip, PaneCreateStippleBitmap
+from aui_utilities import Clip, PaneCreateStippleBitmap, GetDockingImage, GetSlidingPoints
 
 from aui_constants import *
+
+# Define this as a translation function
+_ = wx.GetTranslation
 
 _winxptheme = False
 if wx.Platform == "__WXMSW__":
@@ -506,20 +509,21 @@ class AuiPaneInfo(object):
     optionTopSnapped       = 2**22
     optionBottomSnapped    = 2**23
     optionFlyOut           = 2**24
+    optionCaptionLeft      = 2**25
 
-    buttonClose            = 2**25
-    buttonMaximize         = 2**26
-    buttonMinimize         = 2**27
-    buttonPin              = 2**28
+    buttonClose            = 2**26
+    buttonMaximize         = 2**27
+    buttonMinimize         = 2**28
+    buttonPin              = 2**29
     
-    buttonCustom1          = 2**29
-    buttonCustom2          = 2**30
-    buttonCustom3          = 2**31
+    buttonCustom1          = 2**30
+    buttonCustom2          = 2**31
+    buttonCustom3          = 2**32
 
-    savedHiddenState       = 2**32    # used internally
-    actionPane             = 2**33    # used internally
-    wasMaximized           = 2**34    # used internally
-    needsRestore           = 2**35    # used internally
+    savedHiddenState       = 2**33    # used internally
+    actionPane             = 2**34    # used internally
+    wasMaximized           = 2**35    # used internally
+    needsRestore           = 2**36    # used internally
 
 
     def __init__(self):
@@ -762,7 +766,13 @@ class AuiPaneInfo(object):
         """ HasCaption() returns True if the pane displays a caption. """
         
         return self.HasFlag(self.optionCaption)
+
     
+    def HasCaptionLeft(self):
+        """ HasCaptionLeft() returns True if the pane displays a caption on the left (rotated by 90 degrees). """
+        
+        return self.HasFlag(self.optionCaptionLeft)
+
 
     def HasGripper(self):
         """ HasGripper() returns True if the pane displays a gripper. """
@@ -1322,15 +1332,21 @@ class AuiPaneInfo(object):
         return self
 
 
-    def CaptionVisible(self, visible=True):
+    def CaptionVisible(self, visible=True, left=False):
         """
         CaptionVisible() indicates that a pane caption should be visible. If False, no pane
         caption is drawn.
 
-        :param `visible`: whether the caption should be visible or not.
+        :param `visible`: whether the caption should be visible or not;
+        :param `left`: whether the caption should be drawn on the left (rotated by 90 degrees) or not.
         """
-        
-        return self.SetFlag(self.optionCaption, visible)
+
+        if left:
+            self.SetFlag(self.optionCaption, False)
+            return self.SetFlag(self.optionCaptionLeft, visible)
+
+        self.SetFlag(self.optionCaptionLeft, False)
+        return self.SetFlag(self.optionCaption, visible)                
 
     
     def PaneBorder(self, visible=True):
@@ -1639,7 +1655,7 @@ class AuiPaneInfo(object):
         state = self.state
         
         state |= (self.optionToolbar | self.optionGripper)
-        state &= ~(self.optionResizable | self.optionCaption)
+        state &= ~(self.optionResizable | self.optionCaption | self.optionCaptionLeft)
         
         if self.dock_layer == 0:
             self.dock_layer = 10
@@ -1701,7 +1717,7 @@ class AuiPaneInfo(object):
 
         n = 0
         
-        if self.HasCaption():
+        if self.HasCaption() or self.HasCaptionLeft():
             if isinstance(wx.GetTopLevelParent(self.window), AuiFloatingFrame):
                 return 1
             
@@ -1790,7 +1806,7 @@ class AuiDockingGuide(wx.Frame):
 class AuiDockingGuideWindow(wx.Window):
     """ Target class for L{AuiSingleDockingGuide} and L{AuiCenterDockingGuide}. """
 
-    def __init__(self, parent, rect, direction=0, center=False):
+    def __init__(self, parent, rect, direction=0, center=False, useAero=False):
         """
         Default class constructor. Used internally, do not call it in your code!
 
@@ -1798,7 +1814,8 @@ class AuiDockingGuideWindow(wx.Window):
         :param `rect`: the window rect;
         :param `direction`: one of ``wx.TOP``, ``wx.BOTTOM``, ``wx.LEFT``, ``wx.RIGHT``,
          ``wx.CENTER``;
-        :param `center`: whether the calling class is a L{AuiCenterDockingGuide}.
+        :param `center`: whether the calling class is a L{AuiCenterDockingGuide};
+        :param `useAero`: whether to use the new Aero-style bitmaps for the docking guide.
         """
 
         wx.Window.__init__(self, parent, -1, rect.GetPosition(), rect.GetSize(), wx.NO_BORDER)
@@ -1806,28 +1823,10 @@ class AuiDockingGuideWindow(wx.Window):
         self._direction = direction
         self._center = center
         self._valid = True
-
-        if center:
-            imgName = ""
-        else:
-            imgName = "_single"
-            
-        if direction == wx.TOP:
-            self._bmp_unfocus = eval("up%s"%imgName).GetBitmap()
-            self._bmp_focus = eval("up_focus%s"%imgName).GetBitmap()
-        elif direction == wx.BOTTOM:
-            self._bmp_unfocus = eval("down%s"%imgName).GetBitmap()
-            self._bmp_focus = eval("down_focus%s"%imgName).GetBitmap()
-        elif direction == wx.LEFT:
-            self._bmp_unfocus = eval("left%s"%imgName).GetBitmap()
-            self._bmp_focus = eval("left_focus%s"%imgName).GetBitmap()
-        elif direction == wx.RIGHT:
-            self._bmp_unfocus = eval("right%s"%imgName).GetBitmap()
-            self._bmp_focus = eval("right_focus%s"%imgName).GetBitmap()
-        else:
-            self._bmp_unfocus = eval("tab%s"%imgName).GetBitmap()
-            self._bmp_focus = eval("tab_focus%s"%imgName).GetBitmap()
-
+        self._useAero = useAero
+        
+        self._bmp_unfocus, self._bmp_focus = GetDockingImage(direction, useAero, center)
+        
         self._currentImage = self._bmp_unfocus
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
@@ -2099,19 +2098,85 @@ class AuiSingleDockingGuide(AuiDockingGuide):
         self._direction = direction
 
         AuiDockingGuide.__init__(self, parent, style=wx.FRAME_TOOL_WINDOW | wx.STAY_ON_TOP |
-                                 wx.FRAME_NO_TASKBAR | wx.NO_BORDER, name="auiSingleDockTarget")
+                                 wx.FRAME_NO_TASKBAR | wx.NO_BORDER | wx.FRAME_SHAPED, name="auiSingleDockTarget")
         
         self.Hide()
 
-        if direction in [wx.TOP, wx.BOTTOM]:
-            sizeX, sizeY = guideSizeX, guideSizeY
+        useAero = GetManager(self.GetParent()).GetFlags() & AUI_MGR_AERO_DOCKING_GUIDES
+        self._useAero = useAero
+        self._valid = True
+        
+        if useAero:
+            sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
         else:
-            sizeX, sizeY = guideSizeY, guideSizeX
+            sizeX, sizeY = guideSizeX, guideSizeY
+
+        if direction not in [wx.TOP, wx.BOTTOM]:
+            sizeX, sizeY = sizeY, sizeX
+
+        if self._useAero:
+            self.CreateShapesWithStyle()
+            
+            if wx.Platform == "__WXGTK__":
+                self.Bind(wx.EVT_WINDOW_CREATE, self.SetGuideShape)
+            else:
+                self.SetGuideShape()
+            
+            self.SetSize(self.region.GetBox().GetSize())
+        else:
+            self.SetSize((sizeX, sizeY))
             
         self.rect = wx.Rect(0, 0, sizeX, sizeY)
-        self.target = AuiDockingGuideWindow(self, self.rect, direction, False)
+        self.target = AuiDockingGuideWindow(self, self.rect, direction, False, useAero)
 
-        self.SetSize(self.rect.GetSize())
+
+    def CreateShapesWithStyle(self):
+
+        sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
+
+        if self._direction not in [wx.TOP, wx.BOTTOM]:
+            sizeX, sizeY = sizeY, sizeX
+            
+        bmp, dummy = GetDockingImage(self._direction, True, False)
+        region = wx.RegionFromBitmap(bmp)
+            
+        self.region = region
+        
+
+    def AeroMove(self, pos):
+
+        pass
+    
+
+    def SetGuideShape(self, event=None):
+        """
+        Sets the correct shape for the docking guide window.
+
+        :param `event`: on wxGTK, a L{wx.WindowCreateEvent} event to process.
+        """
+
+        self.SetShape(self.region)        
+                
+        if event is not None:
+            # Skip the event on wxGTK
+            event.Skip()
+            wx.CallAfter(wx.SafeYield, self, True)
+
+
+    def SetValid(self, valid):
+        """
+        Sets the docking direction as valid or invalid.
+
+        :param `valid`: whether the docking direction is allowed or not.
+        """
+
+        self._valid = valid
+
+
+    def IsValid(self):
+        """ Returns whether the docking direction is valid. """
+        
+        return self._valid
 
 
     def UpdateDockGuide(self, pos):
@@ -2157,55 +2222,10 @@ class AuiCenterDockingGuide(AuiDockingGuide):
         AuiDockingGuide.__init__(self, parent, style=wx.FRAME_TOOL_WINDOW | wx.STAY_ON_TOP |
                                  wx.FRAME_NO_TASKBAR | wx.NO_BORDER | wx.FRAME_SHAPED,
                                  name="auiCenterDockTarget")
-        
+
         self.Hide()
 
-        rectLeft = wx.Rect(0, guideSizeY, guideSizeY, guideSizeX)
-        rectTop = wx.Rect(guideSizeY, 0, guideSizeX, guideSizeY)
-        rectRight = wx.Rect(guideSizeY+guideSizeX, guideSizeY, guideSizeY, guideSizeX)
-        rectBottom = wx.Rect(guideSizeY, guideSizeX + guideSizeY, guideSizeX, guideSizeY)
-        rectCenter = wx.Rect(guideSizeY, guideSizeY, guideSizeX, guideSizeX)
-        self.targetLeft = AuiDockingGuideWindow(self, rectLeft, wx.LEFT, True)
-        self.targetTop = AuiDockingGuideWindow(self, rectTop, wx.TOP, True)
-        self.targetRight = AuiDockingGuideWindow(self, rectRight, wx.RIGHT, True)
-        self.targetBottom = AuiDockingGuideWindow(self, rectBottom, wx.BOTTOM, True)
-        self.targetCenter = AuiDockingGuideWindow(self, rectCenter, wx.CENTER, True)
-
-        # top-left diamond
-        tld = [wx.Point(rectTop.x, rectTop.y+rectTop.height-8),
-               wx.Point(rectLeft.x+rectLeft.width-8, rectLeft.y),
-               rectTop.GetBottomLeft()]
-        # bottom-left diamond
-        bld = [wx.Point(rectLeft.x+rectLeft.width-8, rectLeft.y+rectLeft.height),
-               wx.Point(rectBottom.x, rectBottom.y+8),
-               rectBottom.GetTopLeft()]
-        # top-right diamond
-        trd = [wx.Point(rectTop.x+rectTop.width, rectTop.y+rectTop.height-8),
-               wx.Point(rectRight.x+8, rectRight.y),
-               rectRight.GetTopLeft()]        
-        # bottom-right diamond
-        brd = [wx.Point(rectRight.x+8, rectRight.y+rectRight.height),
-               wx.Point(rectBottom.x+rectBottom.width, rectBottom.y+8),
-               rectBottom.GetTopRight()]
-
-        self._triangles = [tld[0:2], bld[0:2],
-                           [wx.Point(rectTop.x+rectTop.width-1, rectTop.y+rectTop.height-8),
-                            wx.Point(rectRight.x+7, rectRight.y)],
-                           [wx.Point(rectRight.x+7, rectRight.y+rectRight.height),
-                            wx.Point(rectBottom.x+rectBottom.width-1, rectBottom.y+8)]]
-        
-        region = wx.Region()
-        region.UnionRect(rectLeft)
-        region.UnionRect(rectTop)
-        region.UnionRect(rectRight)
-        region.UnionRect(rectBottom)
-        region.UnionRect(rectCenter)
-        region.UnionRegion(wx.RegionFromPoints(tld))
-        region.UnionRegion(wx.RegionFromPoints(bld))
-        region.UnionRegion(wx.RegionFromPoints(trd))
-        region.UnionRegion(wx.RegionFromPoints(brd))
-
-        self.region = region
+        self.CreateShapesWithStyle()
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
         
         if wx.Platform == "__WXGTK__":
@@ -2213,11 +2233,85 @@ class AuiCenterDockingGuide(AuiDockingGuide):
         else:
             self.SetGuideShape()
             
-        self.SetSize(region.GetBox().GetSize())
+        self.SetSize(self.region.GetBox().GetSize())
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
+
+    def CreateShapesWithStyle(self):
+
+        useAero = (GetManager(self.GetParent()).GetFlags() & AUI_MGR_AERO_DOCKING_GUIDES) != 0
+        self._useAero = useAero
+        
+        if useAero:
+            sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
+        else:
+            sizeX, sizeY = guideSizeX, guideSizeY
+
+        rectLeft = wx.Rect(0, sizeY, sizeY, sizeX)
+        rectTop = wx.Rect(sizeY, 0, sizeX, sizeY)
+        rectRight = wx.Rect(sizeY+sizeX, sizeY, sizeY, sizeX)
+        rectBottom = wx.Rect(sizeY, sizeX + sizeY, sizeX, sizeY)
+        rectCenter = wx.Rect(sizeY, sizeY, sizeX, sizeX)
+            
+        if not useAero:
+
+            self.targetLeft = AuiDockingGuideWindow(self, rectLeft, wx.LEFT, True, useAero)
+            self.targetTop = AuiDockingGuideWindow(self, rectTop, wx.TOP, True, useAero)
+            self.targetRight = AuiDockingGuideWindow(self, rectRight, wx.RIGHT, True, useAero)
+            self.targetBottom = AuiDockingGuideWindow(self, rectBottom, wx.BOTTOM, True, useAero)
+            self.targetCenter = AuiDockingGuideWindow(self, rectCenter, wx.CENTER, True, useAero)
+
+            
+            # top-left diamond
+            tld = [wx.Point(rectTop.x, rectTop.y+rectTop.height-8),
+                   wx.Point(rectLeft.x+rectLeft.width-8, rectLeft.y),
+                   rectTop.GetBottomLeft()]
+            # bottom-left diamond
+            bld = [wx.Point(rectLeft.x+rectLeft.width-8, rectLeft.y+rectLeft.height),
+                   wx.Point(rectBottom.x, rectBottom.y+8),
+                   rectBottom.GetTopLeft()]
+            # top-right diamond
+            trd = [wx.Point(rectTop.x+rectTop.width, rectTop.y+rectTop.height-8),
+                   wx.Point(rectRight.x+8, rectRight.y),
+                   rectRight.GetTopLeft()]        
+            # bottom-right diamond
+            brd = [wx.Point(rectRight.x+8, rectRight.y+rectRight.height),
+                   wx.Point(rectBottom.x+rectBottom.width, rectBottom.y+8),
+                   rectBottom.GetTopRight()]
+
+            self._triangles = [tld[0:2], bld[0:2],
+                               [wx.Point(rectTop.x+rectTop.width-1, rectTop.y+rectTop.height-8),
+                                wx.Point(rectRight.x+7, rectRight.y)],
+                               [wx.Point(rectRight.x+7, rectRight.y+rectRight.height),
+                                wx.Point(rectBottom.x+rectBottom.width-1, rectBottom.y+8)]]
+            
+            region = wx.Region()
+            region.UnionRect(rectLeft)
+            region.UnionRect(rectTop)
+            region.UnionRect(rectRight)
+            region.UnionRect(rectBottom)
+            region.UnionRect(rectCenter)
+            region.UnionRegion(wx.RegionFromPoints(tld))
+            region.UnionRegion(wx.RegionFromPoints(bld))
+            region.UnionRegion(wx.RegionFromPoints(trd))
+            region.UnionRegion(wx.RegionFromPoints(brd))
+
+        else:
+
+            self._aeroBmp = aero_dock_pane.GetBitmap()
+            region = wx.RegionFromBitmap(self._aeroBmp)
+
+            self._allAeroBmps = [aero_dock_pane_left.GetBitmap(), aero_dock_pane_top.GetBitmap(),
+                                 aero_dock_pane_right.GetBitmap(), aero_dock_pane_bottom.GetBitmap(),
+                                 aero_dock_pane_center.GetBitmap(), aero_dock_pane.GetBitmap()]
+            self._deniedBitmap = aero_denied.GetBitmap()
+            self._aeroRects = [rectLeft, rectTop, rectRight, rectBottom, rectCenter]
+            self._valid = True
+            
+        self.region = region
+        
 
     def SetGuideShape(self, event=None):
         """
@@ -2227,7 +2321,7 @@ class AuiCenterDockingGuide(AuiDockingGuide):
         """
 
         self.SetShape(self.region)        
-                
+
         if event is not None:
             # Skip the event on wxGTK
             event.Skip()
@@ -2243,10 +2337,28 @@ class AuiCenterDockingGuide(AuiDockingGuide):
         :param `pos`: a L{wx.Point} mouse position.
         """
 
-        for target in self.GetChildren():
-            target.UpdateDockGuide(pos)
-            
-        
+        if not self._useAero:
+            for target in self.GetChildren():
+                target.UpdateDockGuide(pos)
+        else:
+            lenRects = len(self._aeroRects)
+            for indx, rect in enumerate(self._aeroRects):
+                if rect.Contains(pos):
+                    if self._allAeroBmps[indx] != self._aeroBmp:
+                        if indx < lenRects - 1 or (indx == lenRects - 1 and self._valid):
+                            self._aeroBmp = self._allAeroBmps[indx]
+                            self.Refresh()
+                        else:
+                            self._aeroBmp = self._allAeroBmps[-1]
+                            self.Refresh()
+                            
+                    return
+
+            if self._aeroBmp != self._allAeroBmps[-1]:
+                self._aeroBmp = self._allAeroBmps[-1]
+                self.Refresh()
+
+
     def HitTest(self, x, y):
         """
         Checks if the mouse position is inside the target windows rect.
@@ -2255,16 +2367,24 @@ class AuiCenterDockingGuide(AuiDockingGuide):
         :param `y`: the `y` mouse position.
         """
 
-        if self.targetLeft.GetScreenRect().Contains((x, y)):
-            return wx.LEFT
-        if self.targetTop.GetScreenRect().Contains((x, y)):
-            return wx.UP
-        if self.targetRight.GetScreenRect().Contains((x, y)):
-            return wx.RIGHT
-        if self.targetBottom.GetScreenRect().Contains((x, y)):
-            return wx.DOWN
-        if self.targetCenter.IsValid() and self.targetCenter.GetScreenRect().Contains((x, y)):
-            return wx.CENTER
+        if not self._useAero:
+            if self.targetLeft.GetScreenRect().Contains((x, y)):
+                return wx.LEFT
+            if self.targetTop.GetScreenRect().Contains((x, y)):
+                return wx.UP
+            if self.targetRight.GetScreenRect().Contains((x, y)):
+                return wx.RIGHT
+            if self.targetBottom.GetScreenRect().Contains((x, y)):
+                return wx.DOWN
+            if self.targetCenter.IsValid() and self.targetCenter.GetScreenRect().Contains((x, y)):
+                return wx.CENTER
+        else:
+            constants = [wx.LEFT, wx.UP, wx.RIGHT, wx.DOWN, wx.CENTER]
+            lenRects = len(self._aeroRects)
+            for indx, rect in enumerate(self._aeroRects):
+                if rect.Contains((x, y)):
+                    if indx < lenRects or (indx == lenRects-1 and self._valid):
+                        return constants[indx]
 
         return -1
 
@@ -2278,11 +2398,36 @@ class AuiCenterDockingGuide(AuiDockingGuide):
          L{auibook.AuiNotebook}.
         """
 
-        if self.targetCenter.IsValid() != valid:        
-            self.targetCenter.SetValid(valid)
-            self.targetCenter.Refresh()
+        if not self._useAero:
+            if self.targetCenter.IsValid() != valid:        
+                self.targetCenter.SetValid(valid)
+                self.targetCenter.Refresh()
+        else:
+            if self._valid != valid:
+                self._valid = valid
+                self.Refresh()
     
 
+    def AeroMove(self, pos):
+
+        if not self._useAero:
+            return
+
+        
+        sizeX, sizeY = aeroguideSizeX, aeroguideSizeY
+        size = self.GetSize()
+        
+        leftRect, topRect, rightRect, bottomRect, centerRect = self._aeroRects
+        thePos = pos + wx.Point((size.x-sizeY)/2, (size.y-sizeX)/2)
+        
+        centerRect.SetPosition(thePos)
+
+        leftRect.SetPosition(thePos + wx.Point(-sizeY, 0))
+        topRect.SetPosition(thePos + wx.Point(0, -sizeY))
+        rightRect.SetPosition(thePos + wx.Point(sizeX, 0))
+        bottomRect.SetPosition(thePos + wx.Point(0, sizeX))
+        
+        
     def OnEraseBackground(self, event):
         """
         Handles the wx.EVT_ERASE_BACKGROUND event for L{AuiCenterDockingGuide}.
@@ -2303,12 +2448,25 @@ class AuiCenterDockingGuide(AuiDockingGuide):
 
         dc = wx.AutoBufferedPaintDC(self)
 
-        dc.SetBrush(wx.Brush(colourTargetBackground))
-        dc.SetPen(wx.Pen(colourTargetBorder))
+        if self._useAero:
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            dc.SetPen(wx.TRANSPARENT_PEN)
+        else:
+            dc.SetBrush(wx.Brush(colourTargetBackground))
+            dc.SetPen(wx.Pen(colourTargetBorder))
 
         rect = self.GetClientRect()
         dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height)
 
+        if self._useAero:
+            dc.DrawBitmap(self._aeroBmp, 0, 0, True)
+            if not self._valid:
+                bmpX, bmpY = self._deniedBitmap.GetWidth(), self._deniedBitmap.GetHeight()
+                xPos, yPos = (rect.x + (rect.width)/2 - bmpX/2), (rect.y + (rect.height)/2 - bmpY/2)
+                dc.DrawBitmap(self._deniedBitmap, xPos+1, yPos, True)
+                
+            return
+        
         dc.SetPen(wx.Pen(colourTargetBorder, 2))
         for pts in self._triangles:
             dc.DrawLinePoint(pts[0], pts[1])
@@ -3485,6 +3643,10 @@ class AuiManager(wx.EvtHandler):
             self._animation_step = 30.0
         else:
             self._animation_step = 5.0
+
+        self._preview_timer = wx.Timer(self, wx.ID_ANY)
+        self._sliding_frame = None
+        
         
         if managed_window:
             self.SetManagedWindow(managed_window)
@@ -3501,6 +3663,8 @@ class AuiManager(wx.EvtHandler):
         self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocus)
         self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.OnCaptureLost)
         self.Bind(wx.EVT_TIMER, self.OnHintFadeTimer, self._hint_fadetimer)
+        self.Bind(wx.EVT_TIMER, self.SlideIn, self._preview_timer)
+
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_SYS_COLOUR_CHANGED, self.OnSysColourChanged)
         
@@ -4699,6 +4863,9 @@ class AuiManager(wx.EvtHandler):
             if dock.IsHorizontal():
                 if pane.HasGripper() and not pane.HasGripperTop():
                     size += gripper_size
+
+                if pane.HasCaptionLeft():
+                    size += caption_size
                     
                 size += pane.best_size.x
                  
@@ -4706,7 +4873,7 @@ class AuiManager(wx.EvtHandler):
                 if pane.HasGripper() and pane.HasGripperTop():
                     size += gripper_size
 
-                if pane.HasCaption():
+                if pane.HasCaption() and not pane.HasCaptionLeft():
                     size += caption_size
                     
                 size += pane.best_size.y
@@ -4796,13 +4963,52 @@ class AuiManager(wx.EvtHandler):
         button_width_total = button_count*pane_button_size
         if button_count >= 1:
             button_width_total += 3
-        
-        if pane.HasCaption():
-        
+
+        caption, captionLeft = pane.HasCaption(), pane.HasCaptionLeft()
+        button_count = len(pane.buttons)
+
+        if captionLeft:
+            caption_sizer = wx.BoxSizer(wx.VERTICAL)
+
+            # add pane buttons to the caption
+            dummy_parts = []
+            for btn_id in xrange(len(pane.buttons)-1, -1, -1):
+                sizer_item = caption_sizer.Add((caption_size, pane_button_size), 0, wx.EXPAND)
+                part = AuiDockUIPart()
+                part.type = AuiDockUIPart.typePaneButton
+                part.dock = dock
+                part.pane = pane
+                part.button = pane.buttons[btn_id]
+                part.orientation = orientation
+                part.cont_sizer = caption_sizer
+                part.sizer_item = sizer_item
+                dummy_parts.append(part)
+            
+            sizer_item = caption_sizer.Add((caption_size, 1), 1, wx.EXPAND)
+            vert_pane_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
             # create the caption sizer
             part = AuiDockUIPart()
+
+            part.type = AuiDockUIPart.typeCaption
+            part.dock = dock
+            part.pane = pane
+            part.button = None
+            part.orientation = orientation
+            part.cont_sizer = vert_pane_sizer
+            part.sizer_item = sizer_item
+            caption_part_idx = len(uiparts)
+            uiparts.append(part)
+            uiparts.extend(dummy_parts)
+
+        elif caption:
+
             caption_sizer = wx.BoxSizer(wx.HORIZONTAL)
             sizer_item = caption_sizer.Add((1, caption_size), 1, wx.EXPAND)
+
+            # create the caption sizer
+            part = AuiDockUIPart()
+
             part.type = AuiDockUIPart.typeCaption
             part.dock = dock
             part.pane = pane
@@ -4813,10 +5019,9 @@ class AuiManager(wx.EvtHandler):
             caption_part_idx = len(uiparts)
             uiparts.append(part)
 
-            button_count = len(pane.buttons)
             # add pane buttons to the caption
             for button in pane.buttons:
-                sizer_item = caption_sizer.Add((pane_button_size, caption_size), 0, wx.EXPAND)
+                sizer_item = caption_sizer.Add((pane_button_size, caption_size), 0, wx.EXPAND)                        
                 part = AuiDockUIPart()
                 part.type = AuiDockUIPart.typePaneButton
                 part.dock = dock
@@ -4827,15 +5032,19 @@ class AuiManager(wx.EvtHandler):
                 part.sizer_item = sizer_item
                 uiparts.append(part)
 
+        if caption or captionLeft:
             # if we have buttons, add a little space to the right
             # of them to ease visual crowding
             if button_count >= 1:
-                caption_sizer.Add((3, caption_size), 0, wx.EXPAND)
-        
+                if captionLeft:
+                    caption_sizer.Add((caption_size, 3), 0, wx.EXPAND)
+                else:
+                    caption_sizer.Add((3, caption_size), 0, wx.EXPAND)
+
             # add the caption sizer
             sizer_item = vert_pane_sizer.Add(caption_sizer, 0, wx.EXPAND)
             uiparts[caption_part_idx].sizer_item = sizer_item
-                
+                    
         # add the pane window itself
         if spacer_only or not pane.window:
             sizer_item = vert_pane_sizer.Add((1, 1), 1, wx.EXPAND)
@@ -4866,8 +5075,8 @@ class AuiManager(wx.EvtHandler):
         if min_size != wx.Size(-1, -1):
             vert_pane_sizer.SetItemMinSize(len(vert_pane_sizer.GetChildren())-1, (min_size.x, min_size.y))
         
-        # add the verticle sizer (caption, pane window) to the
-        # horizontal sizer (gripper, verticle sizer)
+        # add the vertical/horizontal sizer (caption, pane window) to the
+        # horizontal sizer (gripper, vertical sizer)
         horz_pane_sizer.Add(vert_pane_sizer, 1, wx.EXPAND)
 
         # finally, add the pane sizer to the dock sizer
@@ -5180,10 +5389,15 @@ class AuiManager(wx.EvtHandler):
                 # but only if at least one pane inside the dock has a caption
                 if dock.IsHorizontal():
                     for pane in dock.panes:
-                        if pane.HasCaption():
+                        if pane.HasCaption() and not pane.HasCaptionLeft():
                             size = size + caption_size
                             break
-
+                else:
+                    for pane in dock.panes:
+                        if pane.HasCaptionLeft() and not pane.HasCaption():
+                            size = size + caption_size
+                            break
+                    
                 # new dock's size may not be more than the dock constraint
                 # parameter specifies.  See SetDockSizeConstraint()
                 max_dock_x_size = int(self._dock_constraint_x*float(cli_size.x))
@@ -5203,6 +5417,7 @@ class AuiManager(wx.EvtHandler):
             # determine the dock's minimum size
             plus_border = False
             plus_caption = False
+            plus_caption_left = False
             dock_min_size = 0
             for pane in dock.panes:
                 if pane.min_size != wx.Size(-1, -1):
@@ -5210,6 +5425,8 @@ class AuiManager(wx.EvtHandler):
                         plus_border = True
                     if pane.HasCaption():
                         plus_caption = True
+                    if pane.HasCaptionLeft():
+                        plus_caption_left = True
                     if dock.IsHorizontal():
                         if pane.min_size.y > dock_min_size:
                             dock_min_size = pane.min_size.y
@@ -5220,6 +5437,8 @@ class AuiManager(wx.EvtHandler):
             if plus_border:
                 dock_min_size += pane_border_size*2
             if plus_caption and dock.IsHorizontal():
+                dock_min_size += caption_size
+            if plus_caption_left and dock.IsVertical():
                 dock_min_size += caption_size
                
             dock.min_size = dock_min_size
@@ -5434,7 +5653,7 @@ class AuiManager(wx.EvtHandler):
 
         self._hover_button = None
         self._action_part = None
-    
+        
         # destroy floating panes which have been
         # redocked or are becoming non-floating
         for p in self._panes:
@@ -5561,10 +5780,8 @@ class AuiManager(wx.EvtHandler):
         old_pane_rects = []
         pane_count = len(self._panes)
         
-        for ii in xrange(pane_count):
+        for p in self._panes:
             r = wx.Rect()
-            p = self._panes[ii]
-
             if p.window and p.IsShown() and p.IsDocked():
                 r = p.rect
 
@@ -5870,7 +6087,7 @@ class AuiManager(wx.EvtHandler):
         frameRect = GetInternalFrameRect(self._frame, self._docks)
         mousePos = wx.GetMousePosition()
 
-        for guide in self._guides:
+        for indx, guide in enumerate(self._guides):
         
             pt = wx.Point()
             guide_size = guide.host.GetSize()
@@ -5901,12 +6118,16 @@ class AuiManager(wx.EvtHandler):
                 pt.y = rc.y + rc.height / 2
                 if paneInfo.HasCaption():
                     pt.y -= captionSize / 2
+                elif paneInfo.HasCaptionLeft():
+                    pt.x -= captionSize / 2
 
             # guide will be centered around point 'pt'
             targetPosition = wx.Point(pt.x - guide_size.x / 2, pt.y - guide_size.y / 2)
 
             if guide.host.GetPosition() != targetPosition:
                 guide.host.Move(targetPosition)
+                
+            guide.host.AeroMove(targetPosition)
 
             if guide.dock_direction == AUI_DOCK_CENTER:
                 guide.host.ValidateNotebookDocking(paneInfo.IsNotebookDockable())
@@ -6439,6 +6660,9 @@ class AuiManager(wx.EvtHandler):
 
                 tab = event.GetEventObject()
 
+                if tab.HasCapture():
+                    tab.ReleaseMouse()
+
                 # float the window
                 if paneInfo.IsMaximized():
                     self.RestorePane(paneInfo)
@@ -6446,9 +6670,6 @@ class AuiManager(wx.EvtHandler):
                 self.Update()
 
                 self._action_window = paneInfo.window
-
-                if wx.Window.GetCapture() == tab:
-                    tab.ReleaseMouse()
                     
                 self._frame.CaptureMouse()
                 event.SetDispatched(True)
@@ -6841,7 +7062,7 @@ class AuiManager(wx.EvtHandler):
                     bookBasePaneInfo = AuiPaneInfo()
                     bookBasePaneInfo.SetDockPos(paneInfo).NotebookControl(id). \
                         CloseButton(False).SetNameFromNotebookId(). \
-                        NotebookDockable(False)
+                        NotebookDockable(False).Floatable(paneInfo.IsFloatable())
                     bookBasePaneInfo.best_size = paneInfo.best_size
                     panes.append(bookBasePaneInfo)
 
@@ -8883,7 +9104,6 @@ class AuiManager(wx.EvtHandler):
 
             if not e.GetVeto():
                 self.MinimizePane(pane)
-                self.Update()
     
         elif event.button == AUI_BUTTON_MAXIMIZE_RESTORE and not pane.IsMaximized():
         
@@ -8995,6 +9215,7 @@ class AuiManager(wx.EvtHandler):
             win_rect = paneInfo.window.GetScreenRect()
             
             minimize_toolbar = auibar.AuiToolBar(self.GetManagedWindow(), style=tbStyle)
+            minimize_toolbar.Hide()
             minimize_toolbar.SetToolBitmapSize(wx.Size(16, 16))
 
             if paneInfo.icon and paneInfo.icon.IsOk():
@@ -9043,6 +9264,7 @@ class AuiManager(wx.EvtHandler):
             if paneInfo.window and paneInfo.window.IsShown():
                 paneInfo.window.Show(False)
 
+            minimize_toolbar.Show()
             self.Update()
             if self._flags & AUI_MGR_ANIMATE_FRAMES:
                 self.AnimateDocking(win_rect, minimize_toolbar.GetScreenRect())
@@ -9258,4 +9480,104 @@ class AuiManager(wx.EvtHandler):
                 self._frame.RefreshRect(part.rect, True)
                 break
 
+
+    def StartPreviewTimer(self, toolbar):
+        """
+        Starts a timer for sliding in and out a minimized pane.
+
+        :param `toolbar`: the L{AuiToolBar} containing the minimized pane tool.
+        """
+
+        toolbar_pane = self.GetPane(toolbar)
+        toolbar_name = toolbar_pane.name
+        
+        pane_name = toolbar_name[0:-4]
+        
+        self._sliding_pane = self.GetPane(pane_name)
+        self._sliding_rect = toolbar.GetScreenRect()
+        self._sliding_direction = toolbar_pane.dock_direction
+        self._sliding_frame = None
+        
+        self._preview_timer.Start(1000, wx.TIMER_ONE_SHOT)
+
+
+    def StopPreviewTimer(self):
+        """ Stops a timer for sliding in and out a minimized pane. """
+
+        if self._preview_timer.IsRunning():
+            self._preview_timer.Stop()
+
+        self.SlideOut()
+        self._sliding_pane = None
+
+
+    def SlideIn(self, event):
+        """
+        Handles the wx.EVT_TIMER event for L{AuiManager}.
+        This is used solely for sliding in and out minimized panes.
+
+        :param `event`: a L{wx.TimerEvent} to be processed.
+        """
+
+        window = self._sliding_pane.window
+        self._sliding_frame = wx.MiniFrame(None, -1, title=_("Pane Preview"),
+                                           style=wx.FRAME_TOOL_WINDOW | wx.STAY_ON_TOP |
+                                           wx.FRAME_NO_TASKBAR | wx.CAPTION)
+        window.Reparent(self._sliding_frame)
+        self._sliding_frame.SetSize((0, 0))
+        window.Show()
+        self._sliding_frame.Show()
+        
+        size = window.GetBestSize()
+
+        startX, startY, stopX, stopY = GetSlidingPoints(self._sliding_rect, size, self._sliding_direction)
+        
+        step = stopX/10
+        window_size = 0
+        
+        for i in xrange(0, stopX, step):
+            window_size = i
+            self._sliding_frame.SetDimensions(startX, startY, window_size, stopY)
+            self._sliding_frame.Refresh()
+            self._sliding_frame.Update()
+            wx.MilliSleep(10)
+
+        self._sliding_frame.SetDimensions(startX, startY, stopX, stopY)
+        self._sliding_frame.Refresh()
+        self._sliding_frame.Update()
+        
+
+    def SlideOut(self):
+        """ Slides out a preview of a minimized pane. """
+
+        if not self._sliding_frame:
+            return
+
+        window = self._sliding_frame.GetChildren()[0]
+        size = window.GetBestSize()
+        
+        startX, startY, stopX, stopY = GetSlidingPoints(self._sliding_rect, size, self._sliding_direction)
+
+        step = stopX/10
+        window_size = 0
+        
+        for i in xrange(stopX, 0, -step):
+            window_size = i
+            self._sliding_frame.SetDimensions(startX, startY, window_size, stopY)
+            self._sliding_frame.Refresh()
+            self._sliding_frame.Update()
+            self._frame.RefreshRect(wx.Rect(startX+window_size, startY, step, stopY))
+            self._frame.Update()
+            wx.MilliSleep(10)
+
+        self._sliding_frame.SetDimensions(startX, startY, 0, stopY)
+
+        window.Hide()
+        window.Reparent(self._frame)
+
+        self._sliding_frame.Hide()
+        self._sliding_frame.Destroy()
+        self._sliding_frame = None
+        self._sliding_pane = None
+        
         

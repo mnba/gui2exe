@@ -10,8 +10,7 @@ __date__ = "31 March 2009"
 
 import wx
 
-from aui_constants import AUI_BUTTON_STATE_PRESSED, AUI_GRADIENT_VERTICAL
-from aui_constants import AUI_BUTTON_STATE_HIDDEN
+from aui_constants import *
 
 
 if wx.Platform == "__WXMAC__":
@@ -448,11 +447,12 @@ class TabDragImage(wx.DragImage):
         :param `tabArt`: an instance of L{tabart}.
         """
 
+        control = page.control
         memory = wx.MemoryDC(wx.EmptyBitmap(1, 1))
 
         tab_size, x_extent = tabArt.GetTabSize(memory, notebook, page.caption, page.bitmap, page.active,
-                                               button_state)
-
+                                               button_state, control)
+            
         tab_width, tab_height = tab_size
         rect = wx.Rect(0, 0, tab_width, tab_height)
 
@@ -467,7 +467,9 @@ class TabDragImage(wx.DragImage):
         memory.SetBackgroundMode(wx.TRANSPARENT)
         memory.Clear()
 
-        tabArt.DrawTab(memory, notebook, page, rect, button_state)
+        paint_control = wx.Platform != "__WXMAC__"
+        tabArt.DrawTab(memory, notebook, page, rect, button_state, paint_control=paint_control)
+        
         memory.SetBrush(wx.TRANSPARENT_BRUSH)
         memory.SetPen(wx.BLACK_PEN)
         memory.DrawRoundedRectangle(0, 0, tab_width+1, tab_height+1, 2)
@@ -490,3 +492,152 @@ class TabDragImage(wx.DragImage):
                         timg.SetAlpha(x, y, 0)
             bitmap = timg.ConvertToBitmap()
         return bitmap        
+
+
+def GetDockingImage(direction, useAero, center):
+    """
+    Returns the correct name of the docking bitmap depending on the input parameters.
+    """
+
+    suffix = (center and [""] or ["_single"])[0]
+    prefix = (useAero and ["aero_"] or [""])[0]
+        
+    if direction == wx.TOP:
+        bmp_unfocus = eval("%sup%s"%(prefix, suffix)).GetBitmap()
+        bmp_focus = eval("%sup_focus%s"%(prefix, suffix)).GetBitmap()
+    elif direction == wx.BOTTOM:
+        bmp_unfocus = eval("%sdown%s"%(prefix, suffix)).GetBitmap()
+        bmp_focus = eval("%sdown_focus%s"%(prefix, suffix)).GetBitmap()
+    elif direction == wx.LEFT:
+        bmp_unfocus = eval("%sleft%s"%(prefix, suffix)).GetBitmap()
+        bmp_focus = eval("%sleft_focus%s"%(prefix, suffix)).GetBitmap()
+    elif direction == wx.RIGHT:
+        bmp_unfocus = eval("%sright%s"%(prefix, suffix)).GetBitmap()
+        bmp_focus = eval("%sright_focus%s"%(prefix, suffix)).GetBitmap()
+    else:
+        bmp_unfocus = eval("%stab%s"%(prefix, suffix)).GetBitmap()
+        bmp_focus = eval("%stab_focus%s"%(prefix, suffix)).GetBitmap()
+
+    return bmp_unfocus, bmp_focus
+
+
+def TakeScreenShot(rect):
+    """
+    Takes a screenshot of the screen at give pos & size (rect).
+
+    :param `rect`: the screen rectangle for which we want to take a screenshot.
+    """
+
+    # Create a DC for the whole screen area
+    dcScreen = wx.ScreenDC()
+
+    # Create a Bitmap that will later on hold the screenshot image
+    # Note that the Bitmap must have a size big enough to hold the screenshot
+    # -1 means using the current default colour depth
+    bmp = wx.EmptyBitmap(rect.width, rect.height)
+
+    # Create a memory DC that will be used for actually taking the screenshot
+    memDC = wx.MemoryDC()
+
+    # Tell the memory DC to use our Bitmap
+    # all drawing action on the memory DC will go to the Bitmap now
+    memDC.SelectObject(bmp)
+
+    # Blit (in this case copy) the actual screen on the memory DC
+    # and thus the Bitmap
+    memDC.Blit( 0,            # Copy to this X coordinate
+                0,            # Copy to this Y coordinate
+                rect.width,   # Copy this width
+                rect.height,  # Copy this height
+                dcScreen,     # From where do we copy?
+                rect.x,       # What's the X offset in the original DC?
+                rect.y        # What's the Y offset in the original DC?
+                )
+
+    # Select the Bitmap out of the memory DC by selecting a new
+    # uninitialized Bitmap
+    memDC.SelectObject(wx.NullBitmap)
+
+    return bmp
+
+
+def RescaleScreenShot(bmp, thumbnail_size=200):
+    """
+    Rescales a bitmap to be 300 pixels wide (or tall) at maximum.
+
+    :param `bmp`: the bitmap to rescale;
+    :param `thumbnail_size`: the maximum size of every page thumbnail.
+    """
+
+    bmpW, bmpH = bmp.GetWidth(), bmp.GetHeight()
+    img = bmp.ConvertToImage()
+
+    newW, newH = bmpW, bmpH
+    
+    if bmpW > bmpH:
+        if bmpW > thumbnail_size:
+            ratio = bmpW/float(thumbnail_size)
+            newW, newH = int(bmpW/ratio), int(bmpH/ratio)
+            img.Rescale(newW, newH, wx.IMAGE_QUALITY_HIGH)
+    else:
+        if bmpH > thumbnail_size:
+            ratio = bmpH/float(thumbnail_size)
+            newW, newH = int(bmpW/ratio), int(bmpH/ratio)
+            img.Rescale(newW, newH, wx.IMAGE_QUALITY_HIGH)
+
+    newBmp = img.ConvertToBitmap()
+    otherBmp = wx.EmptyBitmap(newW+5, newH+5)    
+
+    memDC = wx.MemoryDC()
+    memDC.SelectObject(otherBmp)
+    memDC.SetBackground(wx.WHITE_BRUSH)
+    memDC.Clear()
+    
+    memDC.SetPen(wx.TRANSPARENT_PEN)
+
+    pos = 0
+    for i in xrange(5, 0, -1):
+        brush = wx.Brush(wx.Colour(50*i, 50*i, 50*i))
+        memDC.SetBrush(brush)
+        memDC.DrawRoundedRectangle(0, 0, newW+5-pos, newH+5-pos, 2)
+        pos += 1
+
+    memDC.DrawBitmap(newBmp, 0, 0, True)
+     
+    # Select the Bitmap out of the memory DC by selecting a new
+    # uninitialized Bitmap
+    memDC.SelectObject(wx.NullBitmap)
+
+    return otherBmp
+
+
+def GetSlidingPoints(rect, size, direction):
+    """
+    Returns the point at which the sliding in and out of a minimized pane begins.
+
+    :param `rect`: the L{AuiToolBar} tool screen rectangle;
+    :param `size`: the pane window size;
+    :param `direction`: the pane docking direction.
+    """
+
+    if direction == AUI_DOCK_LEFT:
+        startX, startY = rect.x + rect.width + 2, rect.y
+    elif direction == AUI_DOCK_TOP:
+        startX, startY = rect.x, rect.y + rect.height + 2
+    elif direction == AUI_DOCK_RIGHT:
+        startX, startY = rect.x - size.x - 2, rect.y
+    elif direction == AUI_DOCK_BOTTOM:
+        startX, startY = rect.x, rect.y - size.y - 2
+    else:
+        raise Exception("How did we get here?")
+
+    caption_height = wx.SystemSettings.GetMetric(wx.SYS_CAPTION_Y)
+    frame_border_x = wx.SystemSettings.GetMetric(wx.SYS_FRAMESIZE_X)
+    frame_border_y = wx.SystemSettings.GetMetric(wx.SYS_FRAMESIZE_Y)
+    
+    stopX = size.x + caption_height + frame_border_x
+    stopY = size.x + frame_border_y
+    
+    return startX, startY, stopX, stopY
+
+

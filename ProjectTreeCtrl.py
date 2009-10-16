@@ -11,6 +11,9 @@ import wx
 import time
 import wx.lib.customtreectrl as CT
 
+if wx.Platform != "__WXMAC__":
+    import extern.flatmenu as FM
+
 # Import our fancy PyBusyInfo (Windows & GTK only)
 from Widgets import PyBusyInfo
 from Constants import _treeIcons
@@ -98,6 +101,11 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         # Bind all the popup menu events with a single handler
         self.Bind(wx.EVT_MENU_RANGE, self.OnPopupMenu, id=self.popupIds[0],
                   id2=self.popupIds[-1])
+
+        if wx.Platform != "__WXMAC__":
+            # Create a FlatMenu style popup and bind the events
+            self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnPopupMenu, id=self.popupIds[0],
+                      id2=self.popupIds[-1])
 
 
     # ============== #
@@ -219,18 +227,21 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # Don't do anything, as there are no actions to do
             return
 
-        menu = wx.Menu()
+        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
+
+        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
+        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
         
         if item == self.rootItem:
 
             # The user clicked on the root item
             # There are a couple of options here: either add a new project or
             # delete all the existing projects from the tree
-            item = wx.MenuItem(menu, self.popupIds[0], _("New project..."))
+            item = MenuItem(menu, self.popupIds[0], _("New project..."))
             bmp = self.MainFrame.CreateBitmap("project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = wx.MenuItem(menu, self.popupIds[1], _("Delete all projects"))
+            item = MenuItem(menu, self.popupIds[1], _("Delete all projects"))
             bmp = self.MainFrame.CreateBitmap("delete_all")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
@@ -243,35 +254,39 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The user clicked on one of children (the project)
             # There are a couple of options here: either load the selected projects or
             # delete them
-            item = wx.MenuItem(menu, self.popupIds[2], _("Load project(s)"))
+            item = MenuItem(menu, self.popupIds[2], _("Load project(s)"))
             bmp = self.MainFrame.CreateBitmap("load_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = wx.MenuItem(menu, self.popupIds[3], _("Edit project name"))
+            item = MenuItem(menu, self.popupIds[3], _("Edit project name"))
             bmp = self.MainFrame.CreateBitmap("project_edit")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
             menu.AppendSeparator()
-            item = wx.MenuItem(menu, self.popupIds[4], _("Delete project(s)"))
+            item = MenuItem(menu, self.popupIds[4], _("Delete project(s)"))
             bmp = self.MainFrame.CreateBitmap("delete_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             menu.AppendSeparator()
-            item = wx.MenuItem(menu, self.popupIds[5], _("Import from file..."))
+            item = MenuItem(menu, self.popupIds[5], _("Import from file..."))
             bmp = self.MainFrame.CreateBitmap("importproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
-            item = wx.MenuItem(menu, self.popupIds[6], _("Copy to new project..."))
+            item = MenuItem(menu, self.popupIds[6], _("Copy to new project..."))
             bmp = self.MainFrame.CreateBitmap("copyproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
-
-        # Pop up the menu on ourselves
-        self.PopupMenu(menu)
-        menu.Destroy()
+        
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        if flat:
+            menu.Popup(wx.GetMousePosition(), self)
+        else:
+            self.PopupMenu(menu)
+            menu.Destroy()
 
         event.Skip()
 

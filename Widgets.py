@@ -60,6 +60,9 @@ if wx.Platform == "__WXMSW__":
             _libimported = None
     else:
         _libimported = None
+
+if wx.Platform != "__WXMAC__":
+    import extern.flatmenu as FM
         
                  
 class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin,
@@ -93,8 +96,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if name == "multipleexe":
             self.setResizeColumn(3)
             # That's a hack for multiple executables in py2exe
-            self.dummyCombo = wx.ComboBox(self, value= "windows", style=wx.CB_DROPDOWN,
-                                          choices= ["windows", "console"])
+            choices = ["windows", "console"]
+            if parent.GetName() == "py2exe":
+                # Added support for com_server, service and ctypes_com_server
+                choices = ["windows", "console", "com_server", "service", "ctypes_com_server"]
+                
+            self.dummyCombo = wx.ComboBox(self, value= "windows", style=wx.CB_DROPDOWN, choices=choices)
             self.dummyCombo.Hide()
             self.dummyButton = wx.Button(self, -1, "...")
             self.dummyButton.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
@@ -207,6 +214,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.Bind(wx.EVT_MENU, self.OnClearAll, id=self.popupId2)
             self.Bind(wx.EVT_MENU, self.OnAdd, id=self.popupId3)
 
+            if wx.Platform != "__WXMAC__":
+                # Create a FlatMenu style popup and bind the events
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnDeleteSelected, id=self.popupId1)
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnClearAll, id=self.popupId2)
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnAdd, id=self.popupId3)
+            
         if self.GetName() == "multipleexe":
             self.dummyCombo.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
             self.dummyButton.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
@@ -332,41 +345,57 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             if not self.GetSelectedIndices():
                 self.Select(item)
+
+        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
+
+        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
+        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
         
-        menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
+        item = MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         menu.AppendSeparator()        
         # Well, we can either delete the selected item(s)...
-        item = wx.MenuItem(menu, self.popupId1, _("Delete selected"))
+        item = MenuItem(menu, self.popupId1, _("Delete selected"))
         bmp = self.MainFrame.CreateBitmap("delete_selected")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         # Or clear completely the list
-        item = wx.MenuItem(menu, self.popupId2, _("Clear all"))
+        item = MenuItem(menu, self.popupId2, _("Clear all"))
         bmp = self.MainFrame.CreateBitmap("clear_all")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
 
-        # Popup the menu on ourselves
-        self.PopupMenu(menu)
-        menu.Destroy()
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        if flat:
+            menu.Popup(wx.GetMousePosition(), self)
+        else:
+            self.PopupMenu(menu)
+            menu.Destroy()
 
 
     def OnRightUp(self, event):
         """ Handles the wx.EVT_RIGHT_UP event for the list control. """
 
-        menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
+        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
+
+        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
+        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
+        
+        item = MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
 
-        # Popup the menu on ourselves
-        self.PopupMenu(menu)
-        menu.Destroy()
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        if flat:
+            menu.Popup(wx.GetMousePosition(), self)
+        else:
+            self.PopupMenu(menu)
+            menu.Destroy()
 
 
     def OnDeleteSelected(self, event):
@@ -551,7 +580,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.SetStringItem(self.selectedItem, 1, value)
             self.UpdateProject()
 
+        if self.GetParent().GetName() == "py2exe":
+            wx.CallAfter(self.GetParent().EnableDllAndExe)
 
+        
     def OnChooseScript(self, event):
         """
         Handles the wx.EVT_BUTTON for the hidden button in the top list control
@@ -2637,7 +2669,7 @@ else:
 class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     """ A multi-purpose combobox. """
 
-    def __init__(self, parent, choices, style, compiler, name):
+    def __init__(self, parent, choices, style, compiler, name, mainFrame=None):
         """
         Default class constructor.
         
@@ -2647,13 +2679,18 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         * choices: a list of strings which represents the combobox choices;
         * style: the combobox style;
         * compiler: the compiler to which the combobox's parent belongs;
-        * name: the option name associated to this combobox.
+        * name: the option name associated to this combobox;
+        * mainFrame: the main application frame (GUI2Exe).
         """
 
         wx.combo.OwnerDrawnComboBox.__init__(self, parent, choices=choices,
                                              style=style, name=name)
 
-        self.MainFrame = wx.GetTopLevelParent(self)
+        if mainFrame is None:
+            self.MainFrame = wx.GetTopLevelParent(self)
+        else:
+            self.MainFrame = mainFrame
+                    
         self.compiler = compiler
         self.option = name
 
@@ -2676,8 +2713,14 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     def BuildImageList(self):
         """ Builds an image list for our list of choices. """
 
-        # Retrieve the images from Constants
-        images = _comboImages[self.compiler][self.option]
+        if self.compiler is not None:
+            # Retrieve the images from Constants
+            images = _comboImages[self.compiler][self.option]
+        else:
+            # it's a combobox from the VendorIDDialog
+            strs = self.GetStrings()
+            images = [st.split()[1] for st in strs]
+            
         self.imageList = []
         # Build the image list
         for png in images:
@@ -4901,4 +4944,253 @@ class ExplorerDialog(BaseDialog):
             if enabled != self.dllUndoButton.IsEnabled():
                 self.dllUndoButton.Enable(enabled)
 
+
+class VendorIDDialog(BaseDialog):
+    """
+    A simple dialog which allows to choose the VendorID sib.py path and whether to use
+    the GNU make or Microsoft nmake.
+    """
+    
+    def __init__(self, parent, path, makeOrNmake):
+        """
+        Default class constructor.
+
         
+        **Parameters:**
+
+        * parent: the widget parent;
+        * path: the previous VendorID sib.py path (if any);
+        * makeOrNmake: whether to use the GNU make or Microsoft nmake.
+        """ 
+
+        BaseDialog.__init__(self, parent)
+
+        self.sibPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, path=path, wildcard=_pywild)
+        self.makeOrNmake = MultiComboBox(self, ["GNU Make", "MS NMake"], 0, None, "vendoriddialog", parent)
+        
+        self.CreateButtons()
+        self.SetProperties(_("VendorID options dialog"), makeOrNmake)
+        self.DoLayout()
+        self.BindEvents()
+
+
+    def SetProperties(self, title, makeOrNmake):
+        """
+        Sets few properties for the dialog.
+
+        
+        **Parameters:**
+
+        * title: the dialog title;
+        * makeOrNmake: whether to use GNU Make or MS NMake.
+        """
+
+        BaseDialog.SetProperties(self, title)
+        self.makeOrNmake.SetText(makeOrNmake)
+        
+        if wx.Platform != "__WXMSW__":
+            self.makeOrNmake.Enable(False)
+        
+
+    def DoLayout(self):
+        """ Layout the widgets using sizers. """
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        label = wx.StaticText(self, -1, _("Please specify where the file 'sib.py' lives and if you require GNU Make\nor Microsoft NMake:"))
+        label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        mainSizer.Add(label, 0, wx.ALL, 10)
+        mainSizer.Add((0, 10))
+        static1 = wx.StaticText(self, -1, _("Path for the file 'sib.py'"))
+        mainSizer.Add(static1, 0, wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.sibPicker, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 20))
+        static2 = wx.StaticText(self, -1, _("Executable Generator"))
+        mainSizer.Add(static2, 0, wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.makeOrNmake, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Add the fancy buttons
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        self.Layout()
+
+
+    def BindEvents(self):
+        """ Binds the events for VendorIDDialog. """
+
+        BaseDialog.BindEvents(self)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
+
+
+    def OnOk(self, event):
+        """ Handles the Ok event generated by a button. """
+
+        path = self.sibPicker.GetPath()
+        if not path or not os.path.isfile(path):
+            self.MainFrame.RunError(2, _("Invalid VendorID 'sib.py' path."))
+            return
+
+        self.EndModal(wx.ID_OK)
+
+        
+    def GetVendorIDPath(self):
+        """ Returns the VendorID sib.py path and the executable generator (GNU Make or MS NMake). """
+        
+        path = self.sibPicker.GetPath()
+        exeGen = self.makeOrNmake.GetValue()
+
+        return path, exeGen
+
+
+class ProgressGauge(wx.PyWindow):
+    """ This class provides a visual alternative for wx.Gauge."""
+    
+    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=(-1,30)):
+        """ Default class constructor. """
+
+        wx.PyWindow.__init__(self, parent, id, pos, size, style=wx.BORDER_NONE)
+
+        self._value = 0
+        self._steps = 16
+        self._pos = 0
+        self._current = 0
+        self._gaugeproportion = 0.4
+
+        self._bottomStartColour = wx.GREEN
+        rgba = self._bottomStartColour.Red(), self._bottomStartColour.Green(), \
+               self._bottomStartColour.Blue(), self._bottomStartColour.Alpha()
+        self._bottomEndColour = self.LightColour(self._bottomStartColour, 30)
+        self._topStartColour = self.LightColour(self._bottomStartColour, 80)
+        self._topEndColour = self.LightColour(self._bottomStartColour, 40)
+        
+        self._background = wx.Brush(wx.WHITE, wx.SOLID)
+        
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+
+        
+    def OnEraseBackground(self, event):
+        """ Handles the wx.EVT_ERASE_BACKGROUND event for ProgressGauge. """
+
+        pass
+
+
+    def OnPaint(self, event):
+        """ Handles the wx.EVT_PAINT event for ProgressGauge. """
+
+        dc = wx.BufferedPaintDC(self)
+        dc.SetBackground(self._background)
+        dc.SetBackground(wx.WHITE_BRUSH) 
+        dc.Clear()
+
+        xsize, ysize = self.GetClientSize()
+        interval = xsize/float(self._steps)
+
+        self._pos = interval*self._value
+        
+        status = self._current/(self._steps - int((self._gaugeproportion*xsize/interval)))
+
+        if status%2 == 0:
+            increment = 1
+        else:
+            increment = -1
+            
+        self._value = self._value + increment
+        self._current = self._current + 1
+
+        self.DrawProgress(dc, xsize, ysize, increment)
+
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRADIENTINACTIVECAPTION)))
+        dc.DrawRectangleRect(self.GetClientRect())
+        
+
+    def LightColour(self, color, percent):
+        """
+        Return light contrast of color. The color returned is from the scale of
+        color -> white. The percent determines how light the color will be.
+        Percent = 100 return white, percent = 0 returns color.
+        """
+
+        end_color = wx.WHITE
+        rd = end_color.Red() - color.Red()
+        gd = end_color.Green() - color.Green()
+        bd = end_color.Blue() - color.Blue()
+        high = 100
+
+        # We take the percent way of the color from color -. white
+        i = percent
+        r = color.Red() + ((i*rd*100)/high)/100
+        g = color.Green() + ((i*gd*100)/high)/100
+        b = color.Blue() + ((i*bd*100)/high)/100
+
+        return wx.Colour(r, g, b)
+
+
+    def DrawProgress(self, dc, xsize, ysize, increment):
+        """ Actually draws the sliding bar. """
+
+        interval = self._gaugeproportion*xsize
+        gc = wx.GraphicsContext.Create(dc)
+        
+        clientRect = self.GetClientRect()
+        gradientRect = wx.Rect(*clientRect)
+
+        x, y, width, height = clientRect
+        x, width = self._pos, interval
+        
+        gradientRect.SetHeight(gradientRect.GetHeight()/2)
+        topStart, topEnd = self._topStartColour, self._topEndColour
+
+        rc1 = wx.Rect(x, y, width, height/2)
+        path1 = self.GetPath(gc, rc1, 8)
+        br1 = gc.CreateLinearGradientBrush(x, y, x, y+height/2, topStart, topEnd)
+        gc.SetBrush(br1)
+        gc.FillPath(path1) #draw main
+
+        path4 = gc.CreatePath()
+        path4.AddRectangle(x, y+height/2-8, width, 8)
+        path4.CloseSubpath()
+        gc.SetBrush(br1)
+        gc.FillPath(path4)            
+        
+        gradientRect.Offset((0, gradientRect.GetHeight()))
+
+        bottomStart, bottomEnd = self._bottomStartColour, self._bottomEndColour
+
+        rc3 = wx.Rect(x, y+height/2, width, height/2)
+        path3 = self.GetPath(gc, rc3, 8)
+        br3 = gc.CreateLinearGradientBrush(x, y+height/2, x, y+height, bottomStart, bottomEnd)
+        gc.SetBrush(br3)
+        gc.FillPath(path3) #draw main
+
+        path4 = gc.CreatePath()
+        path4.AddRectangle(x, y+height/2, width, 8)
+        path4.CloseSubpath()
+        gc.SetBrush(br3)
+        gc.FillPath(path4)
+
+        
+    def GetPath(self, gc, rc, r):
+        """ Returns a rounded GraphicsPath. """
+    
+        x, y, w, h = rc
+        path = gc.CreatePath()
+        path.AddRoundedRectangle(x, y, w, h, r)
+        path.CloseSubpath()
+        return path
+
+
+    def Pulse(self):
+        """ Updates the gauge with a new value. """
+
+        self.Refresh()
+
+    

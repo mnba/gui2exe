@@ -410,7 +410,7 @@ class Py2AppPanel(BaseBuilderPanel):
             if key == "script":
                 buildDir, scriptFile = os.path.split(item)
                 item = "r'%s'"%item
-            elif key == "dist":
+            elif key == "dist_dir":
                 if not item.strip() or not distChoice:
                     item = "dist"
                     if distChoice:
