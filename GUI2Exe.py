@@ -97,7 +97,7 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 16 Oct 2009 10.00 GMT
+Latest revision: Andrea Gavana, 17 Oct 2009 20.00 GMT
 Version 0.5.0
   
 """
@@ -111,6 +111,16 @@ __docformat__ = "epytext"
 # Start the imports
 import sys
 import os
+
+# Do this for MultiVersions install of wxPython
+# We need to import wxversion before importing wx itself...
+try:
+    import wxversion
+    wxversion.ensureMinimal("2.8")
+except ImportError:
+    pass
+
+# Now we can import wx
 import wx
 
 if wx.VERSION < (2, 8, 8, 0):

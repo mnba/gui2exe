@@ -1611,20 +1611,8 @@ class ArtManager(wx.EvtHandler):
     def CreateGreyBitmap(self, bmp):
         """ Creates a grey bitmap image from bmp. """
 
-        # save the file to PNG format
-        if not bmp.SaveFile("__art_manager_tmp_png_file.png", wx.BITMAP_TYPE_PNG):
-            return bmp
-
-        greyBitmap = wx.Bitmap("__art_manager_tmp_png_file.png", wx.BITMAP_TYPE_PNG)
-        os.remove("__art_manager_tmp_png_file.png")
-
-        image = greyBitmap.ConvertToImage()
-        image.SetOption(wx.IMAGE_OPTION_PNG_FORMAT, str(wx.PNG_TYPE_GREY_RED)) 
-        image.SaveFile("__art_manager_tmp_png_file_GREY.png", wx.BITMAP_TYPE_PNG)
-        gb = wx.Bitmap("__art_manager_tmp_png_file_GREY.png", wx.BITMAP_TYPE_PNG)
-        os.remove("__art_manager_tmp_png_file_GREY.png")
-
-        return gb
+        img = bmp.ConvertToImage()
+        return wx.BitmapFromImage(img.ConvertToGreyscale())
 
 
     def GetRaiseToolbar(self):
