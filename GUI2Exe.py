@@ -1265,8 +1265,11 @@ class GUI2Exe(wx.Frame):
     def SetAllFlags(self):
         """ Sets all the fancy flags for wxAUI and friends. """
 
-        self.dock_art = wx.GetApp().GetPreferences("Docking_Style", default=0)        
-        canUse = self._mgr.CanUseModernDockArt()
+        self.dock_art = wx.GetApp().GetPreferences("Docking_Style", default=0)
+        if wx.Platform == "__WXMAC__":
+            canUse = False
+        else:
+            canUse = self._mgr.CanUseModernDockArt()
         
         if wx.Platform == "__WXMSW__" and self.dock_art and canUse:
             self._mgr.SetArtProvider(aui.ModernDockArt(self))
