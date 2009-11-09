@@ -249,8 +249,13 @@ ID_CloseAllTabs = ID_CleanDist + 54
 ID_SaveProject = ID_CleanDist + 55
 ID_SaveAllProjects = ID_CleanDist + 56
 
-# Define a translation string
-_ = wx.GetTranslation
+# Define a translation class
+
+class _(unicode):
+    def __new__(cls, original=''):
+        new = unicode.__new__(cls, wx.GetTranslation(original))
+        new.original = original
+        return new
 
 # It looks like that, while py2exe and py2app are installed on site-packages
 # (or at least you can actually __import__ them), for the other 2 beasts
@@ -588,7 +593,7 @@ class GUI2Exe(wx.Frame):
             menuLabel = eachMenuData[0]
             menuItems = eachMenuData[1:]
 
-            label = menuLabel.strip("&")
+            label = menuLabel.original.strip("&")
             tab = RB.RibbonPage(self._ribbon, wx.ID_ANY, label, self.CreateBitmap(label))
 
             addedPanels = []
