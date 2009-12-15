@@ -10,22 +10,22 @@ Vision and Design Principles
 AUI attempts to encapsulate the following aspects of the user interface:
 
 * **Frame Management**: Frame management provides the means to open, move and hide common
-controls that are needed to interact with the document, and allow these configurations
-to be saved into different perspectives and loaded at a later time. 
+  controls that are needed to interact with the document, and allow these configurations
+  to be saved into different perspectives and loaded at a later time. 
 
 * **Toolbars**: Toolbars are a specialized subset of the frame management system and should
-behave similarly to other docked components. However, they also require additional
-functionality, such as "spring-loaded" rebar support, "chevron" buttons and end-user
-customizability. 
+  behave similarly to other docked components. However, they also require additional
+  functionality, such as "spring-loaded" rebar support, "chevron" buttons and end-user
+  customizability. 
 
 * **Modeless Controls**: Modeless controls expose a tool palette or set of options that
-float above the application content while allowing it to be accessed. Usually accessed
-by the toolbar, these controls disappear when an option is selected, but may also be
-"torn off" the toolbar into a floating frame of their own. 
+  float above the application content while allowing it to be accessed. Usually accessed
+  by the toolbar, these controls disappear when an option is selected, but may also be
+  "torn off" the toolbar into a floating frame of their own. 
 
 * **Look and Feel**: Look and feel encompasses the way controls are drawn, both when shown
-statically as well as when they are being moved. This aspect of user interface design
-incorporates "special effects" such as transparent window dragging as well as frame animation. 
+  statically as well as when they are being moved. This aspect of user interface design
+  incorporates "special effects" such as transparent window dragging as well as frame animation. 
 
 AUI adheres to the following principles:
 
@@ -37,63 +37,63 @@ AUI adheres to the following principles:
 Usage
 =====
 
-The following example shows a simple implementation that uses `AuiManager` to manage
+The following example shows a simple implementation that uses L{AuiManager} to manage
 three text controls in a frame window::
 
-class MyFrame(wx.Frame):
+    class MyFrame(wx.Frame):
 
-    def __init__(self, parent, id=-1, title="AUI Test", pos=wx.DefaultPosition,
-                 size=(800, 600), style=wx.DEFAULT_FRAME_STYLE):
+        def __init__(self, parent, id=-1, title="AUI Test", pos=wx.DefaultPosition,
+                     size=(800, 600), style=wx.DEFAULT_FRAME_STYLE):
 
-        wx.Frame.__init__(self, parent, id, title, pos, size, style)
+            wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
-        self._mgr = aui.AuiManager()
-        
-        # notify AUI which frame to use
-        self._mgr.SetManagedWindow(self)
+            self._mgr = aui.AuiManager()
+            
+            # notify AUI which frame to use
+            self._mgr.SetManagedWindow(self)
 
-        # create several text controls
-        text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
-                                           
-        text2 = wx.TextCtrl(self, -1, "Pane 2 - sample text",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
-                                           
-        text3 = wx.TextCtrl(self, -1, "Main content window",
-                            wx.DefaultPosition, wx.Size(200,150),
-                            wx.NO_BORDER | wx.TE_MULTILINE)
-        
-        # add the panes to the manager
-        self._mgr.AddPane(text1, AuiPaneInfo().Left().Caption("Pane Number One"))
-        self._mgr.AddPane(text2, AuiPaneInfo().Bottom().Caption("Pane Number Two"))
-        self._mgr.AddPane(text3, AuiPaneInfo().CenterPane())
-                              
-        # tell the manager to "commit" all the changes just made
-        self._mgr.Update()
+            # create several text controls
+            text1 = wx.TextCtrl(self, -1, "Pane 1 - sample text",
+                                wx.DefaultPosition, wx.Size(200,150),
+                                wx.NO_BORDER | wx.TE_MULTILINE)
+                                               
+            text2 = wx.TextCtrl(self, -1, "Pane 2 - sample text",
+                                wx.DefaultPosition, wx.Size(200,150),
+                                wx.NO_BORDER | wx.TE_MULTILINE)
+                                               
+            text3 = wx.TextCtrl(self, -1, "Main content window",
+                                wx.DefaultPosition, wx.Size(200,150),
+                                wx.NO_BORDER | wx.TE_MULTILINE)
+            
+            # add the panes to the manager
+            self._mgr.AddPane(text1, AuiPaneInfo().Left().Caption("Pane Number One"))
+            self._mgr.AddPane(text2, AuiPaneInfo().Bottom().Caption("Pane Number Two"))
+            self._mgr.AddPane(text3, AuiPaneInfo().CenterPane())
+                                  
+            # tell the manager to "commit" all the changes just made
+            self._mgr.Update()
 
-        self.Bind(wx.EVT_CLOSE, self.OnClose)
-
-
-    def OnClose(self, event):
-
-        # deinitialize the frame manager
-        self._mgr.UnInit()
-
-        self.Destroy()        
-        event.Skip()        
+            self.Bind(wx.EVT_CLOSE, self.OnClose)
 
 
-# our normal wxApp-derived class, as usual
+        def OnClose(self, event):
 
-app = wx.PySimpleApp()
+            # deinitialize the frame manager
+            self._mgr.UnInit()
 
-frame = MyFrame(None)
-app.SetTopWindow(frame)
-frame.Show()
+            self.Destroy()        
+            event.Skip()        
 
-app.MainLoop()
+
+    # our normal wxApp-derived class, as usual
+
+    app = wx.PySimpleApp()
+
+    frame = MyFrame(None)
+    app.SetTopWindow(frame)
+    frame.Show()
+
+    app.MainLoop()
 
 
 What's New
@@ -127,10 +127,13 @@ missing features (the list is not exhaustive):
 - wxAuiManager & wxToolBar - ToolBar Of Size Zero: http://trac.wxwidgets.org/ticket/9724 
 - wxAuiNotebook doesn't behave properly like a container as far as...: http://trac.wxwidgets.org/ticket/9911
 - Serious layout bugs in wxAUI: http://trac.wxwidgets.org/ticket/10620
+- wAuiDefaultTabArt::Clone() should just use copy contructor: http://trac.wxwidgets.org/ticket/11388
+- Drop down button for check tool on wxAuiToolbar: http://trac.wxwidgets.org/ticket/11139
 
 Plus the following features:
 
 - AuiManager:
+
   (a) Implementation of a simple minimize pane system: Clicking on this minimize button causes a new
       AuiToolBar to be created and added to the frame manager, (currently the implementation is such
       that panes at West will have a toolbar at the right, panes at South will have toolbars at the
@@ -164,20 +167,26 @@ Plus the following features:
       given pane, simply call `CaptionVisible(True, left=True)`;
   (s) New Aero-style docking guides: you can enable them by using the `AuiManager` style ``AUI_MGR_AERO_DOCKING_GUIDES``;
   (t) A slide-in/slide-out preview of minimized panes can be seen by enabling the `AuiManager` style
-      ``AUI_MGR_PREVIEW_MINIMIZED_PANES`` and by hovering with the mouse on the minimized pane toolbar tool.
+      ``AUI_MGR_PREVIEW_MINIMIZED_PANES`` and by hovering with the mouse on the minimized pane toolbar tool;
+  (s) New Whidbey-style docking guides: you can enable them by using the `AuiManager` style ``AUI_MGR_WHIDBEY_DOCKING_GUIDES``.
+
+|
 
 - AuiNotebook:
+
   (a) Implementation of the style ``AUI_NB_HIDE_ON_SINGLE_TAB``, a la `wx.lib.agw.flatnotebook`;
   (b) Implementation of the style ``AUI_NB_SMART_TABS``, a la `wx.lib.agw.flatnotebook`;
   (c) Implementation of the style ``AUI_NB_USE_IMAGES_DROPDOWN``, which allows to show tab images
       on the tab dropdown menu instead of bare check menu items (a la `wx.lib.agw.flatnotebook`);
   (d) 6 different tab arts are available, namely:
+  
       (1) Default "glossy" theme (as in `wx.aui.AuiNotebook`)
       (2) Simple theme (as in `wx.aui.AuiNotebook`)
       (3) Firefox 2 theme
       (4) Visual Studio 2003 theme (VC71)
       (5) Visual Studio 2005 theme (VC81)
       (6) Google Chrome theme
+
   (e) Enabling/disabling tabs;
   (f) Setting the colour of the tab's text;
   (g) Implementation of the style ``AUI_NB_CLOSE_ON_TAB_LEFT``, which draws the tab close button on
@@ -195,9 +204,14 @@ Plus the following features:
   (n) wxPython controls can now be added inside page tabs by calling `AddControlToPage`, and they can be
       removed by calling `RemoveControlFromPage`;
   (o) Possibility to preview all the pages in a `AuiNotebook` (as thumbnails) by using the `NotebookPreview`
-      method of `AuiNotebook`.
-  
+      method of `AuiNotebook`;
+  (p) Tab labels can be edited by calling the `SetRenamable` method on a `AuiNotebook` page;
+  (q) Support for multi-lines tab labels in `AuiNotebook`.
+
+|
+
 - AuiToolBar:
+
   (a) ``AUI_TB_PLAIN_BACKGROUND`` style that allows to easy setup a plain background to the AUI toolbar,
       without the need to override drawing methods. This style contrasts with the default behaviour
       of the `wx.aui.AuiToolBar` that draws a background gradient and this break the window design when
@@ -247,10 +261,11 @@ TODOs
 License And Version
 ===================
 
-AUI library is freeware and distributed under the wxPython license. 
+AUI library is distributed under the wxPython license. 
 
-Latest revision: Andrea Gavana @ 15 Oct 2009, 12.00 GMT
-Version 1.0. 
+Latest revision: Andrea Gavana @ 23 Nov 2009, 11.00 GMT
+
+Version 1.1. 
 
 """
 

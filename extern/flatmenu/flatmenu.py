@@ -1675,6 +1675,8 @@ class FlatMenuBar(wx.Panel):
         pn.LeftDockable(False)
         pn.RightDockable(False)
         pn.ToolbarPane()
+        pn.PaneBorder(False)
+        
         if not fixToolbar:
             # We add our menu bar as a toolbar, with the following settings
             pn.BestSize(wx.Size(xx, self._barHeight))

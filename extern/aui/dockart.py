@@ -2,10 +2,10 @@
 Dock art provider code - a dock provider provides all drawing functionality to
 the AUI dock manager. This allows the dock manager to have a plugable look-and-feel.
 
-By default, a AuiManager uses an instance of this class called AuiDefaultDockArt
+By default, a L{AuiManager} uses an instance of this class called L{AuiDefaultDockArt}
 which provides bitmap art and a colour scheme that is adapted to the major platforms'
 look. You can either derive from that class to alter its behaviour or write a
-completely new dock art class. Call AuiManager.SetArtProvider to make use this
+completely new dock art class. Call L{AuiManager.SetArtProvider} to make use this
 new dock art.
 """
 
@@ -42,16 +42,17 @@ class AuiDefaultDockArt(object):
     to the AUI dock manager. This allows the dock manager to have a plugable
     look-and-feel.
 
-    By default, a AuiManager uses an instance of this class called AuiDefaultDockArt
+    By default, a L{AuiManager} uses an instance of this class called L{AuiDefaultDockArt}
     which provides bitmap art and a colour scheme that is adapted to the major
     platforms' look. You can either derive from that class to alter its behaviour or
     write a completely new dock art class.
-    Call AuiManager.SetArtProvider to make use this new dock art.
+    
+    Call L{AuiManager.SetArtProvider} to make use this new dock art.
 
 
     **Metric Ordinals**
 
-    These are the possible pane dock art settings:
+    These are the possible pane dock art settings for L{AuiManager}:
 
     ================================================  ======================================
     Metric Ordinal Constant                           Description
@@ -80,7 +81,7 @@ class AuiDefaultDockArt(object):
 
     **Gradient Types**
 
-    These are the possible gradient dock art settings:
+    These are the possible gradient dock art settings for L{AuiManager}:
 
     ============================================  ======================================
     Gradient Constant                             Description 
@@ -93,7 +94,7 @@ class AuiDefaultDockArt(object):
 
     **Button States**
 
-    These are the possible pane button/AuiNotebook button/AuiToolBar button states:
+    These are the possible pane button / L{AuiNotebook} button / L{AuiToolBar} button states:
 
     ============================================  ======================================
     Button State Constant                         Description     
@@ -109,7 +110,7 @@ class AuiDefaultDockArt(object):
 
     **Button Identifiers**
 
-    These are the possible pane button/AuiNotebook button/AuiToolBar button identifiers:
+    These are the possible pane button / L{AuiNotebook} button / L{AuiToolBar} button identifiers:
 
     ============================================  ======================================
     Button Identifier                             Description     
@@ -214,7 +215,7 @@ class AuiDefaultDockArt(object):
         """
         Gets the value of a certain setting.
 
-        :param `id`: can be one of the size values in Metric Ordinals.
+        :param `id`: can be one of the size values in `Metric Ordinals`.
         """
 
 
@@ -240,7 +241,7 @@ class AuiDefaultDockArt(object):
         """
         Sets the value of a certain setting using `new_val`
 
-        :param `id`: can be one of the size values in Metric Ordinals;
+        :param `id`: can be one of the size values in `Metric Ordinals`;
         :param `new_val`: the new value of the setting.
         """
 
@@ -266,7 +267,7 @@ class AuiDefaultDockArt(object):
         """
         Gets the colour of a certain setting.
 
-        :param `id`: can be one of the colour values in Metric Ordinals.
+        :param `id`: can be one of the colour values in `Metric Ordinals`.
         """
 
         if id == AUI_DOCKART_BACKGROUND_COLOUR:
@@ -299,8 +300,8 @@ class AuiDefaultDockArt(object):
         """
         Sets the colour of a certain setting.
 
-        :param `id`: can be one of the colour values in Metric Ordinals;
-        :param `new_val`: the new value of the setting.
+        :param `id`: can be one of the colour values in `Metric Ordinals`;
+        :param `colour`: the new value of the setting.
         """
 
         if isinstance(colour, basestring):
@@ -356,7 +357,7 @@ class AuiDefaultDockArt(object):
         Sets a font setting.
         
         :param `id`: must be ``AUI_DOCKART_CAPTION_FONT``;
-        :param `font`: an instance of wx.Font.
+        :param `font`: an instance of `wx.Font`.
         """
         
         if id == AUI_DOCKART_CAPTION_FONT:
@@ -367,7 +368,7 @@ class AuiDefaultDockArt(object):
         """
         Gets a font setting.
         
-        :param `id`: must be ``AUI_DOCKART_CAPTION_FONT``, otherwise wx.NullFont is returned.
+        :param `id`: must be ``AUI_DOCKART_CAPTION_FONT``, otherwise `wx.NullFont` is returned.
         """
         
         if id == AUI_DOCKART_CAPTION_FONT:
@@ -380,8 +381,8 @@ class AuiDefaultDockArt(object):
         """
         Draws a sash between two windows.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `orient`: the sash orientation;
         :param `rect`: the sash rectangle.
         """                
@@ -405,8 +406,8 @@ class AuiDefaultDockArt(object):
         """
         Draws a background.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `orient`: the gradient (if any) orientation;
         :param `rect`: the background rectangle.
         """
@@ -427,8 +428,8 @@ class AuiDefaultDockArt(object):
         """
         Draws the pane border.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `rect`: the border rectangle;
         :param `pane`: the pane for which the border is drawn.
         """        
@@ -466,7 +467,7 @@ class AuiDefaultDockArt(object):
         """
         Draws the text caption background in the pane.
 
-        :param `dc`: a wx.DC device context;
+        :param `dc`: a `wx.DC` device context;
         :param `rect`: the text caption rectangle;
         :param `pane`: the pane for which the text background is drawn.
         """        
@@ -513,7 +514,7 @@ class AuiDefaultDockArt(object):
         """
         Draws the icon in the pane caption area.
 
-        :param `dc`: a wx.DC device context;
+        :param `dc`: a `wx.DC` device context;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the icon is drawn.
         """        
@@ -531,8 +532,8 @@ class AuiDefaultDockArt(object):
         """
         Draws the text in the pane caption.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `text`: the text to be displayed;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the text is drawn.
@@ -582,8 +583,8 @@ class AuiDefaultDockArt(object):
         """
         Requests the user attention by intermittently highlighting the pane caption.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `text`: the text to be displayed;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the text is drawn.
@@ -592,7 +593,7 @@ class AuiDefaultDockArt(object):
         state = pane.state
         pane.state &= ~optionActive
         
-        for indx in xrange(8):
+        for indx in xrange(6):
             active = (indx%2 == 0 and [True] or [False])[0]
             if active:
                 pane.state |= optionActive
@@ -611,8 +612,8 @@ class AuiDefaultDockArt(object):
         """
         Draws a gripper on the pane.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the gripper is drawn.
         """        
@@ -658,8 +659,8 @@ class AuiDefaultDockArt(object):
         """
         Draws a pane button in the pane caption area.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `button`: the button to be drawn;
         :param `button_state`: the pane button state;
         :param `_rect`: the pane caption rectangle;
@@ -746,7 +747,7 @@ class AuiDefaultDockArt(object):
         """
         Draws a sash gripper on a sash between two windows.
 
-        :param `dc`: a wx.DC device context;
+        :param `dc`: a `wx.DC` device context;
         :param `orient`: the sash orientation;
         :param `rect`: the sash rectangle.
         """
@@ -876,33 +877,33 @@ class AuiDefaultDockArt(object):
 
 if _ctypes:
     class RECT(ctypes.Structure):
-        """ Used to handle ModernDockArt on Windows XP. """
+        """ Used to handle L{ModernDockArt} on Windows XP/Vista/7. """
         _fields_ = [('left', ctypes.c_ulong),('top', ctypes.c_ulong),('right', ctypes.c_ulong),('bottom', ctypes.c_ulong)]
 
         def dump(self):
-            """ Dumps `self` as a wx.Rect. """
+            """ Dumps `self` as a `wx.Rect`. """
             return map(int, (self.left, self.top, self.right, self.bottom))
 
 
     class SIZE(ctypes.Structure):
-        """ Used to handle ModernDockArt on Windows XP. """
+        """ Used to handle L{ModernDockArt} on Windows XP/Vista/7. """
         _fields_ = [('x', ctypes.c_long),('y', ctypes.c_long)]
 
 
 class ModernDockArt(AuiDefaultDockArt):
     """
-    ModernDockArt is a custom AuiDockArt class, that implements a look similar to
+    ModernDockArt is a custom `AuiDockArt` class, that implements a look similar to
     Firefox and other recents applications. 
 
-    Is uses winxptheme and XP themes whenever possible, so it should look good even
-    if the user has a custom theme.
+    Is uses the `winxptheme` module and XP themes whenever possible, so it should
+    look good even if the user has a custom theme.
     """
 
     def __init__(self, win):
         """
         Default class constructor. 
 
-        :param `win`: the window managed by AuiManager. 
+        :param `win`: the window managed by L{AuiManager}. 
         """
         
         AuiDefaultDockArt.__init__(self)
@@ -946,8 +947,8 @@ class ModernDockArt(AuiDefaultDockArt):
         """
         Draws the text in the pane caption.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `text`: the text to be displayed;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the text is drawn.
@@ -1004,7 +1005,7 @@ class ModernDockArt(AuiDefaultDockArt):
         """
         Draws the text caption background in the pane.
 
-        :param `dc`: a wx.DC device context;
+        :param `dc`: a `wx.DC` device context;
         :param `rect`: the text caption rectangle;
         :param `pane`: the pane for which we are drawing the caption background.
         """        
@@ -1039,17 +1040,17 @@ class ModernDockArt(AuiDefaultDockArt):
         """
         Requests the user attention by intermittently highlighting the pane caption.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `text`: the text to be displayed;
         :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the text is drawn.
         """        
-
+    
         state = pane.state
         pane.state &= ~optionActive
         
-        for indx in xrange(8):
+        for indx in xrange(6):
             active = (indx%2 == 0 and [True] or [False])[0]
             if active:
                 pane.state |= optionActive
@@ -1068,11 +1069,11 @@ class ModernDockArt(AuiDefaultDockArt):
         """
         Draws a pane button in the pane caption area.
 
-        :param `dc`: a wx.DC device context;
-        :param `window`: an instance of wx.Window;
+        :param `dc`: a `wx.DC` device context;
+        :param `window`: an instance of `wx.Window`;
         :param `button`: the button to be drawn;
         :param `button_state`: the pane button state;
-        :param `_rect`: the pane caption rectangle;
+        :param `rect`: the pane caption rectangle;
         :param `pane`: the pane for which the button is drawn.
         """        
 

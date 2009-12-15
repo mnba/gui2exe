@@ -129,6 +129,8 @@ if wx.VERSION < (2, 8, 8, 0):
 
 import time
 
+sys.path.append("extern")
+
 reload(sys)
 sys.setdefaultencoding(sys.getfilesystemencoding())
 del sys.setdefaultencoding
@@ -1289,8 +1291,9 @@ class GUI2Exe(wx.Frame):
 
         # Allow to have active panes and transparent dragging
         flags = self._mgr.GetFlags()
-        flags += aui.AUI_MGR_ALLOW_ACTIVE_PANE | aui.AUI_MGR_TRANSPARENT_DRAG | aui.AUI_MGR_AERO_DOCKING_GUIDES | \
-                 aui.AUI_MGR_PREVIEW_MINIMIZED_PANES
+        flags += aui.AUI_MGR_ALLOW_ACTIVE_PANE | aui.AUI_MGR_TRANSPARENT_DRAG
+        if wx.Platform != "__WXMAC__":
+            flags += aui.AUI_MGR_AERO_DOCKING_GUIDES + aui.AUI_MGR_PREVIEW_MINIMIZED_PANES
         
         self._mgr.SetFlags(flags)
 
