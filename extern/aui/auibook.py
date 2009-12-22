@@ -1854,7 +1854,7 @@ class AuiTabCtrl(wx.PyControl, AuiTabContainer):
         :param `event`: a `wx.MouseEvent` event to be processed.        
         """
         
-        if wx.Window.GetCapture() == self:
+        if self.HasCapture():
             self.ReleaseMouse()
 
         if self._is_dragging:
@@ -2379,9 +2379,6 @@ class TabFrame(wx.PyWindow):
         """ Does the actual sizing of the tab control. """
     
         if not self._tabs:
-            return
-
-        if self._tabs.IsFrozen() or self._tabs.GetParent().IsFrozen():
             return
 
         hideOnSingle = ((self._tabs.GetFlags() & AUI_NB_HIDE_ON_SINGLE_TAB) and \
@@ -5403,16 +5400,4 @@ class AuiNotebook(wx.PyControl):
         self._textCtrl.SetFocus()
 
         return True
-
-    
-    def Thaw(self):
-        """
-        Thaw L{AuiNotebook}.
-
-        Reenables window updating after a previous call to `Freeze`. To really thaw the
-        control, it must be called exactly the same number of times as `Freeze`.
-        """
-
-        wx.PyControl.Thaw(self)
-        self.DoSizing()
 
