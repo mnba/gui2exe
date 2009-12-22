@@ -9389,7 +9389,7 @@ class AuiManager(wx.EvtHandler):
         # position (that we store)
         if paneInfo.IsFloating():
             paneInfo.floating_pos = paneInfo.frame.GetPosition()
-            if paneInfo.frame._transparent != paneInfo.transparent:
+            if paneInfo.frame._transparent != paneInfo.transparent or self._flags & AUI_MGR_TRANSPARENT_DRAG:
                 paneInfo.frame.SetTransparent(paneInfo.transparent)
                 paneInfo.frame._transparent = paneInfo.transparent
         
@@ -9520,7 +9520,7 @@ class AuiManager(wx.EvtHandler):
 
         if pane.IsFloating():
             pane.floating_pos = pane.frame.GetPosition()
-            if pane.frame._transparent != pane.transparent:
+            if pane.frame._transparent != pane.transparent or self._flags & AUI_MGR_TRANSPARENT_DRAG:
                 pane.frame.SetTransparent(pane.transparent)
                 pane.frame._transparent = pane.transparent
         
