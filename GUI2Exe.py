@@ -1552,8 +1552,9 @@ class GUI2Exe(wx.Frame):
             for key, item in prefs.items():
                 preferences[key] = item
 
-            self.ribbonChecks1[ID_MSW_Provider][0] = preferences["Ribbon_Style"][0] == 0
-            self.ribbonChecks1[ID_AUI_Provider][0] = preferences["Ribbon_Style"][0] == 1
+            if self.HasRibbon():
+                self.ribbonChecks1[ID_MSW_Provider][0] = preferences["Ribbon_Style"][0] == 0
+                self.ribbonChecks1[ID_AUI_Provider][0] = preferences["Ribbon_Style"][0] == 1
 
         self.SetRibbonChecks()  
 
