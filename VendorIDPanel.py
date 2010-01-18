@@ -134,7 +134,7 @@ class VendorIDPanel(BaseBuilderPanel):
 
         if wx.Platform != "__WXMSW__":
             # Disable non-Windows options
-            self.iconPicker.SetValue("")
+            self.iconPicker.SetPath("")
             self.iconPicker.Enable(False)
             self.consoleCheck.SetValue(0)
             self.consoleCheck.Enable(False)
