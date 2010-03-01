@@ -1328,7 +1328,8 @@ class GUI2Exe(wx.Frame):
                 pane.MinimizeMode(aui.AUI_MINIMIZE_POS_SMART | (pane.GetMinimizeMode() & aui.AUI_MINIMIZE_CAPT_MASK))
                 pane.MinimizeMode(aui.AUI_MINIMIZE_CAPT_SMART | (pane.GetMinimizeMode() & aui.AUI_MINIMIZE_POS_MASK))
 
-        self.mainPanel._mgr.SetArtProvider(GUI2ExeDockArt(self))
+        mgr = self.mainPanel.GetAuiManager()
+        mgr.SetArtProvider(GUI2ExeDockArt(self))
 
         useCustom = self.menu_choice
         fmStyle = wx.GetApp().GetPreferences("FlatMenu_Style", default=[1, "Dark"])
