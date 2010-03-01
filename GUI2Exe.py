@@ -340,6 +340,7 @@ class GUI2Exe(wx.Frame):
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
         self.showTips = True                 # Show tooltips for various compiler options
         self.currentTab = None
+        self._fmb = None
 
         # To store the aui perspectives        
         self.perspectives = []
@@ -567,6 +568,12 @@ class GUI2Exe(wx.Frame):
 
         return wx.Platform == "__WXMSW__"
 
+
+    def HasFlatMenu(self):
+        """ Returns whether GUI2Exe supports the FlatMenuBar (MSW and GTK only at the moment). """
+
+        return self._fmb is not None
+        
     
     def BuildRibbonBar(self):
         """ Builds a RibbonBar for GUI2Exe. """
@@ -1202,12 +1209,14 @@ class GUI2Exe(wx.Frame):
                 
         if useCustom == 0:
             # Standard Menu bar
-            pane = self._mgr.GetPane(self._fmb)
-            pane.Hide()
-            self.SetMenuBar(self._mb)
+            if self.HasFlatMenu():
+                pane = self._mgr.GetPane(self._fmb)
+                pane.Hide()
             if self.HasRibbon():
                 ribbon = self._mgr.GetPane(self._ribbon)
                 ribbon.Hide()
+
+            self.SetMenuBar(self._mb)
 
         elif useCustom == 1:
             # Flatmenu bar
