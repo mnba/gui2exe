@@ -2933,7 +2933,7 @@ class GUI2Exe(wx.Frame):
     def OnGaugePulse(self, event):
         """ Handles the wx.EVT_TIMER event for the main frame. """
 
-        if self.process is not None:
+        if self.process is not None and wx.Platform != "__WXMAC__":
             self.progressGauge.Pulse()
         
 
@@ -3548,8 +3548,10 @@ class GUI2Exe(wx.Frame):
         # Show the throbber
         self.messageWindow.ShowThrobber(True)
         selection = self.mainPanel.GetSelection()
-        self.progressGauge = ProgressGauge(self.mainPanel, size=(55, 15))
-        self.mainPanel.AddControlToPage(selection, self.progressGauge)
+
+        if wx.Platform != "__WXMAC__":
+            self.progressGauge = ProgressGauge(self.mainPanel, size=(55, 15))
+            self.mainPanel.AddControlToPage(selection, self.progressGauge)
 
         if self.cleanDist:
             # Clean up the distribution folder
@@ -3602,8 +3604,9 @@ class GUI2Exe(wx.Frame):
         book = self.GetCurrentBook()
         self.messageWindow.EnableDryRun(book)
 
-        self.mainPanel.RemoveControlFromPage(self.mainPanel.GetSelection())
-        self.progressGauge = None
+        if wx.Platform != "__WXMAC__":
+            self.mainPanel.RemoveControlFromPage(self.mainPanel.GetSelection())
+            self.progressGauge = None
             
 
     def WasComServer(self, project, compiler):
@@ -3641,8 +3644,9 @@ class GUI2Exe(wx.Frame):
         """
 
         if pageNumber >= 0:
-            self.mainPanel.RemoveControlFromPage(pageNumber)
-            self.progressGauge = None
+            if wx.Platform != "__WXMAC__":
+                self.mainPanel.RemoveControlFromPage(pageNumber)
+                self.progressGauge = None
 
         if ask:
             # We came from an wx.EVT_END_PROCESS event
