@@ -97,7 +97,7 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 17 Oct 2009 20.00 GMT
+Latest revision: Andrea Gavana, 01 March 2010 23.00 GMT
 Version 0.5.0
   
 """
