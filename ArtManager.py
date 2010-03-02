@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
