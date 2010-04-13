@@ -99,7 +99,7 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 01 March 2010 23.00 GMT
+Latest revision: Andrea Gavana, 13 April 2010 17.00 GMT
 Version 0.5.0
   
 """
@@ -3605,11 +3605,8 @@ class GUI2Exe(wx.Frame):
         # Disable the dry-run button if not using py2exe
         book = self.GetCurrentBook()
         self.messageWindow.EnableDryRun(book)
-
-        if wx.Platform != "__WXMAC__":
-            self.mainPanel.RemoveControlFromPage(self.mainPanel.GetSelection())
-            self.progressGauge = None
-            
+        self.RemoveControlFromPage()
+                    
 
     def WasComServer(self, project, compiler):
         """
@@ -3646,9 +3643,7 @@ class GUI2Exe(wx.Frame):
         """
 
         if pageNumber >= 0:
-            if wx.Platform != "__WXMAC__":
-                self.mainPanel.RemoveControlFromPage(pageNumber)
-                self.progressGauge = None
+            self.RemoveControlFromPage()
 
         if ask:
             # We came from an wx.EVT_END_PROCESS event
@@ -3870,7 +3865,16 @@ class GUI2Exe(wx.Frame):
 
         self.mainPanel.Thaw()
         self.SendMessage(0, _("Project successfully updated from file."))
-        
+
+
+    def RemoveControlFromPage(self):
+        """ Removes the spinning gauge from the notebook tab (MSW and GTK only). """
+
+        if wx.Platform != "__WXMAC__":
+            for indx in xrange(self.mainPanel.GetPageCount()):
+                self.mainPanel.RemoveControlFromPage(indx)
+                self.progressGauge = None
+
 
 class GUI2ExeSplashScreen(AS.AdvancedSplash):
     """ A fancy splash screen class, with a shaped frame. """

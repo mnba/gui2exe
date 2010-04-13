@@ -235,7 +235,8 @@ class Process(object):
         if processEnded:
             # Store the full output message in the project page
             self.project.AssignBuildOutput(self.compiler, self.outputText)
-
+            self.MainFrame.RemoveControlFromPage()
+            
 
     def ReadStream(self, stream, isError, processEnded):
         """

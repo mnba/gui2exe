@@ -302,12 +302,16 @@ class MessageWindow(wx.Panel):
             message = [message]
 
         for msg in message:
-            # Insert the correct icon (message, error, etc...) in the first column
-            indx = self.list.InsertImageStringItem(sys.maxint, "", kind)
-            # Insert the current time and the message
-            self.list.SetStringItem(indx, 1, currentTime)
-            self.list.SetStringItem(indx, 2, msg)
-
+            try:
+                # Insert the correct icon (message, error, etc...) in the first column
+                indx = self.list.InsertImageStringItem(sys.maxint, "", kind)
+                # Insert the current time and the message
+                self.list.SetStringItem(indx, 1, currentTime)
+                self.list.SetStringItem(indx, 2, msg.encode())
+            except UnicodeDecodeError:
+                # Why does this happen here?!?
+                continue
+                
         # Ensure the last item is visible
         self.list.EnsureVisible(indx)
         if wx.Platform == "__WXGTK__":
