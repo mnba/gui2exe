@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -48,6 +50,9 @@ class Project(odict):
         self.missingModules = []
         self.binaryDependencies = []
         self.buildOutputs = {}
+        self.useUPX = {}
+        self.buildInno = {}
+        self.extraKeywords = {}
 
 
     def Update(self, compiler, keyName, keyValue):
@@ -229,6 +234,152 @@ class Project(odict):
         return self.hasBeenCompiled
 
 
+    def GetUseUPX(self, compiler):
+        """
+        Returns if the user wants to use UPX compression based on the chosen compiler.
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to use UPX compression.
+        """
+        
+        if not hasattr(self, "useUPX"):
+            # Old database syntax
+            self.useUPX = {}
+            
+        if compiler not in self.useUPX:
+            # No UPX compression for this compiler
+            return False
+
+        return self.useUPX[compiler]
+
+
+    def SetUseUPX(self, compiler, use):
+        """
+        Sets whether the user wants to use UPX compression based on the chosen compiler.
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to use UPX compression;
+        * use: whether to use UPX compression or not.
+        """
+        
+        if not hasattr(self, "useUPX"):
+            # Old database syntax
+            self.useUPX = {}
+            
+        self.useUPX[compiler] = use
+
+
+    def GetBuildInno(self, compiler):
+        """
+        Returns if the user wants to build a Inno Setup script based on the chosen compiler.
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to build an Inno Setup script.
+        """
+        
+        if not hasattr(self, "buildInno"):
+            # Old database syntax
+            self.buildInno = {}
+            
+        if compiler not in self.buildInno:
+            # No Inno Setup script for this compiler
+            return False
+        
+        return self.buildInno[compiler]
+
+
+    def SetBuildInno(self, compiler, build):
+        """
+        Sets whether the user wants to build an Inno Setup script based on the chosen compiler.
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to build an Inno Setup script;
+        * use: whether to build the script or not.
+        """
+        
+        if not hasattr(self, "buildInno"):
+            # Old database syntax
+            self.buildInno = {}
+            
+        self.buildInno[compiler] = build
+
+
+    def GetExtraKeywords(self, compiler, exeIndex):
+        """
+        Returns the extra keywords chosen by the user for the target class (py2exe only).
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to get extra keywords;
+        * exeIndex: the index of the executable in the list control.
+        """
+        
+        if not hasattr(self, "extraKeywords"):
+            # Old database syntax
+            self.extraKeywords = {}
+            
+        if compiler not in self.extraKeywords:
+            # No extra keywords for this compiler
+            return {}
+
+        if exeIndex not in self.extraKeywords[compiler]:
+            return {}
+        
+        return self.extraKeywords[compiler][exeIndex]
+
+
+    def SetExtraKeywords(self, compiler, exeIndex, keys):
+        """
+        Sets the extra keywords chosen by the user for the target class (py2exe only).
+
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to add the extra keywords;
+        * exeIndex: the index of the executable in the list control;
+        * keys: a dictionary of keyword-value pairs.
+        """
+        
+        if not hasattr(self, "extraKeywords"):
+            # Old database syntax
+            self.extraKeywords = {}
+            
+        self.extraKeywords[compiler] = {exeIndex: keys}
+
+
+    def RemoveExtraKeywords(self, compiler, exeIndex):
+        """
+        Removes the extra keywords chosen by the user for the target class (py2exe only).
+        
+        **Parameters:**
+
+        * compiler: the compiler for which we want to remove the extra keywords;
+        * exeIndex: the index of the executable in the list control.
+        """
+
+        if not hasattr(self, "extraKeywords"):
+            # Old database syntax
+            return
+
+        if compiler not in self.extraKeywords:
+            # No extra keywords for this compiler
+            return 
+
+        if exeIndex not in self.extraKeywords[compiler]:
+            return 
+        
+        self.extraKeywords[compiler].pop(exeIndex)
+        
+    
     def GetExecutableName(self, compiler):
         """
         Returns the executable name based on the chosen compiler.
@@ -279,6 +430,20 @@ class Project(odict):
             if not distChoice or not dist_dir.strip():
                 # Invalid or not selected distribution folder
                 distDir = False
+
+        elif compiler == "vendorid":
+            script = configuration["script"]
+            exename = configuration["exename"]
+            distDir = True
+            if "build_dir_choice" in configuration:
+                distChoice = configuration["build_dir_choice"]
+            else:
+                distChoice = False
+            dist_dir = configuration["build_dir"]
+            if not distChoice or not dist_dir.strip():
+                # Invalid or not selected distribution folder
+                buildDir, name = os.path.split(script)
+                dist_dir = "/build_%s"%os.path.splitext(name)[0]
             
         else:
             # Check if the distribution folder is valid
@@ -301,8 +466,12 @@ class Project(odict):
             exePath = os.path.normpath(path + "/" + dist_dir + "/" + script)
         else:
             # Distribution folder invalid or not selected
-            exePath = script
+            exePath = script + extension
 
+        if extension:
+            if exePath.count(extension) > 1:
+                exePath = exePath[0:-len(extension)]
+                
         return os.path.normpath(exePath)
 
 

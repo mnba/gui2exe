@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -17,6 +19,7 @@ from cx_FreezePanel import cx_FreezePanel
 from bbFreezePanel import bbFreezePanel
 from PyInstallerPanel import PyInstallerPanel
 from Py2AppPanel import Py2AppPanel
+from VendorIDPanel import VendorIDPanel
 
 from Constants import _lbStyle, _bookIcons, _defaultCompilers
 
@@ -53,7 +56,7 @@ class AUINotebookPage(LB.FlatImageBook):
         bmpC, bmpP = self.MainFrame.CreateBitmap("cLetter"), self.MainFrame.CreateBitmap("pLetter")
 
         # Maybe the icons are not that nice...
-        for indx in xrange(4):
+        for indx in xrange(len(_defaultCompilers)):
             for png in _bookIcons:
                 if indx == 0:
                     imgList.Add(self.MainFrame.CreateBitmap(png))
@@ -118,9 +121,12 @@ class AUINotebookPage(LB.FlatImageBook):
             elif ii == 4:
                 # Is a bbFreeze
                 page = bbFreezePanel(self, project.GetName(), project.GetCreationDate())
-            else:
-                # No work dne on other compilers
+            elif ii == 1:
+                # Is a py2app
                 page = Py2AppPanel(self, project.GetName(), project.GetCreationDate())
+            elif ii == 5:
+                # No work done on other compilers
+                page = VendorIDPanel(self, project.GetName(), project.GetCreationDate())
 
             # Add the page to FlatImageBook            
             self.AddPage(page, png, imageId=ii)
@@ -187,6 +193,7 @@ class AUINotebookPage(LB.FlatImageBook):
             # Disable the dry-run button if not using py2exe
             self.MainFrame.messageWindow.EnableDryRun(self)
 
+        self.MainFrame.SetRibbonOptions(event.GetSelection(), self.project)
         page = self.GetPage(event.GetSelection())
         wx.CallAfter(page.SetFocusIgnoringChildren)
 
@@ -204,13 +211,13 @@ class AUINotebookPage(LB.FlatImageBook):
                                    project.GetPostCompileCode(compiler).strip()
             if customCode and postCode:
                 # Both are there, use the double overlay
-                self.SetPageImage(indx, 15+indx)
+                self.SetPageImage(indx, 18+indx)
             elif postCode:
                 # We only have post-compilation code
-                self.SetPageImage(indx, 10+indx)
+                self.SetPageImage(indx, 12+indx)
             elif customCode:
                 # We only have custom code
-                self.SetPageImage(indx, 5+indx)
+                self.SetPageImage(indx, 6+indx)
             else:
                 # No custom or post-compilation code...
                 self.SetPageImage(indx, indx)

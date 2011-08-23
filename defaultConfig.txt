@@ -11,8 +11,6 @@ manifest_file: 0
 xref: 0
 ascii: 0
 custom_boot_script:
-create_dll: 1
-create_exe: 1
 --
 multipleexe: [["windows", "", "", "0.1", "No Company", "No Copyrights", "Py2Exe Sample File"]]
 includes: []
@@ -107,20 +105,3 @@ datamodels: []
 resources: []
 frameworks: []
 plist_code: {}
-%% vendorid
-script:
-exename: 
-signed: 1
-optimize: 0
-build_dir_choice: 0
-build_dir: 
-install_dir_choice: 0
-install_dir: 
-console: 0
-iconfile:
-verbose: 0
-prefix:
-runmake: 0
---
-includes: []
-packages: []

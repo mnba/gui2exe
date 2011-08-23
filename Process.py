@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -36,7 +38,7 @@ class Process(object):
         
         **Parameters:**
 
-        *  parent: the parent widget (GUI2Exe);
+        * parent: the parent widget (GUI2Exe);
         * buildDir: the directory in which we build the executable;
         * setupScript: the setup file passed as a string;
         * run: if False, only a "dry-run" is performed (py2exe only);
@@ -77,16 +79,13 @@ class Process(object):
         # Create a temporary file that we will delete later
         if self.compiler == "PyInstaller":
             suffix = ".spec"
+        elif self.compiler == "vendorid":
+            if wx.Platform == "__WXMSW__":
+                suffix = ".bat"
+            else:
+                suffix = ".sh"
         else:
             suffix = ".py"
-            
-        fd, tmpFileName = tempfile.mkstemp(suffix=suffix, dir=self.buildDir)
-        # Write the setup script string in the temporary file
-        fid = open(tmpFileName, "wt")
-        fid.write(self.setupScript)
-        fid.close()
-        # Store the temporary file data
-        self.tmpFileName = (fd, tmpFileName)
 
         # Run the setup.py optimized, if the user chose to
         configuration = self.project[self.compiler]
@@ -96,6 +95,14 @@ class Process(object):
             if value > 0:
                 optimize = "-" + "O"*value
 
+        setupScript = self.setupScript
+        fd, tmpFileName = tempfile.mkstemp(suffix=suffix, dir=self.buildDir)
+
+        if wx.Platform == "__WXMSW__":
+            separator = "&"
+        else:
+            separator = ";"
+            
         # Build the compilation command
         if self.compiler == "py2exe":
             cmd = '%s %s -u "%s" %s %s'%(self.pythonVersion, optimize, tmpFileName, self.compiler, dryRun)
@@ -118,6 +125,29 @@ class Process(object):
         elif self.compiler == "py2app":
             cmd = '%s %s -u "%s" %s'%(self.pythonVersion, optimize, tmpFileName, self.compiler)
 
+        elif self.compiler == "vendorid":
+            sibPath, makeOrNmake = self.MainFrame.GetVendorIDPath()
+            sibString = self.setupScript.split(separator)
+            setupScript = '%s %s -u %s %s\n'%(self.pythonVersion, optimize, sibPath, sibString[0])
+            for strs in sibString[1:]:
+                setupScript += strs + "\n"
+
+            if wx.Platform == "__WXMSW__":
+                cmd = '%s'%tmpFileName
+            else:
+                cmd = 'chmod +x %s; ./%s'%(tmpFileName, tmpFileName)
+                
+        # Write the setup script string in the temporary file
+        fid = open(tmpFileName, "wt")
+        fid.write(setupScript)            
+        fid.close()
+
+        # Store the temporary file data
+        self.tmpFileName = (fd, tmpFileName)
+
+        if self.compiler == "vendorid":
+            os.close(fd)
+            
         # Monitor the elapsed time
         self.startTime = time.time()
             
@@ -151,8 +181,11 @@ class Process(object):
         self.process.Destroy()
         
         self.MainFrame.process = None
-        # Close the temporary file
-        os.close(self.tmpFileName[0])
+
+        if self.compiler != "vendorid":        
+            # Close the temporary file
+            os.close(self.tmpFileName[0])
+
         # Remove the temporary file from the compilation directory
         if os.path.isfile(opj(self.tmpFileName[1])):
             try:
@@ -192,11 +225,12 @@ class Process(object):
             self.MainFrame.UpdatePageBitmap(self.project.GetName(), 1, self.pageNumber)
             # Process the output text from the compilation steps
             self.ProcessOutputText()
+                                
             if self.run:
                 # Create a manifest file if needed
                 self.MainFrame.CreateManifestFile(self.project, self.compiler)
                 # It was a real compilation, ask the user to test the executable
-                self.MainFrame.SuccessfulCompilation(self.project, self.compiler)
+                self.MainFrame.SuccessfulCompilation(self.project, self.compiler, True, self.pageNumber)
 
         if processEnded:
             # Store the full output message in the project page
@@ -224,6 +258,12 @@ class Process(object):
             if isError and text.strip():
                 if "warning" in text.lower():
                     self.MainFrame.SendMessage(1, text)
+                elif "NotPackedException" in text:
+                    self.MainFrame.SendMessage(1, text)
+                elif "Microsoft" in text or "Copyright" in text:
+                    pass
+                elif text.lower().find("link") == 0:    # NMake output messages
+                    self.MainFrame.SendMessage(10, _("Linking with NMake..."), True)
                 else:
                     # Ah, is the error stream, something went wrong
                     self.MainFrame.SendMessage(2, text)
@@ -236,6 +276,8 @@ class Process(object):
                 # That's the input stream
                 if text.find("byte-compiling") >= 0:    # py2exe/py2app is compiling
                     self.MainFrame.SendMessage(4, _("Byte-compiling Python files..."), True)
+                elif text.find("UPX ") >= 0:            # UPX compression messages
+                    self.MainFrame.SendMessage(8, _("Copying Files/compressing with UPX..."), True)
                 elif text.find("copying") >= 0:         # py2exe is copying files
                     self.MainFrame.SendMessage(5, _("Copying files..."), True)
                 elif text.find("searching") >= 0:       # py2exe is searching for modules
@@ -244,6 +286,10 @@ class Process(object):
                     self.MainFrame.SendMessage(6, _("Skipping Python loaders/byte-compilation..."), True)
                 elif text.find("filtering") >= 0:       # py2app filtering dependencies
                     self.MainFrame.SendMessage(7, _("Filtering Dependencies..."), True)
+                elif text.find("Generating") >= 0:      # VendorID output messages
+                    self.MainFrame.SendMessage(9, _("Generating C code..."), True)
+                elif text.lower().find("link") == 0:    # NMake output messages
+                    self.MainFrame.SendMessage(10, _("Linking with NMake..."), True)                    
                 else:
                     copy = False
 

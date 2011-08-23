@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -13,12 +15,12 @@ import wx
 import glob
 import webbrowser
 
-import wx.lib.mixins.listctrl as listmix
 import wx.stc as stc
 import wx.combo
 import wx.lib.buttons as buttons
 import wx.lib.langlistctrl as langlist
 import wx.lib.buttonpanel as bp
+import wx.lib.mixins.listctrl as listmix
 
 _hasMacThings = True
 try:
@@ -39,6 +41,7 @@ from Utilities import FormatTrace, EnvironmentInfo, CreateBitmap
 from Constants import _iconFromName, _unWantedLists, _faces
 from Constants import _stcKeywords, _pywild, _pypackages, _dllbinaries
 from Constants import _xcdatawild, _dylibwild, _comboImages, _bpPngs
+from Constants import _distutilsKeys, _distutilsTips
 
 # Let's see if we can add few nice shadows to our tooltips (Windows only)
 _libimported = None
@@ -59,6 +62,9 @@ if wx.Platform == "__WXMSW__":
             _libimported = None
     else:
         _libimported = None
+
+if wx.Platform != "__WXMAC__":
+    import extern.flatmenu as FM
         
                  
 class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin,
@@ -92,8 +98,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if name == "multipleexe":
             self.setResizeColumn(3)
             # That's a hack for multiple executables in py2exe
-            self.dummyCombo = wx.ComboBox(self, value= "windows", style=wx.CB_DROPDOWN,
-                                          choices= ["windows", "console"])
+            choices = ["windows", "console"]
+            if parent.GetName() == "py2exe":
+                # Added support for com_server, service and ctypes_com_server
+                choices = ["windows", "console", "com_server", "service", "ctypes_com_server"]
+                
+            self.dummyCombo = wx.ComboBox(self, value= "windows", style=wx.CB_DROPDOWN, choices=choices)
             self.dummyCombo.Hide()
             self.dummyButton = wx.Button(self, -1, "...")
             self.dummyButton.SetFont(wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False))
@@ -187,7 +197,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         self.Bind(wx.EVT_LIST_COL_BEGIN_DRAG, self.OnColumnDrag)
         
-        if self.GetName() not in _unWantedLists:
+        if self.GetName() not in _unWantedLists + ["extrakeywords"]:
             # For most of the list we really do hard work
             self.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
             self.Bind(wx.EVT_LIST_END_LABEL_EDIT, self.OnEndEdit)
@@ -206,6 +216,12 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.Bind(wx.EVT_MENU, self.OnClearAll, id=self.popupId2)
             self.Bind(wx.EVT_MENU, self.OnAdd, id=self.popupId3)
 
+            if wx.Platform != "__WXMAC__":
+                # Create a FlatMenu style popup and bind the events
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnDeleteSelected, id=self.popupId1)
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnClearAll, id=self.popupId2)
+                self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnAdd, id=self.popupId3)
+            
         if self.GetName() == "multipleexe":
             self.dummyCombo.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
             self.dummyButton.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
@@ -259,7 +275,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.isBeingEdited = False
             event.Skip()
             return
-
+        
         col = event.GetColumn()
         indx = event.GetItem().GetId()
         # Check if the user has really modified the item text
@@ -311,6 +327,8 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.itemDataMap.pop(indx)
                 # Delete the item from the list
                 self.DeleteItem(ind)
+                self.RemoveOptionsButton(ind)
+                
             self.Thaw()
             wx.CallAfter(self.UpdateProject)
             wx.CallAfter(self.Recolor)
@@ -329,41 +347,57 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             if not self.GetSelectedIndices():
                 self.Select(item)
+
+        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
+
+        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
+        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
         
-        menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
+        item = MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         menu.AppendSeparator()        
         # Well, we can either delete the selected item(s)...
-        item = wx.MenuItem(menu, self.popupId1, _("Delete selected"))
+        item = MenuItem(menu, self.popupId1, _("Delete selected"))
         bmp = self.MainFrame.CreateBitmap("delete_selected")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
         # Or clear completely the list
-        item = wx.MenuItem(menu, self.popupId2, _("Clear all"))
+        item = MenuItem(menu, self.popupId2, _("Clear all"))
         bmp = self.MainFrame.CreateBitmap("clear_all")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
 
-        # Popup the menu on ourselves
-        self.PopupMenu(menu)
-        menu.Destroy()
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        if flat:
+            menu.Popup(wx.GetMousePosition(), self)
+        else:
+            self.PopupMenu(menu)
+            menu.Destroy()
 
 
     def OnRightUp(self, event):
         """ Handles the wx.EVT_RIGHT_UP event for the list control. """
 
-        menu = wx.Menu()
-        item = wx.MenuItem(menu, self.popupId3, _("Add Item(s)"))
+        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
+
+        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
+        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
+        
+        item = MenuItem(menu, self.popupId3, _("Add Item(s)"))
         bmp = self.MainFrame.CreateBitmap("add")
         item.SetBitmap(bmp)
         menu.AppendItem(item)
 
-        # Popup the menu on ourselves
-        self.PopupMenu(menu)
-        menu.Destroy()
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        if flat:
+            menu.Popup(wx.GetMousePosition(), self)
+        else:
+            self.PopupMenu(menu)
+            menu.Destroy()
 
 
     def OnDeleteSelected(self, event):
@@ -394,6 +428,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.itemDataMap.pop(indx)
             # Delete the item from the list
             self.DeleteItem(ind)
+            self.RemoveOptionsButton(ind)
 
         # Time to warm up...
         self.Thaw()
@@ -419,6 +454,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Update the project, something changed
         self.itemDataMap = {}
         self.UpdateProject()
+            
         self.Recolor()
         
         wx.EndBusyCursor()
@@ -546,7 +582,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             self.SetStringItem(self.selectedItem, 1, value)
             self.UpdateProject()
 
+        if self.GetParent().GetName() == "py2exe":
+            wx.CallAfter(self.GetParent().EnableDllAndExe)
 
+        
     def OnChooseScript(self, event):
         """
         Handles the wx.EVT_BUTTON for the hidden button in the top list control
@@ -594,7 +633,11 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             return
 
         colCount = self.GetColumnCount()
-        # This gets very tricky        
+        # This gets very tricky
+        name = self.GetName()
+        addOptions = name == "multipleexe" and self.GetParent().GetName() == "py2exe"
+        added = False
+        
         for value in configuration:
             # The first item is always an empty string with the informative icon
             indx = self.InsertImageStringItem(sys.maxint, "", 0)
@@ -609,7 +652,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 self.SetItemData(indx, indx)
             else:
                 # This is a list of lists
-                if self.GetName() == "data_files":
+                if name == "data_files":
                     # We have data files, a bit trickier
                     # Everything here is done to comply with the format in which
                     # the data is stored in the database
@@ -630,15 +673,165 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                         item = ("%s"%item).strip()
                         self.SetStringItem(indx, col+1, item)
                         tupleMap += (item,)
+                        
+                    if addOptions:
+                        added = True
+                        self.AddOptionsButton(indx)
 
                     self.itemDataMap[indx] = tupleMap
                     self.SetItemData(indx, indx)
 
+        if added:
+            self.buttonSizer.Layout()
+            self.GetContainingSizer().Layout()
+            
         # Initialize the column sorter mixin (if needed)
         self.InizializeSorter()
         self.Recolor()
 
 
+    def AddOptionsButton(self, indx):
+        """
+        Adds a small button to customize other target keywords.
+
+        **Parameters:**
+
+        * indx: the list index.
+        """
+
+        itemRect = self.GetItemRect(indx)
+        if indx == 0:
+            self.buttonSizer.InsertSpacer(0, (0, itemRect.y+8))
+
+        bmp = self.MainFrame.CreateBitmap("keywords")
+        button = wx.BitmapButton(self.GetParent(), -1, bmp, size=((itemRect.height, itemRect.height)), style=wx.NO_BORDER)
+        self.buttonSizer.Insert(indx+1, button)
+        button.SetToolTipString(_("Set extra keywords for the target class\n(i.e., long_description, author_email, etc...)"))
+        button.Bind(wx.EVT_BUTTON, self.OnExtraKeywords)
+
+        wx.CallAfter(self.AddButton, button, indx, itemRect)
+
+
+    def AddButton(self, button, indx, itemRect):
+        """
+        Delayed call to add the extra keywords button.
+
+        **Parameters:**
+        
+        * button: the extra keywords button;
+        * indx: the list index;
+        * itemRect: the list item rectangle.
+        """
+        
+        project = self.MainFrame.GetCurrentProject()
+        compiler = self.GetParent().GetName()
+        button.extraKeywords = project.GetExtraKeywords(compiler, indx)
+        
+        listSize = wx.Size(*self.GetSize())
+        if itemRect.y > 90:
+            # Increase the size of the list control to show all buttons
+            listSize.height += itemRect.height
+            self.SetMinSize(listSize)
+            self.GetParent().Layout()
+
+
+    def RemoveOptionsButton(self, indx):
+        """
+        Removes the option button.
+
+        **Parameters:**
+
+        * indx: the list index.
+        """
+
+        itemRect = self.GetItemRect(indx)
+
+        if self.GetName() == "multipleexe" and self.GetParent().GetName() == "py2exe":
+            button = self.buttonSizer.GetItem(indx+1).GetWindow()
+            self.buttonSizer.Detach(indx+1)
+            button.Destroy()
+
+            project = self.MainFrame.GetCurrentProject()
+            compiler = self.GetParent().GetName()
+            project.RemoveExtraKeywords(compiler, indx)
+        
+            if indx == 0:
+                # All buttons are gone
+                self.buttonSizer.Remove(indx)
+
+            listSize = wx.Size(*self.GetSize())
+            if listSize.height > 150:
+                # Decrease the size of the list control to return to the original size
+                listSize.height -= itemRect.height
+                if listSize.height < 150:
+                    listSize.height = 150
+                    
+                self.SetMinSize(listSize)
+                self.GetParent().Layout()
+            else:
+                self.GetContainingSizer().Layout()
+        
+
+    def GetExtraKeywords(self, indx):
+        """
+        Returns the extra keywords selected by the user for the target class (py2exe only).
+
+        **Parameters:**
+
+        * indx: the list index.
+        """
+        
+        button = self.buttonSizer.GetItem(indx+1).GetWindow()
+        extraKeywords = button.extraKeywords
+
+        if not extraKeywords:
+            return ""
+
+        strs, count = "", 0
+        for key, value in extraKeywords.items():
+            strs += "%s = '%s', "%(key, value)
+            count += 1
+            if count > 0 and count%3 == 0:
+                strs += "\n    "
+
+        return strs.rstrip(",")
+    
+
+    def OnExtraKeywords(self, event):
+        """ Handles the wx.EVT_BUTTON event for adding custom keywords to the target class. """
+
+        event.Skip()
+        
+        sizer = self.buttonSizer
+        realButton = event.GetEventObject()
+        
+        for indx in xrange(0, self.GetItemCount()):
+            button = sizer.GetItem(indx+1).GetWindow()
+            if button == realButton:
+                break
+
+        extraKeywords = button.extraKeywords
+        if not extraKeywords:
+            # No default extra keywords: get them from preferences
+            extraKeywords = wx.GetApp().GetPreferences("Extra_Keywords", default=_distutilsKeys)
+
+        dlg = ExtraKeywordsDialog(self.MainFrame, extraKeywords)
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+
+        newKeywords = dlg.GetExtraKeywords()
+
+        if newKeywords != extraKeywords:
+            button.extraKeywords = newKeywords
+
+            # Something has changed
+            project = self.MainFrame.GetCurrentProject()
+            compiler = self.GetParent().GetName()
+            project.SetExtraKeywords(compiler, indx, newKeywords)
+            self.UpdateProject()
+        
+        
     def InizializeSorter(self):
         """
         Initializes the column sorter mixin.
@@ -803,6 +996,37 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         self.EnsureVisible(indx)
         
 
+    def RemoteAddItem(self, name):
+        """ Adds an item from another list control. """
+
+        # The first item is always empty text with an informative icon
+        indx = self.InsertImageStringItem(sys.maxint, "", 0)
+        # Insert an item with some visual indicator that should be edited...
+        self.SetStringItem(indx, 1, name)
+        # Update the column sorter mixin
+        self.SetItemData(indx, indx)
+        self.itemDataMap[indx] = ("", name)
+        # Start editing the new label
+        self.EnsureVisible(indx)
+
+        self.Recolor()        
+                
+
+    def RemoteRemoveItem(self, name):
+        """ Adds an item from another list control. """
+
+        for indx in xrange(self.GetItemCount()):
+            thisName = self.GetItem(indx, 1).GetText().strip().encode()
+            if thisName == name:
+                # Pop the data from the column sorter mixin dictionary
+                indx = self.GetItemData(indx)
+                self.itemDataMap.pop(indx)
+                self.DeleteItem(indx)
+                break
+
+        self.Recolor()        
+
+
     def GetLastUsedDirectory(self):
         """ Returns the last selected folder by the user. """
 
@@ -957,10 +1181,21 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         else:
             # This is bbFreeze...
             multipleOptions = ["windows", ""]
-            
+
+        name = self.GetName()            
+        tupleMap = ("",)
         for i in xrange(1, self.GetColumnCount()):
             # Add a new dummy line
             self.SetStringItem(indx, i, multipleOptions[i-1])
+            tupleMap += (multipleOptions[i-1],)
+
+        self.itemDataMap[indx] = tupleMap
+        self.SetItemData(indx, indx)
+
+        if name == "multipleexe" and compiler == "py2exe":
+            self.AddOptionsButton(indx)
+            self.buttonSizer.Layout()
+            self.GetContainingSizer().Layout()
 
         self.EnsureVisible(indx)
         
@@ -1067,6 +1302,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
     def GetExistingItems(self):
         """ Returns a list of existing items in the list control. """
 
+        columns = self.GetColumnCount()
         # Get the list of existing stuff in the list,
         # so that we do not add twice files
         existing = []
@@ -1095,6 +1331,7 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         """
 
         existing = self.GetExistingItems()
+        columns = self.GetColumnCount()
         
         for path in paths:
             if path in existing:
@@ -1279,6 +1516,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
         # Bind the events
         plusButton.Bind(wx.EVT_BUTTON, self.OnAdd)
         minusButton.Bind(wx.EVT_BUTTON, self.OnDeleteSelected)
+
+        if self.GetName() == "multipleexe" and parent.GetName() == "py2exe":
+            self.buttonSizer = sizer
         
         return sizer
 
@@ -2431,7 +2671,7 @@ else:
 class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     """ A multi-purpose combobox. """
 
-    def __init__(self, parent, choices, style, compiler, name):
+    def __init__(self, parent, choices, style, compiler, name, mainFrame=None):
         """
         Default class constructor.
         
@@ -2441,13 +2681,18 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
         * choices: a list of strings which represents the combobox choices;
         * style: the combobox style;
         * compiler: the compiler to which the combobox's parent belongs;
-        * name: the option name associated to this combobox.
+        * name: the option name associated to this combobox;
+        * mainFrame: the main application frame (GUI2Exe).
         """
 
         wx.combo.OwnerDrawnComboBox.__init__(self, parent, choices=choices,
                                              style=style, name=name)
 
-        self.MainFrame = wx.GetTopLevelParent(self)
+        if mainFrame is None:
+            self.MainFrame = wx.GetTopLevelParent(self)
+        else:
+            self.MainFrame = mainFrame
+                    
         self.compiler = compiler
         self.option = name
 
@@ -2470,8 +2715,14 @@ class MultiComboBox(wx.combo.OwnerDrawnComboBox):
     def BuildImageList(self):
         """ Builds an image list for our list of choices. """
 
-        # Retrieve the images from Constants
-        images = _comboImages[self.compiler][self.option]
+        if self.compiler is not None:
+            # Retrieve the images from Constants
+            images = _comboImages[self.compiler][self.option]
+        else:
+            # it's a combobox from the VendorIDDialog
+            strs = self.GetStrings()
+            images = [st.split()[1] for st in strs]
+            
         self.imageList = []
         # Build the image list
         for png in images:
@@ -4223,3 +4474,725 @@ class ErrorDialog(BaseDialog):
         self.Destroy()
         evt.Skip()
         
+
+class ExtraKeywordsDialog(BaseDialog):
+    """ A dialog to show and choose extra keywords for the target class (py2exe only). """
+    
+    def __init__(self, parent, extraKeywords):
+        """
+        Default class constructor.
+
+        
+        **Parameters:**
+
+        * parent: the widget parent;
+        * extraKeywords: the default (or saved) extra keywords for the target class.
+        """        
+
+        BaseDialog.__init__(self, parent)
+
+        self.extraList = BaseListCtrl(self, [_("Keyword"), _("Value")], "extrakeywords", parent)
+        
+        addBmp = self.MainFrame.CreateBitmap("add")
+        removeBmp = self.MainFrame.CreateBitmap("remove")
+        restoreBmp = self.MainFrame.CreateBitmap("restore_defaults")
+        self.addButton = buttons.ThemedGenBitmapTextButton(self, -1, addBmp, _("Add"), size=(-1, 25))
+        self.removeButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, _("Remove"), size=(-1, 25))
+        self.restoreButton = buttons.ThemedGenBitmapTextButton(self, -1, restoreBmp, _("Defaults"), size=(-1, 25))
+
+        self.currentItem = None
+        
+        self.CreateButtons()
+        self.SetProperties(_("Extra keywords dialog"))
+        self.DoLayout()
+        self.BindEvents()
+
+        self.PopulateList(extraKeywords)        
+
+
+    def SetProperties(self, title):
+        """
+        Sets few properties for the dialog.
+
+        
+        **Parameters:**
+
+        * title: the dialog title.
+        """
+
+        BaseDialog.SetProperties(self, title)
+
+
+    def DoLayout(self):
+        """ Layout the widgets using sizers. """
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        centerSizer = wx.BoxSizer(wx.HORIZONTAL)
+        rightSizer = wx.BoxSizer(wx.VERTICAL)
+        label = wx.StaticText(self, -1, _("Please edit the 'Value' content of the list below:"))
+        label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        mainSizer.Add(label, 0, wx.ALL, 10)
+        
+        centerSizer.Add(self.extraList, 1, wx.ALL|wx.EXPAND, 5)
+        rightSizer.Add(self.addButton, 0, wx.BOTTOM, 5)
+        rightSizer.Add(self.removeButton, 0)
+        rightSizer.Add((1, 1), 1, wx.EXPAND, 0)
+        rightSizer.Add(self.restoreButton, 0)
+        centerSizer.Add(rightSizer, 0, wx.ALL|wx.EXPAND, 5)
+        mainSizer.Add(centerSizer, 1, wx.EXPAND, 0)
+
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Add the fancy buttons
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
+
+        self.SetSizer(mainSizer)
+        self.Layout()
+
+        self.SetSize((500, 400))
+        
+
+    def BindEvents(self):
+        """ Binds the events for ExtraKeywordsDialog. """
+
+        BaseDialog.BindEvents(self)
+        
+        self.Bind(wx.EVT_BUTTON, self.OnAdd, self.addButton)
+        self.Bind(wx.EVT_BUTTON, self.OnRemove, self.removeButton)
+        self.Bind(wx.EVT_BUTTON, self.OnRestore, self.restoreButton)
+        self.extraList.Bind(wx.EVT_LIST_BEGIN_LABEL_EDIT, self.OnBeginEdit)
+        self.extraList.Bind(wx.EVT_MOTION, self.OnMotion)
+
+
+    def OnBeginEdit(self, event):
+        """ Handles the wx.EVT_LIST_BEGIN_LABEL_EDIT event for the list control. """
+
+        if event.GetColumn() == 0:
+            # Veto the event for the first column, it holds the icon
+            event.Veto()
+            return
+
+        self.extraList.Select(event.m_itemIndex)
+        event.Skip()
+                
+
+    def PopulateList(self, extraKeywords):
+        """
+        Populates the main list control with the pre-existing keywords.
+
+        **Parameters:**
+
+        * extraKeywords: the pre-existing keywords
+        """
+
+        self.extraList.Freeze()
+        self.extraList.DeleteAllItems()
+        
+        for key, value in extraKeywords.items():
+            tupleMap = ("",)
+            indx = self.extraList.InsertImageStringItem(sys.maxint, "", 0)
+            self.extraList.SetStringItem(indx, 1, key)
+            self.extraList.SetStringItem(indx, 2, value, 1)
+            tupleMap += (key, value)
+            self.extraList.itemDataMap[indx] = tupleMap
+            self.extraList.SetItemData(indx, indx)
+
+        if extraKeywords:
+            self.extraList.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+        else:
+            self.extraList.SetColumnWidth(1, wx.LIST_AUTOSIZE_USEHEADER)
+
+        # Initialize the column sorter mixin (if needed)
+        self.extraList.InizializeSorter()
+        self.extraList.Recolor()
+
+        self.extraList.Thaw()
+        
+
+    def OnAdd(self, event):
+        """ Handles the wx.EVT_BUTTON event when adding items to the list. """
+
+        key = value = _("==> Edit Me <==")
+        indx = self.extraList.InsertImageStringItem(sys.maxint, "", 0)
+        self.extraList.SetStringItem(indx, 1, key)
+        self.extraList.SetStringItem(indx, 2, value, 1)
+        tupleMap = ("", key, value)
+        self.extraList.itemDataMap[indx] = tupleMap
+        self.extraList.SetItemData(indx, indx)
+
+        self.extraList.Select(indx)
+        wx.CallAfter(self.extraList.Recolor)
+
+
+    def OnRemove(self, event):
+        """ Handles the wx.EVT_BUTTON event when removing items to the list. """
+
+        # We are deleting something from the list control
+        selections = self.extraList.GetSelectedIndices()
+        if not selections:
+            self.MainFrame.RunError(1, _("No item has been selected in the list."))
+            return
+        
+        # Reverse them, to delete them safely
+        selections.reverse()
+        # Loop over all the indices
+        self.extraList.Freeze()
+        for ind in selections:
+            # Pop the data from the column sorter mixin dictionary
+            indx = self.extraList.GetItemData(ind)
+            self.extraList.itemDataMap.pop(indx)
+            # Delete the item from the list
+            self.extraList.DeleteItem(ind)
+
+        self.extraList.Thaw()
+        wx.CallAfter(self.extraList.Recolor)
+
+
+    def OnRestore(self, event):
+        """ Handles the wx.EVT_BUTTON event when removing items to the list. """
+
+        answer = self.MainFrame.RunError(3, _("Are you sure you want to restore the default settings?"))
+        if answer != wx.ID_YES:
+            return
+
+        extraKeywords = self.GetExtraKeywords()
+        for key, value in _distutilsKeys.items():
+            if key not in extraKeywords:
+                extraKeywords[key] = value
+                
+        self.PopulateList(extraKeywords)
+        wx.CallAfter(self.extraList.Recolor)
+
+
+    def OnMotion(self, event):
+        """ Handles the wx.EVT_MOTION event for the list control (to display tooltips). """
+
+        pos = event.GetPosition()
+        item, where = self.extraList.HitTest(pos)
+        if item < 0:
+            # No hitting
+            if self.currentItem >= 0:
+                self.extraList.SetToolTipString("")
+                self.currentItem = None
+            return
+
+        text = self.extraList.GetItem(item, 1).GetText().strip()
+        if text not in _distutilsTips:
+            # Unknown keyword
+            if self.currentItem >= 0:
+                self.extraList.SetToolTipString("")
+                self.currentItem = None
+            return
+
+        if item == self.currentItem:
+            # No need to reset the tooltip
+            return
+        
+        self.extraList.SetToolTipString(_distutilsTips[text])
+        self.currentItem = item
+        
+        
+    def GetExtraKeywords(self):
+        """ Returns the pairs of keyword-value for the target class. """
+
+        extraKeywords = {}
+        for indx in xrange(self.extraList.GetItemCount()):
+            item1, item2 = self.extraList.GetItem(indx, 1), self.extraList.GetItem(indx, 2)
+            text1, text2 = item1.GetText().strip(), item2.GetText().strip()
+            if text1 and text2:
+                extraKeywords[text1.encode()] = text2.encode()
+
+        return extraKeywords
+    
+
+class ExplorerDialog(BaseDialog):
+    """
+    A simple explorer-like dialog to analyze which PYDs and DLLs are included in
+    the distribution folder, and to quickly remove them from the project.
+    """
+    
+    def __init__(self, parent, project, compiler, exename):
+        """
+        Default class constructor.
+
+        
+        **Parameters:**
+
+        * parent: the widget parent;
+        * project: the current GUI2Exe project;
+        * compiler: the compiler used to compile the executable;
+        * exename: the executable file name.
+        """ 
+
+        BaseDialog.__init__(self, parent.MainFrame)
+        
+        self.dllSizer_staticbox = wx.StaticBox(self, -1, _("Included DLLs"))
+        self.pydSizer_staticbox = wx.StaticBox(self, -1, _("Included PYDs"))
+        self.topSizer_staticbox = wx.StaticBox(self, -1, _("General project details"))
+        self.pname = wx.StaticText(self, -1, project.GetName())
+        self.cname = wx.StaticText(self, -1, compiler)
+        self.ename = wx.StaticText(self, -1, exename)
+
+        self.dllListCtrl = BaseListCtrl(self, [_("File name"), _("Size (kB)")], "explorerdll", parent.MainFrame)
+
+        removeBmp = self.MainFrame.CreateBitmap("remove")
+        undoBmp = self.MainFrame.CreateBitmap("undo")
+        self.dllRemoveButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, _("Remove"), size=(-1, 25))
+        self.dllUndoButton = buttons.ThemedGenBitmapTextButton(self, -1, undoBmp, _("Undo"), size=(-1, 25))
+        
+        self.pydListCtrl = BaseListCtrl(self, [_("File name"), _("Size (kB)")], "explorerpyd", parent.MainFrame)
+        self.pydRemoveButton = buttons.ThemedGenBitmapTextButton(self, -1, removeBmp, _("Remove"), size=(-1, 25))
+        self.pydUndoButton = buttons.ThemedGenBitmapTextButton(self, -1, undoBmp, _("Undo"), size=(-1, 25))
+
+        self.dllUndoStack = []
+        self.pydUndoStack = []
+        self.panelParent = parent
+
+        self.CreateButtons()
+        self.SetProperties(_("Distribution folder explorer"))
+        self.DoLayout()
+        self.BindEvents()
+
+        self.PopulateLists(exename)
+        
+
+    def SetProperties(self, title):
+        """
+        Sets few properties for the dialog.
+
+        
+        **Parameters:**
+
+        * title: the dialog title.
+        """
+
+        BaseDialog.SetProperties(self, title)
+        self.pname.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        self.cname.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        self.ename.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        self.pydListCtrl.setResizeColumn(2)
+        self.dllListCtrl.setResizeColumn(2)
+        
+
+    def DoLayout(self):
+        """ Layout the widgets using sizers. """
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        pydSizer = wx.StaticBoxSizer(self.pydSizer_staticbox, wx.HORIZONTAL)
+        pydSizer2 = wx.BoxSizer(wx.VERTICAL)
+        dllSizer = wx.StaticBoxSizer(self.dllSizer_staticbox, wx.HORIZONTAL)
+        dllSizer2 = wx.BoxSizer(wx.VERTICAL)
+        topSizer = wx.StaticBoxSizer(self.topSizer_staticbox, wx.HORIZONTAL)
+        grid_sizer = wx.FlexGridSizer(3, 2, 5, 10)
+        label_1 = wx.StaticText(self, -1, _("Project Name:"))
+        grid_sizer.Add(label_1, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        grid_sizer.Add(self.pname, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        label_2 = wx.StaticText(self, -1, _("Compiler Name:"))
+        grid_sizer.Add(label_2, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        grid_sizer.Add(self.cname, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        label_3 = wx.StaticText(self, -1, _("Executable Name:"))
+        grid_sizer.Add(label_3, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        grid_sizer.Add(self.ename, 0, wx.ALIGN_CENTER_VERTICAL, 0)
+        grid_sizer.AddGrowableCol(1)
+        topSizer.Add(grid_sizer, 1, wx.ALL|wx.EXPAND, 5)
+        mainSizer.Add(topSizer, 0, wx.ALL|wx.EXPAND, 5)
+        dllSizer.Add(self.dllListCtrl, 1, wx.ALL|wx.EXPAND, 5)
+        dllSizer2.Add(self.dllRemoveButton, 0, 0, 0)
+        dllSizer2.Add((1, 1), 1, wx.EXPAND, 0)
+        dllSizer2.Add(self.dllUndoButton, 0, 0, 5)
+        dllSizer.Add(dllSizer2, 0, wx.ALL|wx.EXPAND, 5)
+        mainSizer.Add(dllSizer, 1, wx.ALL|wx.EXPAND, 5)
+        pydSizer.Add(self.pydListCtrl, 1, wx.ALL|wx.EXPAND, 5)
+        pydSizer2.Add(self.pydRemoveButton, 0, 0, 0)
+        pydSizer2.Add((1, 1), 1, wx.EXPAND, 0)
+        pydSizer2.Add(self.pydUndoButton, 0, 0, 5)
+        pydSizer.Add(pydSizer2, 0, wx.ALL|wx.EXPAND, 5)
+        mainSizer.Add(pydSizer, 1, wx.ALL|wx.EXPAND, 5)
+
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Add the fancy buttons
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        self.Layout()
+
+
+    def BindEvents(self):
+        """ Binds the events for ExplorerDialog. """
+
+        BaseDialog.BindEvents(self)
+
+        self.Bind(wx.EVT_BUTTON, self.OnRemove, self.dllRemoveButton)
+        self.Bind(wx.EVT_BUTTON, self.OnUndo, self.dllUndoButton)
+        self.Bind(wx.EVT_BUTTON, self.OnRemove, self.pydRemoveButton)
+        self.Bind(wx.EVT_BUTTON, self.OnUndo, self.pydUndoButton)
+        self.pydListCtrl.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI)
+        self.dllListCtrl.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI)
+        
+
+    def PopulateLists(self, exename):
+        """
+        Populates the main list control with the pre-existing keywords.
+
+        **Parameters:**
+
+        * exename: the executable file name.
+        """
+
+        folder = os.path.split(exename)[0]
+        pyds = glob.glob(folder + "/*.pyd")
+        dlls = glob.glob(folder + "/*.dll")
+
+        for indx, listCtrl in enumerate([self.pydListCtrl, self.dllListCtrl]):
+            files = (indx == 0 and [pyds] or [dlls])[0]
+            for binary in files:
+                filename = os.path.split(binary)[1]
+                filesize = "%d"%(os.path.getsize(binary)/1024.0)
+                tupleMap = ("",)
+                indx = listCtrl.InsertImageStringItem(sys.maxint, "", 0)
+                listCtrl.SetStringItem(indx, 1, filename)
+                listCtrl.SetStringItem(indx, 2, filesize, 1)
+                tupleMap += (filename, filesize)
+                listCtrl.itemDataMap[indx] = tupleMap
+                listCtrl.SetItemData(indx, indx)
+
+        # Initialize the column sorter mixin (if needed)
+        self.pydListCtrl.InizializeSorter()
+        self.pydListCtrl.Recolor()
+        self.dllListCtrl.InizializeSorter()
+        self.dllListCtrl.Recolor()
+
+        self.pydListCtrl.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+        self.dllListCtrl.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+        
+        
+    def OnRemove(self, event):
+        """ Handles the wx.EVT_BUTTON event when removing items from the list. """
+        
+        button = event.GetEventObject()
+        thisListCtrl = (button == self.pydRemoveButton and [self.pydListCtrl] or [self.dllListCtrl])[0]
+        listName = (button == self.pydRemoveButton and ["ignores"] or ["dll_excludes"])[0]
+        replace = (button == self.pydRemoveButton and [True] or [False])[0]
+        undo_stack = (replace and [self.pydUndoStack] or [self.dllUndoStack])[0]
+        
+        otherListCtrl = wx.FindWindowByName(listName, self.panelParent)
+        
+        # We are deleting something from the list control
+        selections = thisListCtrl.GetSelectedIndices()
+        if not selections:
+            self.MainFrame.RunError(1, _("No item has been selected in the list."))
+            return
+        
+        # Reverse them, to delete them safely
+        selections.reverse()
+        
+        for sel in selections:
+            name = thisListCtrl.GetItem(sel, 1).GetText()
+            size = thisListCtrl.GetItem(sel, 2).GetText()
+            thisListCtrl.DeleteItem(sel)
+            if replace:
+                name = name.replace(".pyd", "")
+                
+            otherListCtrl.RemoteAddItem(name.strip().encode())
+            undo_stack.append((name, size))
+        
+        thisListCtrl.Recolor()
+        otherListCtrl.UpdateProject()
+        
+
+    def OnUndo(self, event):
+        """ Handles the wx.EVT_BUTTON event when undoing previous changes. """
+        
+        button = event.GetEventObject()
+        thisListCtrl = (button == self.pydUndoButton and [self.pydListCtrl] or [self.dllListCtrl])[0]
+        listName = (button == self.pydUndoButton and ["ignores"] or ["dll_excludes"])[0]
+        replace = (button == self.pydUndoButton and [True] or [False])[0]
+        undo_stack = (replace and [self.pydUndoStack] or [self.dllUndoStack])[0]
+        
+        otherListCtrl = wx.FindWindowByName(listName, self.panelParent)
+        current, size = undo_stack[-1]
+
+        otherListCtrl.RemoteRemoveItem(current)
+        undo_stack.remove(undo_stack[-1])
+        if replace:
+            current += ".pyd"
+            
+        indx = thisListCtrl.InsertImageStringItem(sys.maxint, "", 0)
+        thisListCtrl.SetStringItem(indx, 1, current)
+        thisListCtrl.SetStringItem(indx, 2, size, 1)
+        tupleMap = ("", current, size)
+        thisListCtrl.itemDataMap[indx] = tupleMap
+        thisListCtrl.SetItemData(indx, indx)
+
+        thisListCtrl.Recolor()
+                                                  
+
+    def OnUpdateUI(self, event):
+        """ Handles the wx.EVT_UPDATE_UI event for ExplorerDialog. """
+
+        listCtrl = event.GetEventObject()
+        if listCtrl == self.pydListCtrl:
+            enabled = len(self.pydUndoStack) > 0
+            if enabled != self.pydUndoButton.IsEnabled():
+                self.pydUndoButton.Enable(enabled)
+        else:
+            enabled = len(self.dllUndoStack) > 0
+            if enabled != self.dllUndoButton.IsEnabled():
+                self.dllUndoButton.Enable(enabled)
+
+
+class VendorIDDialog(BaseDialog):
+    """
+    A simple dialog which allows to choose the VendorID sib.py path and whether to use
+    the GNU make or Microsoft nmake.
+    """
+    
+    def __init__(self, parent, path, makeOrNmake):
+        """
+        Default class constructor.
+
+        
+        **Parameters:**
+
+        * parent: the widget parent;
+        * path: the previous VendorID sib.py path (if any);
+        * makeOrNmake: whether to use the GNU make or Microsoft nmake.
+        """ 
+
+        BaseDialog.__init__(self, parent)
+
+        self.sibPicker = wx.FilePickerCtrl(self, style=wx.FLP_USE_TEXTCTRL, path=path, wildcard=_pywild)
+        self.makeOrNmake = MultiComboBox(self, ["GNU Make", "MS NMake"], 0, None, "vendoriddialog", parent)
+        
+        self.CreateButtons()
+        self.SetProperties(_("VendorID options dialog"), makeOrNmake)
+        self.DoLayout()
+        self.BindEvents()
+
+
+    def SetProperties(self, title, makeOrNmake):
+        """
+        Sets few properties for the dialog.
+
+        
+        **Parameters:**
+
+        * title: the dialog title;
+        * makeOrNmake: whether to use GNU Make or MS NMake.
+        """
+
+        BaseDialog.SetProperties(self, title)
+        self.makeOrNmake.SetText(makeOrNmake)
+        
+        if wx.Platform != "__WXMSW__":
+            self.makeOrNmake.Enable(False)
+        
+
+    def DoLayout(self):
+        """ Layout the widgets using sizers. """
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        label = wx.StaticText(self, -1, _("Please specify where the file 'sib.py' lives and if you require GNU Make\nor Microsoft NMake:"))
+        label.SetFont(wx.Font(8, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        mainSizer.Add(label, 0, wx.ALL, 10)
+        mainSizer.Add((0, 10))
+        static1 = wx.StaticText(self, -1, _("Path for the file 'sib.py'"))
+        mainSizer.Add(static1, 0, wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.sibPicker, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 20))
+        static2 = wx.StaticText(self, -1, _("Executable Generator"))
+        mainSizer.Add(static2, 0, wx.LEFT|wx.RIGHT, 5)
+        mainSizer.Add((0, 2))
+        mainSizer.Add(self.makeOrNmake, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        
+        buttonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        # Add the fancy buttons
+        buttonSizer.Add(self.okButton, 0, wx.ALL, 15)
+        buttonSizer.Add((0, 0), 1, wx.EXPAND)
+        buttonSizer.Add(self.cancelButton, 0, wx.ALL, 15)
+        mainSizer.Add(buttonSizer, 0, wx.EXPAND)
+        
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        self.Layout()
+
+
+    def BindEvents(self):
+        """ Binds the events for VendorIDDialog. """
+
+        BaseDialog.BindEvents(self)
+        self.Bind(wx.EVT_BUTTON, self.OnOk, self.okButton)
+
+
+    def OnOk(self, event):
+        """ Handles the Ok event generated by a button. """
+
+        path = self.sibPicker.GetPath()
+        if not path or not os.path.isfile(path):
+            self.MainFrame.RunError(2, _("Invalid VendorID 'sib.py' path."))
+            return
+
+        self.EndModal(wx.ID_OK)
+
+        
+    def GetVendorIDPath(self):
+        """ Returns the VendorID sib.py path and the executable generator (GNU Make or MS NMake). """
+        
+        path = self.sibPicker.GetPath()
+        exeGen = self.makeOrNmake.GetValue()
+
+        return path, exeGen
+
+
+class ProgressGauge(wx.PyWindow):
+    """ This class provides a visual alternative for wx.Gauge."""
+    
+    def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=(-1,30)):
+        """ Default class constructor. """
+
+        wx.PyWindow.__init__(self, parent, id, pos, size, style=wx.BORDER_NONE)
+
+        self._value = 0
+        self._steps = 16
+        self._pos = 0
+        self._current = 0
+        self._gaugeproportion = 0.4
+
+        self._bottomStartColour = wx.GREEN
+        rgba = self._bottomStartColour.Red(), self._bottomStartColour.Green(), \
+               self._bottomStartColour.Blue(), self._bottomStartColour.Alpha()
+        self._bottomEndColour = self.LightColour(self._bottomStartColour, 30)
+        self._topStartColour = self.LightColour(self._bottomStartColour, 80)
+        self._topEndColour = self.LightColour(self._bottomStartColour, 40)
+        
+        self._background = wx.Brush(wx.WHITE, wx.SOLID)
+        
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
+
+        
+    def OnEraseBackground(self, event):
+        """ Handles the wx.EVT_ERASE_BACKGROUND event for ProgressGauge. """
+
+        pass
+
+
+    def OnPaint(self, event):
+        """ Handles the wx.EVT_PAINT event for ProgressGauge. """
+
+        dc = wx.BufferedPaintDC(self)
+        dc.SetBackground(self._background)
+        dc.SetBackground(wx.WHITE_BRUSH) 
+        dc.Clear()
+
+        xsize, ysize = self.GetClientSize()
+        interval = xsize/float(self._steps)
+
+        self._pos = interval*self._value
+        
+        status = self._current/(self._steps - int((self._gaugeproportion*xsize/interval)))
+
+        if status%2 == 0:
+            increment = 1
+        else:
+            increment = -1
+            
+        self._value = self._value + increment
+        self._current = self._current + 1
+
+        self.DrawProgress(dc, xsize, ysize, increment)
+
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_GRADIENTINACTIVECAPTION)))
+        dc.DrawRectangleRect(self.GetClientRect())
+        
+
+    def LightColour(self, color, percent):
+        """
+        Return light contrast of color. The color returned is from the scale of
+        color -> white. The percent determines how light the color will be.
+        Percent = 100 return white, percent = 0 returns color.
+        """
+
+        end_color = wx.WHITE
+        rd = end_color.Red() - color.Red()
+        gd = end_color.Green() - color.Green()
+        bd = end_color.Blue() - color.Blue()
+        high = 100
+
+        # We take the percent way of the color from color -. white
+        i = percent
+        r = color.Red() + ((i*rd*100)/high)/100
+        g = color.Green() + ((i*gd*100)/high)/100
+        b = color.Blue() + ((i*bd*100)/high)/100
+
+        return wx.Colour(r, g, b)
+
+
+    def DrawProgress(self, dc, xsize, ysize, increment):
+        """ Actually draws the sliding bar. """
+
+        interval = self._gaugeproportion*xsize
+        gc = wx.GraphicsContext.Create(dc)
+        
+        clientRect = self.GetClientRect()
+        gradientRect = wx.Rect(*clientRect)
+
+        x, y, width, height = clientRect
+        x, width = self._pos, interval
+        
+        gradientRect.SetHeight(gradientRect.GetHeight()/2)
+        topStart, topEnd = self._topStartColour, self._topEndColour
+
+        rc1 = wx.Rect(x, y, width, height/2)
+        path1 = self.GetPath(gc, rc1, 8)
+        br1 = gc.CreateLinearGradientBrush(x, y, x, y+height/2, topStart, topEnd)
+        gc.SetBrush(br1)
+        gc.FillPath(path1) #draw main
+
+        path4 = gc.CreatePath()
+        path4.AddRectangle(x, y+height/2-8, width, 8)
+        path4.CloseSubpath()
+        gc.SetBrush(br1)
+        gc.FillPath(path4)            
+        
+        gradientRect.Offset((0, gradientRect.GetHeight()))
+
+        bottomStart, bottomEnd = self._bottomStartColour, self._bottomEndColour
+
+        rc3 = wx.Rect(x, y+height/2, width, height/2)
+        path3 = self.GetPath(gc, rc3, 8)
+        br3 = gc.CreateLinearGradientBrush(x, y+height/2, x, y+height, bottomStart, bottomEnd)
+        gc.SetBrush(br3)
+        gc.FillPath(path3) #draw main
+
+        path4 = gc.CreatePath()
+        path4.AddRectangle(x, y+height/2, width, 8)
+        path4.CloseSubpath()
+        gc.SetBrush(br3)
+        gc.FillPath(path4)
+
+        
+    def GetPath(self, gc, rc, r):
+        """ Returns a rounded GraphicsPath. """
+    
+        x, y, w, h = rc
+        path = gc.CreatePath()
+        path.AddRoundedRectangle(x, y, w, h, r)
+        path.CloseSubpath()
+        return path
+
+
+    def Pulse(self):
+        """ Updates the gauge with a new value. """
+
+        self.Refresh()
+
+    
