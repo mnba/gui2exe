@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -121,21 +119,20 @@ class ExecutableProperties(wx.Panel):
         * project: the project from where to get all the data.
         """
 
-        lenIcons = len(_sizeIcons)
-        numFiles, fileSizes = [""]*(lenIcons-2), [""]*(lenIcons-2)
+        numFiles, fileSizes = [""]*5, [""]*5
 
         if project:
             # Get information about the executable file
             for indx, compiler in enumerate(_defaultCompilers):
                 if compiler in project:
-                    numFiles[indx], fileSizes[indx] = GetExecutableData(project, compiler)
+                    numFiles[indx], fileSizes[indx]= GetExecutableData(project, compiler)
 
         # Clear all the items in the list control                
         self.listCtrl.DeleteAllItems()
         # Add all the executable information we have
         for indx, names in enumerate(_bookIcons):
             idx = self.listCtrl.InsertImageStringItem(sys.maxint, names, indx)
-            self.listCtrl.SetStringItem(idx, 1, fileSizes[indx], lenIcons-2)
-            self.listCtrl.SetStringItem(idx, 2, numFiles[indx], lenIcons-1)
+            self.listCtrl.SetStringItem(idx, 1, fileSizes[indx], 5)
+            self.listCtrl.SetStringItem(idx, 2, numFiles[indx], 6)
                     
             

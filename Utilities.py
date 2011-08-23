@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -157,35 +155,6 @@ class ConnectionThread(Thread):
 
         return
     
-
-class ColourClientData(object):
-    """ Class used in the RibbonBar definitions in GUI2Exe. """
-
-    def __init__(self, name, colour):
-        """
-        Default class constructor.
-
-        **Parameters:**
-
-        * name: the colour name;
-        * colour: the actual colour.
-        """
-    
-        self._name = name
-        self._colour = colour
-
-
-    def GetName(self):
-        """ Returns the colour name. """
-
-        return self._name
-
-    
-    def GetColour(self):
-        """ Returns the actual wx.Colour. """
-
-        return self._colour
-
 
 # Path and file filling (os indipendent)
 def opj(path):
@@ -380,7 +349,7 @@ def GetFolderSize(exePath):
     numFiles = "%d"%numFiles
 
     return numFiles, folderSize
-
+    
 
 def RecurseSubDirs(directory, userDir, extensions):
     """
@@ -608,39 +577,4 @@ def CreateBitmap(bmpName):
     
     return catalog[bmpName].GetBitmap()
 
-
-def GetLabelWithoutAccelerator(eachLabel):
-    """ Returns a menu item text stripped of all accelerators. """
-
-    eachLabel = eachLabel.replace("&", "")
-    if "\t" not in eachLabel:
-        return eachLabel
-
-    indx = eachLabel.find("\t")
-    return eachLabel[0:indx]
-
-
-def AddOverlay(bitmap):
-    """ Adds small checkbox bitmap as overlay. """
-
-    img = bitmap.ConvertToImage()
-    img.ConvertAlphaToMask()
-    bitmap = img.ConvertToBitmap()
-
-    bmpX, bmpY = bitmap.GetWidth(), bitmap.GetHeight()
-    baseBMP = wx.EmptyBitmap(bmpX, bmpY)
-    memory = wx.MemoryDC()
-    memory.SelectObject(baseBMP)
     
-    mdc = wx.GraphicsContext.Create(memory)
-    mdc.DrawBitmap(bitmap, 0, 0, bmpX, bmpY)
-
-    pos = (bmpX == 32 and [12] or [6])[0]
-    bmpCheck = (bmpX == 32 and ["check32"] or ["check"])[0]
-    
-    mdc.DrawBitmap(CreateBitmap(bmpCheck), 0, 0, pos, pos)
-
-    memory.SelectObject(wx.NullBitmap)            
-    return baseBMP
-
-

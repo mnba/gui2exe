@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -16,7 +14,7 @@ import wx
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _py2exe_target, _py2exe_imports, _manifest_template, ListType
-from Constants import _py2exe_class, _upx_inno
+from Constants import _py2exe_class
 from Utilities import setupString
 
 # Get the I18N things
@@ -146,11 +144,6 @@ class Py2ExePanel(BaseBuilderPanel):
         # implicitely or explicitely has to convert between unicode and ascii strings
         # this can be prevented by checking this checkbox 
         self.asciiCheck = wx.CheckBox(self, -1, "Ascii", name="ascii")
-
-        # The following 2 are only for service, com_server and ctypes_com_server
-        self.createExeCheck = wx.CheckBox(self, -1, "Create EXE", name="create_exe")
-        self.createDllCheck = wx.CheckBox(self, -1, "Create DLL", name="create_dll")
-
         # By picking a Python script here, this script can do things like installing
         # a customized stdout blackhole. See py2exe's boot_common.py for examples of
         # what can be done. The custom boot script is executed during startup of
@@ -183,9 +176,6 @@ class Py2ExePanel(BaseBuilderPanel):
         self.zipfileTextCtrl.Enable(False)
         self.distTextCtrl.Enable(False)
 
-        self.createExeCheck.SetValue(1)
-        self.createDllCheck.SetValue(1)
-        
         # Set a bold font for the static texts
         font = self.GetFont()
         font.SetWeight(wx.FONTWEIGHT_BOLD)
@@ -193,7 +183,7 @@ class Py2ExePanel(BaseBuilderPanel):
         for child in self.GetChildren():
             if isinstance(child, wx.StaticText) or isinstance(child, wx.CheckBox):
                 child.SetFont(font)
-            
+
 
     def LayoutItems(self):
         """ Layouts the widgets using sizers. """
@@ -320,13 +310,8 @@ class Py2ExePanel(BaseBuilderPanel):
         otherSizer_1.Add(self.crossRefCheck, 0, wx.ALL, 5)
         otherSizer_1.Add((0, 0), 1)
         otherSizer_1.Add(self.asciiCheck, 0, wx.ALL, 5)
-        otherSizer_1.Add((0, 0), 1)        
+        otherSizer_1.Add((0, 0), 1)
         otherSizer_1.Add(self.skiparchiveChoice, 0, wx.ALL, 5)
-        otherSizer_1.Add((0, 0), 1)
-        otherSizer_1.Add(self.createExeCheck, 0, wx.ALL, 5)
-        otherSizer_1.Add((0, 0), 1)
-        otherSizer_1.Add(self.createDllCheck, 0, wx.ALL, 5)
-
         customboot = wx.StaticText(self, -1, _("Custom Boot Script"))
         otherSizer_2.Add(customboot, 0, wx.BOTTOM, 2)
         otherSizer_2.Add(self.customBootPicker, 0, wx.EXPAND)
@@ -340,26 +325,6 @@ class Py2ExePanel(BaseBuilderPanel):
         self.SetupScrolling()
         self.label.SetFocus()
     
-
-    def EnableDllAndExe(self):
-        """
-        Enables or disables the create_exe and create_dll option for py2exe.
-        These options are only available for services, com_servers and ctypes_com_servers.
-        """
-
-        # Disable the create_exe and create_dll
-        self.createDllCheck.Enable(False)
-        self.createExeCheck.Enable(False)
-
-        # Enable the create_exe/create_dll if a service, com_server or ctypes_com_server are there
-        for indx in xrange(self.multipleExe.GetItemCount()):
-            consoleOrWindows = self.multipleExe.GetItem(indx, 1).GetText()
-            if consoleOrWindows in ["service", "com_server", "ctypes_com_server"]:
-                # These things accept module *names*, not file names...
-                self.createDllCheck.Enable(True)
-                self.createExeCheck.Enable(True)
-                break
-        
 
     def ValidateOptions(self):
         """ Validates the py2exe input options before compiling. """
@@ -426,14 +391,8 @@ class Py2ExePanel(BaseBuilderPanel):
         configuration = dict(configuration)
         # Delete the keys we don't need
         zipChoice, distChoice = self.zipfileChoice.GetValue(), self.distChoice.GetValue()
-        createExe, createDll = self.createExeCheck.GetValue(), self.createDllCheck.GetValue()
-        
         del configuration["zipfile_choice"], configuration["dist_dir_choice"]
-        if "create_exe" in configuration:
-            del configuration["create_exe"]
-        if "create_dll" in configuration:
-            del configuration["create_dll"]
-        
+
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
             if key == "custom_boot_script":
@@ -464,14 +423,12 @@ class Py2ExePanel(BaseBuilderPanel):
                     item = "dist"
                     if distChoice:
                         self.MainFrame.SendMessage(1, _('Empty dist_dir option. Using default value "dist"'))
-            
+                
             setupDict[key] = item
 
         targetclass = ""
         baseName = "GUI2Exe_Target_%d"
-        console, windows, service, com_server, ctypes_com_server = "console = [", "windows = [", \
-                                                                   "service = [", "com_server = [", \
-                                                                   "ctypes_com_server = ["
+        console, windows = "console = [", "windows = ["
 
         for indx in xrange(self.multipleExe.GetItemCount()):
 
@@ -480,26 +437,12 @@ class Py2ExePanel(BaseBuilderPanel):
             scriptFile = self.multipleExe.GetItem(indx, 2).GetText()
             buildDir, scriptFile = os.path.split(scriptFile)
 
-            isSpecial = False
-            realScript = scriptFile
-
-            if consoleOrWindows in ["service", "com_server", "ctypes_com_server"]:
-                # These things accept module *names*, not file names...
-                realScript = os.path.splitext(scriptFile)[0]
-                isSpecial = True
-                
             if consoleOrWindows == "console":
                 console += tupleMultiple[0] + ", "
-            elif consoleOrWindows == "windows":
-                windows += tupleMultiple[0] + ", "
-            elif consoleOrWindows == "service":
-                service += tupleMultiple[0] + ", "
-            elif consoleOrWindows == "com_server":
-                com_server += tupleMultiple[0] + ", "
             else:
-                ctypes_com_server += tupleMultiple[0] + ", "
+                windows += tupleMultiple[0] + ", "
 
-            tupleMultiple += (realScript, )
+            tupleMultiple += (scriptFile, )
             
             for col in xrange(3, self.multipleExe.GetColumnCount()):
                 item = self.multipleExe.GetItem(indx, col)
@@ -509,25 +452,10 @@ class Py2ExePanel(BaseBuilderPanel):
                     self.MainFrame.SendMessage(1, _('Empty targetName option. Using Python script name'))
                 if col == 3:
                     programName = text.strip()
-                elif col == 4:
-                    versionNumber = text.strip()
                     
                 tupleMultiple += (text, )
 
-            extraKeywords = self.multipleExe.GetExtraKeywords(indx)
-            if isSpecial:
-                tupleMultiple += (extraKeywords + "\n    create_exe = %s, create_dll = %s"%(bool(createExe), bool(createDll)), )
-            else:
-                tupleMultiple += (extraKeywords, )
-
-            if isSpecial:
-                # services, com_servers and ctypes_com_server require a "modules" keyword
-                py2exe_class = _py2exe_class.replace("    script = ", "    modules = ")
-            else:
-                py2exe_class = _py2exe_class
-                
-            targetclass += py2exe_class%tupleMultiple
-                
+            targetclass += _py2exe_class%tupleMultiple                
 
         # Add the custom code (if any)
         setupDict["customcode"] = (customCode and [customCode.strip()] or ["# No custom code added"])[0]
@@ -553,20 +481,7 @@ class Py2ExePanel(BaseBuilderPanel):
         setupDict["targetclasses"] = targetclass
         setupDict["console"] = console.rstrip(", ") + "]"
         setupDict["windows"] = windows.rstrip(", ") + "]"
-        setupDict["service"] = service.rstrip(", ") + "]"
-        setupDict["com_server"] = com_server.rstrip(", ") + "]"
-        setupDict["ctypes_com_server"] = ctypes_com_server.rstrip(", ") + "]"
 
-        upx, inno = project.GetUseUPX("py2exe"), project.GetBuildInno("py2exe")
-
-        if upx or inno:
-            upxinno = _upx_inno%(upx, inno, programName, versionNumber)
-            setupDict["upx_inno"] = upxinno
-            setupDict["use_upx_inno"] = 'cmdclass = {"py2exe": Py2exe},'
-        else:
-            setupDict["upx_inno"] = "# No custom class for UPX compression or Inno Setup script"
-            setupDict["use_upx_inno"] = "# No UPX or Inno Setup"
-        
         # Populate the main section of the setup script            
         setupScript += _py2exe_target % setupDict
         

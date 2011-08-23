@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -12,9 +10,6 @@
 import wx
 import time
 import wx.lib.customtreectrl as CT
-
-if wx.Platform != "__WXMAC__":
-    import extern.flatmenu as FM
 
 # Import our fancy PyBusyInfo (Windows & GTK only)
 from Widgets import PyBusyInfo
@@ -103,11 +98,6 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         # Bind all the popup menu events with a single handler
         self.Bind(wx.EVT_MENU_RANGE, self.OnPopupMenu, id=self.popupIds[0],
                   id2=self.popupIds[-1])
-
-        if wx.Platform != "__WXMAC__":
-            # Create a FlatMenu style popup and bind the events
-            self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnPopupMenu, id=self.popupIds[0],
-                      id2=self.popupIds[-1])
 
 
     # ============== #
@@ -229,21 +219,18 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # Don't do anything, as there are no actions to do
             return
 
-        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
-
-        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
-        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
+        menu = wx.Menu()
         
         if item == self.rootItem:
 
             # The user clicked on the root item
             # There are a couple of options here: either add a new project or
             # delete all the existing projects from the tree
-            item = MenuItem(menu, self.popupIds[0], _("New project..."))
+            item = wx.MenuItem(menu, self.popupIds[0], _("New project..."))
             bmp = self.MainFrame.CreateBitmap("project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = MenuItem(menu, self.popupIds[1], _("Delete all projects"))
+            item = wx.MenuItem(menu, self.popupIds[1], _("Delete all projects"))
             bmp = self.MainFrame.CreateBitmap("delete_all")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
@@ -256,39 +243,35 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
             # The user clicked on one of children (the project)
             # There are a couple of options here: either load the selected projects or
             # delete them
-            item = MenuItem(menu, self.popupIds[2], _("Load project(s)"))
+            item = wx.MenuItem(menu, self.popupIds[2], _("Load project(s)"))
             bmp = self.MainFrame.CreateBitmap("load_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
-            item = MenuItem(menu, self.popupIds[3], _("Edit project name"))
+            item = wx.MenuItem(menu, self.popupIds[3], _("Edit project name"))
             bmp = self.MainFrame.CreateBitmap("project_edit")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
             menu.AppendSeparator()
-            item = MenuItem(menu, self.popupIds[4], _("Delete project(s)"))
+            item = wx.MenuItem(menu, self.popupIds[4], _("Delete project(s)"))
             bmp = self.MainFrame.CreateBitmap("delete_project")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             menu.AppendSeparator()
-            item = MenuItem(menu, self.popupIds[5], _("Import from file..."))
+            item = wx.MenuItem(menu, self.popupIds[5], _("Import from file..."))
             bmp = self.MainFrame.CreateBitmap("importproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
-            item = MenuItem(menu, self.popupIds[6], _("Copy to new project..."))
+            item = wx.MenuItem(menu, self.popupIds[6], _("Copy to new project..."))
             bmp = self.MainFrame.CreateBitmap("copyproject")
             item.SetBitmap(bmp)
             menu.AppendItem(item)
             item.Enable(len(selections) == 1)
-        
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        if flat:
-            menu.Popup(wx.GetMousePosition(), self)
-        else:
-            self.PopupMenu(menu)
-            menu.Destroy()
+
+        # Pop up the menu on ourselves
+        self.PopupMenu(menu)
+        menu.Destroy()
 
         event.Skip()
 
@@ -614,12 +597,9 @@ class ProjectTreeCtrl(CT.CustomTreeCtrl):
         """
 
         # Change item font depending on the highlight
-        boldFont, normalFont = self.boldFont, self.GetFont()
-
-        for item in self.rootItem.GetChildren():
-            font = (item == treeItem and [boldFont] or [normalFont])[0]
-            # Assign the font to the item
-            self.SetItemFont(item, font)
+        font = (highlight and [self.boldFont] or [self.GetFont()])[0]
+        # Assign the font to the item
+        self.SetItemFont(treeItem, font)
 
 
     def RepositionItems(self, appendToRoot, droppedItem):

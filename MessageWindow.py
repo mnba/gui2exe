@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 ########### GUI2Exe SVN repository information ###################
 # $Date$
 # $Author$
@@ -21,9 +19,6 @@ import wx.animate
 
 from Widgets import BaseListCtrl
 from Utilities import opj, shortNow
-
-if wx.Platform != "__WXMAC__":
-    import extern.flatmenu as FM
 
 # Get the I18N things
 _ = wx.GetTranslation
@@ -129,10 +124,6 @@ class MessageWindow(wx.Panel):
         self.list.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self.OnRightClick)
         self.list.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnRightClick)
 
-        if wx.Platform != "__WXMAC__":
-            # Create a FlatMenu style popup and bind the events
-            self.Bind(FM.EVT_FLAT_MENU_SELECTED, self.OnHistoryClear, id=self.popupId)
-
 
     # ============== #
     # Event handlers #
@@ -168,24 +159,16 @@ class MessageWindow(wx.Panel):
         event for the list control.
         """
 
-        flat, style = wx.GetApp().GetPreferences("Use_Flat_Menu", default=[0, (1, "Dark")])
-
-        menu = (flat and [FM.FlatMenu()] or [wx.Menu()])[0]
-        MenuItem = (flat and [FM.FlatMenuItem] or [wx.MenuItem])[0]
-
+        menu = wx.Menu()
         # This pops up the "clear all" message
-        item = MenuItem(menu, self.popupId, _("Clear History"))
+        item = wx.MenuItem(menu, self.popupId, _("Clear History"))
         bmp = self.MainFrame.CreateBitmap("history_clear")
         item.SetBitmap(bmp)
         menu.AppendItem(item)        
 
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        if flat:
-            menu.Popup(wx.GetMousePosition(), self)
-        else:
-            self.list.PopupMenu(menu)
-            menu.Destroy()
+        # Pop up the menu
+        self.list.PopupMenu(menu)
+        menu.Destroy()
 
 
     def OnHistoryClear(self, event):
