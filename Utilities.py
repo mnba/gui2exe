@@ -29,6 +29,28 @@ from UserDict import UserDict
 from Constants import ListType
 from AllIcons import catalog
 
+if hasattr(os.path, "relpath"):
+    relpath = os.path.relpath # since Python 2.6
+else:
+    def relpath(path, start=os.path.curdir):
+        """Return a relative version of a path"""
+
+        if not path:
+            raise ValueError("no path specified")
+
+        start_list = os.path.abspath(start).split(os.path.sep)
+        path_list = os.path.abspath(path).split(os.path.sep)
+
+        # Work out how much of the filepath is shared by start and path.
+        i = len(os.path.commonprefix([start_list, path_list]))
+
+        rel_list = [os.path.pardir] * (len(start_list)-i) + path_list[i:]
+        if not rel_list:
+            return os.path.curdir
+        
+        return os.path.join(*rel_list)
+
+
 # This class keeps an ordered dictionary
 class odict(UserDict):
     """ An ordered dictionary implementation. """    
@@ -249,7 +271,7 @@ def unique(list):
     return res.items()
 
 
-def setupString(key, item, isPyInstaller=False, splitter=False):
+def setupString(key, item, isPyInstaller=False, splitter=False, useRelPath=False, mainScript=None):
     """
     Sets up the strings for py2exe and other compilers.
   
@@ -267,17 +289,45 @@ def setupString(key, item, isPyInstaller=False, splitter=False):
         # Set up the data_files option
         text = "["
         for i in xrange(len(item)):
+            base, newItem = item[i]
+
+            if useRelPath:
+                newItem = [relpath(it, os.path.split(mainScript)[0]) for it in newItem]
+                
             indent = len(key) + 9 + len(item[i][0])
-            text += "('%s', "%item[i][0] + (",\n" + " "*indent).join(repr(item[i][1]).split(",")) + ")"
+            text += "('%s', "%item[i][0] + (",\n" + " "*indent).join(repr(newItem).split(",")) + ")"
             if i != len(item)-1:
                 text += ",\n" + " "*(len(key)+4)
         item = text + "]"
 
     else:
+
+        newItem = item
+        
+        if useRelPath:
+            if key in ["icon_resources", "bitmap_resources"]:
+                newItem = []
+                for kind, values in item:
+                    newItem.append((kind, relpath(values, os.path.split(mainScript)[0])))
+
+            elif key in ["data_files", "dll_includes", "dll_excludes", "includes"]:
+                newItem = []
+                for name, values, kind in item:
+                    if type(values) == ListType:
+                        for val in values:
+                            newItem.append((name, relpath(val, os.path.split(mainScript)[0]), kind))
+                    else:
+                        newItem.append((name, relpath(values, os.path.split(mainScript)[0]), kind))
+        else:
+            if key == "data_files":
+                newItem = []
+                for name, values, kind in item:
+                    newItem.append((name, values[0], kind))
+                
         # Split the string item and try to text-wrap it
         indent = len(key)+3
         spacer = "\n" + " "*indent
-        item = ("%s"%item).split(",")
+        item = ("%s"%newItem).split(",")
 
         text = ""
         lentext = 0

@@ -469,7 +469,10 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
 
         # This is a bit of a mess, but it works :-D        
         if compiler == "PyInstaller":
-            self.HandleOtherInputs()
+            if name == "excludes":
+                self.HandleNewModule()
+            else:
+                self.HandleOtherInputs()
         elif compiler == "cx_Freeze" and name == "path":
             self.HandleOtherInputs()
         elif compiler == "py2app" and name in ["datamodels", "dylib_excludes", "frameworks"]:
@@ -2532,11 +2535,11 @@ class PyInfoFrame(wx.Frame):
         size = self.GetSize()
         bmp = wx.EmptyBitmap(size.x, size.y)
         dc = wx.BufferedDC(None, bmp)
-        dc.SetBackground(wx.Brush(wx.Color(0, 0, 0), wx.SOLID))
+        dc.SetBackground(wx.Brush(wx.Colour(0, 0, 0), wx.SOLID))
         dc.Clear()
-        dc.SetPen(wx.Pen(wx.Color(0, 0, 0), 1))
+        dc.SetPen(wx.Pen(wx.Colour(0, 0, 0), 1))
         dc.DrawRoundedRectangle(0, 0, size.x, size.y, 12)                
-        r = wx.RegionFromBitmapColour(bmp, wx.Color(0, 0, 0))
+        r = wx.RegionFromBitmapColour(bmp, wx.Colour(0, 0, 0))
         # Store the non-rectangular region
         self.reg = r
 
@@ -3291,7 +3294,7 @@ class PListEditor(BaseDialog):
         self.topPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         self.bottomPanel = wx.Panel(self.vSplitter, style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
         self.titleBar = bp.ButtonPanel(self.topPanel, -1, "PList Actions",
-                                       style=bp.BP_USE_GRADIENT, alignment=bp.BP_ALIGN_LEFT)  
+                                       agwStyle=bp.BP_USE_GRADIENT, alignment=bp.BP_ALIGN_LEFT)  
         
         boldFont = wx.Font(8, wx.SWISS, wx.NORMAL, wx.BOLD, False)
         self.codeCheck = wx.CheckBox(self.bottomPanel, -1, _("Add by Python code"))

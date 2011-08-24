@@ -18,7 +18,7 @@ from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _pyInstaller_imports, ListType
 from Constants import _pyInstaller_target_onefile, _pyInstaller_target_onedir
 from Constants import _pyInstallerTOC, _pyInstallerOptions
-from Utilities import setupString
+from Utilities import setupString, relpath
 
 # Get the I18N things
 _ = wx.GetTranslation
@@ -346,6 +346,9 @@ class PyInstallerPanel(BaseBuilderPanel):
         oneDir = self.oneDirRadio.GetValue()
         ascii = self.asciiCheck.GetValue()
         normpath = os.path.normpath
+
+        useRelPath = self.MainFrame.relativePaths
+        scriptFile = pyFile
         
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
@@ -371,8 +374,8 @@ class PyInstallerPanel(BaseBuilderPanel):
                         item.append(buildDir)
                 elif key == "scripts":
                     continue
-                
-                item = setupString(key, item, True)
+
+                item = setupString(key, item, True, useRelPath=useRelPath, mainScript=scriptFile)
 
             if key == "exename" and not item.strip() and not oneDir:
                 item = os.path.splitext(os.path.split(pyFile)[1])[0] + ".exe"
@@ -382,11 +385,14 @@ class PyInstallerPanel(BaseBuilderPanel):
                 if not item.strip():
                     item = None
                 else:
-                    item = "r'%s'"%item
+                    if useRelPath:
+                        item = 'r"%s"'%(relpath(item, os.path.split(scriptFile)[0]))
+                    else:
+                        item = "r'%s'"%item
             
             setupDict[key] = item
 
-        # Set up the obscure options        
+        # Set up the obscure options
         otherOptions = []
         for indx, checks in enumerate(self.optionsCheckBoxes):
             if checks.GetValue():

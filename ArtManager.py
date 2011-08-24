@@ -508,11 +508,11 @@ class ArtManager(wx.EvtHandler):
     def FillStockBitmaps(self):
 
         bmp = self.ConvertToBitmap(arrow_down, alpha=None)
-        bmp.SetMask(wx.Mask(bmp, wx.Color(0, 128, 128)))
+        bmp.SetMask(wx.Mask(bmp, wx.Colour(0, 128, 128)))
         self._bitmaps.update({"arrow_down": bmp})
 
         bmp = self.ConvertToBitmap(arrow_up, alpha=None)
-        bmp.SetMask(wx.Mask(bmp, wx.Color(0, 128, 128)))
+        bmp.SetMask(wx.Mask(bmp, wx.Colour(0, 128, 128)))
         self._bitmaps.update({"arrow_up": bmp})
 
 
@@ -575,7 +575,7 @@ class ArtManager(wx.EvtHandler):
         g = color.Green() + ((i*gd*100)/high)/100
         b = color.Blue() + ((i*bd*100)/high)/100
 
-        return wx.Color(r, g, b)
+        return wx.Colour(r, g, b)
 
 
     def DarkColour(self, color, percent):
@@ -593,7 +593,7 @@ class ArtManager(wx.EvtHandler):
         g = color.Green() + ((i*gd*100)/high)/100
         b = color.Blue() + ((i*bd*100)/high)/100
 
-        return wx.Color(r, g, b)
+        return wx.Colour(r, g, b)
 
 
     def PaintStraightGradientBox(self, dc, rect, startColor, endColor, vertical=True):
@@ -624,7 +624,7 @@ class ArtManager(wx.EvtHandler):
             g = startColor.Green() + ((i*gd*100)/high)/100
             b = startColor.Blue() + ((i*bd*100)/high)/100
 
-            p = wx.Pen(wx.Color(r, g, b))
+            p = wx.Pen(wx.Colour(r, g, b))
             dc.SetPen(p)
 
             if vertical:
@@ -859,8 +859,8 @@ class ArtManager(wx.EvtHandler):
         greenOffset = float((secondColor.Green() * (100 - percent) / 100) - (firstColor.Green() * percent / 100))
         blueOffset = float((secondColor.Blue() * (100 - percent) / 100) -  (firstColor.Blue() * percent / 100))
 
-        return wx.Color(firstColor.Red() + redOffset, firstColor.Green() + greenOffset,
-                        firstColor.Blue() + blueOffset)
+        return wx.Colour(firstColor.Red() + redOffset, firstColor.Green() + greenOffset,
+                         firstColor.Blue() + blueOffset)
 
 
     def RandomColour(): 

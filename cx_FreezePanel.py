@@ -17,7 +17,7 @@ import wx
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _cx_Freeze_imports, _cx_Freeze_target, _cx_Freeze_class, _pywild, ListType
-from Utilities import setupString
+from Utilities import setupString, relpath
 
 # Get the I18N things
 _ = wx.GetTranslation
@@ -335,6 +335,9 @@ class cx_FreezePanel(BaseBuilderPanel):
         if wx.Platform == "__WXMSW__":
             extension = ".exe"
 
+        useRelPath = self.MainFrame.relativePaths
+        scriptFile = self.multipleExe.GetItem(0, 2).GetText()
+
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
             if key == "initScript" and not item:
@@ -357,12 +360,15 @@ class cx_FreezePanel(BaseBuilderPanel):
                 if not item.strip():
                     item = None
                 else:
-                    item = 'r"%s"'%item
+                    if useRelPath and key in ["initScript", "icon"]:
+                        item = 'r"%s"'%(relpath(item, os.path.split(scriptFile)[0]))
+                    else:
+                        item = 'r"%s"'%item
 
             if type(item) == ListType:
                 # Terrible hack to setup correctly the string to be included
                 # in the setup file
-                item = setupString(key, item)
+                item = setupString(key, item, useRelPath=useRelPath, mainScript=scriptFile)
                 
             setupDict[key] = item
 
@@ -379,7 +385,7 @@ class cx_FreezePanel(BaseBuilderPanel):
             # Add the Python script file
             tupleMultiple += (scriptFile, )
             # Add the init script
-            tupleMultiple += (setupDict["initScript"], )
+            tupleMultiple += (setupDict["initScript"], )                
             consoleOrWindows = self.multipleExe.GetItem(indx, 1).GetText()            
             # Check if it is a GUI app and if it runs on Windows
             if consoleOrWindows == "windows" and sys.platform == "win32":
@@ -397,7 +403,7 @@ class cx_FreezePanel(BaseBuilderPanel):
 
             # Add the executable name                    
             tupleMultiple += (targetName+extension, )
-            # Add the remaining keys
+            # Add the remaining keys                
             tupleMultiple += (bool(setupDict["compress"]), setupDict["copy_dependent_files"],
                               setupDict["append_script_toexe"],
                               setupDict["append_script_tolibrary"], setupDict["icon"])

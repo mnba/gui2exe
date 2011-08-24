@@ -433,6 +433,9 @@ class Py2ExePanel(BaseBuilderPanel):
             del configuration["create_exe"]
         if "create_dll" in configuration:
             del configuration["create_dll"]
+
+        useRelPath = self.MainFrame.relativePaths
+        scriptFile = self.multipleExe.GetItem(0, 2).GetText()
         
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
@@ -448,7 +451,7 @@ class Py2ExePanel(BaseBuilderPanel):
             if type(item) == ListType and key != "multipleexe":
                 # Terrible hack to setup correctly the string to be included
                 # in the setup file
-                item = setupString(key, item)
+                item = setupString(key, item, useRelPath=useRelPath, mainScript=scriptFile)
 
             if key == "zipfile":
                 if item and item.strip() and zipChoice:

@@ -99,14 +99,14 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 13 April 2010 17.00 GMT
-Version 0.5.0
+Latest revision: Andrea Gavana, 18 July 2011 10.00 GMT
+Version 0.5.1
   
 """
 
 __author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <gavana@kpo.kz>"
 __date__    = "01 Apr 2007, 13:15 GMT"
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 __docformat__ = "epytext"
 
 
@@ -224,34 +224,35 @@ ID_UseNormalMenu = ID_CleanDist + 31
 ID_UseRibbonBar = ID_CleanDist + 32
 ID_SetVendorID = ID_CleanDist + 33
 ID_SetPyInstaller = ID_CleanDist + 34
-ID_ChangePython = ID_CleanDist + 35
-ID_SwitchDatabase = ID_CleanDist + 36
-ID_SaveConfig = ID_CleanDist + 37
-ID_API = ID_CleanDist + 38
-ID_Compilers = ID_CleanDist + 39
-ID_Tips = ID_CleanDist + 40
-ID_Upgrade = ID_CleanDist + 41
-ID_Translate = ID_CleanDist + 42
-ID_Contact = ID_CleanDist + 43
+ID_RelativePaths = ID_CleanDist + 35
+ID_ChangePython = ID_CleanDist + 36
+ID_SwitchDatabase = ID_CleanDist + 37
+ID_SaveConfig = ID_CleanDist + 38
+ID_API = ID_CleanDist + 39
+ID_Compilers = ID_CleanDist + 40
+ID_Tips = ID_CleanDist + 41
+ID_Upgrade = ID_CleanDist + 42
+ID_Translate = ID_CleanDist + 43
+ID_Contact = ID_CleanDist + 44
 
-ID_DOCKING = ID_CleanDist + 44
-ID_NOTEBOOK1 = ID_CleanDist + 45
-ID_NOTEBOOK2 = ID_CleanDist + 46
-ID_MENU = ID_CleanDist + 47
+ID_DOCKING = ID_CleanDist + 45
+ID_NOTEBOOK1 = ID_CleanDist + 46
+ID_NOTEBOOK2 = ID_CleanDist + 47
+ID_MENU = ID_CleanDist + 48
 
-ID_AUI_Provider = ID_CleanDist + 48
-ID_MSW_Provider = ID_CleanDist + 49
+ID_AUI_Provider = ID_CleanDist + 49
+ID_MSW_Provider = ID_CleanDist + 50
 
-ID_PRIMARY_COLOUR = ID_CleanDist + 50
-ID_SECONDARY_COLOUR = ID_CleanDist + 51
+ID_PRIMARY_COLOUR = ID_CleanDist + 51
+ID_SECONDARY_COLOUR = ID_CleanDist + 52
 
-ID_PERSPECTIVES = ID_CleanDist + 52
+ID_PERSPECTIVES = ID_CleanDist + 53
 
 # Some ids for the popup menu on tabs (GTK and MSW only)
-ID_CloseTab = ID_CleanDist + 53
-ID_CloseAllTabs = ID_CleanDist + 54
-ID_SaveProject = ID_CleanDist + 55
-ID_SaveAllProjects = ID_CleanDist + 56
+ID_CloseTab = ID_CleanDist + 54
+ID_CloseAllTabs = ID_CleanDist + 55
+ID_SaveProject = ID_CleanDist + 56
+ID_SaveAllProjects = ID_CleanDist + 57
 
 # Define a translation class
 
@@ -341,6 +342,7 @@ class GUI2Exe(wx.Frame):
         self.sibPath = ("", "make")          # Where VendorID sib.py lives and whether to use GNU Make or MS NMake
         self.recurseSubDirs = False          # Recurse sub-directories for the data_files option
         self.showTips = True                 # Show tooltips for various compiler options
+        self.relativePaths = False           # Use relative paths instead of absolute ones for data_files, icon_resources etc...
         self.currentTab = None
         self._fmb = None
 
@@ -500,7 +502,10 @@ class GUI2Exe(wx.Frame):
                     (_("Set P&yInstaller path...") + "\tCtrl+Y", _("Sets the PyInstaller installation path"), "PyInstaller_small", ID_SetPyInstaller, self.OnSetPyInstaller, "",
                      [_("Builders Path"), 0, ""]),
                     (_("Set &VendorID path...") + "\tCtrl+V", _("Sets the VendorID sib.py installation path"), "VendorID_small", ID_SetVendorID, self.OnSetVendorID, "",
-                     [_("Builders Path"), 0, ""]),   
+                     [_("Builders Path"), 0, ""]),
+                    ("", "", "", "", "", "", ""),                 
+                    (_("Use &relative paths") + "\tCtrl+T", _("Use relative paths instead of absolute ones in data_files, icon_resources etc..."), "", ID_RelativePaths, self.OnRelativePaths, wx.ITEM_CHECK,
+                     [_("Folders"), 0, "path"]),                 
                     ("", "", "", "", "", "", ""),
                     (_("Add &custom code...")+"\tCtrl+U", _("Add custom code to the setup script"), "custom_code", ID_AddCustom, self.OnCustomCode, "",
                      [_("Customization"), 0, ""]),
@@ -591,13 +596,15 @@ class GUI2Exe(wx.Frame):
                               ID_UPX: [False],
                               ID_Inno: [False],
                               ID_MSW_Provider: [False],
-                              ID_AUI_Provider: [False]}
+                              ID_AUI_Provider: [False],
+                              ID_RelativePaths: [self.relativePaths]}
 
         self.ribbonChecks2 = {"AutoSave": ID_AutoSave, 
                               "Clean_Dist": ID_CleanDist,
                               "Delete_Build": ID_DeleteBuild,
                               "Show_Tooltips": ID_ShowTip,
-                              "Recurse_Subdirs": ID_Recurse}
+                              "Recurse_Subdirs": ID_Recurse,
+                              "Use_Relative_Paths": ID_RelativePaths}
         
         # loop over the bunch of data above
         for eachMenuData in self.MenuData():
@@ -1463,7 +1470,8 @@ class GUI2Exe(wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_ShowTip)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_Recurse)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_AutoSave)
-                
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_RelativePaths)
+        
 
     def ReadConfigurationFile(self):
         """ Reads the default configuration file (default project initialization). """
@@ -1538,6 +1546,10 @@ class GUI2Exe(wx.Frame):
             if self.autoSave:
                 # Start the autosaving timer (1 minute)
                 self.autosaveTimer.Start(60000)            
+
+        val = options.Read('Use_Relative_Paths')
+        if val:
+            self.relativePaths = eval(val)
 
         preferences = {}
         val = options.Read('Preferences')
@@ -1890,6 +1902,7 @@ class GUI2Exe(wx.Frame):
         config.Write('Clean_Dist', str(self.cleanDist))
         config.Write('Preferences', str(preferences))
         config.Write('AutoSave', str(self.autoSave))
+        config.Write('Use_Relative_Paths', str(self.relativePaths))
         config.Flush()
 
         # Close down the database...
@@ -2260,6 +2273,11 @@ class GUI2Exe(wx.Frame):
         # Try to run the successful compilation accessor method        
         self.SuccessfulCompilation(project, page.GetName(), False)
         
+
+    def OnRelativePaths(self, event):
+
+        self.relativePaths = self.GetRibbonButtonStatus(event)
+    
 
     def OnCustomCode(self, event):
         """ Allows the user to add custom code to the setup.py file. """
@@ -2727,6 +2745,8 @@ class GUI2Exe(wx.Frame):
             event.Check(self.showTips)
         elif evId == ID_Recurse:
             event.Check(self.recurseSubDirs)
+        elif evId == ID_RelativePaths:
+            event.Check(self.relativePaths)
         elif evId == ID_AutoSave:
             event.Check(self.autoSave)
         elif evId == ID_UPX:

@@ -18,7 +18,7 @@ import wx.lib.buttons as buttons
 from BaseBuilderPanel import BaseBuilderPanel
 from Widgets import BaseListCtrl, MultiComboBox
 from Constants import _pywild, _iconwild, ListType
-from Utilities import setupString
+from Utilities import setupString, relpath
 
 # Get the I18N things
 _ = wx.GetTranslation
@@ -301,6 +301,9 @@ class VendorIDPanel(BaseBuilderPanel):
         pythonName = os.path.split(os.path.splitext(self.scriptPicker.GetPath())[0])[1]
         optionString = ""
 
+        useRelPath = self.MainFrame.relativePaths
+        mainFile = self.scriptPicker.GetPath()
+
         # Loop over all the keys, values of the configuration dictionary        
         for key, item in configuration.items():
             if key in ["build_dir_choice", "install_dir_choice"]:
@@ -325,7 +328,10 @@ class VendorIDPanel(BaseBuilderPanel):
 
             elif key == "iconfile":
                 if item.strip():
-                    optionString += " -i %s "%item.strip()
+                    if useRelPath:
+                        optionString += " -i %s "%relpath(item.strip(), os.path.split(mainFile)[0])
+                    else:
+                        optionString += " -i %s "%item.strip()
 
             elif key == "exename":
                 if item.strip():

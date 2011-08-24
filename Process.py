@@ -136,7 +136,7 @@ class Process(object):
                 cmd = '%s'%tmpFileName
             else:
                 cmd = 'chmod +x %s; ./%s'%(tmpFileName, tmpFileName)
-                
+
         # Write the setup script string in the temporary file
         fid = open(tmpFileName, "wt")
         fid.write(setupScript)            
