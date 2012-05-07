@@ -338,6 +338,9 @@ _yes = PyEmbeddedImage(
     "a9QXPGL7gxc9L/eE98wwHWaG6JD1783/kB9qTvueLt8LjwAAAABJRU5ErkJggg==")
 
 
+BUTTON_SIZER_FLAGS = wx.OK | wx.CANCEL | wx.YES | wx.NO | wx.HELP | wx.NO_DEFAULT
+
+
 class StdDialogButtonSizer(wx.BoxSizer):
     """ wxWidgets standard dialog button sizer. """
 
@@ -559,7 +562,7 @@ class GenericMessageDialog(wx.Dialog):
         if self._dialogStyle & wx.YES_NO:
             center_flag |= wx.ALIGN_CENTRE
 
-        sizerBtn = self.CreateSeparatedButtonSizer(self._dialogStyle & self.ButtonSizerFlags)
+        sizerBtn = self.CreateSeparatedButtonSizer(self._dialogStyle & BUTTON_SIZER_FLAGS)
         if sizerBtn:
             topsizer.Add(sizerBtn, 0, center_flag | wx.ALL, 10)
 

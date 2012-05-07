@@ -99,14 +99,14 @@ svn checkout http://gui2exe.googlecode.com/svn/trunk/ gui2exe-read-only
 Project mailing list:
 http://groups.google.com/group/gui2exe
 
-Latest revision: Andrea Gavana, 18 July 2011 10.00 GMT
-Version 0.5.1
+Latest revision: Andrea Gavana, 07 May 2012 21.00 GMT
+Version 0.5.3
   
 """
 
-__author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <gavana@kpo.kz>"
+__author__  = "Andrea Gavana <andrea.gavana@gmail.com>, <andrea.gavana@maerskoil.com>"
 __date__    = "01 Apr 2007, 13:15 GMT"
-__version__ = "0.5.1"
+__version__ = "0.5.3"
 __docformat__ = "epytext"
 
 
@@ -2923,7 +2923,7 @@ class GUI2Exe(wx.Frame):
         """ Launches the mail program to contact the GUI2Exe author. """
 
         wx.BeginBusyCursor()
-        webbrowser.open_new("mailto:andrea.gavana@gmail.com?subject=Comments On GUI2Exe&cc=gavana@kpo.kz")
+        webbrowser.open_new("mailto:andrea.gavana@gmail.com?subject=Comments On GUI2Exe&cc=andrea.gavana@maerskoil.com")
         wx.CallAfter(wx.EndBusyCursor)
 
 
@@ -2935,7 +2935,7 @@ class GUI2Exe(wx.Frame):
               "Author: Andrea Gavana @ 01 Apr 2007\n\n" + \
               "Please report any bug/request of improvements\n" + \
               "to me at the following addresses:\n\n" + \
-              "andrea.gavana@gmail.com\ngavana@kpo.kz\n\n" + \
+              "andrea.gavana@gmail.com\nandrea.gavana@maerskoil.com\n\n" + \
               "Thanks to Cody Precord and the wxPython mailing list\n" + \
               "for the help, ideas and useful suggestions.")%__version__
               

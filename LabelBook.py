@@ -663,7 +663,7 @@ class ImageContainerBase(wx.Panel):
         elif self._nPinButtonStatus == INB_PIN_PRESSED:
             
             dc.SetBrush(wx.TRANSPARENT_BRUSH)
-            dc.SetPen(wx.Pen(wx.NamedColor("LIGHT GREY")))
+            dc.SetPen(wx.Pen(wx.NamedColour("LIGHT GREY")))
             dc.DrawRectangle(xx, rect.y, 16, 16)
 
             # Draw upper and left border with grey color
@@ -727,7 +727,7 @@ class ImageContainer(ImageContainerBase):
         self._colorsMap.update({INB_TAB_AREA_BACKGROUND_COLOR: ArtManager.Get().LightColour(ArtManager.Get().FrameColour(), 50)})
         self._colorsMap.update({INB_ACTIVE_TAB_COLOR: ArtManager.Get().DarkColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DSHADOW), 30)})
         self._colorsMap.update({INB_TABS_BORDER_COLOR: ArtManager.Get().DarkColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DSHADOW), 50)})
-        self._colorsMap.update({INB_HILITE_TAB_COLOR: wx.NamedColor("LIGHT BLUE")})
+        self._colorsMap.update({INB_HILITE_TAB_COLOR: wx.NamedColour("LIGHT BLUE")})
         self._colorsMap.update({INB_TEXT_COLOR: wx.WHITE})
         self._colorsMap.update({INB_ACTIVE_TEXT_COLOR: wx.BLACK})
 
@@ -1478,7 +1478,7 @@ class LabelContainer(ImageContainerBase):
         self._colorsMap.update({INB_TAB_AREA_BACKGROUND_COLOR: ArtManager.Get().LightColour(ArtManager.Get().FrameColour(), 50)})
         self._colorsMap.update({INB_ACTIVE_TAB_COLOR: ArtManager.Get().GetMenuFaceColour()})
         self._colorsMap.update({INB_TABS_BORDER_COLOR: ArtManager.Get().DarkColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DSHADOW), 50)})
-        self._colorsMap.update({INB_HILITE_TAB_COLOR: wx.NamedColor("LIGHT BLUE")})
+        self._colorsMap.update({INB_HILITE_TAB_COLOR: wx.NamedColour("LIGHT BLUE")})
         self._colorsMap.update({INB_TEXT_COLOR: wx.WHITE})
         self._colorsMap.update({INB_ACTIVE_TEXT_COLOR: wx.BLACK})
 

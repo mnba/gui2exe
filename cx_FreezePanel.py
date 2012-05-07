@@ -195,7 +195,7 @@ class cx_FreezePanel(BaseBuilderPanel):
         commonGridSizer.AddGrowableCol(3)
         commonGridSizer.AddGrowableCol(4)
         commonGridSizer.AddGrowableCol(5)
-        commonGridSizer.AddGrowableCol(6)
+##        commonGridSizer.AddGrowableCol(6)
         commonGridSizer.SetEmptyCellSize((0, 0))
         
         commonSizer.Add(commonGridSizer, 1, wx.EXPAND, 0)

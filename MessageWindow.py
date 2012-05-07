@@ -255,7 +255,7 @@ class MessageWindow(wx.Panel):
         indx = self.list.InsertImageStringItem(sys.maxint, "", 2)
         self.list.SetStringItem(indx, 1, currentTime)
         self.list.SetStringItem(indx, 2, _("Error Message"))
-        self.list.SetItemBackgroundColour(indx, wx.NamedColor("yellow"))
+        self.list.SetItemBackgroundColour(indx, wx.NamedColour("yellow"))
         font = self.list.GetFont()
         font.SetWeight(wx.BOLD)
         self.list.SetItemFont(indx, font)

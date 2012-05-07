@@ -1356,7 +1356,7 @@ class ArtManager(wx.EvtHandler):
         """
 
         if not useLightColours and not self.IsDark(self.FrameColour()):
-            return wx.NamedColor("GOLD")
+            return wx.NamedColour("GOLD")
         else:
             return self.LightColour(self.FrameColour(), 30)
 

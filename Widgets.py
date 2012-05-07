@@ -325,9 +325,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
                 # Pop the data from the column sorter mixin dictionary
                 indx = self.GetItemData(ind)
                 self.itemDataMap.pop(indx)
+                self.RemoveOptionsButton(ind)
                 # Delete the item from the list
                 self.DeleteItem(ind)
-                self.RemoveOptionsButton(ind)
                 
             self.Thaw()
             wx.CallAfter(self.UpdateProject)
@@ -426,9 +426,9 @@ class BaseListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdit
             indx = self.GetItemData(ind)
             if not isMultipleExe:
                 self.itemDataMap.pop(indx)
+            self.RemoveOptionsButton(ind)
             # Delete the item from the list
             self.DeleteItem(ind)
-            self.RemoveOptionsButton(ind)
 
         # Time to warm up...
         self.Thaw()
