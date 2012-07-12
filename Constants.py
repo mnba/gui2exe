@@ -668,6 +668,7 @@ _cx_Freeze_target = '''
 
 # Process the includes, excludes and packages first
 
+include_files = []
 includes = %(includes)s
 excludes = %(excludes)s
 packages = %(packages)s
@@ -696,7 +697,8 @@ setup(
     author = %(author)s,
     name = %(name)s,
     
-    options = {"build_exe": {"includes": includes,
+    options = {"build_exe": {"include_files": include_files,
+                             "includes": includes,
                              "excludes": excludes,
                              "packages": packages,
                              "path": path
